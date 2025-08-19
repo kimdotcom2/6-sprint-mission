@@ -8,14 +8,16 @@ public interface JCFMessageService {
 
     void create(Message message);
 
-    boolean existById(String id);
+    boolean existById(UUID id);
 
-    void readById(String id);
+    void readById(UUID id);
+
+    void readChildrenById(UUID id);
 
     void readAll();
 
-    void update(String id, String content, boolean isReply, UUID parentMessageId);
+    void update(UUID id, String content, boolean isReply, UUID parentMessageId);
 
-    void deleteById(String id);
+    void deleteById(UUID id);
 
 }

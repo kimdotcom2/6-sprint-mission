@@ -23,21 +23,21 @@ public class JCFUserCrudService implements JCFUserService {
     }
 
     @Override
-    public boolean existById(String id) {
-        return data.containsKey(UUID.fromString(id));
+    public boolean existById(UUID id) {
+        return data.containsKey(id);
     }
 
     @Override
-    public void readById(String id) {
+    public void readById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such user.");
             return;
 
         }
 
-        User user = data.get(UUID.fromString(id));
+        User user = data.get(id);
 
         System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
         System.out.println(user.toString());
@@ -56,30 +56,30 @@ public class JCFUserCrudService implements JCFUserService {
     }
 
     @Override
-    public void update(String id, String nickname, String email, String password, String description) {
+    public void update(UUID id, String nickname, String email, String password, String description) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such user.");
             return;
 
         }
 
-        data.get(UUID.fromString(id)).update(nickname, email, password, description);
+        data.get(id).update(nickname, email, password, description);
 
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such user.");
             return;
 
         }
 
-        data.remove(UUID.fromString(id));
+        data.remove(id);
 
     }
 }

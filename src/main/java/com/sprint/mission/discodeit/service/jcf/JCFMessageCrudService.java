@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.service.JCFMessageService;
 import com.sprint.mission.discodeit.service.JCFUserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,14 +25,14 @@ public class JCFMessageCrudService implements JCFMessageService {
     @Override
     public void create(Message message) {
 
-        if (!userService.existById(message.getUserId().toString())) {
+        if (!userService.existById(message.getUserId())) {
 
             System.out.println("No such user.");
             return;
 
         }
 
-        if (!channelService.existById(message.getChannelId().toString())) {
+        if (!channelService.existById(message.getChannelId())) {
 
             System.out.println("No such channel.");
             return;
@@ -43,22 +44,44 @@ public class JCFMessageCrudService implements JCFMessageService {
     }
 
     @Override
-    public boolean existById(String id) {
-        return data.containsKey(UUID.fromString(id));
+    public boolean existById(UUID id) {
+        return data.containsKey(id);
     }
 
     @Override
-    public void readById(String id) {
+    public void readById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such message.");
             return;
 
         }
 
-        Message message = data.get(UUID.fromString(id));
+        Message message = data.get(id);
         System.out.println(message.toString());
+
+    }
+
+    @Override
+    public void readChildrenById(UUID id) {
+
+        if (!data.containsKey(id)) {
+
+            System.out.println("No such message.");
+            return;
+
+        }
+
+        List<Message> childMessageList = data.values().stream()
+                .filter(message -> message.isReply() && message.getParentMessageId().equals(id))
+                .toList();
+
+        System.out.println(childMessageList.size());
+
+        childMessageList.stream().forEach(message -> {
+            System.out.println(message.toString());
+        });
 
     }
 
@@ -74,30 +97,30 @@ public class JCFMessageCrudService implements JCFMessageService {
     }
 
     @Override
-    public void update(String id, String content, boolean isReply, UUID parentMessageId) {
+    public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such message.");
             return;
 
         }
 
-        data.get(UUID.fromString(id)).update(content, isReply, parentMessageId);
+        data.get(id).update(content, isReply, parentMessageId);
 
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such message.");
             return;
 
         }
 
-        data.remove(UUID.fromString(id));
+        data.remove(id);
 
     }
 }

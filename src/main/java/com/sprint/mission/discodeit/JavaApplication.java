@@ -27,25 +27,25 @@ public class JavaApplication {
         userService.create(userTwo);
         System.out.println(userTwo.getNickname() + " 유저 추가");
         System.out.println(userOne.getNickname() + " 유저 읽기");
-        userService.readById(userOne.getId().toString());
+        userService.readById(userOne.getId());
         System.out.println("유저 목록 읽기");
         userService.readAll();
         System.out.println("==========================");
 
         //유저 수정
         System.out.println("유저 수정");
-        userService.update(userOne.getId().toString(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+        userService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
         System.out.println(userOne.getNickname() + " 정보 업데이트");
         System.out.println(userOne.getNickname() + " 유저 읽기");
-        userService.readById(userOne.getId().toString());
+        userService.readById(userOne.getId());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
-        userService.deleteById(userTwo.getId().toString());
+        userService.deleteById(userTwo.getId());
         System.out.println(userTwo.getNickname() + " 유저 삭제");
         System.out.println(userTwo.getNickname() + " 유저 읽기");
-        userService.readById(userTwo.getId().toString());
+        userService.readById(userTwo.getId());
         System.out.println("유저 목록 읽기");
         userService.readAll();
         System.out.println("==========================");
@@ -59,25 +59,25 @@ public class JavaApplication {
         channelService.create(channelTwo);
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
         System.out.println(channelOne.getChannelName() + " 채널 읽기");
-        channelService.readById(channelOne.getId().toString());
+        channelService.readById(channelOne.getId());
         System.out.println("채널 목록 읽기");
         channelService.readAll();
         System.out.println("==========================");
 
         //채널 수정
         System.out.println("채널 수정");
-        channelService.update(channelTwo.getId().toString(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+        channelService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
         System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-        channelService.readById(channelTwo.getId().toString());
+        channelService.readById(channelTwo.getId());
         System.out.println("==========================");
 
         //채널 삭제
         System.out.println("채널 삭제");
-        channelService.deleteById(channelTwo.getId().toString());
+        channelService.deleteById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-        channelService.readById(channelTwo.getId().toString());
+        channelService.readById(channelTwo.getId());
         System.out.println("채널 목록 읽기");
         channelService.readAll();
         System.out.println("==========================");
@@ -87,29 +87,31 @@ public class JavaApplication {
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
         messageService.create(messageOne);
         System.out.println(messageOne.getId() + " 메시지 등록");
-        Message messageTwo = new Message(userTwo.getId(), channelTwo.getId(), "messageTwo", true, messageOne.getId());
+        Message messageTwo = new Message(userOne.getId(), channelTwo.getId(), "messageTwo", true, messageOne.getId());
         messageService.create(messageTwo);
         System.out.println(messageTwo.getId() + " 메시지 등록");
         System.out.println(messageOne.getId() + " 메시지 읽기");
-        messageService.readById(messageOne.getId().toString());
+        messageService.readById(messageOne.getId());
+        System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
+        messageService.readChildrenById(messageOne.getId());
         System.out.println("메시지 목록 읽기");
         messageService.readAll();
         System.out.println("==========================");
 
         //메시지 수정
         System.out.println("메시지 수정");
-        messageService.update(messageOne.getId().toString(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+        messageService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
         System.out.println(messageOne.getId() + " 정보 업데이트");
         System.out.println(messageOne.getId() + " 메시지 읽기");
-        messageService.readById(messageOne.getId().toString());
+        messageService.readById(messageOne.getId());
         System.out.println("==========================");
 
         //메시지 삭제
         System.out.println("메시지 삭제");
-        messageService.deleteById(messageTwo.getId().toString());
+        messageService.deleteById(messageTwo.getId());
         System.out.println(messageTwo.getId() + " 메시지 삭제");
         System.out.println(messageTwo.getId() + " 메시지 읽기");
-        messageService.readById(messageTwo.getId().toString());
+        messageService.readById(messageTwo.getId());
         System.out.println("메시지 목록 읽기");
         messageService.readAll();
         System.out.println("==========================");

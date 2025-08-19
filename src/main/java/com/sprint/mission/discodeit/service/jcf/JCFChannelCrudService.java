@@ -23,21 +23,21 @@ public class JCFChannelCrudService implements JCFChannelService {
     }
 
     @Override
-    public boolean existById(String id) {
-        return data.containsKey(UUID.fromString(id));
+    public boolean existById(UUID id) {
+        return data.containsKey(id);
     }
 
     @Override
-    public void readById(String id) {
+    public void readById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such channel.");
             return;
 
         }
 
-        Channel channel = data.get(UUID.fromString(id));
+        Channel channel = data.get(id);
         System.out.println(channel.toString());
 
     }
@@ -54,30 +54,30 @@ public class JCFChannelCrudService implements JCFChannelService {
     }
 
     @Override
-    public void update(String id, String channelName, String category, boolean isVoiceChannel) {
+    public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such channel.");
             return;
 
         }
 
-        data.get(UUID.fromString(id)).update(channelName, category, isVoiceChannel);
+        data.get(id).update(channelName, category, isVoiceChannel);
 
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
 
-        if (!data.containsKey(UUID.fromString(id))) {
+        if (!data.containsKey(id)) {
 
             System.out.println("No such channel.");
             return;
 
         }
 
-        data.remove(UUID.fromString(id));
+        data.remove(id);
 
     }
 }
