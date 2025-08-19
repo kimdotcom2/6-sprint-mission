@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.JCFUserService;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -28,30 +29,32 @@ public class JCFUserCrudService implements JCFUserService {
     }
 
     @Override
-    public void readById(UUID id) {
+    public User readById(UUID id) {
 
         if (!data.containsKey(id)) {
 
             System.out.println("No such user.");
-            return;
+            throw new IllegalArgumentException();
 
         }
 
         User user = data.get(id);
 
         //System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
-        System.out.println(user.toString());
+        //System.out.println(user.toString());
+        return user;
 
     }
 
     @Override
-    public void readAll() {
+    public List<User> readAll() {
 
         System.out.println("User List:");
 
-        data.entrySet().stream().forEach(entry -> {
+        /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().toString());
-        });
+        });*/
+        return List.of(data.values().toArray(new User[0]));
 
     }
 

@@ -49,27 +49,28 @@ public class JCFMessageCrudService implements JCFMessageService {
     }
 
     @Override
-    public void readById(UUID id) {
+    public Message readById(UUID id) {
 
         if (!data.containsKey(id)) {
 
             System.out.println("No such message.");
-            return;
+            throw new IllegalArgumentException();
 
         }
 
         Message message = data.get(id);
-        System.out.println(message.toString());
+        //System.out.println(message.toString());
+        return message;
 
     }
 
     @Override
-    public void readChildrenById(UUID id) {
+    public List<Message> readChildrenById(UUID id) {
 
         if (!data.containsKey(id)) {
 
             System.out.println("No such message.");
-            return;
+            throw new IllegalArgumentException();
 
         }
 
@@ -79,20 +80,23 @@ public class JCFMessageCrudService implements JCFMessageService {
 
         System.out.println("답글 수 : " + childMessageList.size());
 
-        childMessageList.stream().forEach(message -> {
+        /*childMessageList.stream().forEach(message -> {
             System.out.println(message.toString());
-        });
+        });*/
+
+        return childMessageList;
 
     }
 
     @Override
-    public void readAll() {
+    public List<Message> readAll() {
 
         System.out.println("Message List:");
 
-        data.entrySet().stream().forEach(entry -> {
+        /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().getContent());
-        });
+        });*/
+        return List.of(data.values().toArray(new Message[0]));
 
     }
 

@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.entity.Channel;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface JCFChannelService {
@@ -10,9 +11,9 @@ public interface JCFChannelService {
 
     boolean existById(UUID id);
 
-    void readById(UUID id);
+    Channel readById(UUID id);
 
-    void readAll();
+    List<Channel> readAll();
 
     void update(UUID id, String channelName, String category, boolean isVoiceChannel);
 

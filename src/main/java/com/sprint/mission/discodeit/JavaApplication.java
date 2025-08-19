@@ -27,9 +27,10 @@ public class JavaApplication {
         userService.create(userTwo);
         System.out.println(userTwo.getNickname() + " 유저 추가");
         System.out.println(userOne.getNickname() + " 유저 읽기");
-        userService.readById(userOne.getId());
+        System.out.println(userService.readById(userOne.getId()).toString());
         System.out.println("유저 목록 읽기");
-        userService.readAll();
+        userService.readAll().stream()
+                        .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
         //유저 수정
@@ -37,17 +38,18 @@ public class JavaApplication {
         userService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
         System.out.println(userOne.getNickname() + " 정보 업데이트");
         System.out.println(userOne.getNickname() + " 유저 읽기");
-        userService.readById(userOne.getId());
+        System.out.println(userService.readById(userOne.getId()).toString());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
         userService.deleteById(userTwo.getId());
         System.out.println(userTwo.getNickname() + " 유저 삭제");
-        System.out.println(userTwo.getNickname() + " 유저 읽기");
-        userService.readById(userTwo.getId());
+        //System.out.println(userTwo.getNickname() + " 유저 읽기");
+        //System.out.println(userService.readById(userTwo.getId()).toString());
         System.out.println("유저 목록 읽기");
-        userService.readAll();
+        userService.readAll().stream()
+                .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
         //채널 등록
@@ -59,9 +61,10 @@ public class JavaApplication {
         channelService.create(channelTwo);
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
         System.out.println(channelOne.getChannelName() + " 채널 읽기");
-        channelService.readById(channelOne.getId());
+        System.out.println(channelService.readById(channelOne.getId()).toString());
         System.out.println("채널 목록 읽기");
-        channelService.readAll();
+        channelService.readAll().stream()
+                .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
         //채널 수정
@@ -69,17 +72,18 @@ public class JavaApplication {
         channelService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
         System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-        channelService.readById(channelTwo.getId());
+        System.out.println(channelService.readById(channelTwo.getId()).toString());
         System.out.println("==========================");
 
         //채널 삭제
         System.out.println("채널 삭제");
         channelService.deleteById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
-        System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-        channelService.readById(channelTwo.getId());
+        //System.out.println(channelTwo.getChannelName() + " 채널 읽기");
+        //System.out.println(channelService.readById(channelTwo.getId()).toString());
         System.out.println("채널 목록 읽기");
-        channelService.readAll();
+        channelService.readAll().stream()
+                .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
         //메시지 등록
@@ -91,11 +95,13 @@ public class JavaApplication {
         messageService.create(messageTwo);
         System.out.println(messageTwo.getId() + " 메시지 등록");
         System.out.println(messageOne.getId() + " 메시지 읽기");
-        messageService.readById(messageOne.getId());
+        System.out.println(messageService.readById(messageOne.getId()).toString());
         System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
-        messageService.readChildrenById(messageOne.getId());
+        messageService.readChildrenById(messageOne.getId()).stream()
+                .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
-        messageService.readAll();
+        messageService.readAll().stream()
+                .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
         //메시지 수정
@@ -103,17 +109,18 @@ public class JavaApplication {
         messageService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
         System.out.println(messageOne.getId() + " 정보 업데이트");
         System.out.println(messageOne.getId() + " 메시지 읽기");
-        messageService.readById(messageOne.getId());
+        System.out.println(messageService.readById(messageOne.getId()).toString());
         System.out.println("==========================");
 
         //메시지 삭제
         System.out.println("메시지 삭제");
         messageService.deleteById(messageTwo.getId());
         System.out.println(messageTwo.getId() + " 메시지 삭제");
-        System.out.println(messageTwo.getId() + " 메시지 읽기");
-        messageService.readById(messageTwo.getId());
+        //System.out.println(messageTwo.getId() + " 메시지 읽기");
+        //System.out.println(messageService.readById(messageTwo.getId()).toString());
         System.out.println("메시지 목록 읽기");
-        messageService.readAll();
+        messageService.readAll().stream()
+                .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
 

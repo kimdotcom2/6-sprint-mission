@@ -11,7 +11,7 @@ public class User implements Serializable {
     private Long updatedAt;
     private String nickname;
     private String email;
-    private String password;
+    private transient String password;
     private String description;
 
     public UUID getId() {

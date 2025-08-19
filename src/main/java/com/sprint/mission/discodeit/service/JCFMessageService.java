@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.entity.Message;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface JCFMessageService {
@@ -10,11 +11,11 @@ public interface JCFMessageService {
 
     boolean existById(UUID id);
 
-    void readById(UUID id);
+    Message readById(UUID id);
 
-    void readChildrenById(UUID id);
+    List<Message> readChildrenById(UUID id);
 
-    void readAll();
+    List<Message> readAll();
 
     void update(UUID id, String content, boolean isReply, UUID parentMessageId);
 
