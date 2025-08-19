@@ -3,12 +3,8 @@ package com.sprint.mission.discodeit.entity;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Message implements Serializable {
+public class Message extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private UUID id;
-    private Long createdAt;
-    private Long updatedAt;
     private String content;
     private boolean isReply;
     private UUID parentMessageId;
@@ -29,30 +25,6 @@ public class Message implements Serializable {
 
     public void setChannelId(UUID channelId) {
         this.channelId = channelId;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getContent() {
@@ -80,10 +52,9 @@ public class Message implements Serializable {
     }
 
     public Message(UUID userId, UUID channelId, String content, boolean isReply, UUID parentMessageId) {
+        super();
         this.userId = userId;
         this.channelId = channelId;
-        this.id = UUID.randomUUID();
-        this.createdAt = System.currentTimeMillis();
         this.content = content;
         this.isReply = isReply;
         this.parentMessageId = parentMessageId;
@@ -93,12 +64,12 @@ public class Message implements Serializable {
         this.content = content;
         this.isReply = isReply;
         this.parentMessageId = parentMessageId;
-        this.updatedAt = System.currentTimeMillis();
+        super.setUpdatedAt();
     }
 
     @Override
     public String toString() {
-        return "Message [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", content=" + content
+        return "Message [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", content=" + content
                 + ", isReply=" + isReply + ", parentMessageId=" + parentMessageId + ", channelId=" + channelId
                 + ", userId=" + userId + "]";
     }

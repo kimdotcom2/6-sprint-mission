@@ -3,40 +3,13 @@ package com.sprint.mission.discodeit.entity;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private UUID id;
-    private Long createdAt;
-    private Long updatedAt;
+
     private String nickname;
     private String email;
     private transient String password;
     private String description;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public String getNickname() {
         return nickname;
@@ -71,8 +44,7 @@ public class User implements Serializable {
     }
 
     public User(String nickname, String email, String password, String description) {
-        this.id = UUID.randomUUID();
-        this.createdAt = System.currentTimeMillis();
+        super();
         this.nickname = nickname;
         this.email = email;
         this.password = password;
@@ -84,12 +56,12 @@ public class User implements Serializable {
         this.email = email;
         this.password = password;
         this.description = description;
-        this.updatedAt = System.currentTimeMillis();
+        super.setUpdatedAt();
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", nickname=" + nickname
+        return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", nickname=" + nickname
                 + ", email=" + email + ", description=" + description + "]";
     }
 

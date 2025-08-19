@@ -5,41 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Channel implements Serializable {
+public class Channel extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    private UUID id;
-    private Long createdAt;
-    private Long updatedAt;
     private List<User> userList = new ArrayList<>();
     private List<Message> messages = new ArrayList<>();
     private String channelName;
     private String category;
     private boolean isVoiceChannel;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Long updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
     public List<User> getUserList() {
         return userList;
@@ -82,8 +54,7 @@ public class Channel implements Serializable {
     }
 
     public Channel(String channelName, String category, boolean isVoiceChannel) {
-        this.id = UUID.randomUUID();
-        this.createdAt = System.currentTimeMillis();
+        super();
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
@@ -93,12 +64,12 @@ public class Channel implements Serializable {
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
-        this.updatedAt = System.currentTimeMillis();
+        super.setUpdatedAt();
     }
 
     @Override
     public String toString() {
-        return "Channel [id=" + id + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", channelName=" + channelName + ", category=" + category + ", isVoiceChannel=" + isVoiceChannel + "]";
+        return "Channel [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", channelName=" + channelName + ", category=" + category + ", isVoiceChannel=" + isVoiceChannel + "]";
     }
 
 }
