@@ -39,7 +39,7 @@ public class JCFUserCrudService implements JCFUserService {
 
         User user = data.get(id);
 
-        System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
+        //System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
         System.out.println(user.toString());
 
     }
