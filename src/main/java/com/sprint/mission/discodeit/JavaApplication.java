@@ -1,14 +1,14 @@
-package com.sprint.mission.discodit;
+package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodit.entity.Channel;
-import com.sprint.mission.discodit.entity.Message;
-import com.sprint.mission.discodit.entity.User;
-import com.sprint.mission.discodit.service.JCFChannelService;
-import com.sprint.mission.discodit.service.JCFMessageService;
-import com.sprint.mission.discodit.service.JCFUserService;
-import com.sprint.mission.discodit.service.jcf.JCFChannelCrudService;
-import com.sprint.mission.discodit.service.jcf.JCFMessageCrudService;
-import com.sprint.mission.discodit.service.jcf.JCFUserCrudService;
+import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.service.JCFChannelService;
+import com.sprint.mission.discodeit.service.JCFMessageService;
+import com.sprint.mission.discodeit.service.JCFUserService;
+import com.sprint.mission.discodeit.service.jcf.JCFChannelCrudService;
+import com.sprint.mission.discodeit.service.jcf.JCFMessageCrudService;
+import com.sprint.mission.discodeit.service.jcf.JCFUserCrudService;
 
 public class JavaApplication {
 

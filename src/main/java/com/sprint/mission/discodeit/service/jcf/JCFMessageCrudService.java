@@ -1,9 +1,9 @@
-package com.sprint.mission.discodit.service.jcf;
+package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodit.entity.Message;
-import com.sprint.mission.discodit.service.JCFChannelService;
-import com.sprint.mission.discodit.service.JCFMessageService;
-import com.sprint.mission.discodit.service.JCFUserService;
+import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.service.JCFChannelService;
+import com.sprint.mission.discodeit.service.JCFMessageService;
+import com.sprint.mission.discodeit.service.JCFUserService;
 
 import java.util.HashMap;
 import java.util.Map;

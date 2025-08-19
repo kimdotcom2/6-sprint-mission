@@ -1,6 +1,6 @@
-package com.sprint.mission.discodit.service;
+package com.sprint.mission.discodeit.service;
 
-import com.sprint.mission.discodit.entity.Message;
+import com.sprint.mission.discodeit.entity.Message;
 
 import java.util.UUID;
 

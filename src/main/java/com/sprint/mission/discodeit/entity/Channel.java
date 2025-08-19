@@ -1,4 +1,4 @@
-package com.sprint.mission.discodit.entity;
+package com.sprint.mission.discodeit.entity;
 
 import java.util.ArrayList;
 import java.util.List;
