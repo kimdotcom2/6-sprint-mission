@@ -9,7 +9,11 @@ import java.util.UUID;
 
 public class JCFUserCrudService implements JCFUserService {
 
-    private final Map<UUID, User> data = new HashMap<>();
+    private final Map<UUID, User> data;
+
+    public JCFUserCrudService() {
+        data = new HashMap<>();
+    }
 
     @Override
     public void create(User user) {

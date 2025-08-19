@@ -9,7 +9,11 @@ import java.util.UUID;
 
 public class JCFChannelCrudService implements JCFChannelService {
 
-    private final Map<UUID, Channel> data = new HashMap<>();
+    private final Map<UUID, Channel> data;
+
+    public JCFChannelCrudService() {
+        this.data = new HashMap<>();
+    }
 
     @Override
     public void create(Channel channel) {

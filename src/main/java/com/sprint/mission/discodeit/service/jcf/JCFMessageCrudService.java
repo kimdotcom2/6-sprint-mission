@@ -11,13 +11,14 @@ import java.util.UUID;
 
 public class JCFMessageCrudService implements JCFMessageService {
 
-    private final Map<UUID, Message> data = new HashMap<>();
+    private final Map<UUID, Message> data;
     private final JCFUserService userService;
     private final JCFChannelService channelService;
 
     public JCFMessageCrudService(JCFUserService userService, JCFChannelService channelService) {
         this.userService = userService;
         this.channelService = channelService;
+        data = new HashMap<>();
     }
 
     @Override
