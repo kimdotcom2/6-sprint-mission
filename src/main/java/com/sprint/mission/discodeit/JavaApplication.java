@@ -87,7 +87,7 @@ public class JavaApplication {
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
         messageService.create(messageOne);
         System.out.println(messageOne.getId() + " 메시지 등록");
-        Message messageTwo = new Message(userOne.getId(), channelTwo.getId(), "messageTwo", true, messageOne.getId());
+        Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
         messageService.create(messageTwo);
         System.out.println(messageTwo.getId() + " 메시지 등록");
         System.out.println(messageOne.getId() + " 메시지 읽기");
