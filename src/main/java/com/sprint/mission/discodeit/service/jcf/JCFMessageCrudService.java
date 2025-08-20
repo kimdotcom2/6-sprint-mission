@@ -30,6 +30,10 @@ public class JCFMessageCrudService implements MessageService {
             throw new IllegalArgumentException("No such channel.");
         }
 
+        if (data.containsKey(message.getId())) {
+            throw new IllegalArgumentException("Message already exists.");
+        }
+
         data.put(message.getId(), message);
 
     }
@@ -89,6 +93,10 @@ public class JCFMessageCrudService implements MessageService {
     public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
         if (!data.containsKey(id)) {
+            throw new IllegalArgumentException();
+        }
+
+        if (!data.containsKey(parentMessageId) || isReply) {
             throw new IllegalArgumentException();
         }
 

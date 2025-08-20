@@ -16,6 +16,10 @@ public class JCFChannelCrudService implements ChannelService {
     @Override
     public void create(Channel channel) {
 
+        if (data.containsKey(channel.getId())) {
+            throw new IllegalArgumentException("Channel already exists.");
+        }
+
         data.put(channel.getId(), channel);
 
     }

@@ -16,6 +16,10 @@ public class JCFUserCrudService implements UserService {
     @Override
     public void create(User user) {
 
+        if (data.containsKey(user.getId())) {
+            throw new IllegalArgumentException("User already exists.");
+        }
+
         data.put(user.getId(), user);
 
     }

@@ -30,10 +30,13 @@ public class FileUserCrudService implements UserService {
     @Override
     public void create(User user) {
 
+        if (existById(user.getId())) {
+            throw new IllegalArgumentException("User already exists.");
+        }
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            //System.out.println(user.getId());
             oos.writeObject(user);
         } catch (IOException e) {
             throw new IllegalArgumentException();

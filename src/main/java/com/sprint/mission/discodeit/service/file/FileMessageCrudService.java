@@ -45,6 +45,10 @@ public class FileMessageCrudService implements MessageService {
             throw new IllegalArgumentException("No such channel.");
         }
 
+        if (existById(message.getId())) {
+            throw new IllegalArgumentException("Message already exists.");
+        }
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
@@ -122,7 +126,11 @@ public class FileMessageCrudService implements MessageService {
     @Override
     public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
-        Message message = readById(id).orElseThrow();
+        Message message = readById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (existById(parentMessageId) || !message.isReply()) {
+            throw new IllegalArgumentException();
+        }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {

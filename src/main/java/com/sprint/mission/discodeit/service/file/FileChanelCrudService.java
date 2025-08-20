@@ -30,6 +30,10 @@ public class FileChanelCrudService implements ChannelService {
     @Override
     public void create(Channel channel) {
 
+        if (existById(channel.getId())) {
+            throw new IllegalArgumentException("Channel already exists.");
+        }
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve( channel.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
