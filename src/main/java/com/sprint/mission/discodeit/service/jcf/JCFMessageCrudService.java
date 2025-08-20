@@ -1,19 +1,19 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.service.JCFChannelService;
-import com.sprint.mission.discodeit.service.JCFMessageService;
-import com.sprint.mission.discodeit.service.JCFUserService;
+import com.sprint.mission.discodeit.service.ChannelService;
+import com.sprint.mission.discodeit.service.MessageService;
+import com.sprint.mission.discodeit.service.UserService;
 
 import java.util.*;
 
-public class JCFMessageCrudService implements JCFMessageService {
+public class JCFMessageCrudService implements MessageService {
 
     private final Map<UUID, Message> data;
-    private final JCFUserService userService;
-    private final JCFChannelService channelService;
+    private final UserService userService;
+    private final ChannelService channelService;
 
-    public JCFMessageCrudService(JCFUserService userService, JCFChannelService channelService) {
+    public JCFMessageCrudService(UserService userService, ChannelService channelService) {
         this.userService = userService;
         this.channelService = channelService;
         data = new HashMap<>();

@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.service.JCFUserService;
+import com.sprint.mission.discodeit.service.UserService;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class FileUserCrudService implements JCFUserService {
+public class FileUserCrudService implements UserService {
 
     private final Path path;
 
