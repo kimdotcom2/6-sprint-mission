@@ -1,32 +1,30 @@
 package com.sprint.mission.discodeit.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Channel extends BaseEntity implements Serializable {
 
-    private List<User> userList = new ArrayList<>();
-    private List<Message> messages = new ArrayList<>();
+    private Map<UUID, User> userMap = new HashMap<>();
+    private Map<UUID, Message> messageMap = new HashMap<>();
     private String channelName;
     private String category;
     private boolean isVoiceChannel;
 
-    public List<User> getUserList() {
-        return userList;
+    public Map<UUID, User> getUserMap() {
+        return userMap;
     }
 
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
+    public void setUserMap(Map<UUID, User> userMap) {
+        this.userMap = userMap;
     }
 
-    public List<Message> getMessageList() {
-        return messages;
+    public Map<UUID, Message> getMessageMap() {
+        return messageMap;
     }
 
-    public void setMessageList(List<Message> messages) {
-        this.messages = messages;
+    public void setMessageMap(Map<UUID, Message> messageMap) {
+        this.messageMap = messageMap;
     }
 
     public String getChannelName() {

@@ -33,7 +33,7 @@ public class JCFChannelCrudService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        data.get(channelId).getUserList().add(user);
+        data.get(channelId).getUserMap().put(user.getId(), user);
 
     }
 
@@ -44,7 +44,7 @@ public class JCFChannelCrudService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        data.get(channelId).getMessageList().add(message);
+        data.get(channelId).getMessageMap().put(message.getId(), message);
 
     }
 
@@ -107,7 +107,7 @@ public class JCFChannelCrudService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        data.get(channelId).getUserList().removeIf(user -> user.getId().equals(userId));
+        data.get(channelId).getUserMap().remove(userId);
 
     }
 
@@ -118,7 +118,7 @@ public class JCFChannelCrudService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        data.get(channelId).getMessageList().removeIf(user -> user.getId().equals(messageId));
+        data.get(channelId).getMessageMap().remove(messageId);
 
     }
 }

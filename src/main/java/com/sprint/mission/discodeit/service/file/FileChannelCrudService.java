@@ -51,7 +51,7 @@ public class FileChannelCrudService implements ChannelService {
     public void addUserToChannel(UUID channelId, User user) {
 
         Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
-        channel.getUserList().add(user);
+        channel.getUserMap().put(user.getId(), user);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -66,7 +66,7 @@ public class FileChannelCrudService implements ChannelService {
     public void addMessageToChannel(UUID channelId, Message message) {
 
         Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
-        channel.getMessageList().add(message);
+        channel.getMessageMap().put(message.getId(), message);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -161,7 +161,7 @@ public class FileChannelCrudService implements ChannelService {
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
         Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
-        channel.getUserList().removeIf(user -> user.getId().equals(userId));
+        channel.getUserMap().remove(userId);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -176,7 +176,7 @@ public class FileChannelCrudService implements ChannelService {
     public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
 
         Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
-        channel.getMessageList().removeIf(message -> message.getId().equals(messageId));
+        channel.getMessageMap().remove(messageId);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
