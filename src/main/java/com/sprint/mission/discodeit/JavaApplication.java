@@ -285,6 +285,10 @@ public class JavaApplication {
         }
 
         try {
+            channelOne = fileChannelCrudService.findChannelById(channelOne.getId())
+                    .orElseThrow(IllegalArgumentException::new);
+            channelTwo = fileChannelCrudService.findChannelById(channelTwo.getId())
+                    .orElseThrow(IllegalArgumentException::new);
             System.out.println(channelTwo.getChannelName() + " 채널 읽기");
             System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
@@ -297,7 +301,7 @@ public class JavaApplication {
         //채널 삭제
         System.out.println("채널 삭제");
         System.out.println(channelOne.getChannelName() + " 에서 "
-                + user.getNickname() + " 유저 삭제");
+                + channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
         fileChannelCrudService.deleteUserFromChannel(channelOne.getId(), user.getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
 
