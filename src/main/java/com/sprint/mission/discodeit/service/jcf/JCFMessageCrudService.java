@@ -85,7 +85,7 @@ public class JCFMessageCrudService implements MessageService {
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().getContent());
         });*/
-        return List.of(data.values().toArray(new Message[0]));
+        return new ArrayList<>(data.values());
 
     }
 

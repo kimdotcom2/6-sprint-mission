@@ -61,7 +61,7 @@ public class JCFUserCrudService implements UserService {
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().toString());
         });*/
-        return List.of(data.values().toArray(new User[0]));
+        return new ArrayList<>(data.values());
 
     }
 
