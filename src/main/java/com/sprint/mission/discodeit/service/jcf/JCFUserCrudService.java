@@ -10,7 +10,7 @@ public class JCFUserCrudService implements UserService {
     private final Map<UUID, User> data;
 
     public JCFUserCrudService() {
-        data = new HashMap<>();
+        data = new TreeMap<>();
     }
 
     @Override

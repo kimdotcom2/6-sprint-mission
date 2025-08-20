@@ -14,10 +14,7 @@ import com.sprint.mission.discodeit.service.jcf.JCFMessageCrudService;
 import com.sprint.mission.discodeit.service.jcf.JCFUserCrudService;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class JavaApplication {
 
@@ -168,9 +165,9 @@ public class JavaApplication {
         //채널 등록
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Map<UUID, User> userMap = new HashMap<>();
+        Map<UUID, User> userMap = new TreeMap<>();
         userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new HashMap<>();
+        Map<UUID, Message> messageMap = new TreeMap<>();
         messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");
@@ -252,9 +249,9 @@ public class JavaApplication {
         //채널 등록
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Map<UUID, User> userMap = new HashMap<>();
+        Map<UUID, User> userMap = new TreeMap<>();
         userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new HashMap<>();
+        Map<UUID, Message> messageMap = new TreeMap<>();
         messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");

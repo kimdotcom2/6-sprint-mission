@@ -16,7 +16,7 @@ public class JCFMessageCrudService implements MessageService {
     public JCFMessageCrudService(UserService userService, ChannelService channelService) {
         this.userService = userService;
         this.channelService = channelService;
-        data = new HashMap<>();
+        data = new TreeMap<>();
     }
 
     @Override

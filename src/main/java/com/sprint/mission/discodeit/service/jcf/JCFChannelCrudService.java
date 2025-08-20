@@ -12,7 +12,7 @@ public class JCFChannelCrudService implements ChannelService {
     private final Map<UUID, Channel> data;
 
     public JCFChannelCrudService() {
-        this.data = new HashMap<>();
+        this.data = new TreeMap<>();
     }
 
     @Override
