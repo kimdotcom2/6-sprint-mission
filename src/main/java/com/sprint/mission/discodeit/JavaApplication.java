@@ -442,12 +442,12 @@ public class JavaApplication {
 
         try {
             System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
+            fileMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
+                    .forEach(message -> System.out.println(message.toString()));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
 
-        fileMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
-                .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
         fileMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
