@@ -20,6 +20,15 @@ public class FileMessageCrudService implements MessageService {
     private final ChannelService channelService;
 
     public FileMessageCrudService(Path path, UserService userService, ChannelService channelService) {
+
+        if (!path.toFile().exists()) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new IllegalArgumentException();
+            }
+        }
+
         this.path = path;
         this.userService = userService;
         this.channelService = channelService;
