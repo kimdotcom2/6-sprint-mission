@@ -21,11 +21,11 @@ public class Channel extends BaseEntity implements Serializable {
         this.userList = userList;
     }
 
-    public List<Message> getMessages() {
+    public List<Message> getMessageList() {
         return messages;
     }
 
-    public void setMessages(List<Message> messages) {
+    public void setMessageList(List<Message> messages) {
         this.messages = messages;
     }
 

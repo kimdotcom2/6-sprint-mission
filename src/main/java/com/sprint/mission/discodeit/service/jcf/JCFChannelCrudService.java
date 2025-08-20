@@ -1,6 +1,8 @@
 package com.sprint.mission.discodeit.service.jcf;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.util.*;
@@ -21,6 +23,28 @@ public class JCFChannelCrudService implements ChannelService {
         }
 
         data.put(channel.getId(), channel);
+
+    }
+
+    @Override
+    public void addUserToChannel(UUID channelId, User user) {
+
+        if (!data.containsKey(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        data.get(channelId).getUserList().add(user);
+
+    }
+
+    @Override
+    public void addMessageToChannel(UUID channelId, Message message) {
+
+        if (!data.containsKey(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        data.get(channelId).getMessageList().add(message);
 
     }
 
@@ -73,6 +97,28 @@ public class JCFChannelCrudService implements ChannelService {
         }
 
         data.remove(id);
+
+    }
+
+    @Override
+    public void deleteUserFromChannel(UUID channelId, UUID userId) {
+
+        if (!data.containsKey(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        data.get(channelId).getUserList().removeIf(user -> user.getId().equals(userId));
+
+    }
+
+    @Override
+    public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
+
+        if (!data.containsKey(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        data.get(channelId).getMessageList().removeIf(user -> user.getId().equals(messageId));
 
     }
 }

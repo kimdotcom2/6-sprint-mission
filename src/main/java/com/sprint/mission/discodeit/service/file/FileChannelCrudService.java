@@ -1,6 +1,8 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.io.*;
@@ -38,6 +40,36 @@ public class FileChannelCrudService implements ChannelService {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
             //System.out.println(channel.getId());
+            oos.writeObject(channel);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    @Override
+    public void addUserToChannel(UUID channelId, User user) {
+
+        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        channel.getUserList().add(user);
+
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(channel);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    @Override
+    public void addMessageToChannel(UUID channelId, Message message) {
+
+        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        channel.getMessageList().add(message);
+
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
             throw new IllegalArgumentException();
@@ -120,6 +152,36 @@ public class FileChannelCrudService implements ChannelService {
             }
 
         } else {
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    @Override
+    public void deleteUserFromChannel(UUID channelId, UUID userId) {
+
+        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        channel.getUserList().removeIf(user -> user.getId().equals(userId));
+
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(channel);
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
+
+    }
+
+    @Override
+    public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
+
+        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        channel.getMessageList().removeIf(message -> message.getId().equals(messageId));
+
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(channel);
+        } catch (IOException e) {
             throw new IllegalArgumentException();
         }
 
