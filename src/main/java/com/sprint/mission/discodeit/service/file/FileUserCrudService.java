@@ -67,6 +67,32 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
+    public Optional<User> findUserByEmail(String email) {
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (User) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(user -> user.getEmail().equals(email))
+                    .findFirst();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+
+    }
+
+    @Override
     public List<User> findAllUsers() {
 
         try (Stream<Path> pathStream = Files.list(path)) {

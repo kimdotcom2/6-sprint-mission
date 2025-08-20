@@ -117,4 +117,20 @@ class FileUserCrudServiceTest {
         assertEquals(userService.findUserById(user.getId()).orElse(null), null);
 
     }
+
+    @Test
+    void findUserByEmail() {
+
+        //given
+        User user = new User("test", "test", "test", "test");
+        userService.create(user);
+
+        //when
+        User user1 = userService.findUserByEmail(user.getEmail()).orElse(null);
+
+        //then
+        assertEquals(user1.getEmail(), user.getEmail());
+        userService.deleteById(user.getId());
+
+    }
 }

@@ -45,6 +45,15 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
+    public Optional<User> findUserByEmail(String email) {
+
+        return data.entrySet().stream()
+                .filter(entry -> entry.getValue().getEmail().equals(email))
+                .findFirst().map(Map.Entry::getValue);
+
+    }
+
+    @Override
     public List<User> findAllUsers() {
 
         System.out.println("User List:");
