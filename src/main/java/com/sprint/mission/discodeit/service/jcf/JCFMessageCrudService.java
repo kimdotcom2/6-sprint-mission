@@ -23,17 +23,11 @@ public class JCFMessageCrudService implements MessageService {
     public void create(Message message) {
 
         if (!userService.existById(message.getUserId())) {
-
-            System.out.println("No such user.");
-            return;
-
+            throw new IllegalArgumentException("No such user.");
         }
 
         if (!channelService.existById(message.getChannelId())) {
-
-            System.out.println("No such channel.");
-            return;
-
+            throw new IllegalArgumentException("No such channel.");
         }
 
         data.put(message.getId(), message);

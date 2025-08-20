@@ -6,14 +6,13 @@ import com.sprint.mission.discodeit.service.UserService;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class FileUserCrudService implements UserService {
 
     private final Path path;
+    private static final String FILE_EXTENSION = ".ser";
 
     public FileUserCrudService(Path path) {
 
@@ -21,7 +20,7 @@ public class FileUserCrudService implements UserService {
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new IllegalArgumentException();
             }
         }
 
@@ -31,12 +30,13 @@ public class FileUserCrudService implements UserService {
     @Override
     public void create(User user) {
 
-        try(FileOutputStream fos = new FileOutputStream(path.toString() + "\\" + user.getId().toString() + ".ser");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);) {
+        try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
+            ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
+            //System.out.println(user.getId());
             oos.writeObject(user);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException();
         }
 
     }
@@ -44,27 +44,17 @@ public class FileUserCrudService implements UserService {
     @Override
     public boolean existById(UUID id) {
 
-        try (FileInputStream fis = new FileInputStream(path.toString() + "\\" + id.toString() + ".ser");
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-            User user = (User) ois.readObject();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-
-        return true;
+        return Files.exists(path.resolve(id + FILE_EXTENSION));
     }
 
     @Override
     public Optional<User> readById(UUID id) {
 
-        try (FileInputStream fis = new FileInputStream(path.toString() + "\\" + id.toString() + ".ser");
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             User user = (User) ois.readObject();
 
-            //System.out.println(user.toString());
             return Optional.ofNullable(user);
 
         } catch (IOException | ClassNotFoundException e) {
@@ -76,25 +66,23 @@ public class FileUserCrudService implements UserService {
     @Override
     public List<User> readAll() {
 
-        if (Files.exists(path)) {
-            try {
-                return Files.list(path)
-                        .map(path -> {
-                            try (
-                                    FileInputStream fis = new FileInputStream(path.toFile());
-                                    ObjectInputStream ois = new ObjectInputStream(fis)
-                            ) {
-                                Object data = ois.readObject();
-                                return (User) data;
-                            } catch (IOException | ClassNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                        })
-                        .toList();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (User) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+        } catch (IOException e) {
             return new ArrayList<>();
         }
 
@@ -103,10 +91,34 @@ public class FileUserCrudService implements UserService {
     @Override
     public void update(UUID id, String nickname, String email, String password, String description) {
 
+        User user = readById(id).orElseThrow(IllegalArgumentException::new);
+
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+
+            user.update(nickname, email, password, description);
+            oos.writeObject(user);
+
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
+
     }
 
     @Override
     public void deleteById(UUID id) {
+
+        File file = path.resolve(id + FILE_EXTENSION).toFile();
+
+        if (file.exists()) {
+
+            if (!file.delete()) {
+                throw new IllegalArgumentException();
+            }
+
+        } else {
+            throw new IllegalArgumentException();
+        }
 
     }
 }
