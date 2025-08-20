@@ -93,11 +93,11 @@ public class JCFMessageCrudService implements MessageService {
     public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
         if (isReply && !data.containsKey(parentMessageId)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such parent message.");
         }
 
         data.get(id).update(content, isReply, parentMessageId);
@@ -108,7 +108,7 @@ public class JCFMessageCrudService implements MessageService {
     public void deleteById(UUID id) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
         data.remove(id);

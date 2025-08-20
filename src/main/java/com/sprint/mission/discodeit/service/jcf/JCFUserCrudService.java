@@ -69,7 +69,7 @@ public class JCFUserCrudService implements UserService {
     public void update(UUID id, String nickname, String email, String password, String description) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such user.");
         }
 
         data.get(id).update(nickname, email, password, description);
@@ -80,7 +80,7 @@ public class JCFUserCrudService implements UserService {
     public void deleteById(UUID id) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such user.");
         }
 
         data.remove(id);

@@ -22,7 +22,7 @@ public class FileChannelCrudService implements ChannelService {
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Invalid path");
             }
         }
 
@@ -42,7 +42,7 @@ public class FileChannelCrudService implements ChannelService {
             //System.out.println(channel.getId());
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -57,7 +57,7 @@ public class FileChannelCrudService implements ChannelService {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -65,14 +65,15 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void addMessageToChannel(UUID channelId, Message message) {
 
-        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
         channel.getMessageMap().put(message.getId(), message);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -126,7 +127,8 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
-        Channel channel = findChannelById(id).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -135,7 +137,7 @@ public class FileChannelCrudService implements ChannelService {
             oos.writeObject(channel);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -148,11 +150,11 @@ public class FileChannelCrudService implements ChannelService {
         if (file.exists()) {
 
             if (!file.delete()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Failed to delete file.");
             }
 
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -160,14 +162,15 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
-        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
         channel.getUserMap().remove(userId);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -175,14 +178,15 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
 
-        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
         channel.getMessageMap().remove(messageId);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }

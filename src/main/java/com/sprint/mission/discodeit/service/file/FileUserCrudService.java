@@ -20,7 +20,7 @@ public class FileUserCrudService implements UserService {
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Invalid path");
             }
         }
 
@@ -39,7 +39,7 @@ public class FileUserCrudService implements UserService {
 
             oos.writeObject(user);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such user.");
         }
 
     }
@@ -129,7 +129,7 @@ public class FileUserCrudService implements UserService {
             oos.writeObject(user);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such user.");
         }
 
     }
@@ -142,11 +142,11 @@ public class FileUserCrudService implements UserService {
         if (file.exists()) {
 
             if (!file.delete()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Failed to delete file.");
             }
 
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such user.");
         }
 
     }

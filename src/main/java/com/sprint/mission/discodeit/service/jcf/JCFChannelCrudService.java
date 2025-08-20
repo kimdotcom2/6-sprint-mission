@@ -82,7 +82,7 @@ public class JCFChannelCrudService implements ChannelService {
     public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
         data.get(id).update(channelName, category, isVoiceChannel);
