@@ -6,7 +6,7 @@ import java.util.*;
 public class Channel extends BaseEntity implements Serializable {
 
     private Map<UUID, User> userMap = new TreeMap<>();
-    private Map<UUID, Message> messageMap = new TreeMap<>();
+    private Map<UUID, Message> messageMap = new LinkedHashMap<>();
     private String channelName;
     private String category;
     private boolean isVoiceChannel;

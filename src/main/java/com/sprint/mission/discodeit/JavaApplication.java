@@ -167,7 +167,7 @@ public class JavaApplication {
         Message message = new Message(user.getId(), null, "message", false, null);
         Map<UUID, User> userMap = new TreeMap<>();
         userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new TreeMap<>();
+        Map<UUID, Message> messageMap = new LinkedHashMap<>();
         messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");
@@ -251,7 +251,7 @@ public class JavaApplication {
         Message message = new Message(user.getId(), null, "message", false, null);
         Map<UUID, User> userMap = new TreeMap<>();
         userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new TreeMap<>();
+        Map<UUID, Message> messageMap = new LinkedHashMap<>();
         messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");
