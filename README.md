@@ -50,7 +50,7 @@
 - 각 도메인 별로 CrudService의 JCF 구현체 클래스 implement
 - JavaApplication 클래스 생성
 - main 메소드에 테스트 코드 추가
-- MesseageService에 ChannelService, UserService를 필드로 사용하도록 컴포지션 패턴 추가
+- MessageService에 ChannelService, UserService를 필드로 사용하도록 컴포지션 패턴 추가
 
 ## 스크린샷
 <img width="1446" height="464" alt="유저서비스" src="https://github.com/user-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
