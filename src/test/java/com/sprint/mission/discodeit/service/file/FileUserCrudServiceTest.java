@@ -3,12 +3,10 @@ package com.sprint.mission.discodeit.service.file;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +25,7 @@ class FileUserCrudServiceTest {
         userService.create(user);
 
         //then
-        User user1 = userService.readById(user.getId()).orElse(null);
+        User user1 = userService.findUserById(user.getId()).orElse(null);
         assertNotNull(user1);
         System.out.println(user1.toString());
         assertEquals(user1.getId(), user.getId());
@@ -52,7 +50,7 @@ class FileUserCrudServiceTest {
     }
 
     @Test
-    void readById() {
+    void findUserById() {
 
         //given
         User user = new User("test", "test", "test", "test");
@@ -60,7 +58,7 @@ class FileUserCrudServiceTest {
 
         //when
         userService.create(user);
-        User user1 = userService.readById(user.getId()).orElse(null);
+        User user1 = userService.findUserById(user.getId()).orElse(null);
 
         //then
         assertEquals(user1.getId(), user.getId());
@@ -69,7 +67,7 @@ class FileUserCrudServiceTest {
     }
 
     @Test
-    void readAll() {
+    void findAllUsers() {
 
         //given
         User user = new User("test", "test", "test", "test");
@@ -77,7 +75,7 @@ class FileUserCrudServiceTest {
 
         //when
         userService.create(user);
-        List<User> users = userService.readAll();
+        List<User> users = userService.findAllUsers();
 
         //then
         users.forEach(System.out::println);
@@ -95,7 +93,7 @@ class FileUserCrudServiceTest {
 
         //when
         userService.update(user.getId(), "test2", "test2", "test2", "test2");
-        User user1 = userService.readById(user.getId()).orElse(null);
+        User user1 = userService.findUserById(user.getId()).orElse(null);
 
         //then
         System.out.println(user1.toString());
@@ -115,8 +113,8 @@ class FileUserCrudServiceTest {
         userService.deleteById(user.getId());
 
         //then
-        assertFalse(userService.readAll().contains(user));
-        assertEquals(userService.readById(user.getId()).orElse(null), null);
+        assertFalse(userService.findAllUsers().contains(user));
+        assertEquals(userService.findUserById(user.getId()).orElse(null), null);
 
     }
 }

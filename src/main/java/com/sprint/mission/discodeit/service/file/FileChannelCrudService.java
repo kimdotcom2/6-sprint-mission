@@ -51,7 +51,7 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> readById(UUID id) {
+    public Optional<Channel> findChannelById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -67,7 +67,7 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public List<Channel> readAll() {
+    public List<Channel> findAllChannels() {
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -94,7 +94,7 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
-        Channel channel = readById(id).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(id).orElseThrow(IllegalArgumentException::new);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {

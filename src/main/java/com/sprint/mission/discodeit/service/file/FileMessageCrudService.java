@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -64,7 +63,7 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public Optional<Message> readById(UUID id) {
+    public Optional<Message> findMessageById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -80,15 +79,15 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public List<Message> readChildrenById(UUID id) {
+    public List<Message> findChildMessagesById(UUID id) {
 
         if (!existById(id)) {
             throw new IllegalArgumentException();
         }
 
-        System.out.println(readAll().size());
+        System.out.println(findAllMessages().size());
 
-        List<Message> childMessageList = readAll().stream()
+        List<Message> childMessageList = findAllMessages().stream()
                 .filter(message -> message.isReply() && message.getParentMessageId()
                         .equals(id)).toList();
 
@@ -99,7 +98,7 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public List<Message> readAll() {
+    public List<Message> findAllMessages() {
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -126,7 +125,7 @@ public class FileMessageCrudService implements MessageService {
     @Override
     public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
-        Message message = readById(id).orElseThrow(IllegalArgumentException::new);
+        Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
 
         if (existById(parentMessageId) || !message.isReply()) {
             throw new IllegalArgumentException();

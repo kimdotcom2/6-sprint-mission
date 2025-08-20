@@ -30,7 +30,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public Optional<User> readById(UUID id) {
+    public Optional<User> findUserById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -45,7 +45,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public List<User> readAll() {
+    public List<User> findAllUsers() {
 
         System.out.println("User List:");
 

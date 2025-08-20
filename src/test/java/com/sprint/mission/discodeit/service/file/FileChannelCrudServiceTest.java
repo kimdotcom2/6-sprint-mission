@@ -43,7 +43,7 @@ class FileChannelCrudServiceTest {
     }
 
     @Test
-    void readById() {
+    void findChannelById() {
 
         //given
         Channel channel = new Channel("test", "test", true);
@@ -53,7 +53,7 @@ class FileChannelCrudServiceTest {
 
         //then
         assertTrue(fileChannelService.existById(channel.getId()));
-        Channel channel1 = fileChannelService.readById(channel.getId()).orElse(null);
+        Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
         System.out.println(channel1.toString());
         assertEquals(channel1.getId(), channel.getId());
         fileChannelService.deleteById(channel.getId());
@@ -61,7 +61,7 @@ class FileChannelCrudServiceTest {
     }
 
     @Test
-    void readAll() {
+    void findAllChannels() {
 
         //given
         Channel channel = new Channel("test", "test", true);
@@ -72,7 +72,7 @@ class FileChannelCrudServiceTest {
         fileChannelService.create(channel1);
 
         //then
-        fileChannelService.readAll().forEach(System.out::println);
+        fileChannelService.findAllChannels().forEach(System.out::println);
         fileChannelService.deleteById(channel.getId());
         fileChannelService.deleteById(channel1.getId());
 
@@ -90,7 +90,7 @@ class FileChannelCrudServiceTest {
 
         //then
         assertTrue(fileChannelService.existById(channel.getId()));
-        Channel channel1 = fileChannelService.readById(channel.getId()).orElse(null);
+        Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
         System.out.println(channel1.toString());
         assertEquals(channel1.getChannelName(), "test2");
         fileChannelService.deleteById(channel.getId());

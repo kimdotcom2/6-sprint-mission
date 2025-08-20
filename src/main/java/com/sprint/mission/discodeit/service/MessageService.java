@@ -12,11 +12,11 @@ public interface MessageService {
 
     boolean existById(UUID id);
 
-    Optional<Message> readById(UUID id);
+    Optional<Message> findMessageById(UUID id);
 
-    List<Message> readChildrenById(UUID id);
+    List<Message> findChildMessagesById(UUID id);
 
-    List<Message> readAll();
+    List<Message> findAllMessages();
 
     void update(UUID id, String content, boolean isReply, UUID parentMessageId);
 

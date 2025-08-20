@@ -30,7 +30,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> readById(UUID id) {
+    public Optional<Channel> findChannelById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -43,7 +43,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public List<Channel> readAll() {
+    public List<Channel> findAllChannels() {
 
         System.out.println("Channel List:");
 

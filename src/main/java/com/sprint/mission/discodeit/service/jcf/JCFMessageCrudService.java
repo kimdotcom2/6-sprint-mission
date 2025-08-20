@@ -44,7 +44,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public Optional<Message> readById(UUID id) {
+    public Optional<Message> findMessageById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -57,7 +57,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public List<Message> readChildrenById(UUID id) {
+    public List<Message> findChildMessagesById(UUID id) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException();
@@ -78,7 +78,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public List<Message> readAll() {
+    public List<Message> findAllMessages() {
 
         System.out.println("Message List:");
 

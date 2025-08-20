@@ -51,7 +51,7 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public Optional<User> readById(UUID id) {
+    public Optional<User> findUserById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -67,7 +67,7 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public List<User> readAll() {
+    public List<User> findAllUsers() {
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -94,7 +94,7 @@ public class FileUserCrudService implements UserService {
     @Override
     public void update(UUID id, String nickname, String email, String password, String description) {
 
-        User user = readById(id).orElseThrow(IllegalArgumentException::new);
+        User user = findUserById(id).orElseThrow(IllegalArgumentException::new);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {

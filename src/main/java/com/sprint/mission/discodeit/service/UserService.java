@@ -12,9 +12,9 @@ public interface UserService {
 
     boolean existById(UUID id);
 
-    Optional<User> readById(UUID id);
+    Optional<User> findUserById(UUID id);
 
-    List<User> readAll();
+    List<User> findAllUsers();
 
     void update(UUID id, String nickname, String email, String password, String description);
 

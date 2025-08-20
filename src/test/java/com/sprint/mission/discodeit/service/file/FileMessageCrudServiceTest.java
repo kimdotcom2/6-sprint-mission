@@ -32,7 +32,7 @@ class FileMessageCrudServiceTest {
         messageService.create(message);
 
         //when
-        Message message1 = messageService.readById(message.getId()).orElse(null);
+        Message message1 = messageService.findMessageById(message.getId()).orElse(null);
         System.out.println(message1.toString());
 
         //then
@@ -67,7 +67,7 @@ class FileMessageCrudServiceTest {
     }
 
     @Test
-    void readById() {
+    void findMessageById() {
 
         //given
         User user = new User("test", "test", "test", "test");
@@ -78,7 +78,7 @@ class FileMessageCrudServiceTest {
         messageService.create(message);
 
         //when
-        Message message1 = messageService.readById(message.getId()).orElse(null);
+        Message message1 = messageService.findMessageById(message.getId()).orElse(null);
 
         //then
         System.out.println(message1.toString());
@@ -91,7 +91,7 @@ class FileMessageCrudServiceTest {
     }
 
     @Test
-    void readChildrenById() {
+    void findChildMessagesById() {
 
         //given
         User user = new User("test", "test", "test", "test");
@@ -106,7 +106,7 @@ class FileMessageCrudServiceTest {
         messageService.create(message2);
 
         //when
-        List<Message> messageList = messageService.readChildrenById(message.getId());
+        List<Message> messageList = messageService.findChildMessagesById(message.getId());
 
         //then
         messageList.forEach(m -> System.out.println(m.toString()));
@@ -121,7 +121,7 @@ class FileMessageCrudServiceTest {
     }
 
     @Test
-    void readAll() {
+    void findAllMessages() {
 
         //given
         User user = new User("test", "test", "test", "test");
@@ -136,7 +136,7 @@ class FileMessageCrudServiceTest {
         messageService.create(message2);
 
         //when
-        List<Message> messageList = messageService.readAll();
+        List<Message> messageList = messageService.findAllMessages();
 
         //then
         messageList.forEach(m -> System.out.println(m.toString()));
@@ -161,14 +161,14 @@ class FileMessageCrudServiceTest {
         messageService.create(message);
 
         //when
-        Message message1 = messageService.readById(message.getId()).orElse(null);
+        Message message1 = messageService.findMessageById(message.getId()).orElse(null);
         messageService.update(message1.getId(), "test2", false, null);
 
         //then
-        System.out.println(messageService.readById(message.getId()).orElse(null).toString());
+        System.out.println(messageService.findMessageById(message.getId()).orElse(null).toString());
         assertTrue(messageService.existById(message1.getId()));
-        assertEquals(messageService.readById(message.getId()).orElse(null).getId(), message1.getId());
-        assertEquals(messageService.readById(message.getId()).orElse(null).getContent(), "test2");
+        assertEquals(messageService.findMessageById(message.getId()).orElse(null).getId(), message1.getId());
+        assertEquals(messageService.findMessageById(message.getId()).orElse(null).getContent(), "test2");
         messageService.deleteById(message1.getId());
         fileUserService.deleteById(user.getId());
         channelService.deleteById(channel.getId());

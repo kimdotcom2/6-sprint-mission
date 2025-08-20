@@ -44,13 +44,13 @@ public class JavaApplication {
         System.out.println(userTwo.getNickname() + " 유저 추가");
         try {
             System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(jcfUserCrudService.readById(userOne.getId())
+            System.out.println(jcfUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such user.");
         }
         System.out.println("유저 목록 읽기");
-        jcfUserCrudService.readAll().stream()
+        jcfUserCrudService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -64,7 +64,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(jcfUserCrudService.readById(userOne.getId())
+            System.out.println(jcfUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such user.");
@@ -80,7 +80,7 @@ public class JavaApplication {
             System.out.println("No such user.");
         }
         System.out.println("유저 목록 읽기");
-        jcfUserCrudService.readAll().stream()
+        jcfUserCrudService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -100,13 +100,13 @@ public class JavaApplication {
         System.out.println(userTwo.getNickname() + " 유저 추가");
         try {
             System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(fileUserService.readById(userOne.getId())
+            System.out.println(fileUserService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such user.");
         }
         System.out.println("유저 목록 읽기");
-        fileUserService.readAll().stream()
+        fileUserService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -120,7 +120,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(fileUserService.readById(userOne.getId())
+            System.out.println(fileUserService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such user.");
@@ -136,7 +136,7 @@ public class JavaApplication {
             System.out.println("No such user.");
         }
         System.out.println("유저 목록 읽기");
-        fileUserService.readAll().stream()
+        fileUserService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -156,13 +156,13 @@ public class JavaApplication {
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
         try {
             System.out.println(channelOne.getChannelName() + " 채널 읽기");
-            System.out.println(jcfChannelCrudService.readById(channelOne.getId())
+            System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such channel.");
         }
         System.out.println("채널 목록 읽기");
-        jcfChannelCrudService.readAll().stream()
+        jcfChannelCrudService.findAllChannels().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -176,7 +176,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-            System.out.println(jcfChannelCrudService.readById(channelTwo.getId())
+            System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such channel.");
@@ -192,7 +192,7 @@ public class JavaApplication {
             System.out.println("No such channel.");
         }
         System.out.println("채널 목록 읽기");
-        jcfChannelCrudService.readAll().stream()
+        jcfChannelCrudService.findAllChannels().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -212,13 +212,13 @@ public class JavaApplication {
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
         try {
             System.out.println(channelOne.getChannelName() + " 채널 읽기");
-            System.out.println(fileChannelService.readById(channelOne.getId())
+            System.out.println(fileChannelService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such channel.");
         }
         System.out.println("채널 목록 읽기");
-        fileChannelService.readAll().stream()
+        fileChannelService.findAllChannels().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -232,7 +232,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-            System.out.println(fileChannelService.readById(channelTwo.getId())
+            System.out.println(fileChannelService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such channel.");
@@ -248,7 +248,7 @@ public class JavaApplication {
             System.out.println("No such channel.");
         }
         System.out.println("채널 목록 읽기");
-        fileChannelService.readAll().stream()
+        fileChannelService.findAllChannels().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -279,7 +279,7 @@ public class JavaApplication {
         System.out.println(messageTwo.getId() + " 메시지 등록");
         try {
             System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(jcfMessageCrudService.readById(messageOne.getId())
+            System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
@@ -289,10 +289,10 @@ public class JavaApplication {
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
         }
-        jcfMessageCrudService.readChildrenById(messageOne.getId()).stream()
+        jcfMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
-        jcfMessageCrudService.readAll().stream()
+        jcfMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -306,7 +306,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(jcfMessageCrudService.readById(messageOne.getId())
+            System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
@@ -322,7 +322,7 @@ public class JavaApplication {
             System.out.println("No such message.");
         }
         System.out.println("메시지 목록 읽기");
-        jcfMessageCrudService.readAll().stream()
+        jcfMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -353,7 +353,7 @@ public class JavaApplication {
         System.out.println(messageTwo.getId() + " 메시지 등록");
         try {
             System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(fileMessageCrudService.readById(messageOne.getId())
+            System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
@@ -363,10 +363,10 @@ public class JavaApplication {
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
         }
-        fileMessageCrudService.readChildrenById(messageOne.getId()).stream()
+        fileMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
-        fileMessageCrudService.readAll().stream()
+        fileMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -380,7 +380,7 @@ public class JavaApplication {
         }
         try {
             System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(fileMessageCrudService.readById(messageOne.getId())
+            System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
             System.out.println("No such message.");
@@ -396,7 +396,7 @@ public class JavaApplication {
             System.out.println("No such message.");
         }
         System.out.println("메시지 목록 읽기");
-        fileMessageCrudService.readAll().stream()
+        fileMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 

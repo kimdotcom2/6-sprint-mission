@@ -12,9 +12,9 @@ public interface ChannelService {
 
     boolean existById(UUID id);
 
-    Optional<Channel> readById(UUID id);
+    Optional<Channel> findChannelById(UUID id);
 
-    List<Channel> readAll();
+    List<Channel> findAllChannels();
 
     void update(UUID id, String channelName, String category, boolean isVoiceChannel);
 
