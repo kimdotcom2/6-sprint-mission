@@ -52,7 +52,7 @@ public class JavaApplication {
             System.out.println(jcfUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("유저 목록 읽기");
@@ -67,7 +67,7 @@ public class JavaApplication {
             jcfUserCrudService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         try {
@@ -75,7 +75,7 @@ public class JavaApplication {
             System.out.println(jcfUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -86,7 +86,7 @@ public class JavaApplication {
             jcfUserCrudService.deleteById(userTwo.getId());
             System.out.println(userTwo.getNickname() + " 유저 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("유저 목록 읽기");
@@ -115,7 +115,7 @@ public class JavaApplication {
             System.out.println(fileUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("유저 목록 읽기");
@@ -130,7 +130,7 @@ public class JavaApplication {
             fileUserCrudService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         try {
@@ -138,7 +138,7 @@ public class JavaApplication {
             System.out.println(fileUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -150,7 +150,7 @@ public class JavaApplication {
             fileUserCrudService.deleteById(userTwo.getId());
             System.out.println(userTwo.getNickname() + " 유저 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such user.");
+            e.printStackTrace();
         }
 
         System.out.println("유저 목록 읽기");
@@ -190,7 +190,7 @@ public class JavaApplication {
             System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("채널 목록 읽기");
@@ -206,7 +206,7 @@ public class JavaApplication {
             jcfChannelCrudService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         try {
@@ -214,7 +214,7 @@ public class JavaApplication {
             System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -234,7 +234,7 @@ public class JavaApplication {
             jcfChannelCrudService.deleteById(channelTwo.getId());
             System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("채널 목록 읽기");
@@ -275,7 +275,7 @@ public class JavaApplication {
             System.out.println(fileChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("채널 목록 읽기");
@@ -291,7 +291,7 @@ public class JavaApplication {
             fileChannelCrudService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         try {
@@ -299,7 +299,7 @@ public class JavaApplication {
             System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -318,7 +318,7 @@ public class JavaApplication {
             fileChannelCrudService.deleteById(channelTwo.getId());
             System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such channel.");
+            e.printStackTrace();
         }
 
         System.out.println("채널 목록 읽기");
@@ -359,13 +359,13 @@ public class JavaApplication {
             System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         try {
             System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         jcfMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
@@ -382,7 +382,7 @@ public class JavaApplication {
             jcfMessageCrudService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         try {
@@ -390,7 +390,7 @@ public class JavaApplication {
             System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -402,7 +402,7 @@ public class JavaApplication {
             jcfMessageCrudService.deleteById(messageTwo.getId());
             System.out.println(messageTwo.getId() + " 메시지 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         System.out.println("메시지 목록 읽기");
@@ -443,13 +443,13 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         try {
             System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         fileMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
@@ -466,7 +466,7 @@ public class JavaApplication {
             fileMessageCrudService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         try {
@@ -474,7 +474,7 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         System.out.println("==========================");
@@ -485,7 +485,7 @@ public class JavaApplication {
             fileMessageCrudService.deleteById(messageTwo.getId());
             System.out.println(messageTwo.getId() + " 메시지 삭제");
         } catch (IllegalArgumentException e) {
-            System.out.println("No such message.");
+            e.printStackTrace();
         }
 
         System.out.println("메시지 목록 읽기");

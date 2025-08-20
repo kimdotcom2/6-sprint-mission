@@ -127,7 +127,7 @@ public class FileMessageCrudService implements MessageService {
 
         Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
 
-        if (existById(parentMessageId) || !message.isReply()) {
+        if (existById(parentMessageId) && !message.isReply()) {
             throw new IllegalArgumentException();
         }
 
