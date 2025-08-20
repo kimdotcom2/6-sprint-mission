@@ -95,10 +95,7 @@ public class JCFMessageCrudService implements JCFMessageService {
     public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such message.");
-            return;
-
+            throw new IllegalArgumentException();
         }
 
         data.get(id).update(content, isReply, parentMessageId);
@@ -109,10 +106,7 @@ public class JCFMessageCrudService implements JCFMessageService {
     public void deleteById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such message.");
-            return;
-
+            throw new IllegalArgumentException();
         }
 
         data.remove(id);

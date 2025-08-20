@@ -55,10 +55,7 @@ public class JCFChannelCrudService implements JCFChannelService {
     public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such channel.");
-            return;
-
+            throw new IllegalArgumentException();
         }
 
         data.get(id).update(channelName, category, isVoiceChannel);
@@ -69,10 +66,7 @@ public class JCFChannelCrudService implements JCFChannelService {
     public void deleteById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such channel.");
-            return;
-
+            throw new IllegalArgumentException();
         }
 
         data.remove(id);

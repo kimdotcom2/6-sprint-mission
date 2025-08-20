@@ -46,8 +46,12 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        userService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
-        System.out.println(userOne.getNickname() + " 정보 업데이트");
+        try {
+            userService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+            System.out.println(userOne.getNickname() + " 정보 업데이트");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such user.");
+        }
         try {
             System.out.println(userOne.getNickname() + " 유저 읽기");
             System.out.println(userService.readById(userOne.getId())
@@ -59,8 +63,12 @@ public class JavaApplication {
 
         //유저 삭제
         System.out.println("유저 삭제");
-        userService.deleteById(userTwo.getId());
-        System.out.println(userTwo.getNickname() + " 유저 삭제");
+        try {
+            userService.deleteById(userTwo.getId());
+            System.out.println(userTwo.getNickname() + " 유저 삭제");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such user.");
+        }
         System.out.println("유저 목록 읽기");
         userService.readAll().stream()
                 .forEach(user -> System.out.println(user.toString()));
@@ -94,8 +102,12 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        channelService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
-        System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+        try {
+            channelService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such channel.");
+        }
         try {
             System.out.println(channelTwo.getChannelName() + " 채널 읽기");
             System.out.println(channelService.readById(channelTwo.getId())
@@ -107,8 +119,12 @@ public class JavaApplication {
 
         //채널 삭제
         System.out.println("채널 삭제");
-        channelService.deleteById(channelTwo.getId());
-        System.out.println(channelTwo.getChannelName() + " 채널 삭제");
+        try {
+            channelService.deleteById(channelTwo.getId());
+            System.out.println(channelTwo.getChannelName() + " 채널 삭제");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such channel.");
+        }
         System.out.println("채널 목록 읽기");
         channelService.readAll().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -160,8 +176,12 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        messageService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
-        System.out.println(messageOne.getId() + " 정보 업데이트");
+        try {
+            messageService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            System.out.println(messageOne.getId() + " 정보 업데이트");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such message.");
+        }
         try {
             System.out.println(messageOne.getId() + " 메시지 읽기");
             System.out.println(messageService.readById(messageOne.getId())
@@ -173,8 +193,12 @@ public class JavaApplication {
 
         //메시지 삭제
         System.out.println("메시지 삭제");
-        messageService.deleteById(messageTwo.getId());
-        System.out.println(messageTwo.getId() + " 메시지 삭제");
+        try {
+            messageService.deleteById(messageTwo.getId());
+            System.out.println(messageTwo.getId() + " 메시지 삭제");
+        } catch (IllegalArgumentException e) {
+            System.out.println("No such message.");
+        }
         System.out.println("메시지 목록 읽기");
         messageService.readAll().stream()
                 .forEach(message -> System.out.println(message.toString()));

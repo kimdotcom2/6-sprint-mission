@@ -78,7 +78,7 @@ public class FileUserCrudService implements JCFUserService {
 
         if (Files.exists(path)) {
             try {
-                List<User> list = Files.list(path)
+                return Files.list(path)
                         .map(path -> {
                             try (
                                     FileInputStream fis = new FileInputStream(path.toFile());
@@ -91,7 +91,6 @@ public class FileUserCrudService implements JCFUserService {
                             }
                         })
                         .toList();
-                return list;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
