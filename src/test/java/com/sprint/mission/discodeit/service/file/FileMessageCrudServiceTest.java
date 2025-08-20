@@ -17,7 +17,7 @@ class FileMessageCrudServiceTest {
 
     String fileDirectory = "C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\";
     UserService fileUserService = new FileUserCrudService(Path.of(fileDirectory + "users"));
-    ChannelService channelService = new FileChanelCrudService(Path.of(fileDirectory + "channels"));
+    ChannelService channelService = new FileChannelCrudService(Path.of(fileDirectory + "channels"));
     MessageService messageService = new FileMessageCrudService(Path.of(fileDirectory + "messages"), fileUserService, channelService);
 
     @Test

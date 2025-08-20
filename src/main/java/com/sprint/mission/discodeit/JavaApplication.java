@@ -6,7 +6,7 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
-import com.sprint.mission.discodeit.service.file.FileChanelCrudService;
+import com.sprint.mission.discodeit.service.file.FileChannelCrudService;
 import com.sprint.mission.discodeit.service.file.FileMessageCrudService;
 import com.sprint.mission.discodeit.service.file.FileUserCrudService;
 import com.sprint.mission.discodeit.service.jcf.JCFChannelCrudService;
@@ -200,7 +200,7 @@ public class JavaApplication {
 
     public static void testFileChannelService() {
 
-        ChannelService fileChannelService = new FileChanelCrudService(Path.of(fileDirectory + "channels"));
+        ChannelService fileChannelService = new FileChannelCrudService(Path.of(fileDirectory + "channels"));
 
         //채널 등록
         System.out.println("채널 등록");
@@ -331,7 +331,7 @@ public class JavaApplication {
     public static void testFileMessageService() {
 
         UserService fileUserService = new FileUserCrudService(Path.of(fileDirectory + "users"));
-        ChannelService fileChannelService = new FileChanelCrudService(Path.of(fileDirectory + "channels"));
+        ChannelService fileChannelService = new FileChannelCrudService(Path.of(fileDirectory + "channels"));
         MessageService fileMessageCrudService = new FileMessageCrudService(Path.of(fileDirectory + "messages"), fileUserService, fileChannelService);
 
         User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");

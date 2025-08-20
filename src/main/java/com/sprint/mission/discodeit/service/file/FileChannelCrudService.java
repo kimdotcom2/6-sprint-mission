@@ -9,12 +9,12 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FileChanelCrudService implements ChannelService {
+public class FileChannelCrudService implements ChannelService {
 
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
 
-    public FileChanelCrudService(Path path) {
+    public FileChannelCrudService(Path path) {
 
         if (!path.toFile().exists()) {
             try {
