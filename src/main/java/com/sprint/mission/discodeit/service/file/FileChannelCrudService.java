@@ -50,7 +50,8 @@ public class FileChannelCrudService implements ChannelService {
     @Override
     public void addUserToChannel(UUID channelId, User user) {
 
-        Channel channel = findChannelById(channelId).orElseThrow(IllegalArgumentException::new);
+        Channel channel = findChannelById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
         channel.getUserMap().put(user.getId(), user);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());

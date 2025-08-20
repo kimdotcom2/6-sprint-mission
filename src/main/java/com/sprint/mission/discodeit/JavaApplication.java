@@ -168,16 +168,17 @@ public class JavaApplication {
 
         System.out.println("채널 등록");
         Channel channelOne = new Channel("channelOne", "channelOne", false);
+        jcfChannelCrudService.createChannel(channelOne);
         jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
         jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
-        jcfChannelCrudService.createChannel(channelOne);
         System.out.println(channelOne.getChannelName() + " 채널 등록");
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        jcfChannelCrudService.createChannel(channelTwo);
         jcfChannelCrudService.addUserToChannel(channelTwo.getId(), user);
         jcfChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
-        jcfChannelCrudService.createChannel(channelTwo);
 
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
+
         try {
             System.out.println(channelOne.getChannelName() + " 채널 읽기");
             System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
@@ -248,14 +249,14 @@ public class JavaApplication {
 
         System.out.println("채널 등록");
         Channel channelOne = new Channel("channelOne", "channelOne", false);
+        fileChannelCrudService.createChannel(channelOne);
         fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
         fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
-        fileChannelCrudService.createChannel(channelOne);
         System.out.println(channelOne.getChannelName() + " 채널 등록");
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        fileChannelCrudService.createChannel(channelTwo);
         fileChannelCrudService.addUserToChannel(channelTwo.getId(), user);
         fileChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
-        fileChannelCrudService.createChannel(channelTwo);
 
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
 
@@ -296,11 +297,11 @@ public class JavaApplication {
         //채널 삭제
         System.out.println("채널 삭제");
         System.out.println(channelOne.getChannelName() + " 에서 "
-                + channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
-        fileChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
+                + user.getNickname() + " 유저 삭제");
+        fileChannelCrudService.deleteUserFromChannel(channelOne.getId(), user.getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
 
-        fileChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
+        fileChannelCrudService.deleteMessageFromChannel(channelOne.getId(), message.getId());
         channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
 
         try {
