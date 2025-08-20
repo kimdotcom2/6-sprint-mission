@@ -96,7 +96,7 @@ public class JCFMessageCrudService implements MessageService {
             throw new IllegalArgumentException();
         }
 
-        if (data.containsKey(parentMessageId) && !isReply) {
+        if (isReply && !data.containsKey(parentMessageId)) {
             throw new IllegalArgumentException();
         }
 
