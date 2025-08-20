@@ -16,7 +16,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void create(Channel channel) {
+    public void createChannel(Channel channel) {
 
         if (data.containsKey(channel.getId())) {
             throw new IllegalArgumentException("Channel already exists.");
@@ -49,7 +49,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existChannelById(UUID id) {
         return data.containsKey(id);
     }
 
@@ -79,7 +79,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such channel.");
@@ -90,7 +90,7 @@ public class JCFChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteChannelById(UUID id) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException();

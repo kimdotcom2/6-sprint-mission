@@ -28,9 +28,9 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public void create(User user) {
+    public void createUser(User user) {
 
-        if (existById(user.getId())) {
+        if (existUserById(user.getId())) {
             throw new IllegalArgumentException("User already exists.");
         }
 
@@ -45,7 +45,7 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existUserById(UUID id) {
 
         return Files.exists(path.resolve(id + FILE_EXTENSION));
     }
@@ -118,7 +118,7 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public void update(UUID id, String nickname, String email, String password, String description) {
+    public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
         User user = findUserById(id).orElseThrow(IllegalArgumentException::new);
 
@@ -135,7 +135,7 @@ public class FileUserCrudService implements UserService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteUserById(UUID id) {
 
         File file = path.resolve(id + FILE_EXTENSION).toFile();
 

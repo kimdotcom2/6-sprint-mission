@@ -20,13 +20,13 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public void create(Message message) {
+    public void createMessage(Message message) {
 
-        if (!userService.existById(message.getUserId())) {
+        if (!userService.existUserById(message.getUserId())) {
             throw new IllegalArgumentException("No such user.");
         }
 
-        if (!channelService.existById(message.getChannelId())) {
+        if (!channelService.existChannelById(message.getChannelId())) {
             throw new IllegalArgumentException("No such channel.");
         }
 
@@ -39,7 +39,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existMessageById(UUID id) {
         return data.containsKey(id);
     }
 
@@ -90,7 +90,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such message.");
@@ -105,7 +105,7 @@ public class JCFMessageCrudService implements MessageService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteMessageById(UUID id) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such message.");

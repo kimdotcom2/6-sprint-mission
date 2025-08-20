@@ -14,7 +14,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public void create(User user) {
+    public void createUser(User user) {
 
         if (data.containsKey(user.getId())) {
             throw new IllegalArgumentException("User already exists.");
@@ -25,7 +25,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existUserById(UUID id) {
         return data.containsKey(id);
     }
 
@@ -66,7 +66,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public void update(UUID id, String nickname, String email, String password, String description) {
+    public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such user.");
@@ -77,7 +77,7 @@ public class JCFUserCrudService implements UserService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteUserById(UUID id) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such user.");

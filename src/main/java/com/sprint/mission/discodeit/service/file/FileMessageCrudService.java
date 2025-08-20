@@ -34,17 +34,17 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public void create(Message message) {
+    public void createMessage(Message message) {
 
-        if (!userService.existById(message.getUserId())) {
+        if (!userService.existUserById(message.getUserId())) {
             throw new IllegalArgumentException("No such user.");
         }
 
-        if (!channelService.existById(message.getChannelId())) {
+        if (!channelService.existChannelById(message.getChannelId())) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        if (existById(message.getId())) {
+        if (existMessageById(message.getId())) {
             throw new IllegalArgumentException("Message already exists.");
         }
 
@@ -58,7 +58,7 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existMessageById(UUID id) {
         return Files.exists(path.resolve(id + FILE_EXTENSION));
     }
 
@@ -81,7 +81,7 @@ public class FileMessageCrudService implements MessageService {
     @Override
     public List<Message> findChildMessagesById(UUID id) {
 
-        if (!existById(id)) {
+        if (!existMessageById(id)) {
             throw new IllegalArgumentException();
         }
 
@@ -123,11 +123,11 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public void update(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
         Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
 
-        if (existById(parentMessageId) && !message.isReply()) {
+        if (existMessageById(parentMessageId) && !message.isReply()) {
             throw new IllegalArgumentException();
         }
 
@@ -144,7 +144,7 @@ public class FileMessageCrudService implements MessageService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteMessageById(UUID id) {
 
         File file = path.resolve(id + FILE_EXTENSION).toFile();
 

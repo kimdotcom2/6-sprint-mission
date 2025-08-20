@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public interface MessageService {
 
-    void create(Message message);
+    void createMessage(Message message);
 
-    boolean existById(UUID id);
+    boolean existMessageById(UUID id);
 
     Optional<Message> findMessageById(UUID id);
 
@@ -18,8 +18,8 @@ public interface MessageService {
 
     List<Message> findAllMessages();
 
-    void update(UUID id, String content, boolean isReply, UUID parentMessageId);
+    void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId);
 
-    void deleteById(UUID id);
+    void deleteMessageById(UUID id);
 
 }

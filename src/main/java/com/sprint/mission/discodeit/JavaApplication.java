@@ -38,10 +38,10 @@ public class JavaApplication {
         //유저 등록
         System.out.println("유저 등록");
         User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        jcfUserCrudService.create(userOne);
+        jcfUserCrudService.createUser(userOne);
         System.out.println(userOne.getNickname() + " 유저 추가");
         User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
-        jcfUserCrudService.create(userTwo);
+        jcfUserCrudService.createUser(userTwo);
         System.out.println(userTwo.getNickname() + " 유저 추가");
 
         try {
@@ -61,7 +61,7 @@ public class JavaApplication {
         System.out.println("유저 수정");
 
         try {
-            jcfUserCrudService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+            jcfUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -80,7 +80,7 @@ public class JavaApplication {
         //유저 삭제
         System.out.println("유저 삭제");
         try {
-            jcfUserCrudService.deleteById(userTwo.getId());
+            jcfUserCrudService.deleteUserById(userTwo.getId());
             System.out.println(userTwo.getNickname() + " 유저 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -101,10 +101,10 @@ public class JavaApplication {
         //유저 등록
         System.out.println("유저 등록");
         User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        fileUserCrudService.create(userOne);
+        fileUserCrudService.createUser(userOne);
         System.out.println(userOne.getNickname() + " 유저 추가");
         User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
-        fileUserCrudService.create(userTwo);
+        fileUserCrudService.createUser(userTwo);
         System.out.println(userTwo.getNickname() + " 유저 추가");
 
         try {
@@ -124,7 +124,7 @@ public class JavaApplication {
         System.out.println("유저 수정");
 
         try {
-            fileUserCrudService.update(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+            fileUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -144,7 +144,7 @@ public class JavaApplication {
         System.out.println("유저 삭제");
 
         try {
-            fileUserCrudService.deleteById(userTwo.getId());
+            fileUserCrudService.deleteUserById(userTwo.getId());
             System.out.println(userTwo.getNickname() + " 유저 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -165,21 +165,17 @@ public class JavaApplication {
         //채널 등록
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Map<UUID, User> userMap = new TreeMap<>();
-        userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new LinkedHashMap<>();
-        messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");
         Channel channelOne = new Channel("channelOne", "channelOne", false);
-        channelOne.setUserMap(userMap);
-        channelOne.setMessageMap(messageMap);
-        jcfChannelCrudService.create(channelOne);
+        jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        jcfChannelCrudService.createChannel(channelOne);
         System.out.println(channelOne.getChannelName() + " 채널 등록");
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
-        channelTwo.setUserMap(userMap);
-        channelTwo.setMessageMap(messageMap);
-        jcfChannelCrudService.create(channelTwo);
+        jcfChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        jcfChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        jcfChannelCrudService.createChannel(channelTwo);
 
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
         try {
@@ -200,7 +196,7 @@ public class JavaApplication {
         System.out.println("채널 수정");
 
         try {
-            jcfChannelCrudService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            jcfChannelCrudService.updatechannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -228,7 +224,7 @@ public class JavaApplication {
         channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
 
         try {
-            jcfChannelCrudService.deleteById(channelTwo.getId());
+            jcfChannelCrudService.deleteChannelById(channelTwo.getId());
             System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -249,21 +245,17 @@ public class JavaApplication {
         //채널 등록
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Map<UUID, User> userMap = new TreeMap<>();
-        userMap.put(user.getId(), user);
-        Map<UUID, Message> messageMap = new LinkedHashMap<>();
-        messageMap.put(message.getId(), message);
 
         System.out.println("채널 등록");
         Channel channelOne = new Channel("channelOne", "channelOne", false);
-        channelOne.setUserMap(userMap);
-        channelOne.setMessageMap(messageMap);
-        fileChannelCrudService.create(channelOne);
+        fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        fileChannelCrudService.createChannel(channelOne);
         System.out.println(channelOne.getChannelName() + " 채널 등록");
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
-        channelTwo.setUserMap(userMap);
-        channelTwo.setMessageMap(messageMap);
-        fileChannelCrudService.create(channelTwo);
+        fileChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        fileChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        fileChannelCrudService.createChannel(channelTwo);
 
         System.out.println(channelTwo.getChannelName() + " 채널 등록");
 
@@ -285,7 +277,7 @@ public class JavaApplication {
         System.out.println("채널 수정");
 
         try {
-            fileChannelCrudService.update(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            fileChannelCrudService.updatechannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -312,7 +304,7 @@ public class JavaApplication {
         channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
 
         try {
-            fileChannelCrudService.deleteById(channelTwo.getId());
+            fileChannelCrudService.deleteChannelById(channelTwo.getId());
             System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -333,21 +325,21 @@ public class JavaApplication {
         MessageService jcfMessageCrudService = new JCFMessageCrudService(jcfUserCrudService, jcfChannelCrudService);
 
         User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        jcfUserCrudService.create(userOne);
+        jcfUserCrudService.createUser(userOne);
         User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
-        jcfUserCrudService.create(userTwo);
+        jcfUserCrudService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", "channelOne", false);
-        jcfChannelCrudService.create(channelOne);
+        jcfChannelCrudService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
-        jcfChannelCrudService.create(channelTwo);
+        jcfChannelCrudService.createChannel(channelTwo);
 
         //메시지 등록
         System.out.println("메시지 등록");
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
-        jcfMessageCrudService.create(messageOne);
+        jcfMessageCrudService.createMessage(messageOne);
         System.out.println(messageOne.getId() + " 메시지 등록");
         Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
-        jcfMessageCrudService.create(messageTwo);
+        jcfMessageCrudService.createMessage(messageTwo);
 
         System.out.println(messageTwo.getId() + " 메시지 등록");
 
@@ -376,7 +368,7 @@ public class JavaApplication {
         System.out.println("메시지 수정");
 
         try {
-            jcfMessageCrudService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            jcfMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -396,7 +388,7 @@ public class JavaApplication {
         System.out.println("메시지 삭제");
 
         try {
-            jcfMessageCrudService.deleteById(messageTwo.getId());
+            jcfMessageCrudService.deleteMessageById(messageTwo.getId());
             System.out.println(messageTwo.getId() + " 메시지 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -417,21 +409,21 @@ public class JavaApplication {
         MessageService fileMessageCrudService = new FileMessageCrudService(Path.of(fileDirectory + "messages"), fileUserCrudService, fileChannelCrudService);
 
         User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        fileUserCrudService.create(userOne);
+        fileUserCrudService.createUser(userOne);
         User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
-        fileUserCrudService.create(userTwo);
+        fileUserCrudService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", "channelOne", false);
-        fileChannelCrudService.create(channelOne);
+        fileChannelCrudService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
-        fileChannelCrudService.create(channelTwo);
+        fileChannelCrudService.createChannel(channelTwo);
 
         //메시지 등록
         System.out.println("메시지 등록");
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
-        fileMessageCrudService.create(messageOne);
+        fileMessageCrudService.createMessage(messageOne);
         System.out.println(messageOne.getId() + " 메시지 등록");
         Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
-        fileMessageCrudService.create(messageTwo);
+        fileMessageCrudService.createMessage(messageTwo);
 
         System.out.println(messageTwo.getId() + " 메시지 등록");
 
@@ -460,7 +452,7 @@ public class JavaApplication {
         System.out.println("메시지 수정");
 
         try {
-            fileMessageCrudService.update(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            fileMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -479,7 +471,7 @@ public class JavaApplication {
         //메시지 삭제
         System.out.println("메시지 삭제");
         try {
-            fileMessageCrudService.deleteById(messageTwo.getId());
+            fileMessageCrudService.deleteMessageById(messageTwo.getId());
             System.out.println(messageTwo.getId() + " 메시지 삭제");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

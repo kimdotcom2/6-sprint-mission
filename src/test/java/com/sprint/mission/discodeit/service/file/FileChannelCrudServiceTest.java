@@ -13,32 +13,32 @@ class FileChannelCrudServiceTest {
     ChannelService fileChannelService = new FileChannelCrudService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\channels"));
 
     @Test
-    void create() {
+    void createChannel() {
 
         //given
         Channel channel = new Channel("test", "test", true);
 
         //when
-        fileChannelService.create(channel);
+        fileChannelService.createChannel(channel);
 
         //then
-        assertTrue(fileChannelService.existById(channel.getId()));
-        fileChannelService.deleteById(channel.getId());
+        assertTrue(fileChannelService.existChannelById(channel.getId()));
+        fileChannelService.deleteChannelById(channel.getId());
 
     }
 
     @Test
-    void existById() {
+    void existChannelById() {
 
         //given
         Channel channel = new Channel("test", "test", true);
 
         //when
-        fileChannelService.create(channel);
+        fileChannelService.createChannel(channel);
 
         //then
-        assertTrue(fileChannelService.existById(channel.getId()));
-        fileChannelService.deleteById(channel.getId());
+        assertTrue(fileChannelService.existChannelById(channel.getId()));
+        fileChannelService.deleteChannelById(channel.getId());
 
     }
 
@@ -49,14 +49,14 @@ class FileChannelCrudServiceTest {
         Channel channel = new Channel("test", "test", true);
 
         //when
-        fileChannelService.create(channel);
+        fileChannelService.createChannel(channel);
 
         //then
-        assertTrue(fileChannelService.existById(channel.getId()));
+        assertTrue(fileChannelService.existChannelById(channel.getId()));
         Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
         System.out.println(channel1.toString());
         assertEquals(channel1.getId(), channel.getId());
-        fileChannelService.deleteById(channel.getId());
+        fileChannelService.deleteChannelById(channel.getId());
 
     }
 
@@ -68,48 +68,48 @@ class FileChannelCrudServiceTest {
         Channel channel1 = new Channel("test1", "test1", false);
 
         //when
-        fileChannelService.create(channel);
-        fileChannelService.create(channel1);
+        fileChannelService.createChannel(channel);
+        fileChannelService.createChannel(channel1);
 
         //then
         fileChannelService.findAllChannels().forEach(System.out::println);
-        fileChannelService.deleteById(channel.getId());
-        fileChannelService.deleteById(channel1.getId());
+        fileChannelService.deleteChannelById(channel.getId());
+        fileChannelService.deleteChannelById(channel1.getId());
 
     }
 
     @Test
-    void update() {
+    void updatechannel() {
 
         //given
         Channel channel = new Channel("test", "test", true);
-        fileChannelService.create(channel);
+        fileChannelService.createChannel(channel);
 
         //when
-        fileChannelService.update(channel.getId(), "test2", "test2", false);
+        fileChannelService.updatechannel(channel.getId(), "test2", "test2", false);
 
         //then
-        assertTrue(fileChannelService.existById(channel.getId()));
+        assertTrue(fileChannelService.existChannelById(channel.getId()));
         Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
         System.out.println(channel1.toString());
         assertEquals(channel1.getChannelName(), "test2");
-        fileChannelService.deleteById(channel.getId());
+        fileChannelService.deleteChannelById(channel.getId());
 
     }
 
     @Test
-    void deleteById() {
+    void deleteChannelById() {
 
         //given
         Channel channel = new Channel("test", "test", true);
-        fileChannelService.create(channel);
-        assertTrue(fileChannelService.existById(channel.getId()));
+        fileChannelService.createChannel(channel);
+        assertTrue(fileChannelService.existChannelById(channel.getId()));
 
         //when
-        fileChannelService.deleteById(channel.getId());
+        fileChannelService.deleteChannelById(channel.getId());
 
         //then
-        assertFalse(fileChannelService.existById(channel.getId()));
+        assertFalse(fileChannelService.existChannelById(channel.getId()));
 
     }
 }

@@ -10,21 +10,21 @@ import java.util.UUID;
 
 public interface ChannelService {
 
-    void create(Channel channel);
+    void createChannel(Channel channel);
 
     void addUserToChannel(UUID channelId, User user);
 
     void addMessageToChannel(UUID channelId, Message message);
 
-    boolean existById(UUID id);
+    boolean existChannelById(UUID id);
 
     Optional<Channel> findChannelById(UUID id);
 
     List<Channel> findAllChannels();
 
-    void update(UUID id, String channelName, String category, boolean isVoiceChannel);
+    void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel);
 
-    void deleteById(UUID id);
+    void deleteChannelById(UUID id);
 
     void deleteUserFromChannel(UUID channelId, UUID userId);
 

@@ -21,15 +21,15 @@ class FileMessageCrudServiceTest {
     MessageService messageService = new FileMessageCrudService(Path.of(fileDirectory + "messages"), fileUserService, channelService);
 
     @Test
-    void create() {
+    void createMessage() {
 
         //given
         User user = new User("test", "test", "test", "test");
         Channel channel = new Channel("test", "test", true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
 
         //when
         Message message1 = messageService.findMessageById(message.getId()).orElse(null);
@@ -38,31 +38,31 @@ class FileMessageCrudServiceTest {
         //then
         assertNotNull(message1);
         assertEquals(message1.getId(), message.getId());
-        messageService.deleteById(message.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 
     @Test
-    void existById() {
+    void existMessageById() {
 
         //given
         User user = new User("test", "test", "test", "test");
         Channel channel = new Channel("test", "test", true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
 
         //when
-        boolean exist = messageService.existById(message.getId());
+        boolean exist = messageService.existMessageById(message.getId());
 
         //then
         assertTrue(exist);
-        messageService.deleteById(message.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 
@@ -73,9 +73,9 @@ class FileMessageCrudServiceTest {
         User user = new User("test", "test", "test", "test");
         Channel channel = new Channel("test", "test", true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
 
         //when
         Message message1 = messageService.findMessageById(message.getId()).orElse(null);
@@ -84,9 +84,9 @@ class FileMessageCrudServiceTest {
         System.out.println(message1.toString());
         assertNotNull(message1);
         assertEquals(message1.getId(), message.getId());
-        messageService.deleteById(message.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 
@@ -99,11 +99,11 @@ class FileMessageCrudServiceTest {
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
-        messageService.create(message1);
-        messageService.create(message2);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
+        messageService.createMessage(message1);
+        messageService.createMessage(message2);
 
         //when
         List<Message> messageList = messageService.findChildMessagesById(message.getId());
@@ -111,11 +111,11 @@ class FileMessageCrudServiceTest {
         //then
         messageList.forEach(m -> System.out.println(m.toString()));
         assertEquals(messageList.get(0).getId(), message1.getId());
-        messageService.deleteById(message.getId());
-        messageService.deleteById(message1.getId());
-        messageService.deleteById(message2.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message.getId());
+        messageService.deleteMessageById(message1.getId());
+        messageService.deleteMessageById(message2.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
 
     }
@@ -129,11 +129,11 @@ class FileMessageCrudServiceTest {
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
-        messageService.create(message1);
-        messageService.create(message2);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
+        messageService.createMessage(message1);
+        messageService.createMessage(message2);
 
         //when
         List<Message> messageList = messageService.findAllMessages();
@@ -141,58 +141,58 @@ class FileMessageCrudServiceTest {
         //then
         messageList.forEach(m -> System.out.println(m.toString()));
         assertEquals(messageList.get(0).getId(), message.getId());
-        messageService.deleteById(message.getId());
-        messageService.deleteById(message1.getId());
-        messageService.deleteById(message2.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message.getId());
+        messageService.deleteMessageById(message1.getId());
+        messageService.deleteMessageById(message2.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 
     @Test
-    void update() {
+    void updateMessage() {
 
         //given
         User user = new User("test", "test", "test", "test");
         Channel channel = new Channel("test", "test", true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
 
         //when
         Message message1 = messageService.findMessageById(message.getId()).orElse(null);
-        messageService.update(message1.getId(), "test2", false, null);
+        messageService.updateMessage(message1.getId(), "test2", false, null);
 
         //then
         System.out.println(messageService.findMessageById(message.getId()).orElse(null).toString());
-        assertTrue(messageService.existById(message1.getId()));
+        assertTrue(messageService.existMessageById(message1.getId()));
         assertEquals(messageService.findMessageById(message.getId()).orElse(null).getId(), message1.getId());
         assertEquals(messageService.findMessageById(message.getId()).orElse(null).getContent(), "test2");
-        messageService.deleteById(message1.getId());
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        messageService.deleteMessageById(message1.getId());
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 
     @Test
-    void deleteById() {
+    void deleteMessageById() {
 
         //given
         User user = new User("test", "test", "test", "test");
         Channel channel = new Channel("test", "test", true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.create(user);
-        channelService.create(channel);
-        messageService.create(message);
+        fileUserService.createUser(user);
+        channelService.createChannel(channel);
+        messageService.createMessage(message);
 
         //when
-        messageService.deleteById(message.getId());
+        messageService.deleteMessageById(message.getId());
 
         //then
-        assertFalse(messageService.existById(message.getId()));
-        fileUserService.deleteById(user.getId());
-        channelService.deleteById(channel.getId());
+        assertFalse(messageService.existMessageById(message.getId()));
+        fileUserService.deleteUserById(user.getId());
+        channelService.deleteChannelById(channel.getId());
 
     }
 }

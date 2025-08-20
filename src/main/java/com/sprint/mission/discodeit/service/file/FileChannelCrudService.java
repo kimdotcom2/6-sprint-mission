@@ -30,9 +30,9 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void create(Channel channel) {
+    public void createChannel(Channel channel) {
 
-        if (existById(channel.getId())) {
+        if (existChannelById(channel.getId())) {
             throw new IllegalArgumentException("Channel already exists.");
         }
 
@@ -79,7 +79,7 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public boolean existById(UUID id) {
+    public boolean existChannelById(UUID id) {
         return Files.exists(path.resolve(id + FILE_EXTENSION));
     }
 
@@ -125,7 +125,7 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void update(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         Channel channel = findChannelById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
@@ -143,7 +143,7 @@ public class FileChannelCrudService implements ChannelService {
     }
 
     @Override
-    public void deleteById(UUID id) {
+    public void deleteChannelById(UUID id) {
 
         File file = path.resolve(id + FILE_EXTENSION).toFile();
 
