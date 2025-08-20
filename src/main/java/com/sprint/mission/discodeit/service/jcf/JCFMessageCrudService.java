@@ -5,10 +5,7 @@ import com.sprint.mission.discodeit.service.JCFChannelService;
 import com.sprint.mission.discodeit.service.JCFMessageService;
 import com.sprint.mission.discodeit.service.JCFUserService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class JCFMessageCrudService implements JCFMessageService {
 
@@ -49,18 +46,15 @@ public class JCFMessageCrudService implements JCFMessageService {
     }
 
     @Override
-    public Message readById(UUID id) {
+    public Optional<Message> readById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such message.");
-            throw new IllegalArgumentException();
-
+            return Optional.empty();
         }
 
         Message message = data.get(id);
         //System.out.println(message.toString());
-        return message;
+        return Optional.ofNullable(message);
 
     }
 
@@ -68,10 +62,7 @@ public class JCFMessageCrudService implements JCFMessageService {
     public List<Message> readChildrenById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such message.");
             throw new IllegalArgumentException();
-
         }
 
         List<Message> childMessageList = data.values().stream()

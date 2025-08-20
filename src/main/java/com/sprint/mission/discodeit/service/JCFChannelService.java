@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service;
 import com.sprint.mission.discodeit.entity.Channel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface JCFChannelService {
@@ -11,7 +12,7 @@ public interface JCFChannelService {
 
     boolean existById(UUID id);
 
-    Channel readById(UUID id);
+    Optional<Channel> readById(UUID id);
 
     List<Channel> readAll();
 

@@ -3,10 +3,7 @@ package com.sprint.mission.discodeit.service.jcf;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.JCFUserService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class JCFUserCrudService implements JCFUserService {
 
@@ -29,20 +26,17 @@ public class JCFUserCrudService implements JCFUserService {
     }
 
     @Override
-    public User readById(UUID id) {
+    public Optional<User> readById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such user.");
-            throw new IllegalArgumentException();
-
+            return Optional.empty();
         }
 
         User user = data.get(id);
 
         //System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
         //System.out.println(user.toString());
-        return user;
+        return Optional.of(user);
 
     }
 

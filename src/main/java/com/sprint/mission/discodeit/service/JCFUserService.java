@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service;
 import com.sprint.mission.discodeit.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface JCFUserService {
@@ -11,7 +12,7 @@ public interface JCFUserService {
 
     boolean existById(UUID id);
 
-    User readById(UUID id);
+    Optional<User> readById(UUID id);
 
     List<User> readAll();
 

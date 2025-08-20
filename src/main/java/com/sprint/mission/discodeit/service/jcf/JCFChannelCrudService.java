@@ -4,10 +4,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.JCFChannelService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class JCFChannelCrudService implements JCFChannelService {
 
@@ -30,18 +27,15 @@ public class JCFChannelCrudService implements JCFChannelService {
     }
 
     @Override
-    public Channel readById(UUID id) {
+    public Optional<Channel> readById(UUID id) {
 
         if (!data.containsKey(id)) {
-
-            System.out.println("No such channel.");
-            throw new IllegalArgumentException();
-
+            return Optional.empty();
         }
 
         Channel channel = data.get(id);
         //System.out.println(channel.toString());
-        return channel;
+        return Optional.ofNullable(channel);
 
     }
 

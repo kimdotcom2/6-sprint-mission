@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class FileUserCrudService implements JCFUserService {
@@ -56,7 +57,7 @@ public class FileUserCrudService implements JCFUserService {
     }
 
     @Override
-    public User readById(UUID id) {
+    public Optional<User> readById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.toString() + "\\" + id.toString() + ".ser");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -64,10 +65,10 @@ public class FileUserCrudService implements JCFUserService {
             User user = (User) ois.readObject();
 
             //System.out.println(user.toString());
-            return user;
+            return Optional.ofNullable(user);
 
         } catch (IOException | ClassNotFoundException e) {
-            throw new IllegalArgumentException();
+            return Optional.empty();
         }
 
     }
