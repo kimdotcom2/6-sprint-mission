@@ -31,6 +31,11 @@ public class BasicUserService implements UserService {
     }
 
     @Override
+    public boolean existUserByEmail(String email) {
+        return userRepository.existByEmail(email);
+    }
+
+    @Override
     public Optional<User> findUserById(UUID id) {
 
         if (!userRepository.existById(id)) {
@@ -68,7 +73,7 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        if (findUserByEmail(email).isPresent() && !findUserById(id)
+        if (userRepository.existByEmail(email) && !findUserById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user.")).getId().equals(id)) {
             throw new IllegalArgumentException("Email already exists.");
         }
