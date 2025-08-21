@@ -67,9 +67,9 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String password, String description) {
+    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
 
-        if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
+        if (email.isBlank() || newPassword.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -79,11 +79,11 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        if (!securityUtil.hashPassword(password).equals(updatedUser.getPassword())) {
+        if (!securityUtil.hashPassword(currentPassword).equals(updatedUser.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        updatedUser.update(nickname, email, password, description);
+        updatedUser.update(nickname, email, securityUtil.hashPassword(currentPassword), description);
 
         userRepository.save(updatedUser);
 

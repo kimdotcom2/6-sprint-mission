@@ -146,9 +146,9 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String password, String description) {
+    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
 
-        if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
+        if (email.isBlank() || newPassword.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -159,14 +159,17 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        if (!securityUtil.hashPassword(password).equals(user.getPassword())) {
+        System.out.println(securityUtil.hashPassword(currentPassword));
+        System.out.println(user.getPassword());
+
+        if (!securityUtil.hashPassword(currentPassword).equals(user.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            user.update(nickname, email, password, description);
+            user.update(nickname, email, securityUtil.hashPassword(newPassword), description);
             oos.writeObject(user);
 
         } catch (IOException e) {

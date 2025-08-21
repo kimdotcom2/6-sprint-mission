@@ -61,7 +61,7 @@ public class JavaApplication {
         //유저 수정
         System.out.println("유저 수정");
         try {
-            jcfUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+            jcfUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -120,7 +120,7 @@ public class JavaApplication {
         //유저 수정
         System.out.println("유저 수정");
         try {
-            fileUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), userOne.getPassword(), "Bye");
+            fileUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -137,6 +137,7 @@ public class JavaApplication {
         //유저 삭제
         System.out.println("유저 삭제");
         try {
+            fileUserCrudService.deleteUserById(userOne.getId());
             fileUserCrudService.deleteUserById(userTwo.getId());
             System.out.println(userTwo.getNickname() + " 유저 삭제");
         } catch (IllegalArgumentException e) {

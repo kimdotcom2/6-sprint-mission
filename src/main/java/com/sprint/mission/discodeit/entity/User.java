@@ -7,7 +7,7 @@ public class User extends BaseEntity implements Serializable {
 
     private String nickname;
     private String email;
-    private transient String password;
+    private String password;
     private String description;
 
     public String getNickname() {

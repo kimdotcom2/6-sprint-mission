@@ -20,7 +20,7 @@ public interface UserService {
 
     List<User> findAllUsers();
 
-    void updateUser(UUID id, String nickname, String email, String password, String description);
+    void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description);
 
     void deleteUserById(UUID id);
 

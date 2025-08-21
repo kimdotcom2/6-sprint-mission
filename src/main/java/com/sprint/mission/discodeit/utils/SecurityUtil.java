@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class SecurityUtil {
 
@@ -13,13 +14,7 @@ public class SecurityUtil {
 
             byte[] hashedBytes = messageDigest.digest(password.getBytes());
 
-            StringBuilder stringBuilder = new StringBuilder();
-
-            for (byte b : hashedBytes) {
-                stringBuilder.append(String.format("%02x", b));
-            }
-
-            return stringBuilder.toString();
+            return Base64.getEncoder().encodeToString(hashedBytes);
 
         } catch (NoSuchAlgorithmException e) {
             throw new IllegalArgumentException("Failed to hash password.");
@@ -27,5 +22,6 @@ public class SecurityUtil {
 
 
     }
+
 
 }

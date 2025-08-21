@@ -94,9 +94,9 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String password, String description) {
+    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
 
-        if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
+        if (email.isBlank() || nickname.isBlank() || newPassword.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -108,11 +108,11 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        if (!securityUtil.hashPassword(password).equals(data.get(id).getPassword())) {
+        if (!securityUtil.hashPassword(currentPassword).equals(data.get(id).getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        data.get(id).update(nickname, email, password, description);
+        data.get(id).update(nickname, email, securityUtil.hashPassword(newPassword), description);
 
     }
 
