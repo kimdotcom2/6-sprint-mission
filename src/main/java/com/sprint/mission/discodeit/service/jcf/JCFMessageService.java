@@ -67,7 +67,7 @@ public class JCFMessageService implements MessageService {
                 .filter(message -> message.isReply() && message.getParentMessageId().equals(id))
                 .toList();
 
-        System.out.println("답글 수 : " + childMessageList.size());
+        //System.out.println("답글 수 : " + childMessageList.size());
 
         /*childMessageList.stream().forEach(message -> {
             System.out.println(message.toString());

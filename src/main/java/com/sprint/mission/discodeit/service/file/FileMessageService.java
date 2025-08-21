@@ -91,7 +91,7 @@ public class FileMessageService implements MessageService {
                 .filter(message -> message.isReply() && message.getParentMessageId()
                         .equals(id)).toList();
 
-        System.out.println("답글 수 : " + childMessageList.size());
+        //System.out.println("답글 수 : " + childMessageList.size());
 
         return childMessageList;
 
