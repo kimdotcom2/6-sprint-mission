@@ -34,6 +34,10 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
+        if (user.getPassword().isBlank() || user.getEmail().isBlank() || user.getNickname().isBlank()) {
+            throw new IllegalArgumentException("Invalid user data.");
+        }
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
@@ -122,6 +126,10 @@ public class FileUserService implements UserService {
 
         User user = findUserById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
+            throw new IllegalArgumentException("Invalid user data.");
+        }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {

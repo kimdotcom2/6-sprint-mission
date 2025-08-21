@@ -22,6 +22,10 @@ public class JCFChannelService implements ChannelService {
             throw new IllegalArgumentException("Channel already exists.");
         }
 
+        if (channel.getChannelName().isBlank() || channel.getCategory().isBlank()) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
         data.put(channel.getId(), channel);
 
     }
@@ -83,6 +87,10 @@ public class JCFChannelService implements ChannelService {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such channel.");
+        }
+
+        if (channelName.isBlank() || category.isBlank()) {
+            throw new IllegalArgumentException("Invalid channel data.");
         }
 
         data.get(id).update(channelName, category, isVoiceChannel);
