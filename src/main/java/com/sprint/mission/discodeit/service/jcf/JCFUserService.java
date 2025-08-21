@@ -24,6 +24,12 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
+        for (User existingUser : data.values()) {
+            if (existingUser.getEmail().equals(user.getEmail())) {
+                throw new IllegalArgumentException("Email already exists.");
+            }
+        }
+
         data.put(user.getId(), user);
 
     }
@@ -78,6 +84,12 @@ public class JCFUserService implements UserService {
 
         if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
+        }
+
+        for (User existingUser : data.values()) {
+            if (existingUser.getEmail().equals(email)) {
+                throw new IllegalArgumentException("Email already exists.");
+            }
         }
 
         data.get(id).update(nickname, email, password, description);

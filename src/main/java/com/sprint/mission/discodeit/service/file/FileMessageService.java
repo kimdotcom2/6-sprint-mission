@@ -52,7 +52,7 @@ public class FileMessageService implements MessageService {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to create message");
+            throw new IllegalArgumentException("Failed to create message.");
         }
 
     }

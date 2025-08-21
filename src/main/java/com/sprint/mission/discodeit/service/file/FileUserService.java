@@ -20,7 +20,7 @@ public class FileUserService implements UserService {
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
-                throw new IllegalArgumentException("Invalid path");
+                throw new IllegalArgumentException("Failed to create directory.");
             }
         }
 
@@ -38,9 +38,14 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
+        for (User existingUser : findAllUsers()) {
+            if (existingUser.getEmail().equals(user.getEmail())) {
+                throw new IllegalArgumentException("Email already exists.");
+            }
+        }
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-
             oos.writeObject(user);
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to create user.");
@@ -129,6 +134,12 @@ public class FileUserService implements UserService {
 
         if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
+        }
+
+        for (User existingUser : findAllUsers()) {
+            if (existingUser.getEmail().equals(email)) {
+                throw new IllegalArgumentException("Email already exists.");
+            }
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
