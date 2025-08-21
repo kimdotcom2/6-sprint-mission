@@ -20,6 +20,14 @@ public class FileMessageRepository implements MessageRepository {
     public FileMessageRepository(String folderName) {
         this.folderName = folderName;
         path = Path.of(FILE_PATH + folderName);
+
+        if (!path.toFile().exists()) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to create directory.");
+            }
+        }
     }
 
     @Override

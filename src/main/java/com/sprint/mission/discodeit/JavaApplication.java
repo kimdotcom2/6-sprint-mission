@@ -4,9 +4,21 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.enums.ChannelType;
+import com.sprint.mission.discodeit.repository.ChannelRepository;
+import com.sprint.mission.discodeit.repository.MessageRepository;
+import com.sprint.mission.discodeit.repository.UserRepository;
+import com.sprint.mission.discodeit.repository.file.FileChannelRepository;
+import com.sprint.mission.discodeit.repository.file.FileMessageRepository;
+import com.sprint.mission.discodeit.repository.file.FileUserRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFChannelRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFMessageRepository;
+import com.sprint.mission.discodeit.repository.jcf.JCFUserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.service.basic.BasicChannelService;
+import com.sprint.mission.discodeit.service.basic.BasicMessageService;
+import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import com.sprint.mission.discodeit.service.file.FileChannelService;
 import com.sprint.mission.discodeit.service.file.FileMessageService;
 import com.sprint.mission.discodeit.service.file.FileUserService;
@@ -24,12 +36,15 @@ public class JavaApplication {
 
     public static void main(String[] args) {
 
-        testJcfUserService();
+        /*testJcfUserService();
         testJcfChannelService();
         testJcfMessageService();
         testFileUserService();
         testFileChannelService();
-        testFileMessageService();
+        testFileMessageService();*/
+        testBasicUserService();
+        testBasicChannelService();
+        testBasicMessageService();
 
     }
 
@@ -146,6 +161,67 @@ public class JavaApplication {
         System.out.println("유저 목록 읽기");
         fileUserCrudService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
+        System.out.println("==========================");
+
+    }
+
+    public static void testBasicUserService() {
+
+        //UserRepository jcfUserRepository = new JCFUserRepository();
+        UserRepository fileUserRepository = new FileUserRepository("users");
+        UserService basicUserCrudService = new BasicUserService(fileUserRepository);
+
+        //유저 등록
+        System.out.println("유저 등록");
+        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
+        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        basicUserCrudService.createUser(userOne);
+        basicUserCrudService.createUser(userTwo);
+        System.out.println("==========================");
+
+        //유저 읽기
+        try {
+            System.out.println(userOne.getNickname() + " 유저 읽기");
+            System.out.println(basicUserCrudService.findUserById(userOne.getId())
+                    .orElseThrow((IllegalArgumentException::new)).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No user found with id: " + userOne.getId());
+        }
+        System.out.println("유저 목록 읽기");
+        basicUserCrudService.findAllUsers().stream()
+                .forEach(user -> System.out.println(user.toString()));
+        System.out.println("==========================");
+
+        //유저 수정
+        System.out.println("유저 수정");
+        try {
+            basicUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
+            System.out.println(userOne.getNickname() + " 정보 업데이트");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println(userOne.getNickname() + " 유저 읽기");
+            System.out.println(basicUserCrudService.findUserById(userOne.getId())
+                    .orElseThrow(IllegalArgumentException::new).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No user found with id: " + userOne.getId());
+        }
+        System.out.println("==========================");
+
+        //유저 삭제
+        System.out.println("유저 삭제");
+        try {
+            basicUserCrudService.deleteUserById(userTwo.getId());
+            System.out.println(userTwo.getNickname() + " 유저 삭제");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("유저 목록 읽기");
+        basicUserCrudService.findAllUsers().stream()
+                .forEach(user -> System.out.println(user.toString()));
+
         System.out.println("==========================");
 
     }
@@ -288,6 +364,81 @@ public class JavaApplication {
         System.out.println("채널 목록 읽기");
         fileChannelCrudService.findAllChannels().stream()
                 .forEach(channel -> System.out.println(channel.toString()));
+        System.out.println("==========================");
+
+    }
+
+    public static void testBasicChannelService() {
+
+        //ChannelRepository jcfChannelRepository = new JCFChannelRepository();
+        ChannelRepository fileChannelRepository = new FileChannelRepository("channels");
+        ChannelService basicChannelCrudService = new BasicChannelService(fileChannelRepository);
+
+        //채널 등록
+        System.out.println("채널 등록");
+        User user = new User("test", "test", "test", "test");
+        Message message = new Message(user.getId(), null, "message", false, null);
+        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        basicChannelCrudService.createChannel(channelOne);
+        basicChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        basicChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        basicChannelCrudService.createChannel(channelTwo);
+        basicChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        basicChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        System.out.println("==========================");
+
+        //채널 읽기
+        try {
+            System.out.println(channelOne.getChannelName() + " 채널 읽기");
+            System.out.println(basicChannelCrudService.findChannelById(channelOne.getId())
+                    .orElseThrow(IllegalArgumentException::new).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No channel found with id: " + channelOne.getId());
+        }
+        System.out.println("채널 목록 읽기");
+        basicChannelCrudService.findAllChannels().stream()
+                .forEach(channel -> System.out.println(channel.toString()));
+        System.out.println("==========================");
+
+        //채널 수정
+        System.out.println("채널 수정");
+        try {
+            basicChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+            channelTwo = basicChannelCrudService.findChannelById(channelTwo.getId())
+                    .orElseThrow(() ->  new IllegalArgumentException("No such channels"));
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println(channelTwo.getChannelName() + " 채널 읽기");
+            System.out.println(basicChannelCrudService.findChannelById(channelTwo.getId())
+                    .orElseThrow(IllegalArgumentException::new).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No channel found with id: " + channelOne.getId() + "");
+        }
+        System.out.println("==========================");
+
+        //채널 삭제
+        System.out.println("채널 삭제");
+        channelOne = basicChannelCrudService.findChannelById(channelOne.getId())
+                        .orElseThrow(() -> new IllegalArgumentException("No such users."));
+        System.out.println(channelOne.getChannelName() + " 에서 "
+                + user.getNickname() + " 유저 삭제");
+        basicChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
+        System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
+        basicChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
+        try {
+            basicChannelCrudService.deleteChannelById(channelTwo.getId());
+            System.out.println(channelTwo.getChannelName() + " 채널 삭제");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        System.out.println("채널 목록 읽기");
+        basicChannelCrudService.findAllChannels().stream()
+                .forEach(channel -> System.out.println(channel.toString()));
+
         System.out.println("==========================");
 
     }
@@ -439,6 +590,86 @@ public class JavaApplication {
         System.out.println("메시지 목록 읽기");
         fileMessageCrudService.findAllMessages().stream()
                 .forEach(message -> System.out.println(message.toString()));
+        System.out.println("==========================");
+
+    }
+
+    public static void testBasicMessageService() {
+
+        UserRepository jcfUserRepository = new JCFUserRepository();
+        ChannelRepository jcfChannelRepository = new JCFChannelRepository();
+        //MessageRepository jcfMessageRepository = new JCFMessageRepository();
+        MessageRepository fileMessageRepository = new FileMessageRepository("messages");
+        UserService basicUserCrudService = new BasicUserService(jcfUserRepository);
+        ChannelService basicChannelCrudService = new BasicChannelService(jcfChannelRepository);
+        MessageService basicMessageCrudService = new BasicMessageService(jcfUserRepository, jcfChannelRepository, fileMessageRepository);
+
+        //메시지 등록
+        System.out.println("메시지 등록");
+        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
+        basicUserCrudService.createUser(userOne);
+        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        basicUserCrudService.createUser(userTwo);
+        Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
+        basicChannelCrudService.createChannel(channelOne);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        basicChannelCrudService.createChannel(channelTwo);
+        Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
+        basicMessageCrudService.createMessage(messageOne);
+        Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
+        basicMessageCrudService.createMessage(messageTwo);
+        System.out.println("==========================");
+
+        //메시지 읽기
+        System.out.println("메시지 읽기");
+        try {
+            System.out.println(messageOne.getId() + " 메시지 읽기");
+            System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
+                    .orElseThrow(IllegalArgumentException::new).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No message found with id: " + messageOne.getId());
+        }
+        try {
+            System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        basicMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
+                .forEach(message -> System.out.println(message.toString()));
+        System.out.println("메시지 목록 읽기");
+        basicMessageCrudService.findAllMessages().stream()
+                .forEach(message -> System.out.println(message.toString()));
+        System.out.println("==========================");
+
+        //메시지 수정
+        System.out.println("메시지 수정");
+        try {
+            basicMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            System.out.println(messageOne.getId() + " 정보 업데이트");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        try {
+            System.out.println(messageOne.getId() + " 메시지 읽기");
+            System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
+                    .orElseThrow(IllegalArgumentException::new).toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No message found with id: " + messageOne.getId());
+        }
+        System.out.println("==========================");
+
+        //메시지 삭제
+        System.out.println("메시지 삭제");
+        try {
+            basicMessageCrudService.deleteMessageById(messageTwo.getId());
+            System.out.println(messageTwo.getId() + " 메시지 삭제");
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        System.out.println("메시지 목록 읽기");
+        basicMessageCrudService.findAllMessages().stream()
+                .forEach(message -> System.out.println(message.toString()));
+
         System.out.println("==========================");
 
     }

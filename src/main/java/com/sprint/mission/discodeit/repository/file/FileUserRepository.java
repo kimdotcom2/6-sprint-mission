@@ -20,16 +20,27 @@ public class FileUserRepository implements UserRepository {
     public FileUserRepository(String folderName) {
         this.folderName = folderName;
         path = Path.of(FILE_PATH + folderName);
+
+        if (!path.toFile().exists()) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to create directory.");
+            }
+        }
+
     }
 
     @Override
     public void save(User user) {
 
+        System.out.println(path.toString());
+
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(user);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

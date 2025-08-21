@@ -45,7 +45,11 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("User already exists in channel.");
         }
 
-        channelRepository.findById(channelId).get().getUserMap().put(user.getId(), user);
+        Channel updatedChannel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+        updatedChannel.getUserMap().put(user.getId(), user);
+
+        channelRepository.save(updatedChannel);
 
     }
 
@@ -56,7 +60,11 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        channelRepository.findById(channelId).get().getMessageMap().put(message.getId(), message);
+        Channel updatedChannel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+        updatedChannel.getMessageMap().put(message.getId(), message);
+
+        channelRepository.save(updatedChannel);
 
     }
 
