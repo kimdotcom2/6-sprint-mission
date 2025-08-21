@@ -38,6 +38,10 @@ public class JCFChannelService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
+        if (data.get(channelId).getUserMap().containsKey(user.getId())) {
+            throw new IllegalArgumentException("User already exists in channel.");
+        }
+
         data.get(channelId).getUserMap().put(user.getId(), user);
 
     }

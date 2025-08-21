@@ -57,6 +57,11 @@ public class FileChannelService implements ChannelService {
 
         Channel channel = findChannelById(channelId)
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+
+        if (channel.getUserMap().containsKey(user.getId())) {
+            throw new IllegalArgumentException("User already exists in channel.");
+        }
+
         channel.getUserMap().put(user.getId(), user);
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(channelId + FILE_EXTENSION).toFile());

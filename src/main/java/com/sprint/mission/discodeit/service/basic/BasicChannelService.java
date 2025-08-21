@@ -30,15 +30,33 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
+        channelRepository.save(channel);
+
     }
 
     @Override
     public void addUserToChannel(UUID channelId, User user) {
 
+        if (!channelRepository.existById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        if (channelRepository.findById(channelId).get().getUserMap().containsKey(user.getId())) {
+            throw new IllegalArgumentException("User already exists in channel.");
+        }
+
+        channelRepository.findById(channelId).get().getUserMap().put(user.getId(), user);
+
     }
 
     @Override
     public void addMessageToChannel(UUID channelId, Message message) {
+
+        if (!channelRepository.existById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        channelRepository.findById(channelId).get().getMessageMap().put(message.getId(), message);
 
     }
 
