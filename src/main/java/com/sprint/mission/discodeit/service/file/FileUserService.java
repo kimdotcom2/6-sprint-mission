@@ -39,7 +39,7 @@ public class FileUserService implements UserService {
 
             oos.writeObject(user);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such user.");
+            throw new IllegalArgumentException("Failed to create user.");
         }
 
     }
@@ -120,7 +120,8 @@ public class FileUserService implements UserService {
     @Override
     public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
-        User user = findUserById(id).orElseThrow(IllegalArgumentException::new);
+        User user = findUserById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -129,7 +130,7 @@ public class FileUserService implements UserService {
             oos.writeObject(user);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such user.");
+            throw new IllegalArgumentException("Failed to update user.");
         }
 
     }

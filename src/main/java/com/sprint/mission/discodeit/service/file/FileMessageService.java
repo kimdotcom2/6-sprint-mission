@@ -52,7 +52,7 @@ public class FileMessageService implements MessageService {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to create message");
         }
 
     }
@@ -125,7 +125,8 @@ public class FileMessageService implements MessageService {
     @Override
     public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
-        Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
+        Message message = findMessageById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such message."));
 
         if (isReply && (parentMessageId == null || !existMessageById(parentMessageId))) {
             throw new IllegalArgumentException("No such parent message.");
@@ -142,7 +143,7 @@ public class FileMessageService implements MessageService {
             oos.writeObject(message);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such message.");
+            throw new IllegalArgumentException("Failed to update message.");
         }
 
     }

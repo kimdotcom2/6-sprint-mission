@@ -42,7 +42,7 @@ public class FileChannelService implements ChannelService {
             //System.out.println(channel.getId());
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to create channel.");
         }
 
     }
@@ -58,7 +58,7 @@ public class FileChannelService implements ChannelService {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to add user to channel.");
         }
 
     }
@@ -74,7 +74,7 @@ public class FileChannelService implements ChannelService {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to add message to channel.");
         }
 
     }
@@ -138,7 +138,7 @@ public class FileChannelService implements ChannelService {
             oos.writeObject(channel);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to update channel.");
         }
 
     }
@@ -171,7 +171,7 @@ public class FileChannelService implements ChannelService {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to delete user from channel.");
         }
 
     }
@@ -187,7 +187,7 @@ public class FileChannelService implements ChannelService {
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException("No such channel.");
+            throw new IllegalArgumentException("Failed to delete message from channel.");
         }
 
     }
