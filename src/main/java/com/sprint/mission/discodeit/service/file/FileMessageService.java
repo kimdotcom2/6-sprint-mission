@@ -127,8 +127,12 @@ public class FileMessageService implements MessageService {
 
         Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
 
-        if (existMessageById(parentMessageId) && !message.isReply()) {
+        if (isReply && (parentMessageId == null || !existMessageById(parentMessageId))) {
             throw new IllegalArgumentException("No such parent message.");
+        }
+
+        if (parentMessageId != null && !isReply) {
+            throw new IllegalArgumentException("No reply message.");
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());

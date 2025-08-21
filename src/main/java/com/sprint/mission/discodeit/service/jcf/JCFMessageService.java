@@ -96,8 +96,12 @@ public class JCFMessageService implements MessageService {
             throw new IllegalArgumentException("No such message.");
         }
 
-        if (isReply && !data.containsKey(parentMessageId)) {
+        if (isReply && (parentMessageId == null || !data.containsKey(parentMessageId))) {
             throw new IllegalArgumentException("No such parent message.");
+        }
+
+        if (parentMessageId != null && !isReply) {
+            throw new IllegalArgumentException("No reply message.");
         }
 
         data.get(id).update(content, isReply, parentMessageId);
