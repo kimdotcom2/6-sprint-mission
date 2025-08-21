@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service.file;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
@@ -25,7 +26,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         fileUserService.createUser(user);
         channelService.createChannel(channel);
@@ -49,7 +50,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.VOICE, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         fileUserService.createUser(user);
         channelService.createChannel(channel);
@@ -71,7 +72,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.VOICE, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         fileUserService.createUser(user);
         channelService.createChannel(channel);
@@ -95,7 +96,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.DM, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
@@ -125,7 +126,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.DM, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
@@ -154,7 +155,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         fileUserService.createUser(user);
         channelService.createChannel(channel);
@@ -180,7 +181,7 @@ class FileMessageServiceTest {
 
         //given
         User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
         Message message = new Message(user.getId(), channel.getId(), "test", false, null);
         fileUserService.createUser(user);
         channelService.createChannel(channel);
