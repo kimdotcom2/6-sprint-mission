@@ -69,7 +69,7 @@ public class JCFChannelService implements ChannelService {
     @Override
     public List<Channel> findAllChannels() {
 
-        System.out.println("Channel List:");
+        //System.out.println("Channel List:");
 
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().toString());

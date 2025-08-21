@@ -56,7 +56,7 @@ public class JCFUserService implements UserService {
     @Override
     public List<User> findAllUsers() {
 
-        System.out.println("User List:");
+        //System.out.println("User List:");
 
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().toString());

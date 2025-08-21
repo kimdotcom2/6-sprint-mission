@@ -80,7 +80,7 @@ public class JCFMessageService implements MessageService {
     @Override
     public List<Message> findAllMessages() {
 
-        System.out.println("Message List:");
+        //System.out.println("Message List:");
 
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().getContent());
