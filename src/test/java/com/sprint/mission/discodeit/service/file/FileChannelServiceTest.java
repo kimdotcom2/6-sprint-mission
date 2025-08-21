@@ -79,14 +79,14 @@ class FileChannelServiceTest {
     }
 
     @Test
-    void updatechannel() {
+    void updateChannel() {
 
         //given
         Channel channel = new Channel("test", "test", true);
         fileChannelService.createChannel(channel);
 
         //when
-        fileChannelService.updatechannel(channel.getId(), "test2", "test2", false);
+        fileChannelService.updateChannel(channel.getId(), "test2", "test2", false);
 
         //then
         assertTrue(fileChannelService.existChannelById(channel.getId()));

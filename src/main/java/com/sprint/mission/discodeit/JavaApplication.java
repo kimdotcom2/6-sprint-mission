@@ -180,7 +180,7 @@ public class JavaApplication {
         //채널 수정
         System.out.println("채널 수정");
         try {
-            jcfChannelCrudService.updatechannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            jcfChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -249,7 +249,7 @@ public class JavaApplication {
         //채널 수정
         System.out.println("채널 수정");
         try {
-            fileChannelCrudService.updatechannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            fileChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

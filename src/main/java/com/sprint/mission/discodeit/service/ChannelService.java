@@ -22,7 +22,7 @@ public interface ChannelService {
 
     List<Channel> findAllChannels();
 
-    void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel);
+    void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel);
 
     void deleteChannelById(UUID id);
 

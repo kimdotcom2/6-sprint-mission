@@ -126,7 +126,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         Channel channel = findChannelById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));

@@ -79,7 +79,7 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void updatechannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such channel.");
