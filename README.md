@@ -90,6 +90,12 @@
 - 각 도메인 별로 Repository의 File 구현체 클래스 implement
 - 비밀번호 해싱을 위한 SecurityUtils 클래스 생성
 
+##TodoList
+- 엔티티에 빌더 패턴 적용
+- service에 파라미터로 사용할 request DTO 생성
+- 예외처리 점검
+- FileService 테스트 코드에 전체 폴더 clear 하는 코드 추가
+
 ## 스크린샷
 <img width="1446" height="464" alt="유저서비스" src="https://github.com/user-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
 <img width="1446" height="477" alt="채널서비스" src="https://github.com/user-attachments/assets/c9dab0b7-4876-4caa-9833-34ee3be53892" />
