@@ -24,7 +24,7 @@ public class FileMessageService implements MessageService {
             try {
                 Files.createDirectories(path);
             } catch (IOException e) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Invalid path");
             }
         }
 
@@ -52,7 +52,7 @@ public class FileMessageService implements MessageService {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
     }
@@ -82,7 +82,7 @@ public class FileMessageService implements MessageService {
     public List<Message> findChildMessagesById(UUID id) {
 
         if (!existMessageById(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
         System.out.println(findAllMessages().size());
@@ -128,7 +128,7 @@ public class FileMessageService implements MessageService {
         Message message = findMessageById(id).orElseThrow(IllegalArgumentException::new);
 
         if (existMessageById(parentMessageId) && !message.isReply()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such parent message.");
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
@@ -138,7 +138,7 @@ public class FileMessageService implements MessageService {
             oos.writeObject(message);
 
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
     }
@@ -151,11 +151,11 @@ public class FileMessageService implements MessageService {
         if (file.exists()) {
 
             if (!file.delete()) {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Failed to delete file.");
             }
 
         } else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
     }

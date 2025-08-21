@@ -93,7 +93,7 @@ public class JCFChannelService implements ChannelService {
     public void deleteChannelById(UUID id) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such channel.");
         }
 
         data.remove(id);

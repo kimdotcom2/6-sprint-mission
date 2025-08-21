@@ -60,7 +60,7 @@ public class JCFMessageService implements MessageService {
     public List<Message> findChildMessagesById(UUID id) {
 
         if (!data.containsKey(id)) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such message.");
         }
 
         List<Message> childMessageList = data.values().stream()
