@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service.jcf;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.util.*;
@@ -22,7 +23,7 @@ public class JCFChannelService implements ChannelService {
             throw new IllegalArgumentException("Channel already exists.");
         }
 
-        if (channel.getChannelName().isBlank() || channel.getCategory().isBlank()) {
+        if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
@@ -83,13 +84,13 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        if (channelName.isBlank() || category.isBlank()) {
+        if (channelName.isBlank() || category == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 

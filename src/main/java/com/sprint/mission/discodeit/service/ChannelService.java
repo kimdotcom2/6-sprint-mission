@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.enums.ChannelType;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public interface ChannelService {
 
     List<Channel> findAllChannels();
 
-    void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel);
+    void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel);
 
     void deleteChannelById(UUID id);
 

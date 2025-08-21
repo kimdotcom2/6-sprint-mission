@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
 
 public class FileChannelRepository implements ChannelRepository {
 
@@ -33,5 +35,25 @@ public class FileChannelRepository implements ChannelRepository {
     @Override
     public void saveAll(Iterable<Channel> channels) {
         channels.forEach(this::save);
+    }
+
+    @Override
+    public boolean existById(String id) {
+        return false;
+    }
+
+    @Override
+    public Optional<Channel> findById(String id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Channel> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void deleteById(String id) {
+
     }
 }

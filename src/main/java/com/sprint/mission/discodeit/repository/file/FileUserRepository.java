@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class FileUserRepository implements UserRepository {
 
@@ -33,5 +36,30 @@ public class FileUserRepository implements UserRepository {
     @Override
     public void saveAll(Iterable<User> users) {
         users.forEach(this::save);
+    }
+
+    @Override
+    public boolean existById(UUID id) {
+        return false;
+    }
+
+    @Override
+    public Optional<User> findById(UUID id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<User> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+
     }
 }

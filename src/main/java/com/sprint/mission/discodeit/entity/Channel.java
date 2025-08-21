@@ -1,5 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
+import com.sprint.mission.discodeit.enums.ChannelType;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -8,7 +10,7 @@ public class Channel extends BaseEntity implements Serializable {
     private Map<UUID, User> userMap = new TreeMap<>();
     private Map<UUID, Message> messageMap = new LinkedHashMap<>();
     private String channelName;
-    private String category;
+    private ChannelType category;
     private boolean isVoiceChannel;
 
     public Map<UUID, User> getUserMap() {
@@ -35,11 +37,11 @@ public class Channel extends BaseEntity implements Serializable {
         this.channelName = channelName;
     }
 
-    public String getCategory() {
+    public ChannelType getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(ChannelType category) {
         this.category = category;
     }
 
@@ -51,14 +53,14 @@ public class Channel extends BaseEntity implements Serializable {
         isVoiceChannel = voiceChannel;
     }
 
-    public Channel(String channelName, String category, boolean isVoiceChannel) {
+    public Channel(String channelName, ChannelType category, boolean isVoiceChannel) {
         super();
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
     }
 
-    public void update(String channelName, String category, boolean isVoiceChannel) {
+    public void update(String channelName, ChannelType category, boolean isVoiceChannel) {
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;

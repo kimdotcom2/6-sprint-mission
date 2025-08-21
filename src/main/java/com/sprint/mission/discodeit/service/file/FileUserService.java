@@ -137,7 +137,7 @@ public class FileUserService implements UserService {
         }
 
         for (User existingUser : findAllUsers()) {
-            if (existingUser.getEmail().equals(email)) {
+            if (existingUser.getEmail().equals(email) && !existingUser.getId().equals(id)) {
                 throw new IllegalArgumentException("Email already exists.");
             }
         }

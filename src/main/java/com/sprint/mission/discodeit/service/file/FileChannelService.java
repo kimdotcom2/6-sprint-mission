@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service.file;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.io.*;
@@ -36,7 +37,7 @@ public class FileChannelService implements ChannelService {
             throw new IllegalArgumentException("Channel already exists.");
         }
 
-        if (channel.getChannelName().isBlank() || channel.getCategory().isBlank()) {
+        if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
@@ -130,12 +131,12 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(UUID id, String channelName, String category, boolean isVoiceChannel) {
+    public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
 
         Channel channel = findChannelById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
 
-        if (channelName.isBlank() || category.isBlank()) {
+        if (channelName.isBlank() || category == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 

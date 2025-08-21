@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class FileMessageRepository implements MessageRepository {
 
@@ -33,5 +36,25 @@ public class FileMessageRepository implements MessageRepository {
     @Override
     public void saveAll(Iterable<Message> messages) {
         messages.forEach(this::save);
+    }
+
+    @Override
+    public boolean existById(UUID id) {
+        return false;
+    }
+
+    @Override
+    public Optional<Message> findById(UUID id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Message> findAll() {
+        return List.of();
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+
     }
 }

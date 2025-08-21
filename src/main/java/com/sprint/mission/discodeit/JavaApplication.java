@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
@@ -154,8 +155,8 @@ public class JavaApplication {
         System.out.println("채널 등록");
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel("channelOne", "channelOne", false);
-        Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         jcfChannelCrudService.createChannel(channelOne);
         jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
         jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
@@ -223,8 +224,8 @@ public class JavaApplication {
         System.out.println("채널 등록");
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel("channelOne", "channelOne", false);
-        Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         fileChannelCrudService.createChannel(channelOne);
         fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
         fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
@@ -300,9 +301,9 @@ public class JavaApplication {
         jcfUserCrudService.createUser(userOne);
         User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
         jcfUserCrudService.createUser(userTwo);
-        Channel channelOne = new Channel("channelOne", "channelOne", false);
+        Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
         jcfChannelCrudService.createChannel(channelOne);
-        Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         jcfChannelCrudService.createChannel(channelTwo);
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
         jcfMessageCrudService.createMessage(messageOne);
@@ -372,13 +373,13 @@ public class JavaApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
+        User userOne = new User("Kim", "kimjaewon3@gmail.com", "1234", "Hi");
         fileUserCrudService.createUser(userOne);
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userTwo = new User("Kim2", "kimjaewon4@gmail.com", "1234", "Hi");
         fileUserCrudService.createUser(userTwo);
-        Channel channelOne = new Channel("channelOne", "channelOne", false);
+        Channel channelOne = new Channel("channelOne", ChannelType.FORUM, false);
         fileChannelCrudService.createChannel(channelOne);
-        Channel channelTwo = new Channel("channelTwo", "channelTwo", true);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.DM, true);
         fileChannelCrudService.createChannel(channelTwo);
         Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
         fileMessageCrudService.createMessage(messageOne);

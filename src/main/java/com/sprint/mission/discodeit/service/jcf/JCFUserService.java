@@ -87,7 +87,7 @@ public class JCFUserService implements UserService {
         }
 
         for (User existingUser : data.values()) {
-            if (existingUser.getEmail().equals(email)) {
+            if (existingUser.getEmail().equals(email) && !existingUser.getId().equals(id)) {
                 throw new IllegalArgumentException("Email already exists.");
             }
         }
