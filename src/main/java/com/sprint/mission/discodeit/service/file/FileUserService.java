@@ -157,16 +157,14 @@ public class FileUserService implements UserService {
     @Override
     public void deleteUserById(UUID id) {
 
-        File file = path.resolve(id + FILE_EXTENSION).toFile();
-
-        if (file.exists()) {
-
-            if (!file.delete()) {
-                throw new IllegalArgumentException("Failed to delete file.");
-            }
-
-        } else {
+        if (!existUserById(id)) {
             throw new IllegalArgumentException("No such user.");
+        } else {
+            try {
+                Files.delete(path.resolve(id + FILE_EXTENSION));
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to delete user.");
+            }
         }
 
     }

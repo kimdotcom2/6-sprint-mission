@@ -155,16 +155,14 @@ public class FileChannelService implements ChannelService {
     @Override
     public void deleteChannelById(UUID id) {
 
-        File file = path.resolve(id + FILE_EXTENSION).toFile();
-
-        if (file.exists()) {
-
-            if (!file.delete()) {
-                throw new IllegalArgumentException("Failed to delete file.");
-            }
-
-        } else {
+        if (!existChannelById(id)) {
             throw new IllegalArgumentException("No such channel.");
+        } else {
+            try {
+                Files.delete(path.resolve(id + FILE_EXTENSION));
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to delete channel.");
+            }
         }
 
     }

@@ -151,16 +151,14 @@ public class FileMessageService implements MessageService {
     @Override
     public void deleteMessageById(UUID id) {
 
-        File file = path.resolve(id + FILE_EXTENSION).toFile();
-
-        if (file.exists()) {
-
-            if (!file.delete()) {
-                throw new IllegalArgumentException("Failed to delete file.");
-            }
-
-        } else {
+        if (!existMessageById(id)) {
             throw new IllegalArgumentException("No such message.");
+        } else {
+            try {
+                Files.delete(path.resolve(id + FILE_EXTENSION));
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to delete message.");
+            }
         }
 
     }
