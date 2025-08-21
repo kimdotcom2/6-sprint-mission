@@ -12,6 +12,8 @@ public interface UserService {
 
     boolean existUserById(UUID id);
 
+    boolean existUserByEmail(String email);
+
     Optional<User> findUserById(UUID id);
 
     Optional<User> findUserByEmail(String email);

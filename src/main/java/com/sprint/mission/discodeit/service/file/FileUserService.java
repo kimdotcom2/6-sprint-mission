@@ -38,10 +38,8 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        for (User existingUser : findAllUsers()) {
-            if (existingUser.getEmail().equals(user.getEmail())) {
-                throw new IllegalArgumentException("Email already exists.");
-            }
+        if (existUserByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
         }
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
@@ -57,6 +55,19 @@ public class FileUserService implements UserService {
     public boolean existUserById(UUID id) {
 
         return Files.exists(path.resolve(id + FILE_EXTENSION));
+    }
+
+    @Override
+    public boolean existUserByEmail(String email) {
+
+        for (User existingUser : findAllUsers()) {
+            if (existingUser.getEmail().equals(email)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     @Override
@@ -77,6 +88,10 @@ public class FileUserService implements UserService {
 
     @Override
     public Optional<User> findUserByEmail(String email) {
+
+        if (!existUserByEmail(email)) {
+            return Optional.empty();
+        }
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -136,10 +151,8 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        for (User existingUser : findAllUsers()) {
-            if (existingUser.getEmail().equals(email) && !existingUser.getId().equals(id)) {
-                throw new IllegalArgumentException("Email already exists.");
-            }
+        if (existUserByEmail(email) && !user.getEmail().equals(email)) {
+            throw new IllegalArgumentException("Email already exists.");
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());

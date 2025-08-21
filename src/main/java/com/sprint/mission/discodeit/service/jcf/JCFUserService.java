@@ -24,10 +24,8 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        for (User existingUser : data.values()) {
-            if (existingUser.getEmail().equals(user.getEmail())) {
-                throw new IllegalArgumentException("Email already exists.");
-            }
+        if (existUserByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
         }
 
         data.put(user.getId(), user);
@@ -37,6 +35,19 @@ public class JCFUserService implements UserService {
     @Override
     public boolean existUserById(UUID id) {
         return data.containsKey(id);
+    }
+
+    @Override
+    public boolean existUserByEmail(String email) {
+
+        for (User existingUser : data.values()) {
+            if (existingUser.getEmail().equals(email)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     @Override
@@ -56,6 +67,10 @@ public class JCFUserService implements UserService {
 
     @Override
     public Optional<User> findUserByEmail(String email) {
+
+        if (!existUserByEmail(email)) {
+            return Optional.empty();
+        }
 
         return data.entrySet().stream()
                 .filter(entry -> entry.getValue().getEmail().equals(email))
@@ -86,10 +101,8 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        for (User existingUser : data.values()) {
-            if (existingUser.getEmail().equals(email) && !existingUser.getId().equals(id)) {
-                throw new IllegalArgumentException("Email already exists.");
-            }
+        if (existUserByEmail(email) && !data.get(id).getEmail().equals(email)) {
+            throw new IllegalArgumentException("Email already exists.");
         }
 
         data.get(id).update(nickname, email, password, description);
