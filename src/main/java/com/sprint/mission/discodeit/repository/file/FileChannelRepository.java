@@ -6,10 +6,7 @@ import com.sprint.mission.discodeit.repository.ChannelRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class FileChannelRepository implements ChannelRepository {
@@ -40,12 +37,12 @@ public class FileChannelRepository implements ChannelRepository {
     }
 
     @Override
-    public boolean existById(String id) {
+    public boolean existById(UUID id) {
         return Files.exists(path.resolve(id + extension));
     }
 
     @Override
-    public Optional<Channel> findById(String id) {
+    public Optional<Channel> findById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + extension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -86,7 +83,7 @@ public class FileChannelRepository implements ChannelRepository {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
 
         try {
             Files.deleteIfExists(path.resolve(id + extension));

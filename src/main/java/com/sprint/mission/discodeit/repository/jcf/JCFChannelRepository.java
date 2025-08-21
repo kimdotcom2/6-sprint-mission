@@ -24,12 +24,12 @@ public class JCFChannelRepository implements ChannelRepository {
     }
 
     @Override
-    public boolean existById(String id) {
+    public boolean existById(UUID id) {
         return data.containsKey(id);
     }
 
     @Override
-    public Optional<Channel> findById(String id) {
+    public Optional<Channel> findById(UUID id) {
         return Optional.ofNullable(data.get(id));
     }
 
@@ -39,7 +39,7 @@ public class JCFChannelRepository implements ChannelRepository {
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deleteById(UUID id) {
         data.remove(id);
     }
 }

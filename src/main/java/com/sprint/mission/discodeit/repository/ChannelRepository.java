@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface ChannelRepository {
 
@@ -11,12 +12,12 @@ public interface ChannelRepository {
 
     void saveAll(Iterable<Channel> channels);
 
-    boolean existById(String id);
+    boolean existById(UUID id);
 
-    Optional<Channel> findById(String id);
+    Optional<Channel> findById(UUID id);
 
     List<Channel> findAll();
 
-    void deleteById(String id);
+    void deleteById(UUID id);
 
 }
