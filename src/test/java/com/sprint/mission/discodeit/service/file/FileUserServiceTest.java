@@ -92,7 +92,7 @@ class FileUserServiceTest {
         userService.createUser(user);
 
         //when
-        userService.updateUser(user.getId(), "test2", "test2", "test2", "test2");
+        userService.updateUser(user.getId(), "test2", "test2", "test2", "test2", "test2");
         User user1 = userService.findUserById(user.getId()).orElse(null);
 
         //then
