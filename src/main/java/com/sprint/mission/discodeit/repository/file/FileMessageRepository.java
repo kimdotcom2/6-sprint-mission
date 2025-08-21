@@ -9,13 +9,14 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
+
 public class FileMessageRepository implements MessageRepository {
 
-    private final Path path;
+    private final Path path = Path.of(FILE_PATH);
     private final String extension;
 
-    public FileMessageRepository(Path path, String extension) {
-        this.path = path;
+    public FileMessageRepository(String extension) {
         this.extension = extension;
     }
 

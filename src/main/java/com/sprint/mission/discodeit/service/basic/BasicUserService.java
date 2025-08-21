@@ -3,12 +3,14 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.utils.SecurityUtil;
 
 import java.util.*;
 
 public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
+    private final SecurityUtil securityUtil = new SecurityUtil();
 
     public BasicUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -20,6 +22,8 @@ public class BasicUserService implements UserService {
         if (userRepository.existById(user.getId())) {
             throw new IllegalArgumentException("User already exists.");
         }
+
+        user.setPassword(securityUtil.hashPassword(user.getPassword()));
 
         userRepository.save(user);
 
@@ -65,20 +69,20 @@ public class BasicUserService implements UserService {
     @Override
     public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
-        if (!userRepository.existById(id)) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
         if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        if (userRepository.existByEmail(email) && !findUserById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such user.")).getId().equals(id)) {
+        User updatedUser = findUserById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        if (userRepository.existByEmail(email) && !updatedUser.getId().equals(id)) {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        User updatedUser = findUserById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
+        if (!securityUtil.hashPassword(password).equals(updatedUser.getPassword())) {
+            throw new IllegalArgumentException("Invalid password.");
+        }
+
         updatedUser.update(nickname, email, password, description);
 
         userRepository.save(updatedUser);

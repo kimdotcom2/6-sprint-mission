@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.utils.SecurityUtil;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -13,6 +14,7 @@ public class FileUserService implements UserService {
 
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
+    private final SecurityUtil securityUtil = new SecurityUtil();
 
     public FileUserService(Path path) {
 
@@ -41,6 +43,8 @@ public class FileUserService implements UserService {
         if (existUserByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists.");
         }
+
+        user.setPassword(securityUtil.hashPassword(user.getPassword()));
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -144,15 +148,19 @@ public class FileUserService implements UserService {
     @Override
     public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
-        User user = findUserById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such user."));
-
         if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
+        User user = findUserById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+
         if (existUserByEmail(email) && !user.getEmail().equals(email)) {
             throw new IllegalArgumentException("Email already exists.");
+        }
+
+        if (!securityUtil.hashPassword(password).equals(user.getPassword())) {
+            throw new IllegalArgumentException("Invalid password.");
         }
 
         try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());

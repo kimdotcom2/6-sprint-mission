@@ -16,9 +16,11 @@ import com.sprint.mission.discodeit.service.jcf.JCFUserService;
 
 import java.nio.file.Path;
 
+import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
+
 public class JavaApplication {
 
-    static String fileDirectory = "C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\";
+    static String fileDirectory = FILE_PATH;
 
     public static void main(String[] args) {
 
