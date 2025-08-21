@@ -9,17 +9,15 @@ import java.util.*;
 public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
-    private final Map<UUID, User> data;
 
     public BasicUserService(UserRepository userRepository) {
-        data = new TreeMap<>();
         this.userRepository = userRepository;
     }
 
     @Override
     public void createUser(User user) {
 
-        if (data.containsKey(user.getId())) {
+        if (userRepository.existById(user.getId())) {
             throw new IllegalArgumentException("User already exists.");
         }
 
@@ -29,18 +27,17 @@ public class BasicUserService implements UserService {
 
     @Override
     public boolean existUserById(UUID id) {
-        return data.containsKey(id);
+        return userRepository.existById(id);
     }
 
     @Override
     public Optional<User> findUserById(UUID id) {
 
-        if (!data.containsKey(id)) {
-            return Optional.empty();
+        if (!userRepository.existById(id)) {
+            throw new IllegalArgumentException("No such user.");
         }
 
-        User user = data.get(id);
-
+        User user = userRepository.findById(id).get();
 
         return Optional.of(user);
 
@@ -49,24 +46,49 @@ public class BasicUserService implements UserService {
     @Override
     public Optional<User> findUserByEmail(String email) {
 
-        return data.entrySet().stream()
-                .filter(entry -> entry.getValue().getEmail().equals(email))
-                .findFirst().map(Map.Entry::getValue);
+        if (!userRepository.existByEmail(email)) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        return userRepository.findByEmail(email);
 
     }
 
     @Override
     public List<User> findAllUsers() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
     public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
+        if (!userRepository.existById(id)) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        if (email.isBlank() || password.isBlank() || nickname.isBlank()) {
+            throw new IllegalArgumentException("Invalid user data.");
+        }
+
+        if (findUserByEmail(email).isPresent() && !findUserById(id).get().getId().equals(id)) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
+        User updatedUser = findUserById(id).get();
+        updatedUser.update(nickname, email, password, description);
+
+        userRepository.save(updatedUser);
+
     }
 
     @Override
     public void deleteUserById(UUID id) {
+
+        if (!userRepository.existById(id)) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        userRepository.deleteById(id);
 
     }
 }
