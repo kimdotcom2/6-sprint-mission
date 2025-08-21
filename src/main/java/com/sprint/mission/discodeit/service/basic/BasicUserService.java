@@ -37,9 +37,7 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("No such user.");
         }
 
-        User user = userRepository.findById(id).get();
-
-        return Optional.of(user);
+        return userRepository.findById(id);
 
     }
 
@@ -70,11 +68,12 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        if (findUserByEmail(email).isPresent() && !findUserById(id).get().getId().equals(id)) {
+        if (findUserByEmail(email).isPresent() && !findUserById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such user.")).getId().equals(id)) {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        User updatedUser = findUserById(id).get();
+        User updatedUser = findUserById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
         updatedUser.update(nickname, email, password, description);
 
         userRepository.save(updatedUser);
