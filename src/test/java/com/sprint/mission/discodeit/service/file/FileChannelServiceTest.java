@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ class FileChannelServiceTest {
     void createChannel() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
 
         //when
         fileChannelService.createChannel(channel);
@@ -31,7 +32,7 @@ class FileChannelServiceTest {
     void existChannelById() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
 
         //when
         fileChannelService.createChannel(channel);
@@ -46,7 +47,7 @@ class FileChannelServiceTest {
     void findChannelById() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
 
         //when
         fileChannelService.createChannel(channel);
@@ -64,8 +65,8 @@ class FileChannelServiceTest {
     void findAllChannels() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
-        Channel channel1 = new Channel("test1", "test1", false);
+        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel1 = new Channel("test1", ChannelType.VOICE, false);
 
         //when
         fileChannelService.createChannel(channel);
@@ -82,11 +83,11 @@ class FileChannelServiceTest {
     void updateChannel() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.VOICE, true);
         fileChannelService.createChannel(channel);
 
         //when
-        fileChannelService.updateChannel(channel.getId(), "test2", "test2", false);
+        fileChannelService.updateChannel(channel.getId(), "test2", ChannelType.FORUM, false);
 
         //then
         assertTrue(fileChannelService.existChannelById(channel.getId()));
@@ -101,7 +102,7 @@ class FileChannelServiceTest {
     void deleteChannelById() {
 
         //given
-        Channel channel = new Channel("test", "test", true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true);
         fileChannelService.createChannel(channel);
         assertTrue(fileChannelService.existChannelById(channel.getId()));
 
