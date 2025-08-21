@@ -3,10 +3,7 @@ package com.sprint.mission.discodeit.repository.jcf;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class JCFChannelRepository implements ChannelRepository {
 
@@ -28,21 +25,21 @@ public class JCFChannelRepository implements ChannelRepository {
 
     @Override
     public boolean existById(String id) {
-        return false;
+        return data.containsKey(id);
     }
 
     @Override
     public Optional<Channel> findById(String id) {
-        return Optional.empty();
+        return Optional.ofNullable(data.get(id));
     }
 
     @Override
     public List<Channel> findAll() {
-        return List.of();
+        return new ArrayList<>(data.values());
     }
 
     @Override
     public void deleteById(String id) {
-
+        data.remove(id);
     }
 }

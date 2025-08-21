@@ -3,13 +3,11 @@ package com.sprint.mission.discodeit.repository.file;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class FileMessageRepository implements MessageRepository {
 
@@ -40,21 +38,65 @@ public class FileMessageRepository implements MessageRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return false;
+        return Files.exists(path.resolve(id + extension));
     }
 
     @Override
     public Optional<Message> findById(UUID id) {
-        return Optional.empty();
+
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + extension).toFile());
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            Message message = (Message) ois.readObject();
+
+            return Optional.ofNullable(message);
+
+        } catch (IOException | ClassNotFoundException e) {
+            return Optional.empty();
+        }
+
+    }
+
+    @Override
+    public List<Message> findChildById(UUID id) {
+        return findAll().stream()
+                .filter(message -> message.getParentMessageId().equals(id))
+                .toList();
     }
 
     @Override
     public List<Message> findAll() {
-        return List.of();
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(path -> path.toString().endsWith(extension))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (Message) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+
     }
 
     @Override
     public void deleteById(UUID id) {
+
+        try {
+            Files.deleteIfExists(path.resolve(id + extension));
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
 
     }
 }

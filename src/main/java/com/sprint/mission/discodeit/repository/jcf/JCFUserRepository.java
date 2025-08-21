@@ -25,26 +25,30 @@ public class JCFUserRepository implements UserRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return false;
+        return data.containsKey(id);
     }
 
     @Override
     public Optional<User> findById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(data.get(id));
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return Optional.empty();
+
+        return data.entrySet().stream()
+                .filter(entry -> entry.getValue().getEmail().equals(email))
+                .findFirst().map(Map.Entry::getValue);
+
     }
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        return new ArrayList<>(data.values());
     }
 
     @Override
     public void deleteById(UUID id) {
-
+        data.remove(id);
     }
 }

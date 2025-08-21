@@ -3,12 +3,14 @@ package com.sprint.mission.discodeit.repository.file;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class FileChannelRepository implements ChannelRepository {
 
@@ -39,21 +41,58 @@ public class FileChannelRepository implements ChannelRepository {
 
     @Override
     public boolean existById(String id) {
-        return false;
+        return Files.exists(path.resolve(id + extension));
     }
 
     @Override
     public Optional<Channel> findById(String id) {
-        return Optional.empty();
+
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + extension).toFile());
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            Channel channel = (Channel) ois.readObject();
+
+            return Optional.ofNullable(channel);
+
+        } catch (IOException | ClassNotFoundException e) {
+            return Optional.empty();
+        }
+
     }
 
     @Override
     public List<Channel> findAll() {
-        return List.of();
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(path -> path.toString().endsWith(extension))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (Channel) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .toList();
+        } catch (IOException e) {
+            return new ArrayList<>();
+        }
+
     }
 
     @Override
     public void deleteById(String id) {
+
+        try {
+            Files.deleteIfExists(path.resolve(id + extension));
+        } catch (IOException e) {
+            throw new IllegalArgumentException();
+        }
 
     }
 }

@@ -3,10 +3,7 @@ package com.sprint.mission.discodeit.repository.jcf;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class JCFMessageRepository implements MessageRepository {
 
@@ -28,21 +25,28 @@ public class JCFMessageRepository implements MessageRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return false;
+        return data.containsKey(id);
     }
 
     @Override
     public Optional<Message> findById(UUID id) {
-        return Optional.empty();
+        return Optional.ofNullable(data.get(id));
+    }
+
+    @Override
+    public List<Message> findChildById(UUID id) {
+        return data.values().stream()
+                .filter(message -> message.getParentMessageId().equals(id))
+                .toList();
     }
 
     @Override
     public List<Message> findAll() {
-        return List.of();
+        return new ArrayList<>(data.values());
     }
 
     @Override
     public void deleteById(UUID id) {
-
+        data.remove(id);
     }
 }

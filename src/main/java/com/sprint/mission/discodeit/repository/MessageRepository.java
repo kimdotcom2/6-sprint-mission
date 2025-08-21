@@ -16,6 +16,8 @@ public interface MessageRepository {
 
     Optional<Message> findById(UUID id);
 
+    List<Message> findChildById(UUID id);
+
     List<Message> findAll();
 
     void deleteById(UUID id);
