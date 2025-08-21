@@ -41,10 +41,10 @@
       - [x] 클래스 네이밍 규칙: File[인터페이스 이름]
       - [x] JCF 대신 FileIO와 객체 직렬화를 활용해 메소드를 구현하세요.
     - [x] Application에서 서비스 구현체를 File*Service로 바꾸어 테스트해보세요.
-  - [] 서비스 구현체 분석
-    - [] JCF*Service 구현체와 File*Service 구현체를 비교하여 공통점과 차이점을 발견해보세요.
-      - [] "비즈니스 로직"과 관련된 코드를 식별해보세요.
-      - []  "저장 로직"과 관련된 코드를 식별해보세요.
+  - [ ] 서비스 구현체 분석
+    - [ ] JCF*Service 구현체와 File*Service 구현체를 비교하여 공통점과 차이점을 발견해보세요.
+      - [ ] "비즈니스 로직"과 관련된 코드를 식별해보세요.
+      - [ ]  "저장 로직"과 관련된 코드를 식별해보세요.
   - [x] 레포지토리 설계 및 구현
     - [x] "저장 로직"과 관련된 기능을 도메인 모델 별 인터페이스로 선언하세요.
       - [x] 인터페이스 패키지명: com.sprint.mission.discodeit.repository
@@ -76,7 +76,7 @@
 - MessageService에 ChannelService, UserService를 필드로 사용하도록 컴포지션 패턴 추가
 - 저장 기능을 담당하는 Repository 인터페이스 추가
 - 각 도메인 별로 Repository의 JCF 구현체 클래스 implement
-- - 각 도메인 별로 Repository의 File 구현체 클래스 implement
+- 각 도메인 별로 Repository의 File 구현체 클래스 implement
 ## 스크린샷
 <img width="1446" height="464" alt="유저서비스" src="https://github.com/user-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
 <img width="1446" height="477" alt="채널서비스" src="https://github.com/user-attachments/assets/c9dab0b7-4876-4caa-9833-34ee3be53892" />
