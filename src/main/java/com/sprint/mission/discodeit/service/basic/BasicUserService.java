@@ -23,6 +23,10 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
+        if (userRepository.existByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists.");
+        }
+
         user.setPassword(securityUtil.hashPassword(user.getPassword()));
 
         userRepository.save(user);
