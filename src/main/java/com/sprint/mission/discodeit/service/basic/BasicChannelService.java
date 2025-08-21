@@ -62,36 +62,82 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public boolean existChannelById(UUID id) {
-        return false;
+        return channelRepository.existById(id);
     }
 
     @Override
     public Optional<Channel> findChannelById(UUID id) {
-        return Optional.empty();
+
+        if (!channelRepository.existById(id)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        return channelRepository.findById(id);
+
     }
 
     @Override
     public List<Channel> findAllChannels() {
-        return List.of();
+        return channelRepository.findAll();
     }
 
     @Override
     public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+
+        if (!channelRepository.existById(id)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        if (channelName.isBlank() || category == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
+        Channel updatedChannel = channelRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+
+        updatedChannel.update(channelName, category, isVoiceChannel);
+        channelRepository.save(updatedChannel);
 
     }
 
     @Override
     public void deleteChannelById(UUID id) {
 
+        if (!channelRepository.existById(id)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        channelRepository.deleteById(id);
+
     }
 
     @Override
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
+        if (!channelRepository.existById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+
+        channel.getUserMap().remove(userId);
+        channelRepository.save(channel);
+
     }
 
     @Override
     public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
+
+        if (!channelRepository.existById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        Channel channel = channelRepository.findById(channelId)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+
+        channel.getMessageMap().remove(messageId);
+        channelRepository.save(channel);
 
     }
 }
