@@ -7,11 +7,11 @@ import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.util.*;
 
-public class JCFChannelCrudService implements ChannelService {
+public class JCFChannelService implements ChannelService {
 
     private final Map<UUID, Channel> data;
 
-    public JCFChannelCrudService() {
+    public JCFChannelService() {
         this.data = new TreeMap<>();
     }
 

@@ -1,16 +1,19 @@
-package com.sprint.mission.discodeit.service.jcf;
+package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.entity.User;
+import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
 
 import java.util.*;
 
-public class JCFUserCrudService implements UserService {
+public class BasicUserService implements UserService {
 
+    private final UserRepository userRepository;
     private final Map<UUID, User> data;
 
-    public JCFUserCrudService() {
+    public BasicUserService(UserRepository userRepository) {
         data = new TreeMap<>();
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -20,7 +23,7 @@ public class JCFUserCrudService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        data.put(user.getId(), user);
+        userRepository.save(user);
 
     }
 
@@ -38,8 +41,7 @@ public class JCFUserCrudService implements UserService {
 
         User user = data.get(id);
 
-        //System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
-        //System.out.println(user.toString());
+
         return Optional.of(user);
 
     }
@@ -55,35 +57,16 @@ public class JCFUserCrudService implements UserService {
 
     @Override
     public List<User> findAllUsers() {
-
-        System.out.println("User List:");
-
-        /*data.entrySet().stream().forEach(entry -> {
-            System.out.println(entry.getValue().toString());
-        });*/
-        return new ArrayList<>(data.values());
-
+        return List.of();
     }
 
     @Override
     public void updateUser(UUID id, String nickname, String email, String password, String description) {
 
-        if (!data.containsKey(id)) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
-        data.get(id).update(nickname, email, password, description);
-
     }
 
     @Override
     public void deleteUserById(UUID id) {
-
-        if (!data.containsKey(id)) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
-        data.remove(id);
 
     }
 }

@@ -11,14 +11,14 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FileMessageCrudService implements MessageService {
+public class FileMessageService implements MessageService {
 
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
     private final UserService userService;
     private final ChannelService channelService;
 
-    public FileMessageCrudService(Path path, UserService userService, ChannelService channelService) {
+    public FileMessageService(Path path, UserService userService, ChannelService channelService) {
 
         if (!path.toFile().exists()) {
             try {

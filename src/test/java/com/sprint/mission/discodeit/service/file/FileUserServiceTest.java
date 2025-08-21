@@ -10,9 +10,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileUserCrudServiceTest {
+class FileUserServiceTest {
 
-    UserService userService = new FileUserCrudService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\users"));
+    UserService userService = new FileUserService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\users"));
 
     @Test
     void createUser() {

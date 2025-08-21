@@ -13,12 +13,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileMessageCrudServiceTest {
+class FileMessageServiceTest {
 
     String fileDirectory = "C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\";
-    UserService fileUserService = new FileUserCrudService(Path.of(fileDirectory + "users"));
-    ChannelService channelService = new FileChannelCrudService(Path.of(fileDirectory + "channels"));
-    MessageService messageService = new FileMessageCrudService(Path.of(fileDirectory + "messages"), fileUserService, channelService);
+    UserService fileUserService = new FileUserService(Path.of(fileDirectory + "users"));
+    ChannelService channelService = new FileChannelService(Path.of(fileDirectory + "channels"));
+    MessageService messageService = new FileMessageService(Path.of(fileDirectory + "messages"), fileUserService, channelService);
 
     @Test
     void createMessage() {

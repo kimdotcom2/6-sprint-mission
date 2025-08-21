@@ -9,12 +9,12 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class FileUserCrudService implements UserService {
+public class FileUserService implements UserService {
 
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
 
-    public FileUserCrudService(Path path) {
+    public FileUserService(Path path) {
 
         if (!path.toFile().exists()) {
             try {

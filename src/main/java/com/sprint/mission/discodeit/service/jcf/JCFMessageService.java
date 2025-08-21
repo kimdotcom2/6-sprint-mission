@@ -7,13 +7,13 @@ import com.sprint.mission.discodeit.service.UserService;
 
 import java.util.*;
 
-public class JCFMessageCrudService implements MessageService {
+public class JCFMessageService implements MessageService {
 
     private final Map<UUID, Message> data;
     private final UserService userService;
     private final ChannelService channelService;
 
-    public JCFMessageCrudService(UserService userService, ChannelService channelService) {
+    public JCFMessageService(UserService userService, ChannelService channelService) {
         this.userService = userService;
         this.channelService = channelService;
         data = new TreeMap<>();

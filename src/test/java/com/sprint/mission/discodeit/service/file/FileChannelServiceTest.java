@@ -8,9 +8,9 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileChannelCrudServiceTest {
+class FileChannelServiceTest {
 
-    ChannelService fileChannelService = new FileChannelCrudService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\channels"));
+    ChannelService fileChannelService = new FileChannelService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\channels"));
 
     @Test
     void createChannel() {
