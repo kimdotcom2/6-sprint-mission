@@ -1,6 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.repository.ChannelRepository;
+import com.sprint.mission.discodeit.repository.MessageRepository;
+import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 
 import java.util.List;
@@ -9,40 +12,95 @@ import java.util.UUID;
 
 public class BasicMessageService implements MessageService {
 
+    private final MessageRepository messageRepository;
+    private final UserRepository userRepository;
+    private final ChannelRepository channelRepository;
 
+    public BasicMessageService(MessageRepository messageRepository, UserRepository userRepository, ChannelRepository channelRepository) {
+        this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
+        this.channelRepository = channelRepository;
+    }
 
     @Override
     public void createMessage(Message message) {
+
+        if (!userRepository.existById(message.getUserId())) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        if (!channelRepository.existById(message.getChannelId())) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        if (messageRepository.existById(message.getId())) {
+            throw new IllegalArgumentException("Message already exists.");
+        }
+
+        messageRepository.save(message);
 
     }
 
     @Override
     public boolean existMessageById(UUID id) {
-        return false;
+        return messageRepository.existById(id);
     }
 
     @Override
     public Optional<Message> findMessageById(UUID id) {
-        return Optional.empty();
+
+        if (!messageRepository.existById(id)) {
+            throw new IllegalArgumentException("No such message.");
+        }
+
+        return messageRepository.findById(id);
     }
 
     @Override
     public List<Message> findChildMessagesById(UUID id) {
-        return List.of();
+
+        if (!messageRepository.existById(id)) {
+            throw new IllegalArgumentException("No such message.");
+        }
+
+        return messageRepository.findChildById(id);
     }
 
     @Override
     public List<Message> findAllMessages() {
-        return List.of();
+        return messageRepository.findAll();
     }
 
     @Override
     public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
+        if (!messageRepository.existById(id)) {
+            throw new IllegalArgumentException("No such message.");
+        }
+
+        if (isReply && (parentMessageId == null || !messageRepository.existById(parentMessageId))) {
+            throw new IllegalArgumentException("No such parent message.");
+        }
+
+        if (parentMessageId != null && !isReply) {
+            throw new IllegalArgumentException("No reply message.");
+        }
+
+        Message updatedMessage = messageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such message."));
+        updatedMessage.update(content, isReply, parentMessageId);
+        messageRepository.save(updatedMessage);
+
     }
 
     @Override
     public void deleteMessageById(UUID id) {
+
+        if (!messageRepository.existById(id)) {
+            throw new IllegalArgumentException("No such message.");
+        }
+
+        messageRepository.deleteById(id);
 
     }
 }
