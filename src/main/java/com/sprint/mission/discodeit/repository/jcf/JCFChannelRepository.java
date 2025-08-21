@@ -9,8 +9,8 @@ public class JCFChannelRepository implements ChannelRepository {
 
     private final Map<UUID, Channel> data;
 
-    public JCFChannelRepository(Map<UUID, Channel> data) {
-        this.data = data;
+    public JCFChannelRepository() {
+        data = new TreeMap<>();
     }
 
     @Override

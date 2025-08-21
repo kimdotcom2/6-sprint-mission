@@ -13,17 +13,19 @@ import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
 
 public class FileMessageRepository implements MessageRepository {
 
-    private final Path path = Path.of(FILE_PATH);
-    private final String extension;
+    private final Path path;
+    private static final String FILE_EXTENSION = ".ser";
+    private final String folderName;
 
-    public FileMessageRepository(String extension) {
-        this.extension = extension;
+    public FileMessageRepository(String folderName) {
+        this.folderName = folderName;
+        path = Path.of(FILE_PATH + folderName);
     }
 
     @Override
     public void save(Message message) {
 
-        try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + extension).toFile());
+        try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
@@ -39,13 +41,13 @@ public class FileMessageRepository implements MessageRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return Files.exists(path.resolve(id + extension));
+        return Files.exists(path.resolve(id + FILE_EXTENSION));
     }
 
     @Override
     public Optional<Message> findById(UUID id) {
 
-        try (FileInputStream fis = new FileInputStream(path.resolve(id + extension).toFile());
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             Message message = (Message) ois.readObject();
@@ -61,6 +63,7 @@ public class FileMessageRepository implements MessageRepository {
     @Override
     public List<Message> findChildById(UUID id) {
         return findAll().stream()
+                .filter(message -> message.isReply())
                 .filter(message -> message.getParentMessageId().equals(id))
                 .toList();
     }
@@ -70,7 +73,7 @@ public class FileMessageRepository implements MessageRepository {
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
-                    .filter(path -> path.toString().endsWith(extension))
+                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
                     .map(path -> {
                         try (
                                 FileInputStream fis = new FileInputStream(path.toFile());
@@ -94,7 +97,7 @@ public class FileMessageRepository implements MessageRepository {
     public void deleteById(UUID id) {
 
         try {
-            Files.deleteIfExists(path.resolve(id + extension));
+            Files.deleteIfExists(path.resolve(id + FILE_EXTENSION));
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }

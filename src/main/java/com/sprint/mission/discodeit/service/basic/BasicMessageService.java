@@ -16,10 +16,10 @@ public class BasicMessageService implements MessageService {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
 
-    public BasicMessageService(MessageRepository messageRepository, UserRepository userRepository, ChannelRepository channelRepository) {
-        this.messageRepository = messageRepository;
+    public BasicMessageService(UserRepository userRepository, ChannelRepository channelRepository, MessageRepository messageRepository) {
         this.userRepository = userRepository;
         this.channelRepository = channelRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override

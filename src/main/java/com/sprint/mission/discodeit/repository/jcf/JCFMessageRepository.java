@@ -9,8 +9,8 @@ public class JCFMessageRepository implements MessageRepository {
 
     private final Map<UUID, Message> data;
 
-    public JCFMessageRepository(Map<UUID, Message> data) {
-        this.data = data;
+    public JCFMessageRepository() {
+        data = new TreeMap<>();
     }
 
     @Override
@@ -36,6 +36,7 @@ public class JCFMessageRepository implements MessageRepository {
     @Override
     public List<Message> findChildById(UUID id) {
         return data.values().stream()
+                .filter(message -> message.isReply())
                 .filter(message -> message.getParentMessageId().equals(id))
                 .toList();
     }

@@ -158,10 +158,7 @@ public class FileUserService implements UserService {
         if (existUserByEmail(email) && !user.getEmail().equals(email)) {
             throw new IllegalArgumentException("Email already exists.");
         }
-
-        System.out.println(securityUtil.hashPassword(currentPassword));
-        System.out.println(user.getPassword());
-
+        
         if (!securityUtil.hashPassword(currentPassword).equals(user.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
