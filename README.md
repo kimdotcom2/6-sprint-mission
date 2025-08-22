@@ -81,7 +81,7 @@
 - CrudService 인터페이스 생성
 - CrudService 인터페이스에 crud 메소드 선언
 - 각 도메인 별로 CrudService의 JCF 구현체 클래스 implement
-- - 각 도메인 별로 CrudService의 File 구현체 클래스 implement
+- 각 도메인 별로 CrudService의 File 구현체 클래스 implement
 - JavaApplication 클래스 생성
 - main 메소드에 테스트 코드 추가
 - MessageService에 ChannelService, UserService를 필드로 사용하도록 컴포지션 패턴 추가
