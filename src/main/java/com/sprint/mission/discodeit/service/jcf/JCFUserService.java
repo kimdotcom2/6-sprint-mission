@@ -88,7 +88,11 @@ public class JCFUserService implements UserService {
 
         /*data.entrySet().stream().forEach(entry -> {
             System.out.println(entry.getValue().toString());
-        });*/
+        });
+        return data.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .sorted(Comparator.comparing(User::getCreatedAt))
+                .toList();*/
         return new ArrayList<>(data.values());
 
     }
