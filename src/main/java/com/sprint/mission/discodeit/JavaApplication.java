@@ -34,15 +34,16 @@ import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
 public class JavaApplication {
 
     static String fileDirectory = FILE_PATH;
+    static final String strongPassword = "fe5A3sad@lks^";
 
     public static void main(String[] args) {
 
-        /*testJcfUserService();
+        testJcfUserService();
         testJcfChannelService();
         testJcfMessageService();
         testFileUserService();
         testFileChannelService();
-        testFileMessageService();*/
+        testFileMessageService();
         testBasicUserService();
         testBasicChannelService();
         testBasicMessageService();
@@ -58,13 +59,13 @@ public class JavaApplication {
         User userOne = new User.Builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         jcfUserCrudService.createUser(userOne);
@@ -91,8 +92,8 @@ public class JavaApplication {
                     .id(userOne.getId())
                     .nickname(userOne.getNickname())
                     .email(userOne.getEmail())
-                    .currentPassword("1234")
-                    .newPassword("12345")
+                    .currentPassword(strongPassword)
+                    .newPassword(strongPassword + "k")
                     .description("Bye")
                     .build();
             jcfUserCrudService.updateUser(requestOne);
@@ -135,13 +136,13 @@ public class JavaApplication {
         User userOne = new User.Builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         fileUserCrudService.createUser(userOne);
@@ -168,8 +169,8 @@ public class JavaApplication {
                     .id(userOne.getId())
                     .nickname(userOne.getNickname())
                     .email(userOne.getEmail())
-                    .currentPassword("1234")
-                    .newPassword("12345")
+                    .currentPassword(strongPassword)
+                    .newPassword(strongPassword + "k")
                     .description("Bye")
                     .build();
             fileUserCrudService.updateUser(requestOne);
@@ -213,13 +214,13 @@ public class JavaApplication {
         User userOne = new User.Builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
-                .password("1234")
+                .password(strongPassword)
                 .description("Hi")
                 .build();
         basicUserCrudService.createUser(userOne);
@@ -246,8 +247,8 @@ public class JavaApplication {
                     .id(userOne.getId())
                     .nickname(userOne.getNickname())
                     .email(userOne.getEmail())
-                    .currentPassword("1234")
-                    .newPassword("12345")
+                    .currentPassword(strongPassword)
+                    .newPassword(strongPassword + "k")
                     .description("Bye")
                     .build();
             basicUserCrudService.updateUser(requestOne);
@@ -287,7 +288,7 @@ public class JavaApplication {
 
         //채널 등록
         System.out.println("채널 등록");
-        User user = new User("test", "test", "test", "test");
+        User user = new User("test", "test@test.com", strongPassword, "test");
         Message message = new Message(user.getId(), null, "message", false, null);
         //Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
         //Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
@@ -372,7 +373,7 @@ public class JavaApplication {
 
         //채널 등록
         System.out.println("채널 등록");
-        User user = new User("test", "test", "test", "test");
+        User user = new User("test", "test@test.com", strongPassword, "test");
         Message message = new Message(user.getId(), null, "message", false, null);
         Channel channelOne = new Channel.Builder()
                 .channelName("channelOne")
@@ -461,7 +462,7 @@ public class JavaApplication {
 
         //채널 등록
         System.out.println("채널 등록");
-        User user = new User("test", "test", "test", "test");
+        User user = new User("test", "test@test.com", strongPassword, "test");
         Message message = new Message(user.getId(), null, "message", false, null);
         Channel channelOne = new Channel.Builder()
                 .channelName("channelOne")
@@ -550,9 +551,9 @@ public class JavaApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
+        User userOne = new User("Kim", "kimjaewon@gmail.com", strongPassword, "Hi");
         jcfUserCrudService.createUser(userOne);
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", strongPassword, "Hi");
         jcfUserCrudService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
         jcfChannelCrudService.createChannel(channelOne);
@@ -646,9 +647,9 @@ public class JavaApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        User userOne = new User("Kim", "kimjaewon3@gmail.com", "1234", "Hi");
+        User userOne = new User("Kim", "kimjaewon3@gmail.com", strongPassword, "Hi");
         fileUserCrudService.createUser(userOne);
-        User userTwo = new User("Kim2", "kimjaewon4@gmail.com", "1234", "Hi");
+        User userTwo = new User("Kim2", "kimjaewon4@gmail.com", strongPassword, "Hi");
         fileUserCrudService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", ChannelType.FORUM, false);
         fileChannelCrudService.createChannel(channelOne);
@@ -743,9 +744,9 @@ public class JavaApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
+        User userOne = new User("Kim", "kimjaewon@gmail.com", strongPassword, "Hi");
         basicUserCrudService.createUser(userOne);
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", strongPassword, "Hi");
         basicUserCrudService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
         basicChannelCrudService.createChannel(channelOne);

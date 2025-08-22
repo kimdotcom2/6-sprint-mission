@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
+import com.sprint.mission.discodeit.utils.ValidationUtil;
 
 import java.util.*;
 
@@ -12,6 +13,7 @@ public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil = new SecurityUtil();
+    private final ValidationUtil validationUtil = new ValidationUtil();
 
     public BasicUserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -24,7 +26,7 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (user.getPassword().isBlank() || user.getEmail().isBlank() || user.getNickname().isBlank()) {
+        if (!validationUtil.isPasswordValid(user.getPassword()) || !validationUtil.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -78,7 +80,10 @@ public class BasicUserService implements UserService {
     @Override
     public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (request.email().isBlank() || request.newPassword().isBlank() || request.nickname().isBlank()) {
+        if (!validationUtil.isEmailValid(request.email()) ||
+                !validationUtil.isPasswordValid(request.newPassword()) ||
+                !validationUtil.isPasswordValid(request.currentPassword()) ||
+                request.nickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 

@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
+import com.sprint.mission.discodeit.utils.ValidationUtil;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public class JCFUserService implements UserService {
 
     private final Map<UUID, User> data;
     private final SecurityUtil securityUtil = new SecurityUtil();
+    private final ValidationUtil validationUtil = new ValidationUtil();
 
     public JCFUserService() {
         data = new TreeMap<>();
@@ -23,7 +25,7 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (user.getPassword().isBlank() || user.getEmail().isBlank() || user.getNickname().isBlank()) {
+        if (!validationUtil.isPasswordValid(user.getPassword()) || !validationUtil.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -101,7 +103,10 @@ public class JCFUserService implements UserService {
     @Override
     public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (request.email().isBlank() || request.nickname().isBlank() || request.newPassword().isBlank()) {
+        if (!validationUtil.isEmailValid(request.email()) ||
+                request.nickname().isBlank() ||
+                !validationUtil.isPasswordValid(request.newPassword()) ||
+                !validationUtil.isPasswordValid(request.currentPassword())) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -117,7 +122,7 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        data.get(request).update(request.nickname(), request.email(), securityUtil.hashPassword(request.newPassword()), request.description());
+        data.get(request.id()).update(request.nickname(), request.email(), securityUtil.hashPassword(request.newPassword()), request.description());
 
     }
 
