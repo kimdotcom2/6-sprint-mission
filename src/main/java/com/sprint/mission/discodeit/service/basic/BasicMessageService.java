@@ -68,6 +68,28 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
+    public List<Message> findMessagesByUserId(UUID userId) {
+
+        if (!userRepository.existById(userId)) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        return messageRepository.findByUserId(userId);
+
+    }
+
+    @Override
+    public List<Message> findMessagesByChannelId(UUID channelId) {
+
+        if (!channelRepository.existById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        return messageRepository.findByChannelId(channelId);
+
+    }
+
+    @Override
     public List<Message> findAllMessages() {
         return messageRepository.findAll();
     }

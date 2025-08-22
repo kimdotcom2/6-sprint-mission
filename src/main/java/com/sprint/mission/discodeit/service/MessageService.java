@@ -17,6 +17,10 @@ public interface MessageService {
 
     List<Message> findChildMessagesById(UUID id);
 
+    List<Message> findMessagesByUserId(UUID userId);
+
+    List<Message> findMessagesByChannelId(UUID channelId);
+
     List<Message> findAllMessages();
 
     void updateMessage(DiscordDTO.UpdateMessageRequest request);

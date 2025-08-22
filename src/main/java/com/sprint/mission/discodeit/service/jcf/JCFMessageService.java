@@ -71,6 +71,33 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
+    public List<Message> findMessagesByUserId(UUID userId) {
+
+        if (!userService.existUserById(userId)) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        return findAllMessages().stream()
+                .filter(message -> message.getUserId().equals(userId))
+                .toList();
+
+    }
+
+    @Override
+    public List<Message> findMessagesByChannelId(UUID channelId) {
+
+        if (!channelService.existChannelById(channelId)) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
+        return findAllMessages().stream()
+                .filter(message -> message.getChannelId().equals(channelId))
+                .sorted(Comparator.comparing(Message::getCreatedAt))
+                .toList();
+
+    }
+
+    @Override
     public List<Message> findAllMessages() {
 
         //System.out.println("Message List:");

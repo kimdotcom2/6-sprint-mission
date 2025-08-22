@@ -18,6 +18,10 @@ public interface MessageRepository {
 
     List<Message> findChildById(UUID id);
 
+    List<Message> findByUserId(UUID userId);
+
+    List<Message> findByChannelId(UUID channelId);
+
     List<Message> findAll();
 
     void deleteById(UUID id);

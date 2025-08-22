@@ -77,6 +77,22 @@ public class FileMessageRepository implements MessageRepository {
     }
 
     @Override
+    public List<Message> findByUserId(UUID userId) {
+        return findAll().stream()
+                .filter(message -> message.getUserId().equals(userId))
+                .sorted(Comparator.comparing(Message::getCreatedAt))
+                .toList();
+    }
+
+    @Override
+    public List<Message> findByChannelId(UUID channelId) {
+        return findAll().stream()
+                .filter(message -> message.getChannelId().equals(channelId))
+                .sorted(Comparator.comparing(Message::getCreatedAt))
+                .toList();
+    }
+
+    @Override
     public List<Message> findAll() {
 
         try (Stream<Path> pathStream = Files.list(path)) {
