@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.UUID;
 
 public class BaseEntity implements Serializable {
@@ -12,7 +13,7 @@ public class BaseEntity implements Serializable {
 
     public BaseEntity() {
         this.id = UUID.randomUUID();
-        this.createdAt = System.currentTimeMillis();
+        this.createdAt = Instant.now().toEpochMilli();
         this.updatedAt = null;
     }
 
@@ -29,7 +30,7 @@ public class BaseEntity implements Serializable {
     }
 
     public void setUpdatedAt() {
-        this.updatedAt = System.currentTimeMillis();
+        this.updatedAt = Instant.now().toEpochMilli();
     }
 
 }

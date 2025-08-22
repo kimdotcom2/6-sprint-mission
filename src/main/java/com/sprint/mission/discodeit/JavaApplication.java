@@ -38,12 +38,12 @@ public class JavaApplication {
 
     public static void main(String[] args) {
 
-        testJcfUserService();
+        /*testJcfUserService();
         testJcfChannelService();
         testJcfMessageService();
         testFileUserService();
         testFileChannelService();
-        testFileMessageService();
+        testFileMessageService();*/
         testBasicUserService();
         testBasicChannelService();
         testBasicMessageService();
