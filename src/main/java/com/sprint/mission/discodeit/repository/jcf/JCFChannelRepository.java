@@ -34,6 +34,13 @@ public class JCFChannelRepository implements ChannelRepository {
     }
 
     @Override
+    public List<Channel> findByUserId(UUID userId) {
+        return findAll().stream()
+                .filter(channel -> channel.getUserMap().containsKey(userId))
+                .toList();
+    }
+
+    @Override
     public List<Channel> findAll() {
         return new ArrayList<>(data.values());
     }

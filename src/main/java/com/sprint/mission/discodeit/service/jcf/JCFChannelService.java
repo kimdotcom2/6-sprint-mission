@@ -76,6 +76,13 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
+    public List<Channel> findChannelsByUserId(UUID userId) {
+        return findAllChannels().stream()
+                .filter(channel -> channel.getUserMap().containsKey(userId))
+                .toList();
+    }
+
+    @Override
     public List<Channel> findAllChannels() {
 
         //System.out.println("Channel List:");

@@ -111,6 +111,13 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
+    public List<Channel> findChannelsByUserId(UUID userId) {
+        return findAllChannels().stream()
+                .filter(channel -> channel.getUserMap().containsKey(userId))
+                .toList();
+    }
+
+    @Override
     public List<Channel> findAllChannels() {
 
         try (Stream<Path> pathStream = Files.list(path)) {

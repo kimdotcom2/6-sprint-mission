@@ -22,6 +22,8 @@ public interface ChannelService {
 
     Optional<Channel> findChannelById(UUID id);
 
+    List<Channel> findChannelsByUserId(UUID userId);
+
     List<Channel> findAllChannels();
 
     void updateChannel(DiscordDTO.UpdateChannelRequest request);
