@@ -82,7 +82,16 @@
     - [x] Basic*Service 구현체를 활용하여 테스트해보세요.
       - [x] JCF*Repository  구현체를 활용하여 테스트해보세요.
       - [x] File*Repository 구현체를 활용하여 테스트해보세요.
-    - [ ] 이전에 작성했던 코드(JCF*Service 또는 File*Service)와 비교해 어떤 차이가 있는지 정리해보세요.
+    - [x] 이전에 작성했던 코드(JCF*Service 또는 File*Service)와 비교해 어떤 차이가 있는지 정리해보세요.
+    
+        | 비교    | Service                          | Service + Repository         |
+        |-------|----------------------------------|------------------------------|
+        | 역할    | 비즈니스 로직 + CRUD 로직                | 비즈니스 로직과 CRUD 로직이 분리됨          |
+        | 계층    | 모호하고 불분명 | Service 계층과 Repository 계층 |
+        | 의존성   | Client가 저장 방법에 따라 Service 구현체 생성 | Service가 Repository를 주입받아 사용 |
+        | 확장성   | CRUD 처리 로직이 바뀌면 Service를 수정      | Service 수정 불필요               |
+        | 재사용성  | 중복 코드가 발생하고 재사용 어려움              | 역할이 분리되어 재사용 용이              |
+        | 테스트   | 단일 로직 테스트 어려움                    | 단일 로직의 단위 테스트 용이             |
 
 ## 주요 변경사항
 - Git Repository init
@@ -100,10 +109,10 @@
 - 비밀번호 해싱을 위한 SecurityUtils 클래스 생성
 - 엔티티에 빌더 패턴 적용
 - service에서 update 메소드의 파라미터로 사용할 request DTO 생성
+- 이메일, 비밀번호 양식 검증하는 validator 작성
 
 ## TodoList
 - 예외처리 점검
-- 이메일, 비밀번호 양식 검증하는 validator 작성
 - FileService 테스트 코드에 전체 폴더 clear 하는 코드 추가
 
 ## 스크린샷
