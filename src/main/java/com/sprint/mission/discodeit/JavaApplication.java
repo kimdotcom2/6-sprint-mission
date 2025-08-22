@@ -81,7 +81,7 @@ public class JavaApplication {
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
-        jcfUserCrudService.findAllUsers().stream()
+        jcfUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -236,7 +236,7 @@ public class JavaApplication {
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
-        basicUserCrudService.findAllUsers().stream()
+        basicUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -448,7 +448,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("채널 목록 읽기");
-        fileChannelCrudService.findAllChannels().stream()
+        fileChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -491,7 +491,7 @@ public class JavaApplication {
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
-        basicChannelCrudService.findAllChannels().stream()
+        basicChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -684,13 +684,13 @@ public class JavaApplication {
         }
         try {
             System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
-            fileMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
+            fileMessageCrudService.findChildMessagesById(messageOne.getId())
                     .forEach(message -> System.out.println(message.toString()));
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
         System.out.println("메시지 목록 읽기");
-        fileMessageCrudService.findAllMessages().stream()
+        fileMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -784,10 +784,10 @@ public class JavaApplication {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        basicMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
+        basicMessageCrudService.findChildMessagesById(messageOne.getId())
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
-        basicMessageCrudService.findAllMessages().stream()
+        basicMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 

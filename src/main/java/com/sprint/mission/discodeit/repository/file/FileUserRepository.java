@@ -34,7 +34,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public void save(User user) {
 
-        System.out.println(path.toString());
+        //System.out.println(path.toString());
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {

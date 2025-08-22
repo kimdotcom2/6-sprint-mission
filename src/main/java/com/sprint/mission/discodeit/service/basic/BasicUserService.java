@@ -7,7 +7,9 @@ import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
 import com.sprint.mission.discodeit.utils.ValidationUtil;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public class BasicUserService implements UserService {
 

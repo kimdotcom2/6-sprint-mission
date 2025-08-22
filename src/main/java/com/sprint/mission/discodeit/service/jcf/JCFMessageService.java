@@ -64,17 +64,9 @@ public class JCFMessageService implements MessageService {
             throw new IllegalArgumentException("No such message.");
         }
 
-        List<Message> childMessageList = data.values().stream()
+        return data.values().stream()
                 .filter(message -> message.isReply() && message.getParentMessageId().equals(id))
                 .toList();
-
-        //System.out.println("답글 수 : " + childMessageList.size());
-
-        /*childMessageList.stream().forEach(message -> {
-            System.out.println(message.toString());
-        });*/
-
-        return childMessageList;
 
     }
 

@@ -36,7 +36,7 @@ public class JCFMessageRepository implements MessageRepository {
     @Override
     public List<Message> findChildById(UUID id) {
         return data.values().stream()
-                .filter(message -> message.isReply())
+                .filter(Message::isReply)
                 .filter(message -> message.getParentMessageId().equals(id))
                 .toList();
     }

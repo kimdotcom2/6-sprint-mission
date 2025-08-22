@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -87,12 +88,20 @@ class FileUserServiceTest {
     void updateUser() {
 
         //given
-        User user = new User("test", "test", "test", "test");
+        User user = new User("test", "test@test.com", "A39ffcsdg&fdsldsf", "test");
         System.out.println(user.getId());
         userService.createUser(user);
 
         //when
-        userService.updateUser(user.getId(), "test2", "test2", "test2", "test2", "test2");
+        DiscordDTO.UpdateUserRequest updateUserRequest = new DiscordDTO.UpdateUserRequest.Builder()
+                .id(user.getId())
+                .nickname("test2")
+                .email("test2@test.com")
+                .currentPassword("A39ffcsdg&fdsldsf")
+                .newPassword("A39ffcsdg&fdsldsf")
+                .description("test2")
+                .build();
+        userService.updateUser(updateUserRequest);
         User user1 = userService.findUserById(user.getId()).orElse(null);
 
         //then
@@ -114,7 +123,7 @@ class FileUserServiceTest {
 
         //then
         assertFalse(userService.findAllUsers().contains(user));
-        assertEquals(userService.findUserById(user.getId()).orElse(null), null);
+        assertEquals(null, userService.findUserById(user.getId()).orElse(null));
 
     }
 

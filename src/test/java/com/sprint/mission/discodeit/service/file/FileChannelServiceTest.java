@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -87,7 +88,13 @@ class FileChannelServiceTest {
         fileChannelService.createChannel(channel);
 
         //when
-        fileChannelService.updateChannel(channel.getId(), "test2", ChannelType.FORUM, false);
+        DiscordDTO.UpdateChannelRequest channelRequest = new DiscordDTO.UpdateChannelRequest.Builder()
+                .id(channel.getId())
+                .channelName("test2")
+                .category(ChannelType.FORUM)
+                .isVoiceChannel(false)
+                .build();
+        fileChannelService.updateChannel(channelRequest);
 
         //then
         assertTrue(fileChannelService.existChannelById(channel.getId()));
