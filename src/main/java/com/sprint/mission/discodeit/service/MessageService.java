@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Message;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public interface MessageService {
 
     List<Message> findAllMessages();
 
-    void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId);
+    void updateMessage(DiscordDTO.UpdateMessageRequest request);
 
     void deleteMessageById(UUID id);
 

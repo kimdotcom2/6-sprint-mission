@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -72,23 +73,23 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public void updateMessage(DiscordDTO.UpdateMessageRequest request) {
 
-        if (!messageRepository.existById(id)) {
+        if (!messageRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such message.");
         }
 
-        if (isReply && (parentMessageId == null || !messageRepository.existById(parentMessageId))) {
+        if (request.isReply() && (request.parentMessageId() == null || !messageRepository.existById(request.id()))) {
             throw new IllegalArgumentException("No such parent message.");
         }
 
-        if (parentMessageId != null && !isReply) {
+        if (request.parentMessageId() != null && !request.isReply()) {
             throw new IllegalArgumentException("No reply message.");
         }
 
-        Message updatedMessage = messageRepository.findById(id)
+        Message updatedMessage = messageRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such message."));
-        updatedMessage.update(content, isReply, parentMessageId);
+        updatedMessage.update(request.content(), request.isReply(), request.parentMessageId());
         messageRepository.save(updatedMessage);
 
     }

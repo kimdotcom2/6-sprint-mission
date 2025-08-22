@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -90,21 +91,21 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public void updateMessage(DiscordDTO.UpdateMessageRequest request) {
 
-        if (!data.containsKey(id)) {
+        if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such message.");
         }
 
-        if (isReply && (parentMessageId == null || !data.containsKey(parentMessageId))) {
+        if (request.isReply() && (request.parentMessageId() == null || !data.containsKey(request.parentMessageId()))) {
             throw new IllegalArgumentException("No such parent message.");
         }
 
-        if (parentMessageId != null && !isReply) {
+        if (request.parentMessageId() != null && !request.isReply()) {
             throw new IllegalArgumentException("No reply message.");
         }
 
-        data.get(id).update(content, isReply, parentMessageId);
+        data.get(request.id()).update(request.content(), request.isReply(), request.parentMessageId());
 
     }
 

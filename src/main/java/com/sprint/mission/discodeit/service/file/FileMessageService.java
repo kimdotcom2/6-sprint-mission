@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -123,23 +124,23 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public void updateMessage(DiscordDTO.UpdateMessageRequest request) {
 
-        Message message = findMessageById(id)
+        Message message = findMessageById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such message."));
 
-        if (isReply && (parentMessageId == null || !existMessageById(parentMessageId))) {
+        if (request.isReply() && (request.parentMessageId() == null || !existMessageById(request.parentMessageId()))) {
             throw new IllegalArgumentException("No such parent message.");
         }
 
-        if (parentMessageId != null && !isReply) {
+        if (request.parentMessageId() != null && !request.isReply()) {
             throw new IllegalArgumentException("No reply message.");
         }
 
-        try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(request.id() + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            message.update(content, isReply, parentMessageId);
+            message.update(request.content(), request.isReply(), request.parentMessageId());
             oos.writeObject(message);
 
         } catch (IOException e) {

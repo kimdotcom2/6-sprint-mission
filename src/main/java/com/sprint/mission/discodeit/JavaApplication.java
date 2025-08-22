@@ -602,7 +602,13 @@ public class JavaApplication {
         //메시지 수정
         System.out.println("메시지 수정");
         try {
-            jcfMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                    .id(messageOne.getId())
+                    .content("messageOne edited")
+                    .isReply(messageOne.isReply())
+                    .parentMessageId(messageOne.getParentMessageId())
+                    .build();
+            jcfMessageCrudService.updateMessage(requestOne);
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -690,7 +696,13 @@ public class JavaApplication {
         //메시지 수정
         System.out.println("메시지 수정");
         try {
-            fileMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                    .id(messageOne.getId())
+                    .content("messageOne edited")
+                    .isReply(messageOne.isReply())
+                    .parentMessageId(messageOne.getParentMessageId())
+                    .build();
+            fileMessageCrudService.updateMessage(requestOne);
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -781,7 +793,13 @@ public class JavaApplication {
         //메시지 수정
         System.out.println("메시지 수정");
         try {
-            basicMessageCrudService.updateMessage(messageOne.getId(), "messageOne edited", messageOne.isReply(), messageOne.getParentMessageId());
+            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                    .id(messageOne.getId())
+                    .content("messageOne edited")
+                    .isReply(messageOne.isReply())
+                    .parentMessageId(messageOne.getParentMessageId())
+                    .build();
+            basicMessageCrudService.updateMessage(requestOne);
             System.out.println(messageOne.getId() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
