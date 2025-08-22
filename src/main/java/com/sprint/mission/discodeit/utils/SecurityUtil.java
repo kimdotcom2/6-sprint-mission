@@ -20,8 +20,6 @@ public class SecurityUtil {
             throw new IllegalArgumentException("Failed to hash password.");
         }
 
-
     }
-
 
 }
