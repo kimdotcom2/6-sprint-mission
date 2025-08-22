@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
@@ -146,27 +147,27 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
+    public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (email.isBlank() || newPassword.isBlank() || nickname.isBlank()) {
+        if (request.email().isBlank() || request.newPassword().isBlank() || request.nickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        User user = findUserById(id)
+        User user = findUserById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        if (existUserByEmail(email) && !user.getEmail().equals(email)) {
+        if (existUserByEmail(request.email()) && !user.getEmail().equals(request.email())) {
             throw new IllegalArgumentException("Email already exists.");
         }
         
-        if (!securityUtil.hashPassword(currentPassword).equals(user.getPassword())) {
+        if (!securityUtil.hashPassword(request.currentPassword()).equals(user.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(request.id() + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            user.update(nickname, email, securityUtil.hashPassword(newPassword), description);
+            user.update(request.nickname(), request.email(), securityUtil.hashPassword(request.newPassword()), request.description());
             oos.writeObject(user);
 
         } catch (IOException e) {

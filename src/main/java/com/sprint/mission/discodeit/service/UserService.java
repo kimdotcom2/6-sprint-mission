@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface UserService {
 
     List<User> findAllUsers();
 
-    void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description);
+    void updateUser(DiscordDTO.UpdateUserRequest request);
 
     void deleteUserById(UUID id);
 

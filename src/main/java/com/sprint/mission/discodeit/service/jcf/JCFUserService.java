@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
@@ -98,25 +99,25 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
+    public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (email.isBlank() || nickname.isBlank() || newPassword.isBlank()) {
+        if (request.email().isBlank() || request.nickname().isBlank() || request.newPassword().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        if (!data.containsKey(id)) {
+        if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such user.");
         }
 
-        if (existUserByEmail(email) && !data.get(id).getEmail().equals(email)) {
+        if (existUserByEmail(request.email()) && !data.get(request.id()).getEmail().equals(request.email())) {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        if (!securityUtil.hashPassword(currentPassword).equals(data.get(id).getPassword())) {
+        if (!securityUtil.hashPassword(request.currentPassword()).equals(data.get(request.id()).getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        data.get(id).update(nickname, email, securityUtil.hashPassword(newPassword), description);
+        data.get(request).update(request.nickname(), request.email(), securityUtil.hashPassword(request.newPassword()), request.description());
 
     }
 

@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -86,7 +87,15 @@ public class JavaApplication {
         //유저 수정
         System.out.println("유저 수정");
         try {
-            jcfUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
+            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                    .id(userOne.getId())
+                    .nickname(userOne.getNickname())
+                    .email(userOne.getEmail())
+                    .currentPassword("1234")
+                    .newPassword("12345")
+                    .description("Bye")
+                    .build();
+            jcfUserCrudService.updateUser(requestOne);
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -155,7 +164,15 @@ public class JavaApplication {
         //유저 수정
         System.out.println("유저 수정");
         try {
-            fileUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
+            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                    .id(userOne.getId())
+                    .nickname(userOne.getNickname())
+                    .email(userOne.getEmail())
+                    .currentPassword("1234")
+                    .newPassword("12345")
+                    .description("Bye")
+                    .build();
+            fileUserCrudService.updateUser(requestOne);
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -225,7 +242,15 @@ public class JavaApplication {
         //유저 수정
         System.out.println("유저 수정");
         try {
-            basicUserCrudService.updateUser(userOne.getId(), userOne.getNickname(), userOne.getEmail(), "1234", "12345", "Bye");
+            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                    .id(userOne.getId())
+                    .nickname(userOne.getNickname())
+                    .email(userOne.getEmail())
+                    .currentPassword("1234")
+                    .newPassword("12345")
+                    .description("Bye")
+                    .build();
+            basicUserCrudService.updateUser(requestOne);
             System.out.println(userOne.getNickname() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();

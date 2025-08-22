@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
@@ -75,23 +76,23 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UUID id, String nickname, String email, String currentPassword, String newPassword, String description) {
+    public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (email.isBlank() || newPassword.isBlank() || nickname.isBlank()) {
+        if (request.email().isBlank() || request.newPassword().isBlank() || request.nickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        User updatedUser = findUserById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
+        User updatedUser = findUserById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        if (userRepository.existByEmail(email) && !updatedUser.getId().equals(id)) {
+        if (userRepository.existByEmail(request.email()) && !updatedUser.getId().equals(request.id())) {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        if (!securityUtil.hashPassword(currentPassword).equals(updatedUser.getPassword())) {
+        if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUser.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        updatedUser.update(nickname, email, securityUtil.hashPassword(currentPassword), description);
+        updatedUser.update(request.nickname(), request.email(), securityUtil.hashPassword(request.currentPassword()), request.description());
 
         userRepository.save(updatedUser);
 
