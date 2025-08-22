@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class User extends BaseEntity implements Serializable {
 
