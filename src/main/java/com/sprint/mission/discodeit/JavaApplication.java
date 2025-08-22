@@ -54,8 +54,18 @@ public class JavaApplication {
 
         //유저 등록
         System.out.println("유저 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userOne = new User.Builder()
+                .nickname("Kim")
+                .email("kimjaewon@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
+        User userTwo = new User.Builder()
+                .nickname("Kim2")
+                .email("kimjaewon2@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
         jcfUserCrudService.createUser(userOne);
         jcfUserCrudService.createUser(userTwo);
         System.out.println("==========================");
@@ -113,8 +123,18 @@ public class JavaApplication {
 
         //유저 등록
         System.out.println("유저 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userOne = new User.Builder()
+                .nickname("Kim")
+                .email("kimjaewon@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
+        User userTwo = new User.Builder()
+                .nickname("Kim2")
+                .email("kimjaewon2@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
         fileUserCrudService.createUser(userOne);
         fileUserCrudService.createUser(userTwo);
         System.out.println("==========================");
@@ -173,8 +193,18 @@ public class JavaApplication {
 
         //유저 등록
         System.out.println("유저 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", "1234", "Hi");
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", "1234", "Hi");
+        User userOne = new User.Builder()
+                .nickname("Kim")
+                .email("kimjaewon@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
+        User userTwo = new User.Builder()
+                .nickname("Kim2")
+                .email("kimjaewon2@gmail.com")
+                .password("1234")
+                .description("Hi")
+                .build();
         basicUserCrudService.createUser(userOne);
         basicUserCrudService.createUser(userTwo);
         System.out.println("==========================");
@@ -234,8 +264,18 @@ public class JavaApplication {
         System.out.println("채널 등록");
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
-        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        //Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
+        //Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        Channel channelOne = new Channel.Builder()
+                .channelName("channelOne")
+                .category(ChannelType.TEXT)
+                .isVoiceChannel(false)
+                .build();
+        Channel channelTwo = new Channel.Builder()
+                .channelName("channelTwo")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true)
+                .build();
         jcfChannelCrudService.createChannel(channelOne);
         jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
         jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
@@ -303,8 +343,16 @@ public class JavaApplication {
         System.out.println("채널 등록");
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
-        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        Channel channelOne = new Channel.Builder()
+                .channelName("channelOne")
+                .category(ChannelType.TEXT)
+                .isVoiceChannel(false)
+                .build();
+        Channel channelTwo = new Channel.Builder()
+                .channelName("channelTwo")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true)
+                .build();
         fileChannelCrudService.createChannel(channelOne);
         fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
         fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
@@ -378,8 +426,16 @@ public class JavaApplication {
         System.out.println("채널 등록");
         User user = new User("test", "test", "test", "test");
         Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
-        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        Channel channelOne = new Channel.Builder()
+                .channelName("channelOne")
+                .category(ChannelType.TEXT)
+                .isVoiceChannel(false)
+                .build();
+        Channel channelTwo = new Channel.Builder()
+                .channelName("channelTwo")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true)
+                .build();
         basicChannelCrudService.createChannel(channelOne);
         basicChannelCrudService.addUserToChannel(channelOne.getId(), user);
         basicChannelCrudService.addMessageToChannel(channelOne.getId(), message);
@@ -459,9 +515,23 @@ public class JavaApplication {
         jcfChannelCrudService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         jcfChannelCrudService.createChannel(channelTwo);
-        Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
+        //Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
+        //Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
+        Message messageOne = new Message.Builder()
+                .userId(userOne.getId())
+                .channelId(channelOne.getId())
+                .content("messageOne")
+                .isReply(false)
+                .parentMessageId(null)
+                .build();
+        Message messageTwo = new Message.Builder()
+                .userId(userTwo.getId())
+                .channelId(channelTwo.getId())
+                .content("messageTwo")
+                .isReply(true)
+                .parentMessageId(messageOne.getId())
+                .build();
         jcfMessageCrudService.createMessage(messageOne);
-        Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
         jcfMessageCrudService.createMessage(messageTwo);
         System.out.println("==========================");
 
@@ -535,9 +605,21 @@ public class JavaApplication {
         fileChannelCrudService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", ChannelType.DM, true);
         fileChannelCrudService.createChannel(channelTwo);
-        Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
+        Message messageOne = new Message.Builder()
+                .userId(userOne.getId())
+                .channelId(channelOne.getId())
+                .content("messageOne")
+                .isReply(false)
+                .parentMessageId(null)
+                .build();
+        Message messageTwo = new Message.Builder()
+                .userId(userTwo.getId())
+                .channelId(channelTwo.getId())
+                .content("messageTwo")
+                .isReply(true)
+                .parentMessageId(messageOne.getId())
+                .build();
         fileMessageCrudService.createMessage(messageOne);
-        Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
         fileMessageCrudService.createMessage(messageTwo);
         System.out.println("==========================");
 
@@ -614,9 +696,21 @@ public class JavaApplication {
         basicChannelCrudService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         basicChannelCrudService.createChannel(channelTwo);
-        Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
+        Message messageOne = new Message.Builder()
+                .userId(userOne.getId())
+                .channelId(channelOne.getId())
+                .content("messageOne")
+                .isReply(false)
+                .parentMessageId(null)
+                .build();
+        Message messageTwo = new Message.Builder()
+                .userId(userTwo.getId())
+                .channelId(channelTwo.getId())
+                .content("messageTwo")
+                .isReply(true)
+                .parentMessageId(messageOne.getId())
+                .build();
         basicMessageCrudService.createMessage(messageOne);
-        Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
         basicMessageCrudService.createMessage(messageTwo);
         System.out.println("==========================");
 

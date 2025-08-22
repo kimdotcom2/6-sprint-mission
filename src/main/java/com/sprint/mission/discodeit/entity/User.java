@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public class User extends BaseEntity implements Serializable {
 
@@ -64,6 +63,37 @@ public class User extends BaseEntity implements Serializable {
                 + ", email=" + email + ", description=" + description + "]";
     }
 
+    public static class Builder {
 
+        private String nickname;
+        private String email;
+        private String password;
+        private String description;
+
+        public Builder nickname(String nickname) {
+            this.nickname = nickname;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public User build() {
+            return new User(nickname, email, password, description);
+        }
+
+    }
 
 }

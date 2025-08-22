@@ -74,4 +74,43 @@ public class Message extends BaseEntity implements Serializable {
                 + ", userId=" + userId + "]";
     }
 
+    public static class Builder {
+
+        private String content;
+        private boolean isReply;
+        private UUID parentMessageId = null;
+        private UUID channelId;
+        private UUID userId;
+
+        public Builder content(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder isReply(boolean isReply) {
+            this.isReply = isReply;
+            return this;
+        }
+
+        public Builder parentMessageId(UUID parentMessageId) {
+            this.parentMessageId = parentMessageId;
+            return this;
+        }
+
+        public Builder channelId(UUID channelId) {
+            this.channelId = channelId;
+            return this;
+        }
+
+        public Builder userId(UUID userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Message build() {
+            return new Message(userId, channelId, content, isReply, parentMessageId);
+        }
+
+    }
+
 }

@@ -3,7 +3,10 @@ package com.sprint.mission.discodeit.entity;
 import com.sprint.mission.discodeit.enums.ChannelType;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.UUID;
 
 public class Channel extends BaseEntity implements Serializable {
 
@@ -70,6 +73,33 @@ public class Channel extends BaseEntity implements Serializable {
     @Override
     public String toString() {
         return "Channel [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", channelName=" + channelName + ", category=" + category + ", isVoiceChannel=" + isVoiceChannel + "]";
+    }
+
+    public static class Builder {
+
+        private String channelName;
+        private ChannelType category;
+        private boolean isVoiceChannel;
+
+        public Builder channelName(String channelName) {
+            this.channelName = channelName;
+            return this;
+        }
+
+        public Builder category(ChannelType category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder isVoiceChannel(boolean isVoiceChannel) {
+            this.isVoiceChannel = isVoiceChannel;
+            return this;
+        }
+
+        public Channel build() {
+            return new Channel(channelName, category, isVoiceChannel);
+        }
+
     }
 
 }
