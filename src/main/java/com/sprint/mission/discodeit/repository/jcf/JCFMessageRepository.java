@@ -37,7 +37,7 @@ public class JCFMessageRepository implements MessageRepository {
     public List<Message> findChildById(UUID id) {
         return data.values().stream()
                 .filter(Message::isReply)
-                .filter(message -> message.getParentMessageId().equals(id))
+                .filter(message -> message.getParentMessageId() != null && message.getParentMessageId().equals(id))
                 .toList();
     }
 
