@@ -90,9 +90,9 @@
 - 각 도메인 별로 Repository의 File 구현체 클래스 implement
 - 비밀번호 해싱을 위한 SecurityUtils 클래스 생성
 - 엔티티에 빌더 패턴 적용
+- service에서 update 메소드의 파라미터로 사용할 request DTO 생성
 
 ## TodoList
-- service에 파라미터로 사용할 request DTO 생성
 - 예외처리 점검
 - FileService 테스트 코드에 전체 폴더 clear 하는 코드 추가
 
