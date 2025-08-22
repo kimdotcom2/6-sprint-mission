@@ -65,7 +65,7 @@ public class JCFMessageService implements MessageService {
         }
 
         return data.values().stream()
-                .filter(message -> message.isReply() && message.getParentMessageId().equals(id))
+                .filter(message -> message.isReply() && message.getParentMessageId() != null && message.getParentMessageId().equals(id))
                 .toList();
 
     }
