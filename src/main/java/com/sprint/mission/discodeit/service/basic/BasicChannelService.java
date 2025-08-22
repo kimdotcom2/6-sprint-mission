@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -90,20 +91,20 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
 
-        if (!channelRepository.existById(id)) {
+        if (!channelRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        if (channelName.isBlank() || category == null) {
+        if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
-        Channel updatedChannel = channelRepository.findById(id)
+        Channel updatedChannel = channelRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
 
-        updatedChannel.update(channelName, category, isVoiceChannel);
+        updatedChannel.update(request.channelName(), request.category(), request.isVoiceChannel());
         channelRepository.save(updatedChannel);
 
     }

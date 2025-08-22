@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -136,19 +137,19 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
 
-        Channel channel = findChannelById(id)
+        Channel channel = findChannelById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
 
-        if (channelName.isBlank() || category == null) {
+        if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
-        try (FileOutputStream fos = new FileOutputStream(path.resolve(id + FILE_EXTENSION).toFile());
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(request.id() + FILE_EXTENSION).toFile());
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 
-            channel.update(channelName, category, isVoiceChannel);
+            channel.update(request.channelName(), request.category(), request.isVoiceChannel());
             oos.writeObject(channel);
 
         } catch (IOException e) {

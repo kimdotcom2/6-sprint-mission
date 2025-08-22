@@ -325,7 +325,13 @@ public class JavaApplication {
         //채널 수정
         System.out.println("채널 수정");
         try {
-            jcfChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                    .id(channelTwo.getId())
+                    .channelName(channelTwo.getChannelName())
+                    .category(ChannelType.DM)
+                    .isVoiceChannel(false)
+                    .build();
+            jcfChannelCrudService.updateChannel(requestTwo);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -402,7 +408,13 @@ public class JavaApplication {
         //채널 수정
         System.out.println("채널 수정");
         try {
-            fileChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                    .id(channelTwo.getId())
+                    .channelName(channelTwo.getChannelName())
+                    .category(ChannelType.DM)
+                    .isVoiceChannel(false)
+                    .build();
+            fileChannelCrudService.updateChannel(requestTwo);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -485,7 +497,13 @@ public class JavaApplication {
         //채널 수정
         System.out.println("채널 수정");
         try {
-            basicChannelCrudService.updateChannel(channelTwo.getId(), channelTwo.getChannelName(), channelTwo.getCategory(), false);
+            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                    .id(channelTwo.getId())
+                    .channelName(channelTwo.getChannelName())
+                    .category(ChannelType.DM)
+                    .isVoiceChannel(false)
+                    .build();
+            basicChannelCrudService.updateChannel(requestTwo);
             System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
             channelTwo = basicChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(() ->  new IllegalArgumentException("No such channels"));

@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -23,7 +24,7 @@ public interface ChannelService {
 
     List<Channel> findAllChannels();
 
-    void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel);
+    void updateChannel(DiscordDTO.UpdateChannelRequest request);
 
     void deleteChannelById(UUID id);
 

@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
+import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -88,17 +89,17 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
 
-        if (!data.containsKey(id)) {
+        if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        if (channelName.isBlank() || category == null) {
+        if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
-        data.get(id).update(channelName, category, isVoiceChannel);
+        data.get(request.id()).update(request.channelName(), request.category(), request.isVoiceChannel());
 
     }
 
