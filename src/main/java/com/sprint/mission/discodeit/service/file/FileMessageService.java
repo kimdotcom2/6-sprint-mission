@@ -86,15 +86,13 @@ public class FileMessageService implements MessageService {
             throw new IllegalArgumentException("No such message.");
         }
 
-        System.out.println(findAllMessages().size());
-
-        List<Message> childMessageList = findAllMessages().stream()
-                .filter(message -> message.isReply() && message.getParentMessageId()
-                        .equals(id)).toList();
+        //System.out.println(findAllMessages().size());
 
         //System.out.println("답글 수 : " + childMessageList.size());
 
-        return childMessageList;
+        return findAllMessages().stream()
+                .filter(message -> message.isReply() && message.getParentMessageId()
+                        .equals(id)).toList();
 
     }
 

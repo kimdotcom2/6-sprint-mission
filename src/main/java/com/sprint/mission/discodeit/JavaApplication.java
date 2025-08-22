@@ -12,7 +12,6 @@ import com.sprint.mission.discodeit.repository.file.FileChannelRepository;
 import com.sprint.mission.discodeit.repository.file.FileMessageRepository;
 import com.sprint.mission.discodeit.repository.file.FileUserRepository;
 import com.sprint.mission.discodeit.repository.jcf.JCFChannelRepository;
-import com.sprint.mission.discodeit.repository.jcf.JCFMessageRepository;
 import com.sprint.mission.discodeit.repository.jcf.JCFUserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -158,7 +157,7 @@ public class JavaApplication {
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
-        fileUserCrudService.findAllUsers().stream()
+        fileUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -197,7 +196,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("유저 목록 읽기");
-        fileUserCrudService.findAllUsers().stream()
+        fileUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
@@ -275,7 +274,7 @@ public class JavaApplication {
         }
 
         System.out.println("유저 목록 읽기");
-        basicUserCrudService.findAllUsers().stream()
+        basicUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
 
         System.out.println("==========================");
@@ -319,7 +318,7 @@ public class JavaApplication {
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
-        jcfChannelCrudService.findAllChannels().stream()
+        jcfChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -342,7 +341,7 @@ public class JavaApplication {
             System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No channel found with id: " + channelOne.getId() + "");
+            System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
 
@@ -360,7 +359,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("채널 목록 읽기");
-        jcfChannelCrudService.findAllChannels().stream()
+        jcfChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
 
         System.out.println("==========================");
@@ -402,7 +401,7 @@ public class JavaApplication {
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
-        fileChannelCrudService.findAllChannels().stream()
+        fileChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
@@ -429,7 +428,7 @@ public class JavaApplication {
             System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No channel found with id: " + channelOne.getId() + "");
+            System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
 
@@ -516,7 +515,7 @@ public class JavaApplication {
             System.out.println(basicChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No channel found with id: " + channelOne.getId() + "");
+            System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
 
@@ -536,7 +535,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("채널 목록 읽기");
-        basicChannelCrudService.findAllChannels().stream()
+        basicChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
 
         System.out.println("==========================");
@@ -593,10 +592,10 @@ public class JavaApplication {
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
-        jcfMessageCrudService.findChildMessagesById(messageOne.getId()).stream()
+        jcfMessageCrudService.findChildMessagesById(messageOne.getId())
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
-        jcfMessageCrudService.findAllMessages().stream()
+        jcfMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -632,7 +631,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("메시지 목록 읽기");
-        jcfMessageCrudService.findAllMessages().stream()
+        jcfMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
 
         System.out.println("==========================");
@@ -680,7 +679,7 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No message found with id: " + messageOne.getId() + "");
+            System.out.println("No message found with id: " + messageOne.getId());
         }
         try {
             System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
@@ -713,7 +712,7 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
-            System.out.println("No message found with id: " + messageOne.getId() + "");
+            System.out.println("No message found with id: " + messageOne.getId());
         }
         System.out.println("==========================");
 
@@ -726,7 +725,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("메시지 목록 읽기");
-        fileMessageCrudService.findAllMessages().stream()
+        fileMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
@@ -823,7 +822,7 @@ public class JavaApplication {
             e.printStackTrace();
         }
         System.out.println("메시지 목록 읽기");
-        basicMessageCrudService.findAllMessages().stream()
+        basicMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
 
         System.out.println("==========================");
