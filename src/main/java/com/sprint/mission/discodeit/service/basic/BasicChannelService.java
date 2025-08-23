@@ -42,7 +42,7 @@ public class BasicChannelService implements ChannelService {
         }
 
         if (channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("User already exists in channel.")).getUserMap().containsKey(user.getId())) {
+                .orElseThrow(() -> new IllegalArgumentException("No such user.")).getUserMap().containsKey(user.getId())) {
             throw new IllegalArgumentException("User already exists in channel.");
         }
 
