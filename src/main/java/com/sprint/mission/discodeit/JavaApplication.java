@@ -167,6 +167,10 @@ public class JavaApplication {
                 .forEach(user -> System.out.println(user.toString()));
         System.out.println("==========================");
 
+        //clear
+        fileUserCrudService.findAllUsers()
+                .forEach(user -> fileUserCrudService.deleteUserById(user.getId()));
+
     }
 
     public static void testBasicUserService() {
@@ -229,6 +233,10 @@ public class JavaApplication {
                 .forEach(user -> System.out.println(user.toString()));
 
         System.out.println("==========================");
+
+        //clear
+        basicUserCrudService.findAllUsers()
+                .forEach(user -> basicUserCrudService.deleteUserById(user.getId()));
 
     }
 
@@ -370,6 +378,10 @@ public class JavaApplication {
                 .forEach(channel -> System.out.println(channel.toString()));
         System.out.println("==========================");
 
+        //clear
+        fileChannelCrudService.findAllChannels()
+                .forEach(channel -> fileChannelCrudService.deleteChannelById(channel.getId()));
+
     }
 
     public static void testBasicChannelService() {
@@ -442,6 +454,10 @@ public class JavaApplication {
                 .forEach(channel -> System.out.println(channel.toString()));
 
         System.out.println("==========================");
+
+        //clear
+        basicChannelCrudService.findAllChannels()
+                .forEach(channel -> basicChannelCrudService.deleteChannelById(channel.getId()));
 
     }
 
@@ -592,6 +608,10 @@ public class JavaApplication {
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("==========================");
 
+        //clear
+        fileMessageCrudService.findAllMessages()
+                .forEach(message -> fileMessageCrudService.deleteMessageById(message.getId()));
+
     }
 
     public static void testBasicMessageService() {
@@ -669,6 +689,14 @@ public class JavaApplication {
                 .forEach(message -> System.out.println(message.toString()));
 
         System.out.println("==========================");
+
+        //clear
+        basicMessageCrudService.findAllMessages()
+                .forEach(message -> basicMessageCrudService.deleteMessageById(message.getId()));
+        basicChannelCrudService.findAllChannels()
+                .forEach(channel -> basicChannelCrudService.deleteChannelById(channel.getId()));
+        basicUserCrudService.findAllUsers()
+                .forEach(user -> basicUserCrudService.deleteUserById(user.getId()));
 
     }
 
