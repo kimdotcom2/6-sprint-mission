@@ -112,7 +112,7 @@ public class FileMessageRepository implements MessageRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            return new ArrayList<>();
+            throw new RuntimeException();
         }
 
     }

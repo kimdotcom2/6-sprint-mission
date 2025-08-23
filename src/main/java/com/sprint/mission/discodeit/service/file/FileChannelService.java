@@ -137,7 +137,7 @@ public class FileChannelService implements ChannelService {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            return new ArrayList<>();
+            throw new RuntimeException();
         }
 
     }

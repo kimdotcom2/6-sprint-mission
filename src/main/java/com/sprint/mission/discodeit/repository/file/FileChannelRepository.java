@@ -96,7 +96,7 @@ public class FileChannelRepository implements ChannelRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            return new ArrayList<>();
+            throw new RuntimeException();
         }
 
     }
