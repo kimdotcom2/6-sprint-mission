@@ -111,7 +111,6 @@
 - 이메일, 비밀번호 양식 검증하는 validator 작성
 
 ## TodoList
-- 예외처리 점검
 - FileService 테스트 코드에 전체 폴더 clear 하는 코드 추가
 
 ## 스크린샷
