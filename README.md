@@ -111,7 +111,6 @@
 - 이메일, 비밀번호 양식 검증하는 validator 작성
 
 ## TodoList
-- FileService 테스트 코드에 전체 폴더 clear 하는 코드 추가
 
 ## 스크린샷
 <img width="1446" height="464" alt="유저서비스" src="https://github.com/user-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
