@@ -52,7 +52,7 @@ public class JCFMessageService implements MessageService {
         }
 
         Message message = data.get(id);
-        //System.out.println(message.toString());
+
         return Optional.ofNullable(message);
 
     }
@@ -99,14 +99,7 @@ public class JCFMessageService implements MessageService {
 
     @Override
     public List<Message> findAllMessages() {
-
-        //System.out.println("Message List:");
-
-        /*data.entrySet().stream().forEach(entry -> {
-            System.out.println(entry.getValue().getContent());
-        });*/
         return new ArrayList<>(data.values());
-
     }
 
     @Override

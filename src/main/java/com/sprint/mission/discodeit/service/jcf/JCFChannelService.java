@@ -70,7 +70,7 @@ public class JCFChannelService implements ChannelService {
         }
 
         Channel channel = data.get(id);
-        //System.out.println(channel.toString());
+
         return Optional.ofNullable(channel);
 
     }
@@ -84,14 +84,7 @@ public class JCFChannelService implements ChannelService {
 
     @Override
     public List<Channel> findAllChannels() {
-
-        //System.out.println("Channel List:");
-
-        /*data.entrySet().stream().forEach(entry -> {
-            System.out.println(entry.getValue().toString());
-        });*/
         return new ArrayList<>(data.values());
-
     }
 
     @Override

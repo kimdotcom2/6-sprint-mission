@@ -65,8 +65,6 @@ public class JCFUserService implements UserService {
 
         User user = data.get(id);
 
-        //System.out.print("ID: " + user.getId() + " nickname: " + user.getNickname() + " email: " + user.getEmail());
-        //System.out.println(user.toString());
         return Optional.of(user);
 
     }
@@ -86,18 +84,7 @@ public class JCFUserService implements UserService {
 
     @Override
     public List<User> findAllUsers() {
-
-        //System.out.println("User List:");
-
-        /*data.entrySet().stream().forEach(entry -> {
-            System.out.println(entry.getValue().toString());
-        });
-        return data.entrySet().stream()
-                .map(Map.Entry::getValue)
-                .sorted(Comparator.comparing(User::getCreatedAt))
-                .toList();*/
         return new ArrayList<>(data.values());
-
     }
 
     @Override

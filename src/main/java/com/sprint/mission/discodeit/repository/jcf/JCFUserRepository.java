@@ -40,11 +40,9 @@ public class JCFUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-
         return data.entrySet().stream()
                 .filter(entry -> entry.getValue().getEmail().equals(email))
                 .findFirst().map(Map.Entry::getValue);
-
     }
 
     @Override
