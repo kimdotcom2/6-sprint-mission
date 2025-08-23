@@ -72,14 +72,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //유저 읽기
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(jcfUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow((IllegalArgumentException::new)).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(jcfUserCrudService.findUserById(userOne.getId())
+                .orElseThrow((IllegalArgumentException::new)).toString());
         System.out.println("유저 목록 읽기");
         jcfUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
@@ -87,38 +82,25 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        try {
-            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
-                    .id(userOne.getId())
-                    .nickname(userOne.getNickname())
-                    .email(userOne.getEmail())
-                    .currentPassword(strongPassword)
-                    .newPassword(strongPassword + "k")
-                    .description("Bye")
-                    .build();
-            jcfUserCrudService.updateUser(requestOne);
-            System.out.println(userOne.getNickname() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(jcfUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                .id(userOne.getId())
+                .nickname(userOne.getNickname())
+                .email(userOne.getEmail())
+                .currentPassword(strongPassword)
+                .newPassword(strongPassword + "k")
+                .description("Bye")
+                .build();
+        jcfUserCrudService.updateUser(requestOne);
+        System.out.println(userOne.getNickname() + " 정보 업데이트");
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(jcfUserCrudService.findUserById(userOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
-        try {
-            jcfUserCrudService.deleteUserById(userTwo.getId());
-            System.out.println(userTwo.getNickname() + " 유저 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-
+        jcfUserCrudService.deleteUserById(userTwo.getId());
+        System.out.println(userTwo.getNickname() + " 유저 삭제");
         System.out.println("유저 목록 읽기");
         jcfUserCrudService.findAllUsers().stream()
                 .forEach(user -> System.out.println(user.toString()));
@@ -150,14 +132,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //유저 읽기
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(fileUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(fileUserCrudService.findUserById(userOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("유저 목록 읽기");
         fileUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
@@ -165,38 +142,26 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        try {
-            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
-                    .id(userOne.getId())
-                    .nickname(userOne.getNickname())
-                    .email(userOne.getEmail())
-                    .currentPassword(strongPassword)
-                    .newPassword(strongPassword + "k")
-                    .description("Bye")
-                    .build();
-            fileUserCrudService.updateUser(requestOne);
-            System.out.println(userOne.getNickname() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(fileUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                .id(userOne.getId())
+                .nickname(userOne.getNickname())
+                .email(userOne.getEmail())
+                .currentPassword(strongPassword)
+                .newPassword(strongPassword + "k")
+                .description("Bye")
+                .build();
+        fileUserCrudService.updateUser(requestOne);
+        System.out.println(userOne.getNickname() + " 정보 업데이트");
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(fileUserCrudService.findUserById(userOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
-        try {
-            fileUserCrudService.deleteUserById(userOne.getId());
-            fileUserCrudService.deleteUserById(userTwo.getId());
-            System.out.println(userTwo.getNickname() + " 유저 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        fileUserCrudService.deleteUserById(userOne.getId());
+        fileUserCrudService.deleteUserById(userTwo.getId());
+        System.out.println(userTwo.getNickname() + " 유저 삭제");
         System.out.println("유저 목록 읽기");
         fileUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
@@ -229,14 +194,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //유저 읽기
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(basicUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow((IllegalArgumentException::new)).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(basicUserCrudService.findUserById(userOne.getId())
+                .orElseThrow((IllegalArgumentException::new)).toString());
         System.out.println("유저 목록 읽기");
         basicUserCrudService.findAllUsers()
                 .forEach(user -> System.out.println(user.toString()));
@@ -244,38 +204,25 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        try {
-            DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
-                    .id(userOne.getId())
-                    .nickname(userOne.getNickname())
-                    .email(userOne.getEmail())
-                    .currentPassword(strongPassword)
-                    .newPassword(strongPassword + "k")
-                    .description("Bye")
-                    .build();
-            basicUserCrudService.updateUser(requestOne);
-            System.out.println(userOne.getNickname() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(userOne.getNickname() + " 유저 읽기");
-            System.out.println(basicUserCrudService.findUserById(userOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No user found with id: " + userOne.getId());
-        }
+        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+                .id(userOne.getId())
+                .nickname(userOne.getNickname())
+                .email(userOne.getEmail())
+                .currentPassword(strongPassword)
+                .newPassword(strongPassword + "k")
+                .description("Bye")
+                .build();
+        basicUserCrudService.updateUser(requestOne);
+        System.out.println(userOne.getNickname() + " 정보 업데이트");
+        System.out.println(userOne.getNickname() + " 유저 읽기");
+        System.out.println(basicUserCrudService.findUserById(userOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
-        try {
-            basicUserCrudService.deleteUserById(userTwo.getId());
-            System.out.println(userTwo.getNickname() + " 유저 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        basicUserCrudService.deleteUserById(userTwo.getId());
+        System.out.println(userTwo.getNickname() + " 유저 삭제");
 
         System.out.println("유저 목록 읽기");
         basicUserCrudService.findAllUsers()
@@ -314,14 +261,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //채널 읽기
-        try {
-            System.out.println(channelOne.getChannelName() + " 채널 읽기");
-            System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        System.out.println(channelOne.getChannelName() + " 채널 읽기");
+        System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("채널 목록 읽기");
         jcfChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -329,26 +271,17 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        try {
-            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
-                    .id(channelTwo.getId())
-                    .channelName(channelTwo.getChannelName())
-                    .category(ChannelType.DM)
-                    .isVoiceChannel(false)
-                    .build();
-            jcfChannelCrudService.updateChannel(requestTwo);
-            System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-            System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                .id(channelTwo.getId())
+                .channelName(channelTwo.getChannelName())
+                .category(ChannelType.DM)
+                .isVoiceChannel(false)
+                .build();
+        jcfChannelCrudService.updateChannel(requestTwo);
+        System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+        System.out.println(channelTwo.getChannelName() + " 채널 읽기");
+        System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //채널 삭제
@@ -358,12 +291,8 @@ public class JavaApplication {
         jcfChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
         jcfChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
-        try {
-            jcfChannelCrudService.deleteChannelById(channelTwo.getId());
-            System.out.println(channelTwo.getChannelName() + " 채널 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        jcfChannelCrudService.deleteChannelById(channelTwo.getId());
+        System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
         jcfChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -399,14 +328,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //채널 읽기
-        try {
-            System.out.println(channelOne.getChannelName() + " 채널 읽기");
-            System.out.println(fileChannelCrudService.findChannelById(channelOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        System.out.println(channelOne.getChannelName() + " 채널 읽기");
+        System.out.println(fileChannelCrudService.findChannelById(channelOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("채널 목록 읽기");
         fileChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -414,30 +338,21 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        try {
-            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
-                    .id(channelTwo.getId())
-                    .channelName(channelTwo.getChannelName())
-                    .category(ChannelType.DM)
-                    .isVoiceChannel(false)
-                    .build();
-            fileChannelCrudService.updateChannel(requestTwo);
-            System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            channelOne = fileChannelCrudService.findChannelById(channelOne.getId())
-                    .orElseThrow(IllegalArgumentException::new);
-            channelTwo = fileChannelCrudService.findChannelById(channelTwo.getId())
-                    .orElseThrow(IllegalArgumentException::new);
-            System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-            System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                .id(channelTwo.getId())
+                .channelName(channelTwo.getChannelName())
+                .category(ChannelType.DM)
+                .isVoiceChannel(false)
+                .build();
+        fileChannelCrudService.updateChannel(requestTwo);
+        System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+        channelOne = fileChannelCrudService.findChannelById(channelOne.getId())
+                .orElseThrow(IllegalArgumentException::new);
+        channelTwo = fileChannelCrudService.findChannelById(channelTwo.getId())
+                .orElseThrow(IllegalArgumentException::new);
+        System.out.println(channelTwo.getChannelName() + " 채널 읽기");
+        System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //채널 삭제
@@ -448,12 +363,8 @@ public class JavaApplication {
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
         fileChannelCrudService.deleteMessageFromChannel(channelOne.getId(), message.getId());
         channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
-        try {
-            fileChannelCrudService.deleteChannelById(channelTwo.getId());
-            System.out.println(channelTwo.getChannelName() + " 채널 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        fileChannelCrudService.deleteChannelById(channelTwo.getId());
+        System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
         fileChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -490,14 +401,9 @@ public class JavaApplication {
         System.out.println("==========================");
 
         //채널 읽기
-        try {
-            System.out.println(channelOne.getChannelName() + " 채널 읽기");
-            System.out.println(basicChannelCrudService.findChannelById(channelOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        System.out.println(channelOne.getChannelName() + " 채널 읽기");
+        System.out.println(basicChannelCrudService.findChannelById(channelOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("채널 목록 읽기");
         basicChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -505,28 +411,19 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        try {
-            DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
-                    .id(channelTwo.getId())
-                    .channelName(channelTwo.getChannelName())
-                    .category(ChannelType.DM)
-                    .isVoiceChannel(false)
-                    .build();
-            basicChannelCrudService.updateChannel(requestTwo);
-            System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
-            channelTwo = basicChannelCrudService.findChannelById(channelTwo.getId())
-                    .orElseThrow(() ->  new IllegalArgumentException("No such channels"));
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-            System.out.println(basicChannelCrudService.findChannelById(channelTwo.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No channel found with id: " + channelOne.getId());
-        }
+        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+                .id(channelTwo.getId())
+                .channelName(channelTwo.getChannelName())
+                .category(ChannelType.DM)
+                .isVoiceChannel(false)
+                .build();
+        basicChannelCrudService.updateChannel(requestTwo);
+        System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
+        channelTwo = basicChannelCrudService.findChannelById(channelTwo.getId())
+                .orElseThrow(() ->  new IllegalArgumentException("No such channels"));
+        System.out.println(channelTwo.getChannelName() + " 채널 읽기");
+        System.out.println(basicChannelCrudService.findChannelById(channelTwo.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //채널 삭제
@@ -538,12 +435,8 @@ public class JavaApplication {
         basicChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
         basicChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
-        try {
-            basicChannelCrudService.deleteChannelById(channelTwo.getId());
-            System.out.println(channelTwo.getChannelName() + " 채널 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        basicChannelCrudService.deleteChannelById(channelTwo.getId());
+        System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
         basicChannelCrudService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -590,19 +483,10 @@ public class JavaApplication {
 
         //메시지 읽기
         System.out.println("메시지 읽기");
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
-        try {
-            System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
+        System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
         jcfMessageCrudService.findChildMessagesById(messageOne.getId())
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
@@ -612,35 +496,23 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        try {
-            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
-                    .id(messageOne.getId())
-                    .content("messageOne edited")
-                    .isReply(messageOne.isReply())
-                    .parentMessageId(messageOne.getParentMessageId())
-                    .build();
-            jcfMessageCrudService.updateMessage(requestOne);
-            System.out.println(messageOne.getId() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
+        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                .id(messageOne.getId())
+                .content("messageOne edited")
+                .isReply(messageOne.isReply())
+                .parentMessageId(messageOne.getParentMessageId())
+                .build();
+        jcfMessageCrudService.updateMessage(requestOne);
+        System.out.println(messageOne.getId() + " 정보 업데이트");
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //메시지 삭제
         System.out.println("메시지 삭제");
-        try {
-            jcfMessageCrudService.deleteMessageById(messageTwo.getId());
-            System.out.println(messageTwo.getId() + " 메시지 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        jcfMessageCrudService.deleteMessageById(messageTwo.getId());
+        System.out.println(messageTwo.getId() + " 메시지 삭제");
         System.out.println("메시지 목록 읽기");
         jcfMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
@@ -685,21 +557,12 @@ public class JavaApplication {
 
         //메시지 읽기
         System.out.println("메시지 읽기");
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
-        try {
-            System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
-            fileMessageCrudService.findChildMessagesById(messageOne.getId())
-                    .forEach(message -> System.out.println(message.toString()));
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
+        System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
+        fileMessageCrudService.findChildMessagesById(messageOne.getId())
+                .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
         fileMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
@@ -707,36 +570,23 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        try {
-            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
-                    .id(messageOne.getId())
-                    .content("messageOne edited")
-                    .isReply(messageOne.isReply())
-                    .parentMessageId(messageOne.getParentMessageId())
-                    .build();
-            fileMessageCrudService.updateMessage(requestOne);
-            System.out.println(messageOne.getId() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
+        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                .id(messageOne.getId())
+                .content("messageOne edited")
+                .isReply(messageOne.isReply())
+                .parentMessageId(messageOne.getParentMessageId())
+                .build();
+        fileMessageCrudService.updateMessage(requestOne);
+        System.out.println(messageOne.getId() + " 정보 업데이트");
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //메시지 삭제
         System.out.println("메시지 삭제");
-        try {
-            fileMessageCrudService.deleteMessageById(messageTwo.getId());
-            System.out.println(messageTwo.getId() + " 메시지 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        fileMessageCrudService.deleteMessageById(messageTwo.getId());
+        System.out.println(messageTwo.getId() + " 메시지 삭제");
         System.out.println("메시지 목록 읽기");
         fileMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
@@ -784,19 +634,10 @@ public class JavaApplication {
 
         //메시지 읽기
         System.out.println("메시지 읽기");
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
-        try {
-            System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
+        System.out.println(messageOne.getId() + " 의 답글 메시지 읽기");
         basicMessageCrudService.findChildMessagesById(messageOne.getId())
                 .forEach(message -> System.out.println(message.toString()));
         System.out.println("메시지 목록 읽기");
@@ -806,36 +647,23 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        try {
-            DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
-                    .id(messageOne.getId())
-                    .content("messageOne edited")
-                    .isReply(messageOne.isReply())
-                    .parentMessageId(messageOne.getParentMessageId())
-                    .build();
-            basicMessageCrudService.updateMessage(requestOne);
-            System.out.println(messageOne.getId() + " 정보 업데이트");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        try {
-            System.out.println(messageOne.getId() + " 메시지 읽기");
-            System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
-                    .orElseThrow(IllegalArgumentException::new).toString());
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            System.out.println("No message found with id: " + messageOne.getId());
-        }
+        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+                .id(messageOne.getId())
+                .content("messageOne edited")
+                .isReply(messageOne.isReply())
+                .parentMessageId(messageOne.getParentMessageId())
+                .build();
+        basicMessageCrudService.updateMessage(requestOne);
+        System.out.println(messageOne.getId() + " 정보 업데이트");
+        System.out.println(messageOne.getId() + " 메시지 읽기");
+        System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
+                .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //메시지 삭제
         System.out.println("메시지 삭제");
-        try {
-            basicMessageCrudService.deleteMessageById(messageTwo.getId());
-            System.out.println(messageTwo.getId() + " 메시지 삭제");
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
+        basicMessageCrudService.deleteMessageById(messageTwo.getId());
+        System.out.println(messageTwo.getId() + " 메시지 삭제");
         System.out.println("메시지 목록 읽기");
         basicMessageCrudService.findAllMessages()
                 .forEach(message -> System.out.println(message.toString()));
