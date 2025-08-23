@@ -77,6 +77,7 @@ public class JavaApplication {
             System.out.println(jcfUserCrudService.findUserById(userOne.getId())
                     .orElseThrow((IllegalArgumentException::new)).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
@@ -154,6 +155,7 @@ public class JavaApplication {
             System.out.println(fileUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
@@ -232,6 +234,7 @@ public class JavaApplication {
             System.out.println(basicUserCrudService.findUserById(userOne.getId())
                     .orElseThrow((IllegalArgumentException::new)).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("유저 목록 읽기");
@@ -260,6 +263,7 @@ public class JavaApplication {
             System.out.println(basicUserCrudService.findUserById(userOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No user found with id: " + userOne.getId());
         }
         System.out.println("==========================");
@@ -315,6 +319,7 @@ public class JavaApplication {
             System.out.println(jcfChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
@@ -341,6 +346,7 @@ public class JavaApplication {
             System.out.println(jcfChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
@@ -398,6 +404,7 @@ public class JavaApplication {
             System.out.println(fileChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
@@ -428,6 +435,7 @@ public class JavaApplication {
             System.out.println(fileChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
@@ -487,6 +495,7 @@ public class JavaApplication {
             System.out.println(basicChannelCrudService.findChannelById(channelOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("채널 목록 읽기");
@@ -515,6 +524,7 @@ public class JavaApplication {
             System.out.println(basicChannelCrudService.findChannelById(channelTwo.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No channel found with id: " + channelOne.getId());
         }
         System.out.println("==========================");
@@ -585,6 +595,7 @@ public class JavaApplication {
             System.out.println(jcfMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No message found with id: " + messageOne.getId());
         }
         try {
@@ -679,6 +690,7 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No message found with id: " + messageOne.getId());
         }
         try {
@@ -712,6 +724,7 @@ public class JavaApplication {
             System.out.println(fileMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No message found with id: " + messageOne.getId());
         }
         System.out.println("==========================");
@@ -776,6 +789,7 @@ public class JavaApplication {
             System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No message found with id: " + messageOne.getId());
         }
         try {
@@ -809,6 +823,7 @@ public class JavaApplication {
             System.out.println(basicMessageCrudService.findMessageById(messageOne.getId())
                     .orElseThrow(IllegalArgumentException::new).toString());
         } catch (IllegalArgumentException e) {
+            e.printStackTrace();
             System.out.println("No message found with id: " + messageOne.getId());
         }
         System.out.println("==========================");
