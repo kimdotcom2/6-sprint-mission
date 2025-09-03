@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,6 +13,7 @@ import java.util.stream.Stream;
 
 import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
 
+@Repository
 public class FileChannelRepository implements ChannelRepository {
 
     private final Path path;
