@@ -43,9 +43,9 @@ public class JavaApplication {
         testFileUserService();
         testFileChannelService();
         testFileMessageService();
-        testBasicUserService();
-        testBasicChannelService();
-        testBasicMessageService();
+        //testBasicUserService();
+        //testBasicChannelService();
+        //testBasicMessageService();
 
     }
 
@@ -176,7 +176,7 @@ public class JavaApplication {
     public static void testBasicUserService() {
 
         //UserRepository jcfUserRepository = new JCFUserRepository();
-        UserRepository fileUserRepository = new FileUserRepository("users");
+        UserRepository fileUserRepository = new FileUserRepository();
         UserService basicUserCrudService = new BasicUserService(fileUserRepository);
 
         //유저 등록
@@ -387,7 +387,7 @@ public class JavaApplication {
     public static void testBasicChannelService() {
 
         //ChannelRepository jcfChannelRepository = new JCFChannelRepository();
-        ChannelRepository fileChannelRepository = new FileChannelRepository("channels");
+        ChannelRepository fileChannelRepository = new FileChannelRepository();
         ChannelService basicChannelCrudService = new BasicChannelService(fileChannelRepository);
 
         //채널 등록
@@ -619,10 +619,10 @@ public class JavaApplication {
         UserRepository jcfUserRepository = new JCFUserRepository();
         ChannelRepository jcfChannelRepository = new JCFChannelRepository();
         //MessageRepository jcfMessageRepository = new JCFMessageRepository();
-        MessageRepository fileMessageRepository = new FileMessageRepository("messages");
+        MessageRepository fileMessageRepository = new FileMessageRepository();
         UserService basicUserCrudService = new BasicUserService(jcfUserRepository);
         ChannelService basicChannelCrudService = new BasicChannelService(jcfChannelRepository);
-        MessageService basicMessageCrudService = new BasicMessageService(jcfUserRepository, jcfChannelRepository, fileMessageRepository);
+        MessageService basicMessageCrudService = new BasicMessageService(fileMessageRepository, jcfUserRepository, jcfChannelRepository);
 
         //메시지 등록
         System.out.println("메시지 등록");

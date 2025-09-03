@@ -1,3 +1,14 @@
+file:
+    upload:
+        extension: .ser
+        folder:
+            channel:
+                name: channels
+            message:
+                name: messages
+            user:
+                name: users
+        path: "C:springcodeit-bootcamp-spring6-sprint-missionsrcmain\resourcesdata"
 spring:
     application:
         name: discodeit

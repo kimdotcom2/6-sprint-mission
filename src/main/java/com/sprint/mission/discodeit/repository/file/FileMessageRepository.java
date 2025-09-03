@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -10,12 +12,34 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
-
 @Repository
+@RequiredArgsConstructor
 public class FileMessageRepository implements MessageRepository {
 
-    private final Path path;
+    @Value("${file.upload.path}")
+    private String fileUploadFolder;
+    @Value("${file.upload.folder.message.name.name}")
+    private String folderName;
+    @Value("${file.upload.extension}")
+    private String fileExtension;
+
+    private Path initFolder() {
+
+        Path path = Path.of(fileUploadFolder + folderName);
+
+        if (!path.toFile().exists()) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to create directory.");
+            }
+        }
+
+        return path;
+
+    }
+
+    /*private final Path path;
     private static final String FILE_EXTENSION = ".ser";
     private final String folderName;
 
@@ -30,12 +54,14 @@ public class FileMessageRepository implements MessageRepository {
                 throw new IllegalArgumentException("Failed to create directory.");
             }
         }
-    }
+    }*/
 
     @Override
     public void save(Message message) {
 
-        try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + FILE_EXTENSION).toFile());
+        Path path = initFolder();
+
+        try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
@@ -51,13 +77,18 @@ public class FileMessageRepository implements MessageRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return Files.exists(path.resolve(id + FILE_EXTENSION));
+
+        Path path = initFolder();
+
+        return Files.exists(path.resolve(id + fileExtension));
     }
 
     @Override
     public Optional<Message> findById(UUID id) {
 
-        try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
+        Path path = initFolder();
+
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             Message message = (Message) ois.readObject();
@@ -97,12 +128,14 @@ public class FileMessageRepository implements MessageRepository {
     @Override
     public List<Message> findAll() {
 
+        Path path = initFolder();
+
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
-                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
-                    .map(path -> {
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .map(file -> {
                         try (
-                                FileInputStream fis = new FileInputStream(path.toFile());
+                                FileInputStream fis = new FileInputStream(file.toFile());
                                 ObjectInputStream ois = new ObjectInputStream(fis)
                         ) {
                             Object data = ois.readObject();
@@ -122,8 +155,10 @@ public class FileMessageRepository implements MessageRepository {
     @Override
     public void deleteById(UUID id) {
 
+        Path path = initFolder();
+
         try {
-            Files.deleteIfExists(path.resolve(id + FILE_EXTENSION));
+            Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }

@@ -2,24 +2,50 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
-import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
-
 @Repository
+@RequiredArgsConstructor
 public class FileUserRepository implements UserRepository {
 
-    private final Path path;
-    private final String folderName;
-    private static final String FILE_EXTENSION = ".ser";
+    @Value("${file.upload.path}")
+    private String fileUploadFolder;
+    @Value("${file.upload.folder.user.name}")
+    private String folderName;
+    @Value("${file.upload.extension}")
+    private String fileExtension;
 
-    public FileUserRepository(String folderName) {
+    private Path initFolder() {
+
+        Path path = Path.of(fileUploadFolder + folderName);
+
+        if (!path.toFile().exists()) {
+            try {
+                Files.createDirectories(path);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Failed to create directory.");
+            }
+        }
+
+        return path;
+
+    }
+
+    //private static final String FILE_EXTENSION = ".ser";
+
+    /*public FileUserRepository(String folderName) {
         this.folderName = folderName;
         path = Path.of(FILE_PATH + folderName);
 
@@ -33,12 +59,18 @@ public class FileUserRepository implements UserRepository {
 
     }
 
+    public FileUserRepository() {
+
+
+
+    }*/
+
     @Override
     public void save(User user) {
 
-        //System.out.println(path.toString());
+        Path path = initFolder();
 
-        try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
+        try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(user);
         } catch (IOException e) {
@@ -54,7 +86,10 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public boolean existById(UUID id) {
-        return Files.exists(path.resolve(id + FILE_EXTENSION));
+
+        Path path = initFolder();
+
+        return Files.exists(path.resolve(id + fileExtension));
     }
 
     @Override
@@ -65,7 +100,9 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(UUID id) {
 
-        try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
+        Path path = initFolder();
+
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
             User user = (User) ois.readObject();
@@ -81,12 +118,14 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
 
+        Path path = initFolder();
+
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
-                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
-                    .map(path -> {
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .map(file -> {
                         try (
-                                FileInputStream fis = new FileInputStream(path.toFile());
+                                FileInputStream fis = new FileInputStream(file.toFile());
                                 ObjectInputStream ois = new ObjectInputStream(fis)
                         ) {
                             Object data = ois.readObject();
@@ -107,12 +146,14 @@ public class FileUserRepository implements UserRepository {
     @Override
     public List<User> findAll() {
 
+        Path path = initFolder();
+
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
-                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
-                    .map(path -> {
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .map(file -> {
                         try (
-                                FileInputStream fis = new FileInputStream(path.toFile());
+                                FileInputStream fis = new FileInputStream(file.toFile());
                                 ObjectInputStream ois = new ObjectInputStream(fis)
                         ) {
                             Object data = ois.readObject();
@@ -132,8 +173,10 @@ public class FileUserRepository implements UserRepository {
     @Override
     public void deleteById(UUID id) {
 
+        Path path = initFolder();
+
         try {
-            Files.deleteIfExists(path.resolve(id + FILE_EXTENSION));
+            Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
             throw new IllegalArgumentException();
         }
