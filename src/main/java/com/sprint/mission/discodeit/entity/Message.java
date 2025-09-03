@@ -1,8 +1,15 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.UUID;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Message extends BaseEntity implements Serializable {
 
     private String content;
@@ -11,7 +18,7 @@ public class Message extends BaseEntity implements Serializable {
     private UUID channelId;
     private UUID userId;
 
-    public UUID getUserId() {
+    /*public UUID getUserId() {
         return userId;
     }
 
@@ -49,7 +56,7 @@ public class Message extends BaseEntity implements Serializable {
 
     public void setParentMessageId(UUID parentMessageId) {
         this.parentMessageId = parentMessageId;
-    }
+    }*/
 
     public Message(UUID userId, UUID channelId, String content, boolean isReply, UUID parentMessageId) {
         super();

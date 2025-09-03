@@ -1,7 +1,14 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class User extends BaseEntity implements Serializable {
 
     private String nickname;
@@ -9,7 +16,7 @@ public class User extends BaseEntity implements Serializable {
     private String password;
     private String description;
 
-    public String getNickname() {
+    /*public String getNickname() {
         return nickname;
     }
 
@@ -39,7 +46,7 @@ public class User extends BaseEntity implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
+    }*/
 
     public User(String nickname, String email, String password, String description) {
         super();

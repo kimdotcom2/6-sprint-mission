@@ -1,9 +1,14 @@
 package com.sprint.mission.discodeit.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
+@Getter
+@RequiredArgsConstructor
 public class BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,7 +22,7 @@ public class BaseEntity implements Serializable {
         this.updatedAt = null;
     }
 
-    public UUID getId() {
+    /*public UUID getId() {
         return id;
     }
 
@@ -27,7 +32,7 @@ public class BaseEntity implements Serializable {
 
     public Long getUpdatedAt() {
         return updatedAt;
-    }
+    }*/
 
     public void setUpdatedAt() {
         this.updatedAt = Instant.now().toEpochMilli();

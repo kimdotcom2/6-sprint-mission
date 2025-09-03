@@ -1,6 +1,10 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.enums.ChannelType;
+import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -8,6 +12,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.UUID;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
 public class Channel extends BaseEntity implements Serializable {
 
     private Map<UUID, User> userMap = new TreeMap<>();
@@ -16,7 +23,7 @@ public class Channel extends BaseEntity implements Serializable {
     private ChannelType category;
     private boolean isVoiceChannel;
 
-    public Map<UUID, User> getUserMap() {
+    /*public Map<UUID, User> getUserMap() {
         return userMap;
     }
 
@@ -54,7 +61,7 @@ public class Channel extends BaseEntity implements Serializable {
 
     public void setVoiceChannel(boolean voiceChannel) {
         isVoiceChannel = voiceChannel;
-    }
+    }*/
 
     public Channel(String channelName, ChannelType category, boolean isVoiceChannel) {
         super();
