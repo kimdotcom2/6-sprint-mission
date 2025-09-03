@@ -1,5 +1,8 @@
 package com.sprint.mission.discodeit.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class ValidationUtil {
 
     public boolean isEmailValid(String email) {

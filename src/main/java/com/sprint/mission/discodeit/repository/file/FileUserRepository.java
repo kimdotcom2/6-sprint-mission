@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Repository
+@Repository("fileUserRepository")
 @RequiredArgsConstructor
 public class FileUserRepository implements UserRepository {
 

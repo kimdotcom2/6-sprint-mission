@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@Service("basicUserService")
 @RequiredArgsConstructor
 public class BasicUserService implements UserService {
 

@@ -1,9 +1,12 @@
 package com.sprint.mission.discodeit.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+@Component
 public class SecurityUtil {
 
     public String hashPassword(String password) {

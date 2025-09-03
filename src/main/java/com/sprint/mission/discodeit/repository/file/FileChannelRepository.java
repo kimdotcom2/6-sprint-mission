@@ -16,13 +16,13 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Repository
+@Repository("fileChannelRepository")
 @RequiredArgsConstructor
 public class FileChannelRepository implements ChannelRepository {
 
     @Value("${file.upload.path}")
     private String fileUploadFolder;
-    @Value("${file.upload.folder.channel.name.name}")
+    @Value("${file.upload.folder.channel.name}")
     private String folderName;
     @Value("${file.upload.extension}")
     private String fileExtension;

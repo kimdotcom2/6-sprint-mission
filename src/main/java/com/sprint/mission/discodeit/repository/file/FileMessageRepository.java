@@ -12,13 +12,13 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-@Repository
+@Repository("fileMessageRepository")
 @RequiredArgsConstructor
 public class FileMessageRepository implements MessageRepository {
 
     @Value("${file.upload.path}")
     private String fileUploadFolder;
-    @Value("${file.upload.folder.message.name.name}")
+    @Value("${file.upload.folder.message.name}")
     private String folderName;
     @Value("${file.upload.extension}")
     private String fileExtension;
