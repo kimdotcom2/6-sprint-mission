@@ -1,15 +1,14 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.component.Validator;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import com.sprint.mission.discodeit.component.Validator;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +22,7 @@ public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
     private final UserStatusRepository userStatusRepository;
+    private final BinaryContentRepository binaryContentRepository;
     private final SecurityUtil securityUtil = new SecurityUtil();
     private final Validator validator;
 
@@ -148,6 +148,10 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("No such user.");
         }
 
+        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        binaryContentRepository.deleteById(user.getProfileImageId());
+        userStatusRepository.deleteById(user.getId());
         userRepository.deleteById(id);
 
     }
