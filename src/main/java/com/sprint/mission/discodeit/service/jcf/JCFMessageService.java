@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -103,7 +103,7 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(DiscordDTO.UpdateMessageRequest request) {
+    public void updateMessage(MessageDTO.UpdateMessageRequest request) {
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such message.");

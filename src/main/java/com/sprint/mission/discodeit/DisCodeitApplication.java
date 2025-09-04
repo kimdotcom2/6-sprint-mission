@@ -1,30 +1,19 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.ChannelDTO;
+import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.enums.ChannelType;
-import com.sprint.mission.discodeit.repository.ChannelRepository;
-import com.sprint.mission.discodeit.repository.MessageRepository;
-import com.sprint.mission.discodeit.repository.UserRepository;
-import com.sprint.mission.discodeit.repository.file.FileChannelRepository;
-import com.sprint.mission.discodeit.repository.file.FileMessageRepository;
-import com.sprint.mission.discodeit.repository.file.FileUserRepository;
-import com.sprint.mission.discodeit.repository.jcf.JCFChannelRepository;
-import com.sprint.mission.discodeit.repository.jcf.JCFUserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.service.UserService;
-import com.sprint.mission.discodeit.service.basic.BasicChannelService;
-import com.sprint.mission.discodeit.service.basic.BasicMessageService;
-import com.sprint.mission.discodeit.service.basic.BasicUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -75,7 +64,7 @@ public class DisCodeitApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
+        UserDTO.UpdateUserRequest requestOne = UserDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
                 .nickname(userOne.getNickname())
                 .email(userOne.getEmail())
@@ -142,7 +131,7 @@ public class DisCodeitApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
+        ChannelDTO.UpdateChannelRequest requestTwo = ChannelDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
                 .channelName(channelTwo.getChannelName())
                 .category(ChannelType.DM)
@@ -225,7 +214,7 @@ public class DisCodeitApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        DiscordDTO.UpdateMessageRequest requestOne = DiscordDTO.UpdateMessageRequest.builder()
+        MessageDTO.UpdateMessageRequest requestOne = MessageDTO.UpdateMessageRequest.builder()
                 .id(messageOne.getId())
                 .content("messageOne edited")
                 .isReply(messageOne.isReply())

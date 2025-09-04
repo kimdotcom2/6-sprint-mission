@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
@@ -149,7 +149,7 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void updateUser(DiscordDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserRequest request) {
 
         if (!validator.isEmailValid(request.email()) ||
                 !validator.isPasswordValid(request.newPassword()) ||

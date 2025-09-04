@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -93,7 +93,7 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(DiscordDTO.UpdateMessageRequest request) {
+    public void updateMessage(MessageDTO.UpdateMessageRequest request) {
 
         if (!messageRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such message.");

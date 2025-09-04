@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import org.junit.jupiter.api.Assertions;
@@ -93,7 +93,7 @@ class FileUserServiceTest {
         userService.createUser(user);
 
         //when
-        DiscordDTO.UpdateUserRequest updateUserRequest = DiscordDTO.UpdateUserRequest.builder()
+        UserDTO.UpdateUserRequest updateUserRequest = UserDTO.UpdateUserRequest.builder()
                 .id(user.getId())
                 .nickname("test2")
                 .email("test2@test.com")

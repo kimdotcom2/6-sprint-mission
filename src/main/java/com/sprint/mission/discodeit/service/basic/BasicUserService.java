@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.UserService;
@@ -80,7 +80,7 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public void updateUser(DiscordDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserRequest request) {
 
         if (!validator.isEmailValid(request.email()) ||
                 !validator.isPasswordValid(request.newPassword()) ||

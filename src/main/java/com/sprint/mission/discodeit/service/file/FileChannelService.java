@@ -1,9 +1,7 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.io.*;
@@ -143,7 +141,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
+    public void updateChannel(ChannelDTO.UpdateChannelRequest request) {
 
         Channel channel = findChannelById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));

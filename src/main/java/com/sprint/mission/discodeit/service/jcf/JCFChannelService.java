@@ -1,9 +1,7 @@
 package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.ChannelService;
 
 import java.util.*;
@@ -88,7 +86,7 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
+    public void updateChannel(ChannelDTO.UpdateChannelRequest request) {
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such channel.");

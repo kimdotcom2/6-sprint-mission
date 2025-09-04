@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -164,7 +164,7 @@ class FileMessageServiceTest {
 
         //when
         Message message1 = messageService.findMessageById(message.getId()).orElse(null);
-        DiscordDTO.UpdateMessageRequest messageRequest = DiscordDTO.UpdateMessageRequest.builder()
+        MessageDTO.UpdateMessageRequest messageRequest = MessageDTO.UpdateMessageRequest.builder()
                 .id(message1.getId())
                 .content("test2")
                 .isReply(false)

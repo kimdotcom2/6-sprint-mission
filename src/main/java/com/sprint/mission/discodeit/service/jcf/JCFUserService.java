@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.service.jcf;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
@@ -88,7 +88,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void updateUser(DiscordDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserRequest request) {
 
         if (!validator.isEmailValid(request.email()) ||
                 request.nickname().isBlank() ||

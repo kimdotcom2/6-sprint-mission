@@ -1,9 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +96,7 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(DiscordDTO.UpdateChannelRequest request) {
+    public void updateChannel(ChannelDTO.UpdateChannelRequest request) {
 
         if (!channelRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such channel.");

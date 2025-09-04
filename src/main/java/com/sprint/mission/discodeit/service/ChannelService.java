@@ -1,10 +1,7 @@
 package com.sprint.mission.discodeit.service;
 
-import com.sprint.mission.discodeit.dto.DiscordDTO;
+import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.enums.ChannelType;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +23,7 @@ public interface ChannelService {
 
     List<Channel> findAllChannels();
 
-    void updateChannel(DiscordDTO.UpdateChannelRequest request);
+    void updateChannel(ChannelDTO.UpdateChannelRequest request);
 
     void deleteChannelById(UUID id);
 
