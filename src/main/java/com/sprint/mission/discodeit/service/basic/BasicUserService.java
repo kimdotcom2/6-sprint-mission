@@ -37,20 +37,14 @@ public class BasicUserService implements UserService {
                 .description(request.description())
                 .build();
 
-        if (userRepository.existById(user.getId())) {
+        if (userRepository.existById(user.getId()) ||
+                userRepository.existByEmail(user.getEmail()) ||
+                userRepository.existByNickname(user.getNickname())) {
             throw new IllegalArgumentException("User already exists.");
         }
 
         if (!validator.isPasswordValid(user.getPassword()) || !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
-        }
-
-        if (userRepository.existByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists.");
-        }
-
-        if (userRepository.existByNickname(user.getNickname())) {
-            throw new IllegalArgumentException("Nickname already exists.");
         }
 
         user.updatePassword(securityUtil.hashPassword(user.getPassword()));
@@ -64,8 +58,8 @@ public class BasicUserService implements UserService {
                     .fileType(request.fileType())
                     .build();
 
-            user.updateProfileImageId(binaryContent.getId());
             binaryContentRepository.save(binaryContent);
+            user.updateProfileImageId(binaryContent.getId());
 
         }
 
@@ -151,8 +145,10 @@ public class BasicUserService implements UserService {
 
         User updatedUser = userRepository.findById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        if (userRepository.existByEmail(request.email()) && !updatedUser.getId().equals(request.id())) {
-            throw new IllegalArgumentException("Email already exists.");
+        if ((userRepository.existByNickname(request.nickname()) ||
+                userRepository.existByEmail(request.email())) &&
+                !updatedUser.getId().equals(request.id())) {
+            throw new IllegalArgumentException("User already exists.");
         }
 
         if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUser.getPassword())) {
@@ -168,8 +164,8 @@ public class BasicUserService implements UserService {
                     .fileType(request.fileType())
                     .build();
 
-            updatedUser.updateProfileImageId(binaryContent.getId());
             binaryContentRepository.save(binaryContent);
+            updatedUser.updateProfileImageId(binaryContent.getId());
 
         }
 
