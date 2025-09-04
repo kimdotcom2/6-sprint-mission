@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +19,7 @@ public class Message extends BaseEntity implements Serializable {
     private UUID parentMessageId;
     private UUID channelId;
     private UUID userId;
+    private List<UUID> binaryContentIdList = new ArrayList<>();
 
     /*public UUID getUserId() {
         return userId;
@@ -72,6 +75,20 @@ public class Message extends BaseEntity implements Serializable {
         this.isReply = isReply;
         this.parentMessageId = parentMessageId;
         super.update();
+    }
+
+    public void addBinaryContent(UUID binaryContentId) {
+        binaryContentIdList.add(binaryContentId);
+    }
+
+    public void removeBinaryContent(UUID... binaryContentIds) {
+        for (UUID binaryContentId : binaryContentIds) {
+            binaryContentIdList.remove(binaryContentId);
+        }
+    }
+
+    public void removeAllBinaryContent() {
+        binaryContentIdList.clear();
     }
 
     @Override

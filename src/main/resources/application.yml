@@ -8,6 +8,8 @@ file:
                 name: messages
             user:
                 name: users
+            file:
+                name: files
         path: C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\
 spring:
     application:

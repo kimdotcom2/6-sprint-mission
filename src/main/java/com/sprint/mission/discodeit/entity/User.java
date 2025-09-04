@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public class User extends BaseEntity implements Serializable {
     private String email;
     private String password;
     private String description;
+    private UUID profileImageId;
 
     /*public String getNickname() {
         return nickname;
@@ -62,6 +64,10 @@ public class User extends BaseEntity implements Serializable {
         this.password = password;
         this.description = description;
         super.update();
+    }
+
+    public void updateProfileImageId(UUID profileImageId) {
+        this.profileImageId = profileImageId;
     }
 
     @Override
