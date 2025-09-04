@@ -92,7 +92,7 @@ public class DisCodeitApplication {
 
         //clear
         userService.findAllUsers()
-                .forEach(user -> userService.deleteUserById(user.getId()));
+                .forEach(user -> userService.deleteUserById(user.id()));
 
     }
 
@@ -243,7 +243,7 @@ public class DisCodeitApplication {
         channelService.findAllChannels()
                 .forEach(channel -> channelService.deleteChannelById(channel.getId()));
         userService.findAllUsers()
-                .forEach(user -> userService.deleteUserById(user.getId()));
+                .forEach(user -> userService.deleteUserById(user.id()));
 
     }
 

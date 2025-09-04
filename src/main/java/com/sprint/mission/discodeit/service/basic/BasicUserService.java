@@ -60,30 +60,59 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(UUID id) {
+    public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
 
-        if (!userRepository.existById(id)) {
-            throw new IllegalArgumentException("No such user.");
-        }
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        return userRepository.findById(id);
+        UserStatus userStatus = userStatusRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
-    }
-
-    @Override
-    public Optional<User> findUserByEmail(String email) {
-
-        if (!userRepository.existByEmail(email)) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
-        return userRepository.findByEmail(email);
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .profileImageId(user.getProfileImageId())
+                .isOnline(userStatus.isLogin())
+                .build());
 
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        UserStatus userStatus = userStatusRepository.findById(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .profileImageId(user.getProfileImageId())
+                .isOnline(userStatus.isLogin())
+                .build());
+
+    }
+
+    @Override
+    public List<UserDTO.FindUserResult> findAllUsers() {
+
+        return userRepository.findAll().stream()
+                .map(user -> UserDTO.FindUserResult.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .nickname(user.getNickname())
+                        .description(user.getDescription())
+                        .profileImageId(user.getProfileImageId())
+                        .isOnline(userStatusRepository.findById(user.getId())
+                                .orElseThrow(() -> new IllegalArgumentException("No such user status.")).isLogin())
+                        .build())
+                .toList();
     }
 
     @Override
@@ -96,7 +125,7 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        User updatedUser = findUserById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
+        User updatedUser = userRepository.findById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         if (userRepository.existByEmail(request.email()) && !updatedUser.getId().equals(request.id())) {
             throw new IllegalArgumentException("Email already exists.");

@@ -15,11 +15,11 @@ public interface UserService {
 
     boolean existUserByEmail(String email);
 
-    Optional<User> findUserById(UUID id);
+    Optional<UserDTO.FindUserResult> findUserById(UUID id);
 
-    Optional<User> findUserByEmail(String email);
+    Optional<UserDTO.FindUserResult> findUserByEmail(String email);
 
-    List<User> findAllUsers();
+    List<UserDTO.FindUserResult> findAllUsers();
 
     void updateUser(UserDTO.UpdateUserRequest request);
 

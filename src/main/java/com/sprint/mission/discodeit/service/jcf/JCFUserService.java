@@ -57,7 +57,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(UUID id) {
+    public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -65,26 +65,46 @@ public class JCFUserService implements UserService {
 
         User user = data.get(id);
 
-        return Optional.of(user);
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .build());
 
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
+    public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
 
         if (!existUserByEmail(email)) {
             return Optional.empty();
         }
 
-        return data.entrySet().stream()
+        User user = data.entrySet().stream()
                 .filter(entry -> entry.getValue().getEmail().equals(email))
-                .findFirst().map(Map.Entry::getValue);
+                .findFirst().map(Map.Entry::getValue).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .build());
 
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return new ArrayList<>(data.values());
+    public List<UserDTO.FindUserResult> findAllUsers() {
+
+        List<User> userList = new ArrayList<>(data.values());
+
+        return userList.stream().map(user -> UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .build()).toList();
     }
 
     @Override

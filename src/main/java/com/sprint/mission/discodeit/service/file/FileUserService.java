@@ -67,8 +67,8 @@ public class FileUserService implements UserService {
     @Override
     public boolean existUserByEmail(String email) {
 
-        for (User existingUser : findAllUsers()) {
-            if (existingUser.getEmail().equals(email)) {
+        for (UserDTO.FindUserResult existingUser : findAllUsers()) {
+            if (existingUser.email().equals(email)) {
                 return true;
             }
         }
@@ -77,8 +77,7 @@ public class FileUserService implements UserService {
 
     }
 
-    @Override
-    public Optional<User> findUserById(UUID id) {
+    public Optional<User> parseUserById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -94,7 +93,28 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public Optional<User> findUserByEmail(String email) {
+    public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
+
+        try (FileInputStream fis = new FileInputStream(path.resolve(id + FILE_EXTENSION).toFile());
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            User user = (User) ois.readObject();
+
+            return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .nickname(user.getNickname())
+                    .description(user.getDescription())
+                    .build());
+
+        } catch (IOException | ClassNotFoundException e) {
+            return Optional.empty();
+        }
+
+    }
+
+    @Override
+    public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
 
         if (!existUserByEmail(email)) {
             return Optional.empty();
@@ -116,6 +136,12 @@ public class FileUserService implements UserService {
                     })
                     .filter(Objects::nonNull)
                     .filter(user -> user.getEmail().equals(email))
+                    .map(user -> UserDTO.FindUserResult.builder()
+                            .id(user.getId())
+                            .email(user.getEmail())
+                            .nickname(user.getNickname())
+                            .description(user.getDescription())
+                            .build())
                     .findFirst();
         } catch (IOException e) {
             return Optional.empty();
@@ -124,7 +150,7 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public List<User> findAllUsers() {
+    public List<UserDTO.FindUserResult> findAllUsers() {
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -141,6 +167,12 @@ public class FileUserService implements UserService {
                         }
                     })
                     .filter(Objects::nonNull)
+                    .map(user -> UserDTO.FindUserResult.builder()
+                            .id(user.getId())
+                            .email(user.getEmail())
+                            .nickname(user.getNickname())
+                            .description(user.getDescription())
+                            .build())
                     .toList();
         } catch (IOException e) {
             throw new RuntimeException();
@@ -158,7 +190,7 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
-        User user = findUserById(request.id())
+        User user = parseUserById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         if (existUserByEmail(request.email()) && !user.getEmail().equals(request.email())) {
