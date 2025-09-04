@@ -19,7 +19,7 @@ public class BasicUserService implements UserService {
 
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final Validator validator = new Validator();
+    private final Validator validator;
 
     @Override
     public void createUser(User user) {
