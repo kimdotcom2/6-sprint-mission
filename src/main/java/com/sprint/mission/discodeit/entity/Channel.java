@@ -6,18 +6,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class Channel extends BaseEntity implements Serializable {
 
-    private Map<UUID, User> userMap = new TreeMap<>();
-    private Map<UUID, Message> messageMap = new LinkedHashMap<>();
+    //private Map<UUID, User> userMap = new TreeMap<>();
+    //private Map<UUID, Message> messageMap = new LinkedHashMap<>();
     private String channelName;
     private ChannelType category;
     private boolean isVoiceChannel;

@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit;
 
+import com.sprint.mission.discodeit.component.Validator;
 import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
@@ -177,7 +178,7 @@ public class JavaApplication {
 
         //UserRepository jcfUserRepository = new JCFUserRepository();
         UserRepository fileUserRepository = new FileUserRepository();
-        UserService basicUserCrudService = new BasicUserService(fileUserRepository);
+        UserService basicUserCrudService = new BasicUserService(fileUserRepository, new Validator());
 
         //유저 등록
         System.out.println("유저 등록");
@@ -261,11 +262,11 @@ public class JavaApplication {
                 .isVoiceChannel(true)
                 .build();
         jcfChannelCrudService.createChannel(channelOne);
-        jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
-        jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        //jcfChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        //jcfChannelCrudService.addMessageToChannel(channelOne.getId(), message);
         jcfChannelCrudService.createChannel(channelTwo);
-        jcfChannelCrudService.addUserToChannel(channelTwo.getId(), user);
-        jcfChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        //jcfChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        //jcfChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
         System.out.println("==========================");
 
         //채널 읽기
@@ -294,11 +295,11 @@ public class JavaApplication {
 
         //채널 삭제
         System.out.println("채널 삭제");
-        System.out.println(channelOne.getChannelName() + " 에서 "
-                + channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
-        jcfChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
+        //System.out.println(channelOne.getChannelName() + " 에서 "
+                //+ channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
+        //jcfChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
-        jcfChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
+        //jcfChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
         jcfChannelCrudService.deleteChannelById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
@@ -328,11 +329,11 @@ public class JavaApplication {
                 .isVoiceChannel(true)
                 .build();
         fileChannelCrudService.createChannel(channelOne);
-        fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
-        fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        //fileChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        //fileChannelCrudService.addMessageToChannel(channelOne.getId(), message);
         fileChannelCrudService.createChannel(channelTwo);
-        fileChannelCrudService.addUserToChannel(channelTwo.getId(), user);
-        fileChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        //fileChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        //fileChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
         System.out.println("==========================");
 
         //채널 읽기
@@ -365,12 +366,12 @@ public class JavaApplication {
 
         //채널 삭제
         System.out.println("채널 삭제");
-        System.out.println(channelOne.getChannelName() + " 에서 "
-                + channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
-        fileChannelCrudService.deleteUserFromChannel(channelOne.getId(), user.getId());
+        //System.out.println(channelOne.getChannelName() + " 에서 "
+                //+ channelOne.getUserMap().get(user.getId()).getNickname() + " 유저 삭제");
+        //fileChannelCrudService.deleteUserFromChannel(channelOne.getId(), user.getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
-        fileChannelCrudService.deleteMessageFromChannel(channelOne.getId(), message.getId());
-        channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
+        //fileChannelCrudService.deleteMessageFromChannel(channelOne.getId(), message.getId());
+        //channelOne.getMessageMap().entrySet().forEach(m -> System.out.println(m.toString()));
         fileChannelCrudService.deleteChannelById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
@@ -405,11 +406,11 @@ public class JavaApplication {
                 .isVoiceChannel(true)
                 .build();
         basicChannelCrudService.createChannel(channelOne);
-        basicChannelCrudService.addUserToChannel(channelOne.getId(), user);
-        basicChannelCrudService.addMessageToChannel(channelOne.getId(), message);
+        //basicChannelCrudService.addUserToChannel(channelOne.getId(), user);
+        //basicChannelCrudService.addMessageToChannel(channelOne.getId(), message);
         basicChannelCrudService.createChannel(channelTwo);
-        basicChannelCrudService.addUserToChannel(channelTwo.getId(), user);
-        basicChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
+        //basicChannelCrudService.addUserToChannel(channelTwo.getId(), user);
+        //basicChannelCrudService.addMessageToChannel(channelTwo.getId(), message);
         System.out.println("==========================");
 
         //채널 읽기
@@ -444,9 +445,9 @@ public class JavaApplication {
                         .orElseThrow(() -> new IllegalArgumentException("No such users."));
         System.out.println(channelOne.getChannelName() + " 에서 "
                 + user.getNickname() + " 유저 삭제");
-        basicChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
+        //basicChannelCrudService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
-        basicChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
+        //basicChannelCrudService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
         basicChannelCrudService.deleteChannelById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
@@ -620,7 +621,7 @@ public class JavaApplication {
         ChannelRepository jcfChannelRepository = new JCFChannelRepository();
         //MessageRepository jcfMessageRepository = new JCFMessageRepository();
         MessageRepository fileMessageRepository = new FileMessageRepository();
-        UserService basicUserCrudService = new BasicUserService(jcfUserRepository);
+        UserService basicUserCrudService = new BasicUserService(jcfUserRepository, new Validator());
         ChannelService basicChannelCrudService = new BasicChannelService(jcfChannelRepository);
         MessageService basicMessageCrudService = new BasicMessageService(fileMessageRepository, jcfUserRepository, jcfChannelRepository);
 

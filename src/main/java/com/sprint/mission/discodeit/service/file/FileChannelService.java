@@ -52,7 +52,7 @@ public class FileChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void addUserToChannel(UUID channelId, User user) {
 
         Channel channel = findChannelById(channelId)
@@ -71,9 +71,9 @@ public class FileChannelService implements ChannelService {
             throw new IllegalArgumentException("Failed to add user to channel.");
         }
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void addMessageToChannel(UUID channelId, Message message) {
 
         Channel channel = findChannelById(channelId)
@@ -87,7 +87,7 @@ public class FileChannelService implements ChannelService {
             throw new IllegalArgumentException("Failed to add message to channel.");
         }
 
-    }
+    }*/
 
     @Override
     public boolean existChannelById(UUID id) {
@@ -110,12 +110,12 @@ public class FileChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public List<Channel> findChannelsByUserId(UUID userId) {
         return findAllChannels().stream()
                 .filter(channel -> channel.getUserMap().containsKey(userId))
                 .toList();
-    }
+    }*/
 
     @Override
     public List<Channel> findAllChannels() {
@@ -179,7 +179,7 @@ public class FileChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
         Channel channel = findChannelById(channelId)
@@ -209,5 +209,5 @@ public class FileChannelService implements ChannelService {
             throw new IllegalArgumentException("Failed to delete message from channel.");
         }
 
-    }
+    }*/
 }

@@ -31,7 +31,7 @@ public class JCFChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void addUserToChannel(UUID channelId, User user) {
 
         if (!data.containsKey(channelId)) {
@@ -44,9 +44,9 @@ public class JCFChannelService implements ChannelService {
 
         data.get(channelId).getUserMap().put(user.getId(), user);
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void addMessageToChannel(UUID channelId, Message message) {
 
         if (!data.containsKey(channelId)) {
@@ -55,7 +55,7 @@ public class JCFChannelService implements ChannelService {
 
         data.get(channelId).getMessageMap().put(message.getId(), message);
 
-    }
+    }*/
 
     @Override
     public boolean existChannelById(UUID id) {
@@ -75,12 +75,12 @@ public class JCFChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public List<Channel> findChannelsByUserId(UUID userId) {
         return findAllChannels().stream()
                 .filter(channel -> channel.getUserMap().containsKey(userId))
                 .toList();
-    }
+    }*/
 
     @Override
     public List<Channel> findAllChannels() {
@@ -113,7 +113,7 @@ public class JCFChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
         if (!data.containsKey(channelId)) {
@@ -133,5 +133,5 @@ public class JCFChannelService implements ChannelService {
 
         data.get(channelId).getMessageMap().remove(messageId);
 
-    }
+    }*/
 }

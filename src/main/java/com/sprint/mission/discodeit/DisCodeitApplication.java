@@ -124,11 +124,11 @@ public class DisCodeitApplication {
                 .isVoiceChannel(true)
                 .build();
         channelService.createChannel(channelOne);
-        channelService.addUserToChannel(channelOne.getId(), user);
-        channelService.addMessageToChannel(channelOne.getId(), message);
+        //channelService.addUserToChannel(channelOne.getId(), user);
+        //channelService.addMessageToChannel(channelOne.getId(), message);
         channelService.createChannel(channelTwo);
-        channelService.addUserToChannel(channelTwo.getId(), user);
-        channelService.addMessageToChannel(channelTwo.getId(), message);
+        //channelService.addUserToChannel(channelTwo.getId(), user);
+        //channelService.addMessageToChannel(channelTwo.getId(), message);
         System.out.println("==========================");
 
         //채널 읽기
@@ -163,9 +163,9 @@ public class DisCodeitApplication {
                 .orElseThrow(() -> new IllegalArgumentException("No such users."));
         System.out.println(channelOne.getChannelName() + " 에서 "
                 + user.getNickname() + " 유저 삭제");
-        channelService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
+        //channelService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
-        channelService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
+        //channelService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
         channelService.deleteChannelById(channelTwo.getId());
         System.out.println(channelTwo.getChannelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");

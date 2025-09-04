@@ -34,7 +34,7 @@ public class BasicChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void addUserToChannel(UUID channelId, User user) {
 
         if (!channelRepository.existById(channelId)) {
@@ -52,9 +52,9 @@ public class BasicChannelService implements ChannelService {
 
         channelRepository.save(updatedChannel);
 
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void addMessageToChannel(UUID channelId, Message message) {
 
         if (!channelRepository.existById(channelId)) {
@@ -67,7 +67,7 @@ public class BasicChannelService implements ChannelService {
 
         channelRepository.save(updatedChannel);
 
-    }
+    }*/
 
     @Override
     public boolean existChannelById(UUID id) {
@@ -85,12 +85,12 @@ public class BasicChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public List<Channel> findChannelsByUserId(UUID userId) {
         return findAllChannels().stream()
                 .filter(channel -> channel.getUserMap().containsKey(userId))
                 .toList();
-    }
+    }*/
 
     @Override
     public List<Channel> findAllChannels() {
@@ -127,7 +127,7 @@ public class BasicChannelService implements ChannelService {
 
     }
 
-    @Override
+    /*@Override
     public void deleteUserFromChannel(UUID channelId, UUID userId) {
 
         if (!channelRepository.existById(channelId)) {
@@ -155,5 +155,5 @@ public class BasicChannelService implements ChannelService {
         channel.getMessageMap().remove(messageId);
         channelRepository.save(channel);
 
-    }
+    }*/
 }

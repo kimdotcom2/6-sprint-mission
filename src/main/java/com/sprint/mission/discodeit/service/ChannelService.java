@@ -14,15 +14,15 @@ public interface ChannelService {
 
     void createChannel(Channel channel);
 
-    void addUserToChannel(UUID channelId, User user);
+    //void addUserToChannel(UUID channelId, User user);
 
-    void addMessageToChannel(UUID channelId, Message message);
+    //void addMessageToChannel(UUID channelId, Message message);
 
     boolean existChannelById(UUID id);
 
     Optional<Channel> findChannelById(UUID id);
 
-    List<Channel> findChannelsByUserId(UUID userId);
+    //List<Channel> findChannelsByUserId(UUID userId);
 
     List<Channel> findAllChannels();
 
@@ -30,8 +30,8 @@ public interface ChannelService {
 
     void deleteChannelById(UUID id);
 
-    void deleteUserFromChannel(UUID channelId, UUID userId);
+    //void deleteUserFromChannel(UUID channelId, UUID userId);
 
-    void deleteMessageFromChannel(UUID channelId, UUID messageId);
+    //void deleteMessageFromChannel(UUID channelId, UUID messageId);
 
 }
