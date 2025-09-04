@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto;
 
+import com.sprint.mission.discodeit.enums.FileType;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -9,6 +10,17 @@ public class UserDTO {
     //login request DTO
     @Builder
     public record LoginRequest(String email, String password) {
+
+    }
+
+    @Builder
+    public record CreateUserRequest(
+            String nickname,
+            String email,
+            String password,
+            String description,
+            byte[] profileImage,
+            FileType fileType) {
 
     }
 
@@ -22,7 +34,8 @@ public class UserDTO {
             String newPassword,
             String description,
             boolean isProfileImageUpdated,
-            UUID profileImageId
+            byte[] profileImage,
+            FileType fileType
     ) {
 
     }

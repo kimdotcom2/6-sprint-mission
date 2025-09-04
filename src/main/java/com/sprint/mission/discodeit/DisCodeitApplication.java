@@ -37,13 +37,13 @@ public class DisCodeitApplication {
 
         //유저 등록
         System.out.println("유저 등록");
-        User userOne = new User.Builder()
+        UserDTO.CreateUserRequest userOne = UserDTO.CreateUserRequest.builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
-        User userTwo = new User.Builder()
+        UserDTO.CreateUserRequest userTwo = UserDTO.CreateUserRequest.builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
@@ -54,8 +54,8 @@ public class DisCodeitApplication {
         System.out.println("==========================");
 
         //유저 읽기
-        System.out.println(userOne.getNickname() + " 유저 읽기");
-        System.out.println(userService.findUserById(userOne.getId())
+        System.out.println(userOne.nickname() + " 유저 읽기");
+        System.out.println(userService.findUserByEmail(userOne.email())
                 .orElseThrow((IllegalArgumentException::new)).toString());
         System.out.println("유저 목록 읽기");
         userService.findAllUsers()
@@ -65,24 +65,26 @@ public class DisCodeitApplication {
         //유저 수정
         System.out.println("유저 수정");
         UserDTO.UpdateUserRequest requestOne = UserDTO.UpdateUserRequest.builder()
-                .id(userOne.getId())
-                .nickname(userOne.getNickname())
-                .email(userOne.getEmail())
+                .id(userService.findUserByEmail(userOne.email())
+                        .orElseThrow((IllegalArgumentException::new)).id())
+                .nickname(userOne.nickname())
+                .email(userOne.email())
                 .currentPassword(strongPassword)
                 .newPassword(strongPassword + "k")
                 .description("Bye")
                 .build();
         userService.updateUser(requestOne);
-        System.out.println(userOne.getNickname() + " 정보 업데이트");
-        System.out.println(userOne.getNickname() + " 유저 읽기");
-        System.out.println(userService.findUserById(userOne.getId())
+        System.out.println(userOne.nickname() + " 정보 업데이트");
+        System.out.println(userOne.nickname() + " 유저 읽기");
+        System.out.println(userService.findUserByEmail(userOne.email())
                 .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //유저 삭제
         System.out.println("유저 삭제");
-        userService.deleteUserById(userTwo.getId());
-        System.out.println(userTwo.getNickname() + " 유저 삭제");
+        userService.deleteUserById(userService.findUserByEmail(userOne.email())
+                .orElseThrow((IllegalArgumentException::new)).id());
+        System.out.println(userTwo.nickname() + " 유저 삭제");
 
         System.out.println("유저 목록 읽기");
         userService.findAllUsers()
@@ -173,23 +175,35 @@ public class DisCodeitApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        User userOne = new User("Kim", "kimjaewon@gmail.com", strongPassword, "Hi");
+        UserDTO.CreateUserRequest userOne = UserDTO.CreateUserRequest.builder()
+                .nickname("Kim")
+                .email("kimjaewon@gmail.com")
+                .password(strongPassword)
+                .description("Hi")
+                .build();
+        UserDTO.CreateUserRequest userTwo = UserDTO.CreateUserRequest.builder()
+                .nickname("Kim2")
+                .email("kimjaewon2@gmail.com")
+                .password(strongPassword)
+                .description("Hi")
+                .build();
         userService.createUser(userOne);
-        User userTwo = new User("Kim2", "kimjaewon2@gmail.com", strongPassword, "Hi");
         userService.createUser(userTwo);
         Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
         channelService.createChannel(channelOne);
         Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         channelService.createChannel(channelTwo);
         Message messageOne = new Message.Builder()
-                .userId(userOne.getId())
+                .userId(userService.findUserByEmail(userOne.email())
+                        .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelOne.getId())
                 .content("messageOne")
                 .isReply(false)
                 .parentMessageId(null)
                 .build();
         Message messageTwo = new Message.Builder()
-                .userId(userTwo.getId())
+                .userId(userService.findUserByEmail(userTwo.email())
+                        .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelTwo.getId())
                 .content("messageTwo")
                 .isReply(true)

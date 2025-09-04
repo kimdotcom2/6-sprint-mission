@@ -98,6 +98,11 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existByNickname(String nickname) {
+        return findAll().stream().anyMatch(user -> user.getNickname().equals(nickname));
+    }
+
+    @Override
     public Optional<User> findById(UUID id) {
 
         Path path = initFolder();

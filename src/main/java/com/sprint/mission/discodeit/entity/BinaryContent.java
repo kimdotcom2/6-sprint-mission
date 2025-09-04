@@ -8,11 +8,13 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
+@Builder
 public class BinaryContent implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final UUID id;
+    private final UUID id = UUID.randomUUID();
     private final Long createdAt = Instant.now().toEpochMilli();
+    private final byte[] data;
     private final FileType fileType;
 
 }

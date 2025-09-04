@@ -66,6 +66,11 @@ public class User extends BaseEntity implements Serializable {
         super.update();
     }
 
+    public void updatePassword(String password) {
+        this.password = password;
+        super.update();
+    }
+
     public void updateProfileImageId(UUID profileImageId) {
         this.profileImageId = profileImageId;
     }

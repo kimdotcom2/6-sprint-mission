@@ -19,7 +19,14 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void createUser(User user) {
+    public void createUser(UserDTO.CreateUserRequest request) {
+
+        User user = new User.Builder()
+                .email(request.email())
+                .password(request.password())
+                .nickname(request.nickname())
+                .description(request.description())
+                .build();
 
         if (data.containsKey(user.getId())) {
             throw new IllegalArgumentException("User already exists.");

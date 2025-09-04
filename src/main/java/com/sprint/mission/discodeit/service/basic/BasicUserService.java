@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.component.Validator;
 import com.sprint.mission.discodeit.dto.UserDTO;
+import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
@@ -27,7 +28,14 @@ public class BasicUserService implements UserService {
     private final Validator validator;
 
     @Override
-    public void createUser(User user) {
+    public void createUser(UserDTO.CreateUserRequest request) {
+
+        User user = new User.Builder()
+                .email(request.email())
+                .password(request.password())
+                .nickname(request.nickname())
+                .description(request.description())
+                .build();
 
         if (userRepository.existById(user.getId())) {
             throw new IllegalArgumentException("User already exists.");
@@ -41,11 +49,27 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        user.setPassword(securityUtil.hashPassword(user.getPassword()));
+        if (userRepository.existByNickname(user.getNickname())) {
+            throw new IllegalArgumentException("Nickname already exists.");
+        }
 
-        userRepository.save(user);
+        user.updatePassword(securityUtil.hashPassword(user.getPassword()));
 
         userStatusRepository.save(new UserStatus(user.getId()));
+
+        if (request.profileImage() != null) {
+
+            BinaryContent binaryContent = BinaryContent.builder()
+                    .data(request.profileImage())
+                    .fileType(request.fileType())
+                    .build();
+
+            user.updateProfileImageId(binaryContent.getId());
+            binaryContentRepository.save(binaryContent);
+
+        }
+
+        userRepository.save(user);
 
     }
 
@@ -136,6 +160,18 @@ public class BasicUserService implements UserService {
         }
 
         updatedUser.update(request.nickname(), request.email(), securityUtil.hashPassword(request.currentPassword()), request.description());
+
+        if (request.isProfileImageUpdated()) {
+
+            BinaryContent binaryContent = BinaryContent.builder()
+                    .data(request.profileImage())
+                    .fileType(request.fileType())
+                    .build();
+
+            updatedUser.updateProfileImageId(binaryContent.getId());
+            binaryContentRepository.save(binaryContent);
+
+        }
 
         userRepository.save(updatedUser);
 
