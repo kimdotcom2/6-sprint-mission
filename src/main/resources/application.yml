@@ -10,6 +10,12 @@ file:
                 name: users
             file:
                 name: files
+            userStatus:
+                name: userStatus
+            readStatus:
+                name: readStatus
+            BinaryContent:
+                name: binaryContent
         path: C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\
 spring:
     application:
