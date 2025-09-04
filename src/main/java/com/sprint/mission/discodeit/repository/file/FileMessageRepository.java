@@ -105,7 +105,7 @@ public class FileMessageRepository implements MessageRepository {
     public List<Message> findChildById(UUID id) {
         return findAll().stream()
                 .filter(Message::isReply)
-                .filter(message -> message.getParentMessageId() != null && message.getParentMessageId().equals(id))
+                .filter(message -> message.getParentMessageId().equals(id))
                 .toList();
     }
 
