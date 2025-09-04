@@ -36,6 +36,6 @@ public interface ReadStatusRepository {
 
     void deleteByChannelId(UUID channelId);
 
-    void deleteAll(Iterable<ReadStatus> readStatus);
+    void deleteAll(Iterable<UUID> readStatus);
 
 }

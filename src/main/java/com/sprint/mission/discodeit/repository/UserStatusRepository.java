@@ -28,6 +28,6 @@ public interface UserStatusRepository {
 
     void deleteByUserId(UUID userId);
 
-    void deleteAll(Iterable<UserStatus> userStatus);
+    void deleteAll(Iterable<UUID> userStatus);
 
 }

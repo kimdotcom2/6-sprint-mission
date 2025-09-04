@@ -22,6 +22,6 @@ public interface BinaryContentRepository {
 
     void deleteById(UUID id);
 
-    void deleteAll(Iterable<BinaryContent> binaryContents);
+    void deleteAll(Iterable<UUID> binaryContents);
 
 }
