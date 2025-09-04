@@ -16,7 +16,7 @@ public class User extends BaseEntity implements Serializable {
     private String email;
     private String password;
     private String description;
-    private UUID profileImageId;
+    private UUID profileImageId = null;
 
     /*public String getNickname() {
         return nickname;
