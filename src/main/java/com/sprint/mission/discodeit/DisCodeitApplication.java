@@ -189,9 +189,9 @@ public class DisCodeitApplication {
                 .build();
         userService.createUser(userOne);
         userService.createUser(userTwo);
-        Channel channelOne = new Channel("channelOne", ChannelType.DM, false);
+        Channel channelOne = new Channel("channelOne", ChannelType.DM, false, false);
         channelService.createChannel(channelOne);
-        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
+        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true, false);
         channelService.createChannel(channelTwo);
         Message messageOne = new Message.Builder()
                 .userId(userService.findUserByEmail(userOne.email())

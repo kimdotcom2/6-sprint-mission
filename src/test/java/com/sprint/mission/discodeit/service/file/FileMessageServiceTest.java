@@ -34,7 +34,7 @@ class FileMessageServiceTest {
                 .description("test")
                 .build();
         fileUserService.createUser(user);
-        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true, false);
         Message message = new Message(fileUserService.findUserByEmail(user.email())
                 .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
@@ -65,7 +65,7 @@ class FileMessageServiceTest {
                 .description("test")
                 .build();
         fileUserService.createUser(user);
-        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true, false);
         Message message = new Message(fileUserService.findUserByEmail(user.email())
                 .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
@@ -93,7 +93,7 @@ class FileMessageServiceTest {
                 .description("test")
                 .build();
         fileUserService.createUser(user);
-        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true, false);
         Message message = new Message(fileUserService.findUserByEmail(user.email())
                 .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
@@ -124,7 +124,7 @@ class FileMessageServiceTest {
                 .build();
         fileUserService.createUser(userRequest);
         UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
-        Channel channel = new Channel("test", ChannelType.DM, true);
+        Channel channel = new Channel("test", ChannelType.DM, true, false);
         Message message = new Message(user.id(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.id(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.id(), channel.getId(), "test2", true, message.getId());
@@ -161,7 +161,7 @@ class FileMessageServiceTest {
                 .build();
         fileUserService.createUser(userRequest);
         UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
-        Channel channel = new Channel("test", ChannelType.DM, true);
+        Channel channel = new Channel("test", ChannelType.DM, true, false);
         Message message = new Message(user.id(), channel.getId(), "test", false, null);
         Message message1 = new Message(user.id(), channel.getId(), "test1", true, message.getId());
         Message message2 = new Message(user.id(), channel.getId(), "test2", true, message.getId());
@@ -196,7 +196,7 @@ class FileMessageServiceTest {
                 .build();
         fileUserService.createUser(userRequest);
         UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
         Message message = new Message(user.id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
@@ -233,7 +233,7 @@ class FileMessageServiceTest {
                 .description("test")
                 .build();
         fileUserService.createUser(userRequest);
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
         Message message = new Message(fileUserService.findUserByEmail(userRequest.email())
                 .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);

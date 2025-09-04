@@ -18,6 +18,7 @@ public class Channel extends BaseEntity implements Serializable {
     private String channelName;
     private ChannelType category;
     private boolean isVoiceChannel;
+    private boolean isPrivate = false;
 
     /*public Map<UUID, User> getUserMap() {
         return userMap;
@@ -59,11 +60,12 @@ public class Channel extends BaseEntity implements Serializable {
         isVoiceChannel = voiceChannel;
     }*/
 
-    public Channel(String channelName, ChannelType category, boolean isVoiceChannel) {
+    public Channel(String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate) {
         super();
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
+        this.isPrivate = isPrivate;
     }
 
     public void update(String channelName, ChannelType category, boolean isVoiceChannel) {
@@ -83,6 +85,7 @@ public class Channel extends BaseEntity implements Serializable {
         private String channelName;
         private ChannelType category;
         private boolean isVoiceChannel;
+        private boolean isPrivate;
 
         public Builder channelName(String channelName) {
             this.channelName = channelName;
@@ -99,8 +102,13 @@ public class Channel extends BaseEntity implements Serializable {
             return this;
         }
 
+        public Builder isPrivate(boolean isPrivate) {
+            this.isPrivate = isPrivate;
+            return this;
+        }
+
         public Channel build() {
-            return new Channel(channelName, category, isVoiceChannel);
+            return new Channel(channelName, category, isVoiceChannel, isPrivate);
         }
 
     }

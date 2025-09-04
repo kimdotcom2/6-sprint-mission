@@ -18,7 +18,7 @@ class FileChannelServiceTest {
     void createChannel() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
 
         //when
         fileChannelService.createChannel(channel);
@@ -33,7 +33,7 @@ class FileChannelServiceTest {
     void existChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
 
         //when
         fileChannelService.createChannel(channel);
@@ -48,7 +48,7 @@ class FileChannelServiceTest {
     void findChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
 
         //when
         fileChannelService.createChannel(channel);
@@ -66,8 +66,8 @@ class FileChannelServiceTest {
     void findAllChannels() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true);
-        Channel channel1 = new Channel("test1", ChannelType.VOICE, false);
+        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
+        Channel channel1 = new Channel("test1", ChannelType.VOICE, false, false);
 
         //when
         fileChannelService.createChannel(channel);
@@ -84,7 +84,7 @@ class FileChannelServiceTest {
     void updateChannel() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.VOICE, true);
+        Channel channel = new Channel("test", ChannelType.VOICE, true, false);
         fileChannelService.createChannel(channel);
 
         //when
@@ -109,7 +109,7 @@ class FileChannelServiceTest {
     void deleteChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Channel channel = new Channel("test", ChannelType.TEXT, true, false);
         fileChannelService.createChannel(channel);
         assertTrue(fileChannelService.existChannelById(channel.getId()));
 
