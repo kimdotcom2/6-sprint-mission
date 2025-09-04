@@ -9,7 +9,7 @@ public class UserDTO {
 
     //login request DTO
     @Builder
-    public record LoginRequest(String email, String password) {
+    public record LoginRequest(String nickname, String password) {
 
     }
 

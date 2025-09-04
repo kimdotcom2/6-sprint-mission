@@ -18,7 +18,7 @@ public class BasicAuthService implements AuthService {
     @Override
     public User login(UserDTO.LoginRequest loginRequest) {
 
-        User user = userRepository.findByEmail(loginRequest.email())
+        User user = userRepository.findByNickname(loginRequest.nickname())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         if (user.getPassword().equals(securityUtil.hashPassword(loginRequest.password()))) {
