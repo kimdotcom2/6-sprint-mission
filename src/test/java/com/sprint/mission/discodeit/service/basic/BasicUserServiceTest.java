@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.enums.FileType;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
+import com.sprint.mission.discodeit.utils.SecurityUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,6 +53,17 @@ class BasicUserServiceTest {
             .password("A39ffcsdg&fdsldsf")
             .description("test")
             .profileImage(String.valueOf(1).getBytes(StandardCharsets.UTF_8))
+            .fileType(FileType.IMAGE)
+            .build();
+
+    UserDTO.UpdateUserRequest updateUserRequest = UserDTO.UpdateUserRequest.builder()
+            .id(user.getId())
+            .nickname("test")
+            .email("test@test.com")
+            .currentPassword(user.getPassword())
+            .newPassword("A39ffcsdg&fdsldsf2")
+            .description("test2")
+            .profileImage(String.valueOf(2).getBytes(StandardCharsets.UTF_8))
             .fileType(FileType.IMAGE)
             .build();
 
@@ -147,9 +159,34 @@ class BasicUserServiceTest {
 
     @Test
     void updateUser() {
+
+        //given
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+        when(validator.isEmailValid(userRequest.email())).thenReturn(true);
+        when(validator.isPasswordValid(updateUserRequest.newPassword())).thenReturn(true);
+        when(validator.isPasswordValid(updateUserRequest.currentPassword())).thenReturn(true);
+        user.updatePassword(new SecurityUtil().hashPassword(user.getPassword()));
+        when(userRepository.existByNickname(userRequest.nickname())).thenReturn(false);
+        when(userRepository.existByEmail(userRequest.email())).thenReturn(false);
+        when(userRepository.existById(user.getId())).thenReturn(true);
+
+        //when
+        basicUserService.updateUser(updateUserRequest);
+
     }
 
     @Test
     void deleteUserById() {
+
+        //given
+        when(userRepository.existById(user.getId())).thenReturn(true);
+        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
+
+        //when
+        basicUserService.deleteUserById(user.getId());
+
+        //then
+
+
     }
 }
