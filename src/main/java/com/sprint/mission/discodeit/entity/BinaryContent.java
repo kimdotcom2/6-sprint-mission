@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
-@Data
+@Getter
 @Builder
 public class BinaryContent implements Serializable {
 
