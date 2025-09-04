@@ -61,7 +61,7 @@ public class User extends BaseEntity implements Serializable {
         this.email = email;
         this.password = password;
         this.description = description;
-        super.setUpdatedAt();
+        super.update();
     }
 
     @Override

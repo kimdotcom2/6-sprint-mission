@@ -82,7 +82,7 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+        DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
                 .nickname(userOne.getNickname())
                 .email(userOne.getEmail())
@@ -142,7 +142,7 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+        DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
                 .nickname(userOne.getNickname())
                 .email(userOne.getEmail())
@@ -208,7 +208,7 @@ public class JavaApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        DiscordDTO.UpdateUserRequest requestOne = new DiscordDTO.UpdateUserRequest.Builder()
+        DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
                 .nickname(userOne.getNickname())
                 .email(userOne.getEmail())
@@ -279,7 +279,7 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+        DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
                 .channelName(channelTwo.getChannelName())
                 .category(ChannelType.DM)
@@ -346,7 +346,7 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+        DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
                 .channelName(channelTwo.getChannelName())
                 .category(ChannelType.DM)
@@ -423,7 +423,7 @@ public class JavaApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        DiscordDTO.UpdateChannelRequest requestTwo = new DiscordDTO.UpdateChannelRequest.Builder()
+        DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
                 .channelName(channelTwo.getChannelName())
                 .category(ChannelType.DM)
@@ -512,7 +512,7 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+        DiscordDTO.UpdateMessageRequest requestOne = DiscordDTO.UpdateMessageRequest.builder()
                 .id(messageOne.getId())
                 .content("messageOne edited")
                 .isReply(messageOne.isReply())
@@ -586,7 +586,7 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+        DiscordDTO.UpdateMessageRequest requestOne = DiscordDTO.UpdateMessageRequest.builder()
                 .id(messageOne.getId())
                 .content("messageOne edited")
                 .isReply(messageOne.isReply())
@@ -667,7 +667,7 @@ public class JavaApplication {
 
         //메시지 수정
         System.out.println("메시지 수정");
-        DiscordDTO.UpdateMessageRequest requestOne = new DiscordDTO.UpdateMessageRequest.Builder()
+        DiscordDTO.UpdateMessageRequest requestOne = DiscordDTO.UpdateMessageRequest.builder()
                 .id(messageOne.getId())
                 .content("messageOne edited")
                 .isReply(messageOne.isReply())

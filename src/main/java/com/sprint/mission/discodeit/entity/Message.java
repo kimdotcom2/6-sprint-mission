@@ -71,7 +71,7 @@ public class Message extends BaseEntity implements Serializable {
         this.content = content;
         this.isReply = isReply;
         this.parentMessageId = parentMessageId;
-        super.setUpdatedAt();
+        super.update();
     }
 
     @Override

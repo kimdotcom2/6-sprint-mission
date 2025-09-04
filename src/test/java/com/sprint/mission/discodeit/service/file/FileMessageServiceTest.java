@@ -164,7 +164,7 @@ class FileMessageServiceTest {
 
         //when
         Message message1 = messageService.findMessageById(message.getId()).orElse(null);
-        DiscordDTO.UpdateMessageRequest messageRequest = new DiscordDTO.UpdateMessageRequest.Builder()
+        DiscordDTO.UpdateMessageRequest messageRequest = DiscordDTO.UpdateMessageRequest.builder()
                 .id(message1.getId())
                 .content("test2")
                 .isReply(false)

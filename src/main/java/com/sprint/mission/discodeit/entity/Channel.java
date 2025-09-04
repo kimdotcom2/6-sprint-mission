@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.enums.ChannelType;
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -74,7 +73,7 @@ public class Channel extends BaseEntity implements Serializable {
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
-        super.setUpdatedAt();
+        super.update();
     }
 
     @Override

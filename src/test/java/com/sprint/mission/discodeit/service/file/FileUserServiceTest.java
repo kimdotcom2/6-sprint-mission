@@ -93,7 +93,7 @@ class FileUserServiceTest {
         userService.createUser(user);
 
         //when
-        DiscordDTO.UpdateUserRequest updateUserRequest = new DiscordDTO.UpdateUserRequest.Builder()
+        DiscordDTO.UpdateUserRequest updateUserRequest = DiscordDTO.UpdateUserRequest.builder()
                 .id(user.getId())
                 .nickname("test2")
                 .email("test2@test.com")

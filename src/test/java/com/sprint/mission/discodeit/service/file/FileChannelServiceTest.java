@@ -88,7 +88,7 @@ class FileChannelServiceTest {
         fileChannelService.createChannel(channel);
 
         //when
-        DiscordDTO.UpdateChannelRequest channelRequest = new DiscordDTO.UpdateChannelRequest.Builder()
+        DiscordDTO.UpdateChannelRequest channelRequest = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channel.getId())
                 .channelName("test2")
                 .category(ChannelType.FORUM)

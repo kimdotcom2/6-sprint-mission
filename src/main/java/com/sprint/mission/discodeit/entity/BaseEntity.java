@@ -34,7 +34,7 @@ public class BaseEntity implements Serializable {
         return updatedAt;
     }*/
 
-    public void setUpdatedAt() {
+    protected void update() {
         this.updatedAt = Instant.now().toEpochMilli();
     }
 
