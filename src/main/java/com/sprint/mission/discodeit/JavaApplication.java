@@ -31,6 +31,7 @@ import java.nio.file.Path;
 
 import static com.sprint.mission.discodeit.config.PathConfig.FILE_PATH;
 
+@Deprecated
 public class JavaApplication {
 
     static String fileDirectory = FILE_PATH;

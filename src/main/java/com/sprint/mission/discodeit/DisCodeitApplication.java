@@ -111,8 +111,8 @@ public class DisCodeitApplication {
 
         //채널 등록
         System.out.println("채널 등록");
-        User user = new User("test", "test@test.com", strongPassword, "test");
-        Message message = new Message(user.getId(), null, "message", false, null);
+        //User user = new User("test", "test@test.com", strongPassword, "test");
+        //Message message = new Message(user.getId(), null, "message", false, null);
         Channel channelOne = new Channel.Builder()
                 .channelName("channelOne")
                 .category(ChannelType.TEXT)
@@ -161,8 +161,8 @@ public class DisCodeitApplication {
         System.out.println("채널 삭제");
         channelOne = channelService.findChannelById(channelOne.getId())
                 .orElseThrow(() -> new IllegalArgumentException("No such users."));
-        System.out.println(channelOne.getChannelName() + " 에서 "
-                + user.getNickname() + " 유저 삭제");
+        //System.out.println(channelOne.getChannelName() + " 에서 "
+                //+ user.getNickname() + " 유저 삭제");
         //channelService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
         System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
         //channelService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
