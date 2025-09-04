@@ -1,9 +1,10 @@
 package com.sprint.mission.discodeit.repository.file;
 
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,6 +15,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
+@Repository("fileUserStatusRepository")
+@RequiredArgsConstructor
 public class FileUserStatusRepository implements UserStatusRepository {
 
     @Value("${file.upload.path}")
@@ -72,6 +75,7 @@ public class FileUserStatusRepository implements UserStatusRepository {
 
     @Override
     public Optional<UserStatus> findById(UUID id) {
+
         Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
