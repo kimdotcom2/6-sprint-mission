@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.component;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("validator")
 public class Validator {
 
     public boolean isEmailValid(String email) {

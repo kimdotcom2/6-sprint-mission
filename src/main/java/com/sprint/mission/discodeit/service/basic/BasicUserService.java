@@ -51,7 +51,7 @@ public class BasicUserService implements UserService {
 
         userStatusRepository.save(new UserStatus(user.getId()));
 
-        if (request.profileImage() != null) {
+        if (request.profileImage() != null && request.fileType() != null) {
 
             BinaryContent binaryContent = BinaryContent.builder()
                     .data(request.profileImage())
@@ -61,6 +61,10 @@ public class BasicUserService implements UserService {
             binaryContentRepository.save(binaryContent);
             user.updateProfileImageId(binaryContent.getId());
 
+        } else if (request.profileImage() == null && request.fileType() != null) {
+            throw new IllegalArgumentException("Invalid user data.");
+        } else if (request.profileImage() != null) {
+            throw new IllegalArgumentException("Invalid user data.");
         }
 
         userRepository.save(user);
@@ -83,7 +87,7 @@ public class BasicUserService implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        UserStatus userStatus = userStatusRepository.findById(id)
+        UserStatus userStatus = userStatusRepository.findByUserId(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
@@ -103,7 +107,7 @@ public class BasicUserService implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        UserStatus userStatus = userStatusRepository.findById(user.getId())
+        UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
@@ -127,7 +131,7 @@ public class BasicUserService implements UserService {
                         .nickname(user.getNickname())
                         .description(user.getDescription())
                         .profileImageId(user.getProfileImageId())
-                        .isOnline(userStatusRepository.findById(user.getId())
+                        .isOnline(userStatusRepository.findByUserId(user.getId())
                                 .orElseThrow(() -> new IllegalArgumentException("No such user status.")).isLogin())
                         .build())
                 .toList();
