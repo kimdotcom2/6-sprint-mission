@@ -1,9 +1,9 @@
-package com.sprint.mission.discodeit.utils;
+package com.sprint.mission.discodeit.component;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidationUtil {
+public class Validator {
 
     public boolean isEmailValid(String email) {
         return email.matches( "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");

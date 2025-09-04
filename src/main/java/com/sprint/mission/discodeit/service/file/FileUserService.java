@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import com.sprint.mission.discodeit.utils.ValidationUtil;
+import com.sprint.mission.discodeit.component.Validator;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -17,7 +17,7 @@ public class FileUserService implements UserService {
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final ValidationUtil validationUtil = new ValidationUtil();
+    private final Validator validator = new Validator();
 
     public FileUserService(Path path) {
 
@@ -39,7 +39,7 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (!validationUtil.isPasswordValid(user.getPassword())|| !validationUtil.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
+        if (!validator.isPasswordValid(user.getPassword())|| !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -151,9 +151,9 @@ public class FileUserService implements UserService {
     @Override
     public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (!validationUtil.isEmailValid(request.email()) ||
-                !validationUtil.isPasswordValid(request.newPassword()) ||
-                !validationUtil.isPasswordValid(request.currentPassword()) ||
+        if (!validator.isEmailValid(request.email()) ||
+                !validator.isPasswordValid(request.newPassword()) ||
+                !validator.isPasswordValid(request.currentPassword()) ||
                 request.nickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }

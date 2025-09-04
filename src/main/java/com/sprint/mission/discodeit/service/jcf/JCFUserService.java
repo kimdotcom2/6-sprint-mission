@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.DiscordDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import com.sprint.mission.discodeit.utils.ValidationUtil;
+import com.sprint.mission.discodeit.component.Validator;
 
 import java.util.*;
 
@@ -12,7 +12,7 @@ public class JCFUserService implements UserService {
 
     private final Map<UUID, User> data;
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final ValidationUtil validationUtil = new ValidationUtil();
+    private final Validator validator = new Validator();
 
     public JCFUserService() {
         data = new TreeMap<>();
@@ -25,7 +25,7 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (!validationUtil.isPasswordValid(user.getPassword()) || !validationUtil.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
+        if (!validator.isPasswordValid(user.getPassword()) || !validator.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
@@ -90,10 +90,10 @@ public class JCFUserService implements UserService {
     @Override
     public void updateUser(DiscordDTO.UpdateUserRequest request) {
 
-        if (!validationUtil.isEmailValid(request.email()) ||
+        if (!validator.isEmailValid(request.email()) ||
                 request.nickname().isBlank() ||
-                !validationUtil.isPasswordValid(request.newPassword()) ||
-                !validationUtil.isPasswordValid(request.currentPassword())) {
+                !validator.isPasswordValid(request.newPassword()) ||
+                !validator.isPasswordValid(request.currentPassword())) {
             throw new IllegalArgumentException("Invalid user data.");
         }
 
