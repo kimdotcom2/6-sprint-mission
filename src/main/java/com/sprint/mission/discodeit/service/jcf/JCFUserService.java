@@ -40,7 +40,7 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        user.setPassword(securityUtil.hashPassword(user.getPassword()));
+        user.updatePassword(securityUtil.hashPassword(user.getPassword()));
         data.put(user.getId(), user);
 
     }

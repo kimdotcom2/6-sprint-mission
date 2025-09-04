@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
-@Setter
+//@Setter
 @RequiredArgsConstructor
 public class User extends BaseEntity implements Serializable {
 

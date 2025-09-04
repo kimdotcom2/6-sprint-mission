@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-@Setter
+//@Setter
 @RequiredArgsConstructor
 public class UserStatus extends BaseEntity implements Serializable {
 

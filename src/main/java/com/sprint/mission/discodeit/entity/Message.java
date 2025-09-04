@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
-@Setter
+//@Setter
 @RequiredArgsConstructor
 public class Message extends BaseEntity implements Serializable {
 

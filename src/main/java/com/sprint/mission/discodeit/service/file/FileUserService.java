@@ -54,7 +54,7 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("Email already exists.");
         }
 
-        user.setPassword(securityUtil.hashPassword(user.getPassword()));
+        user.updatePassword(securityUtil.hashPassword(user.getPassword()));
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
