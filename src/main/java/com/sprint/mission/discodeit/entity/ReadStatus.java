@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @RequiredArgsConstructor
 public class ReadStatus extends BaseEntity implements Serializable {
 
@@ -27,6 +26,25 @@ public class ReadStatus extends BaseEntity implements Serializable {
 
     public void updateLastReadTimestamp() {
         this.lastReadTimestamp = Instant.now().toEpochMilli();
+    }
+
+    public static class Builder {
+        private UUID channelId;
+        private UUID userId;
+
+        public Builder channelId(UUID channelId) {
+            this.channelId = channelId;
+            return this;
+        }
+
+        public Builder userId(UUID userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public ReadStatus build() {
+            return new ReadStatus(channelId, userId);
+        }
     }
 
 }

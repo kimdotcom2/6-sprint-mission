@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
 @RequiredArgsConstructor
 public class UserStatus extends BaseEntity implements Serializable {
 
@@ -26,11 +25,25 @@ public class UserStatus extends BaseEntity implements Serializable {
     }
 
     public UserStatus(UUID userId) {
+        super();
         this.userId = userId;
     }
 
     public void updateLastActiveTimestamp() {
         this.lastActiveTimestamp = Instant.now().toEpochMilli();
+    }
+
+    public static class Builder {
+        private UUID userId;
+
+        public Builder userId(UUID userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public UserStatus build() {
+            return new UserStatus(userId);
+        }
     }
 
 }

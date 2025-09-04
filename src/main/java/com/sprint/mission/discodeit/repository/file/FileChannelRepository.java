@@ -106,12 +106,13 @@ public class FileChannelRepository implements ChannelRepository {
 
     }
 
-    @Override
+    /*@Override
     public List<Channel> findByUserId(UUID userId) {
         return findAll().stream()
-                .filter(channel -> channel.getUserMap().containsKey(userId))
+                .filter(channel -> channel
+                        .getUserMap().containsKey(userId))
                 .toList();
-    }
+    }*/
 
     @Override
     public List<Channel> findAll() {
