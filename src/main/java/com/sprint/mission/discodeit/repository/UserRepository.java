@@ -22,6 +22,8 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findByNickname(String nickname);
+
     List<User> findAll();
 
     void deleteById(UUID id);

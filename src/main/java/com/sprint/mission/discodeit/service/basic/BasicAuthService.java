@@ -22,7 +22,6 @@ public class BasicAuthService implements AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         if (user.getPassword().equals(securityUtil.hashPassword(loginRequest.password()))) {
-
             return user;
         } else {
             throw new IllegalArgumentException("Invalid password.");

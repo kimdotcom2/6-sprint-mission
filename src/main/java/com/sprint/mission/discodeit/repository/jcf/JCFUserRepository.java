@@ -51,6 +51,13 @@ public class JCFUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByNickname(String nickname) {
+        return data.entrySet().stream()
+                .filter(entry -> entry.getValue().getNickname().equals(nickname))
+                .findFirst().map(Map.Entry::getValue);
+    }
+
+    @Override
     public List<User> findAll() {
         return new ArrayList<>(data.values());
     }

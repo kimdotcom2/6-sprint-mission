@@ -148,6 +148,34 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByNickname(String nickname) {
+
+        Path path = initFolder();
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .map(file -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(file.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (User) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(user -> user.getNickname().equals(nickname))
+                    .findFirst();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
+
+    }
+
+    @Override
     public List<User> findAll() {
 
         Path path = initFolder();
