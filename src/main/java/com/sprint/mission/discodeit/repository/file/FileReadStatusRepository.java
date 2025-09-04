@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.ReadStatus;
-import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -61,9 +60,11 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public boolean existById(UUID id) {
+
         Path path = initFolder();
 
         return Files.exists(path.resolve(id + fileExtension));
+
     }
 
     @Override
@@ -295,8 +296,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public void deleteAll(Iterable<UUID> readStatus) {
-
         readStatus.forEach(this::deleteById);
-
     }
 }

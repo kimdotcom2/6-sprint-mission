@@ -1,8 +1,7 @@
 package com.sprint.mission.discodeit.repository.file;
 
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.repository.ChannelRepository;
-import lombok.RequiredArgsConstructor;
+import com.sprint.mission.discodeit.entity.BinaryContent;
+import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -15,13 +14,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Repository("fileChannelRepository")
-@RequiredArgsConstructor
-public class FileChannelRepository implements ChannelRepository {
+@Repository
+public class FileBinaryContentRepository implements BinaryContentRepository {
 
     @Value("${file.upload.path}")
     private String fileUploadFolder;
-    @Value("${file.upload.folder.channel.name}")
+    @Value("${file.upload.folder.binaryContent.name}")
     private String folderName;
     @Value("${file.upload.extension}")
     private String fileExtension;
@@ -42,41 +40,23 @@ public class FileChannelRepository implements ChannelRepository {
 
     }
 
-    /*private final Path path;
-    private static final String FILE_EXTENSION = ".ser";
-    private final String folderName;
-
-    public FileChannelRepository(String folderName) {
-        this.folderName = folderName;
-        path = Path.of(FILE_PATH + folderName);
-
-        if (!path.toFile().exists()) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Failed to create directory.");
-            }
-        }
-
-    }*/
-
     @Override
-    public void save(Channel channel) {
+    public void save(BinaryContent binaryContent) {
 
         Path path = initFolder();
 
-        try(FileOutputStream fos = new FileOutputStream(path.resolve( channel.getId() + fileExtension).toFile());
+        try(FileOutputStream fos = new FileOutputStream(path.resolve(binaryContent.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-            oos.writeObject(channel);
+            oos.writeObject(binaryContent);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
 
     @Override
-    public void saveAll(Iterable<Channel> channels) {
-        channels.forEach(this::save);
+    public void saveAll(Iterable<BinaryContent> binaryContents) {
+        binaryContents.forEach(this::save);
     }
 
     @Override
@@ -85,19 +65,20 @@ public class FileChannelRepository implements ChannelRepository {
         Path path = initFolder();
 
         return Files.exists(path.resolve(id + fileExtension));
+
     }
 
     @Override
-    public Optional<Channel> findById(UUID id) {
+    public Optional<BinaryContent> findById(UUID id) {
 
         Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
-            Channel channel = (Channel) ois.readObject();
+            BinaryContent binaryContent = (BinaryContent) ois.readObject();
 
-            return Optional.ofNullable(channel);
+            return Optional.ofNullable(binaryContent);
 
         } catch (IOException | ClassNotFoundException e) {
             return Optional.empty();
@@ -105,17 +86,8 @@ public class FileChannelRepository implements ChannelRepository {
 
     }
 
-    /*@Override
-    public List<Channel> findByUserId(UUID userId) {
-        return findAll().stream()
-                .filter(channel -> channel
-                        .getUserMap().containsKey(userId))
-                .toList();
-    }*/
-
     @Override
-    public List<Channel> findAll() {
-
+    public List<BinaryContent> findAll() {
         Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
@@ -127,7 +99,7 @@ public class FileChannelRepository implements ChannelRepository {
                                 ObjectInputStream ois = new ObjectInputStream(fis)
                         ) {
                             Object data = ois.readObject();
-                            return (Channel) data;
+                            return (BinaryContent) data;
                         } catch (IOException | ClassNotFoundException e) {
                             return null;
                         }
@@ -137,7 +109,6 @@ public class FileChannelRepository implements ChannelRepository {
         } catch (IOException e) {
             throw new RuntimeException();
         }
-
     }
 
     @Override
@@ -151,5 +122,10 @@ public class FileChannelRepository implements ChannelRepository {
             throw new IllegalArgumentException();
         }
 
+    }
+
+    @Override
+    public void deleteAll(Iterable<UUID> binaryContents) {
+        binaryContents.forEach(this::deleteById);
     }
 }

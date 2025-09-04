@@ -14,8 +14,8 @@ file:
                 name: userStatus
             readStatus:
                 name: readStatus
-            BinaryContent:
-                name: binaryContent
+            binaryContent:
+                name: binaryContents
         path: C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\
 spring:
     application:
