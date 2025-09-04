@@ -16,7 +16,7 @@ public class Message extends BaseEntity implements Serializable {
 
     private String content;
     private boolean isReply;
-    private UUID parentMessageId;
+    private UUID parentMessageId = null;
     private UUID channelId;
     private UUID userId;
     private List<UUID> binaryContentIdList = new ArrayList<>();
