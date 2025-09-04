@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.User;
@@ -26,10 +27,16 @@ class FileMessageServiceTest {
     void createMessage() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", ChannelType.TEXT, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
+        UserDTO.CreateUserRequest user = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
         fileUserService.createUser(user);
+        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Message message = new Message(fileUserService.findUserByEmail(user.email())
+                .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
 
@@ -41,7 +48,8 @@ class FileMessageServiceTest {
         assertNotNull(message1);
         assertEquals(message1.getId(), message.getId());
         messageService.deleteMessageById(message.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(fileUserService.findUserByEmail(user.email())
+                .orElse(null).id());
         channelService.deleteChannelById(channel.getId());
 
     }
@@ -50,10 +58,16 @@ class FileMessageServiceTest {
     void existMessageById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", ChannelType.VOICE, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
+        UserDTO.CreateUserRequest user = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
         fileUserService.createUser(user);
+        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Message message = new Message(fileUserService.findUserByEmail(user.email())
+                .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
 
@@ -63,7 +77,7 @@ class FileMessageServiceTest {
         //then
         assertTrue(exist);
         messageService.deleteMessageById(message.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(fileUserService.findUserByEmail(user.email()).orElse(null).id());
         channelService.deleteChannelById(channel.getId());
 
     }
@@ -72,10 +86,16 @@ class FileMessageServiceTest {
     void findMessageById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        Channel channel = new Channel("test", ChannelType.VOICE, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
+        UserDTO.CreateUserRequest user = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
         fileUserService.createUser(user);
+        Channel channel = new Channel("test", ChannelType.TEXT, true);
+        Message message = new Message(fileUserService.findUserByEmail(user.email())
+                .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
 
@@ -87,7 +107,7 @@ class FileMessageServiceTest {
         assertNotNull(message1);
         assertEquals(message1.getId(), message.getId());
         messageService.deleteMessageById(message.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(fileUserService.findUserByEmail(user.email()).orElse(null).id());
         channelService.deleteChannelById(channel.getId());
 
     }
@@ -96,12 +116,19 @@ class FileMessageServiceTest {
     void findChildMessagesById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
+        fileUserService.createUser(userRequest);
+        UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
         Channel channel = new Channel("test", ChannelType.DM, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
-        Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
-        fileUserService.createUser(user);
+        Message message = new Message(user.id(), channel.getId(), "test", false, null);
+        Message message1 = new Message(user.id(), channel.getId(), "test1", true, message.getId());
+        Message message2 = new Message(user.id(), channel.getId(), "test2", true, message.getId());
+
         channelService.createChannel(channel);
         messageService.createMessage(message);
         messageService.createMessage(message1);
@@ -116,7 +143,7 @@ class FileMessageServiceTest {
         messageService.deleteMessageById(message.getId());
         messageService.deleteMessageById(message1.getId());
         messageService.deleteMessageById(message2.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(user.id());
         channelService.deleteChannelById(channel.getId());
 
 
@@ -126,12 +153,18 @@ class FileMessageServiceTest {
     void findAllMessages() {
 
         //given
-        User user = new User("test", "test", "test", "test");
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
+        fileUserService.createUser(userRequest);
+        UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
         Channel channel = new Channel("test", ChannelType.DM, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        Message message1 = new Message(user.getId(), channel.getId(), "test1", true, message.getId());
-        Message message2 = new Message(user.getId(), channel.getId(), "test2", true, message.getId());
-        fileUserService.createUser(user);
+        Message message = new Message(user.id(), channel.getId(), "test", false, null);
+        Message message1 = new Message(user.id(), channel.getId(), "test1", true, message.getId());
+        Message message2 = new Message(user.id(), channel.getId(), "test2", true, message.getId());
         channelService.createChannel(channel);
         messageService.createMessage(message);
         messageService.createMessage(message1);
@@ -146,7 +179,7 @@ class FileMessageServiceTest {
         messageService.deleteMessageById(message.getId());
         messageService.deleteMessageById(message1.getId());
         messageService.deleteMessageById(message2.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(user.id());
         channelService.deleteChannelById(channel.getId());
 
     }
@@ -155,10 +188,16 @@ class FileMessageServiceTest {
     void updateMessage() {
 
         //given
-        User user = new User("test", "test", "test", "test");
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
+        fileUserService.createUser(userRequest);
+        UserDTO.FindUserResult user = fileUserService.findUserByEmail(userRequest.email()).get();
         Channel channel = new Channel("test", ChannelType.FORUM, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.createUser(user);
+        Message message = new Message(user.id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
 
@@ -178,7 +217,7 @@ class FileMessageServiceTest {
         assertEquals(messageService.findMessageById(message.getId()).orElse(null).getId(), message1.getId());
         assertEquals(messageService.findMessageById(message.getId()).orElse(null).getContent(), "test2");
         messageService.deleteMessageById(message1.getId());
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(user.id());
         channelService.deleteChannelById(channel.getId());
 
     }
@@ -187,10 +226,16 @@ class FileMessageServiceTest {
     void deleteMessageById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test")
+                .password("test")
+                .description("test")
+                .build();
+        fileUserService.createUser(userRequest);
         Channel channel = new Channel("test", ChannelType.FORUM, true);
-        Message message = new Message(user.getId(), channel.getId(), "test", false, null);
-        fileUserService.createUser(user);
+        Message message = new Message(fileUserService.findUserByEmail(userRequest.email())
+                .orElse(null).id(), channel.getId(), "test", false, null);
         channelService.createChannel(channel);
         messageService.createMessage(message);
 
@@ -199,7 +244,8 @@ class FileMessageServiceTest {
 
         //then
         assertFalse(messageService.existMessageById(message.getId()));
-        fileUserService.deleteUserById(user.getId());
+        fileUserService.deleteUserById(fileUserService.findUserByEmail(userRequest.email())
+                .orElse(null).id());
         channelService.deleteChannelById(channel.getId());
 
     }

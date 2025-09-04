@@ -19,18 +19,22 @@ class FileUserServiceTest {
     void createUser() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        System.out.println(user.getId());
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
 
         //when
-        userService.createUser(user);
+        userService.createUser(userRequest);
 
         //then
-        User user1 = userService.findUserById(user.getId()).orElse(null);
+        UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).orElse(null);
         assertNotNull(user1);
         System.out.println(user1.toString());
-        assertEquals(user1.getId(), user.getId());
-        userService.deleteUserById(user.getId());
+        assertEquals(user1.email(), userRequest.email());
+        userService.deleteUserById(user1.id());
 
     }
 
@@ -38,15 +42,19 @@ class FileUserServiceTest {
     void existUserById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        System.out.println(user.getId());
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
 
         //when
-        userService.createUser(user);
+        userService.createUser(userRequest);
 
         //then
-        Assertions.assertTrue(userService.existUserById(user.getId()));
-        userService.deleteUserById(user.getId());
+        Assertions.assertTrue(userService.existUserByEmail(userRequest.email()));
+        userService.deleteUserById(userService.findUserByEmail(userRequest.email()).orElse(null).id());
 
     }
 
@@ -54,16 +62,20 @@ class FileUserServiceTest {
     void findUserById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        System.out.println(user.getId());
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
 
         //when
-        userService.createUser(user);
-        User user1 = userService.findUserById(user.getId()).orElse(null);
+        userService.createUser(userRequest);
+        UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).orElse(null);
 
         //then
-        assertEquals(user1.getId(), user.getId());
-        userService.deleteUserById(user.getId());
+        assertEquals(user1.email(), userRequest.email());
+        userService.deleteUserById(user1.id());
 
     }
 
@@ -71,16 +83,20 @@ class FileUserServiceTest {
     void findAllUsers() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        System.out.println(user.getId());
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
 
         //when
-        userService.createUser(user);
-        List<User> users = userService.findAllUsers();
+        userService.createUser(userRequest);
+        List<UserDTO.FindUserResult> users = userService.findAllUsers();
 
         //then
         users.forEach(System.out::println);
-        userService.deleteUserById(user.getId());
+        userService.deleteUserById(userService.findUserByEmail(userRequest.email()).orElse(null).id());
 
     }
 
@@ -88,13 +104,18 @@ class FileUserServiceTest {
     void updateUser() {
 
         //given
-        User user = new User("test", "test@test.com", "A39ffcsdg&fdsldsf", "test");
-        System.out.println(user.getId());
-        userService.createUser(user);
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
+        userService.createUser(userRequest);
 
         //when
+        UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).orElse(null);
         UserDTO.UpdateUserRequest updateUserRequest = UserDTO.UpdateUserRequest.builder()
-                .id(user.getId())
+                .id(user1.id())
                 .nickname("test2")
                 .email("test2@test.com")
                 .currentPassword("A39ffcsdg&fdsldsf")
@@ -102,12 +123,12 @@ class FileUserServiceTest {
                 .description("test2")
                 .build();
         userService.updateUser(updateUserRequest);
-        User user1 = userService.findUserById(user.getId()).orElse(null);
+        user1 = userService.findUserById(user1.id()).orElse(null);
 
         //then
         System.out.println(user1.toString());
-        assertEquals(user1.getNickname(), "test2");
-        userService.deleteUserById(user.getId());
+        assertEquals(user1.nickname(), "test2");
+        userService.deleteUserById(user1.id());
 
     }
 
@@ -115,15 +136,21 @@ class FileUserServiceTest {
     void deleteUserById() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        userService.createUser(user);
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
+        userService.createUser(userRequest);
 
         //when
-        userService.deleteUserById(user.getId());
+        UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).orElse(null);
+        userService.deleteUserById(user1.id());
 
         //then
-        assertFalse(userService.findAllUsers().contains(user));
-        assertEquals(null, userService.findUserById(user.getId()).orElse(null));
+        assertFalse(userService.findAllUsers().contains(user1));
+        assertEquals(null, userService.findUserById(user1.id()).orElse(null));
 
     }
 
@@ -131,15 +158,20 @@ class FileUserServiceTest {
     void findUserByEmail() {
 
         //given
-        User user = new User("test", "test", "test", "test");
-        userService.createUser(user);
+        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+                .nickname("test")
+                .email("test@test.com")
+                .password("A39ffcsdg&fdsldsf")
+                .description("test")
+                .build();
+        userService.createUser(userRequest);
 
         //when
-        User user1 = userService.findUserByEmail(user.getEmail()).orElse(null);
+        UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).get();
 
         //then
-        assertEquals(user1.getEmail(), user.getEmail());
-        userService.deleteUserById(user.getId());
+        assertEquals(user1.email(), userRequest.email());
+        userService.deleteUserById(user1.id());
 
     }
 }
