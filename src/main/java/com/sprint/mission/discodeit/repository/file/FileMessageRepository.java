@@ -164,4 +164,9 @@ public class FileMessageRepository implements MessageRepository {
         }
 
     }
+
+    @Override
+    public void deleteByChannelId(UUID channelId) {
+        findByChannelId(channelId).forEach(message -> deleteById(message.getId()));
+    }
 }

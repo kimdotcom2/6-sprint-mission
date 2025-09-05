@@ -202,6 +202,8 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("No such channel.");
         }
 
+        messageRepository.deleteByChannelId(id);
+        readStatusRepository.deleteByChannelId(id);
         channelRepository.deleteById(id);
 
     }
