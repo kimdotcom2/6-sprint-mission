@@ -147,7 +147,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findById(readStatus.getId())).thenReturn(Optional.of(readStatus));
 
         // when
-        ReadStatusDTO.ReadStatusResult result = basicReadStatusService.findReadStatusById(readStatus.getId()).orElse(null);
+        ReadStatusDTO.FindReadStatusResult result = basicReadStatusService.findReadStatusById(readStatus.getId()).orElse(null);
 
         // then
         Assertions.assertNotNull(result);
@@ -181,7 +181,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findByUserIdAndChannelId(userId, channelId)).thenReturn(Optional.of(readStatus));
 
         // when
-        ReadStatusDTO.ReadStatusResult result = basicReadStatusService.findReadStatusByUserIdAndChannelId(userId, channelId).orElse(null);
+        ReadStatusDTO.FindReadStatusResult result = basicReadStatusService.findReadStatusByUserIdAndChannelId(userId, channelId).orElse(null);
 
         // then
         Assertions.assertNotNull(result);
@@ -226,7 +226,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findByUserId(userId)).thenReturn(List.of(rs));
 
         // when
-        List<ReadStatusDTO.ReadStatusResult> results = basicReadStatusService.findAllReadStatusByUserId(userId);
+        List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatusByUserId(userId);
 
         // then
         Assertions.assertEquals(1, results.size());
@@ -256,7 +256,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findByChannelId(channelId)).thenReturn(List.of(rs));
 
         // when
-        List<ReadStatusDTO.ReadStatusResult> results = basicReadStatusService.findAllReadStatusByChannelId(channelId);
+        List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatusByChannelId(channelId);
 
         // then
         Assertions.assertEquals(1, results.size());
@@ -284,7 +284,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findAll()).thenReturn(List.of(rs));
 
         // when
-        List<ReadStatusDTO.ReadStatusResult> results = basicReadStatusService.findAllReadStatus();
+        List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatus();
 
         // then
         Assertions.assertEquals(1, results.size());

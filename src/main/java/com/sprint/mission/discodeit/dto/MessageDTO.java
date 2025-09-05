@@ -10,6 +10,18 @@ public class MessageDTO {
     @Builder
     public record CreateMessageRequest(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<UUID> binaryContentList) {
 
+        public CreateMessageRequest {
+
+            if (isReply && parentMessageId == null) {
+                throw new IllegalArgumentException("Parent message id is required.");
+            }
+
+            if (!isReply && parentMessageId != null) {
+                throw new IllegalArgumentException("Parent message id is not required.");
+            }
+
+        }
+
     }
 
     @Builder
@@ -30,6 +42,18 @@ public class MessageDTO {
     //message update를 위한 Request DTO
     @Builder
     public record UpdateMessageRequest(UUID id, String content, boolean isReply, UUID parentMessageId) {
+
+        public UpdateMessageRequest {
+
+            if (isReply && parentMessageId == null) {
+                throw new IllegalArgumentException("Parent message id is required.");
+            }
+
+            if (!isReply && parentMessageId != null) {
+                throw new IllegalArgumentException("Parent message id is not required.");
+            }
+
+        }
 
     }
 

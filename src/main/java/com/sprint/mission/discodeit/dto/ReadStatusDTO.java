@@ -12,7 +12,7 @@ public class ReadStatusDTO {
     }
 
     @Builder
-    public record ReadStatusResult(
+    public record FindReadStatusResult(
             UUID id,
             UUID channelId,
             UUID userId,

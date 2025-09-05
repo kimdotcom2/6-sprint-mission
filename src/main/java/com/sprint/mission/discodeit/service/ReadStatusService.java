@@ -14,15 +14,15 @@ public interface ReadStatusService {
 
     boolean existReadStatusByUserIdAndChannelId(UUID userId, UUID channelId);
 
-    Optional<ReadStatusDTO.ReadStatusResult> findReadStatusById(UUID id);
+    Optional<ReadStatusDTO.FindReadStatusResult> findReadStatusById(UUID id);
 
-    Optional<ReadStatusDTO.ReadStatusResult> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId);
+    Optional<ReadStatusDTO.FindReadStatusResult> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId);
 
-    List<ReadStatusDTO.ReadStatusResult> findAllReadStatusByUserId(UUID userId);
+    List<ReadStatusDTO.FindReadStatusResult> findAllReadStatusByUserId(UUID userId);
 
-    List<ReadStatusDTO.ReadStatusResult> findAllReadStatusByChannelId(UUID channelId);
+    List<ReadStatusDTO.FindReadStatusResult> findAllReadStatusByChannelId(UUID channelId);
 
-    List<ReadStatusDTO.ReadStatusResult> findAllReadStatus();
+    List<ReadStatusDTO.FindReadStatusResult> findAllReadStatus();
 
     void updateReadStatus(ReadStatusDTO.UpdateReadStatusRequest request);
 

@@ -56,12 +56,12 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public Optional<ReadStatusDTO.ReadStatusResult> findReadStatusById(UUID id) {
+    public Optional<ReadStatusDTO.FindReadStatusResult> findReadStatusById(UUID id) {
 
         ReadStatus readStatus = readStatusRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such read status."));
 
-        return Optional.ofNullable(ReadStatusDTO.ReadStatusResult.builder()
+        return Optional.ofNullable(ReadStatusDTO.FindReadStatusResult.builder()
                 .id(readStatus.getId())
                 .channelId(readStatus.getChannelId())
                 .userId(readStatus.getUserId())
@@ -72,7 +72,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public Optional<ReadStatusDTO.ReadStatusResult> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
+    public Optional<ReadStatusDTO.FindReadStatusResult> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
 
         if (!userRepository.existById(userId)) {
             throw new IllegalArgumentException("No such user.");
@@ -85,7 +85,7 @@ public class BasicReadStatusService implements ReadStatusService {
         ReadStatus readStatus = readStatusRepository.findByUserIdAndChannelId(userId, channelId)
                 .orElseThrow(() -> new IllegalArgumentException("No such read status."));
 
-        return Optional.ofNullable(ReadStatusDTO.ReadStatusResult.builder()
+        return Optional.ofNullable(ReadStatusDTO.FindReadStatusResult.builder()
                 .id(readStatus.getId())
                 .channelId(readStatus.getChannelId())
                 .userId(readStatus.getUserId())
@@ -97,7 +97,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public List<ReadStatusDTO.ReadStatusResult> findAllReadStatusByUserId(UUID userId) {
+    public List<ReadStatusDTO.FindReadStatusResult> findAllReadStatusByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
             throw new IllegalArgumentException("No such user.");
@@ -105,7 +105,7 @@ public class BasicReadStatusService implements ReadStatusService {
 
         return readStatusRepository.findByUserId(userId)
                 .stream()
-                .map(readStatus -> ReadStatusDTO.ReadStatusResult.builder()
+                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
                         .id(readStatus.getId())
                         .channelId(readStatus.getChannelId())
                         .userId(readStatus.getUserId())
@@ -117,7 +117,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public List<ReadStatusDTO.ReadStatusResult> findAllReadStatusByChannelId(UUID channelId) {
+    public List<ReadStatusDTO.FindReadStatusResult> findAllReadStatusByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
             throw new IllegalArgumentException("No such channel.");
@@ -125,7 +125,7 @@ public class BasicReadStatusService implements ReadStatusService {
 
         return readStatusRepository.findByChannelId(channelId)
                 .stream()
-                .map(readStatus -> ReadStatusDTO.ReadStatusResult.builder()
+                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
                         .id(readStatus.getId())
                         .channelId(readStatus.getChannelId())
                         .userId(readStatus.getUserId())
@@ -137,10 +137,10 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public List<ReadStatusDTO.ReadStatusResult> findAllReadStatus() {
+    public List<ReadStatusDTO.FindReadStatusResult> findAllReadStatus() {
         return readStatusRepository.findAll()
                 .stream()
-                .map(readStatus -> ReadStatusDTO.ReadStatusResult.builder()
+                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
                         .id(readStatus.getId())
                         .channelId(readStatus.getChannelId())
                         .userId(readStatus.getUserId())

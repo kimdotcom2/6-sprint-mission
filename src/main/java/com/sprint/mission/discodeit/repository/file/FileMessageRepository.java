@@ -39,23 +39,6 @@ public class FileMessageRepository implements MessageRepository {
 
     }
 
-    /*private final Path path;
-    private static final String FILE_EXTENSION = ".ser";
-    private final String folderName;
-
-    public FileMessageRepository(String folderName) {
-        this.folderName = folderName;
-        path = Path.of(FILE_PATH + folderName);
-
-        if (!path.toFile().exists()) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Failed to create directory.");
-            }
-        }
-    }*/
-
     @Override
     public void save(Message message) {
 
