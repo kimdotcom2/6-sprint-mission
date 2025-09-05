@@ -32,6 +32,10 @@ public class BasicReadStatusService implements ReadStatusService {
             throw new IllegalArgumentException("No such channel.");
         }
 
+        if (existReadStatusByUserIdAndChannelId(request.userId(), request.channelId())) {
+            throw new IllegalArgumentException("Read status already exists.");
+        }
+
         ReadStatus readStatus = new ReadStatus.Builder()
                 .channelId(request.channelId())
                 .userId(request.userId())
