@@ -47,10 +47,6 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        /*if (!validator.isPasswordValid(user.getPassword())|| !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
-            throw new IllegalArgumentException("Invalid user data.");
-        }*/
-
         if (existUserByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists.");
         }

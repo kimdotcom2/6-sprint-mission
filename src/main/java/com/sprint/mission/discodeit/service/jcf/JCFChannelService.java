@@ -73,6 +73,10 @@ public class JCFChannelService implements ChannelService {
                 .id(channel.getId())
                 .channelName(channel.getChannelName())
                 .category(channel.getCategory())
+                .isVoiceChannel(channel.isVoiceChannel())
+                .isPrivate(channel.isPrivate())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
                 .build();
 
         return Optional.ofNullable(findChannelResult);
@@ -89,6 +93,10 @@ public class JCFChannelService implements ChannelService {
         return new ArrayList<>(data.values().stream().map(channel -> ChannelDTO.FindChannelResult.builder()
                 .id(channel.getId())
                 .channelName(channel.getChannelName())
+                .isVoiceChannel(channel.isVoiceChannel())
+                .isPrivate(channel.isPrivate())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
                 .category(channel.getCategory()).build()).toList());
     }
 

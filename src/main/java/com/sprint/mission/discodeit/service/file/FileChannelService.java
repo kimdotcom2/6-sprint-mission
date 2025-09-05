@@ -102,6 +102,10 @@ public class FileChannelService implements ChannelService {
                     .id(channel.getId())
                     .channelName(channel.getChannelName())
                     .category(channel.getCategory())
+                    .isVoiceChannel(channel.isVoiceChannel())
+                    .isPrivate(channel.isPrivate())
+                    .createdAt(channel.getCreatedAt())
+                    .updatedAt(channel.getUpdatedAt())
                     .build();
 
             return Optional.ofNullable(findChannelResult);
@@ -139,6 +143,10 @@ public class FileChannelService implements ChannelService {
                             .id(channel.getId())
                             .channelName(channel.getChannelName())
                             .category(channel.getCategory())
+                            .isVoiceChannel(channel.isVoiceChannel())
+                            .isPrivate(channel.isPrivate())
+                            .createdAt(channel.getCreatedAt())
+                            .updatedAt(channel.getUpdatedAt())
                             .build())
                     .toList();
         } catch (IOException e) {

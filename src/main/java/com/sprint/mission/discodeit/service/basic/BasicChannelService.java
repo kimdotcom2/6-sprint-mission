@@ -88,6 +88,8 @@ public class BasicChannelService implements ChannelService {
                         .map(ReadStatus::getUserId).toList() : new ArrayList<>())
                 .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
                         .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
                 .build());
 
     }
@@ -107,6 +109,8 @@ public class BasicChannelService implements ChannelService {
                                 .map(ReadStatus::getUserId).toList() : new ArrayList<>())
                                 .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
                                         .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
+                                .createdAt(channel.getCreatedAt())
+                                .updatedAt(channel.getUpdatedAt())
                         .build())
                         .toList();
     }
@@ -124,6 +128,8 @@ public class BasicChannelService implements ChannelService {
                                 .map(ReadStatus::getUserId).toList() : new ArrayList<>())
                         .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
                                 .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
+                        .createdAt(channel.getCreatedAt())
+                        .updatedAt(channel.getUpdatedAt())
                         .build())
                 .toList();
     }
