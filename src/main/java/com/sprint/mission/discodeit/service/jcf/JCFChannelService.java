@@ -131,6 +131,10 @@ public class JCFChannelService implements ChannelService {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
+        if (data.get(request.id()).isPrivate()) {
+            throw new IllegalArgumentException("Private channel cannot be updated.");
+        }
+
         data.get(request.id()).update(request.channelName(), request.category(), request.isVoiceChannel());
 
     }

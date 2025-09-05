@@ -197,6 +197,10 @@ public class FileChannelService implements ChannelService {
 
             Channel channel = (Channel) ois.readObject();
 
+            if (channel.isPrivate()) {
+                throw new IllegalArgumentException("Private channel cannot be updated.");
+            }
+
             channel.update(request.channelName(), request.category(), request.isVoiceChannel());
             oos.writeObject(channel);
 

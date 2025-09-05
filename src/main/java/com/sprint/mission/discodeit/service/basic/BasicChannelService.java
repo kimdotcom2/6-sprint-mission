@@ -167,6 +167,10 @@ public class BasicChannelService implements ChannelService {
         Channel updatedChannel = channelRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
 
+        if (updatedChannel.isPrivate()) {
+            throw new IllegalArgumentException("Private channel cannot be updated.");
+        }
+
         updatedChannel.update(request.channelName(), request.category(), request.isVoiceChannel());
         channelRepository.save(updatedChannel);
 
