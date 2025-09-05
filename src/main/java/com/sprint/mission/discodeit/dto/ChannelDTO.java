@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.dto;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import lombok.Builder;
 
+import java.util.List;
 import java.util.UUID;
 
 public class ChannelDTO {
@@ -13,13 +14,18 @@ public class ChannelDTO {
     }
 
     @Builder
-    public record CreatePrivateChannelRequest(String channelName, ChannelType category, boolean isVoiceChannel) {
+    public record CreatePrivateChannelRequest(ChannelType category, boolean isVoiceChannel, List<UUID> userIdList) {
 
     }
 
     //channel update를 위한 Request DTO
     @Builder
     public record UpdateChannelRequest(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+
+    }
+
+    @Builder
+    public record FindChannelResult(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, List<UUID> userIdList) {
 
     }
 

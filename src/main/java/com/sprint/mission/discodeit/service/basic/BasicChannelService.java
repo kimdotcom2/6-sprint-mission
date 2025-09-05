@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -9,6 +10,7 @@ import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +24,13 @@ public class BasicChannelService implements ChannelService {
     private final ReadStatusRepository readStatusRepository;
 
     @Override
-    public void createChannel(Channel channel) {
+    public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
+
+        Channel channel = new Channel.Builder()
+                .channelName(request.channelName())
+                .category(request.category())
+                .isVoiceChannel(request.isVoiceChannel())
+                .build();
 
         if (channelRepository.existById(channel.getId())) {
             throw new IllegalArgumentException("Channel already exists.");
@@ -32,6 +40,31 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
+        channelRepository.save(channel);
+
+    }
+
+    @Override
+    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request) {
+
+        Channel channel = new Channel.Builder()
+                .category(request.category())
+                .isPrivate(true)
+                .build();
+
+        if (channelRepository.existById(channel.getId())) {
+            throw new IllegalArgumentException("Channel already exists.");
+        }
+
+        if (channel.getCategory() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
+        List<ReadStatus> readStatusList = request.userIdList().stream()
+                .map(userId -> new ReadStatus(channel.getId(), userId))
+                .toList();
+
+        readStatusRepository.saveAll(readStatusList);
         channelRepository.save(channel);
 
     }
@@ -77,13 +110,24 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID id) {
+    public Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id) {
 
         if (!channelRepository.existById(id)) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        return channelRepository.findById(id);
+        Channel channel = channelRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
+
+        return Optional.of(ChannelDTO.FindChannelResult.builder()
+                .id(channel.getId())
+                .channelName(channel.getChannelName())
+                .category(channel.getCategory())
+                .isVoiceChannel(channel.isVoiceChannel())
+                .isPrivate(channel.isPrivate())
+                .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
+                        .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                .build());
 
     }
 
@@ -95,8 +139,18 @@ public class BasicChannelService implements ChannelService {
     }*/
 
     @Override
-    public List<Channel> findAllChannels() {
-        return channelRepository.findAll();
+    public List<ChannelDTO.FindChannelResult> findAllChannels() {
+        return channelRepository.findAll().stream()
+                .map(channel -> ChannelDTO.FindChannelResult.builder()
+                        .id(channel.getId())
+                        .channelName(channel.getChannelName())
+                        .category(channel.getCategory())
+                        .isVoiceChannel(channel.isVoiceChannel())
+                        .isPrivate(channel.isPrivate())
+                        .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
+                                .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                        .build())
+                .toList();
     }
 
     @Override

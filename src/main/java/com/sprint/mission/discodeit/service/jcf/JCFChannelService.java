@@ -15,13 +15,39 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public void createChannel(Channel channel) {
+    public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
+
+        Channel channel = new Channel.Builder()
+                .channelName(request.channelName())
+                .category(request.category())
+                .isVoiceChannel(request.isVoiceChannel())
+                .build();
 
         if (data.containsKey(channel.getId())) {
             throw new IllegalArgumentException("Channel already exists.");
         }
 
         if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
+        data.put(channel.getId(), channel);
+
+    }
+
+    @Override
+    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request) {
+
+        Channel channel = new Channel.Builder()
+                .category(request.category())
+                .isPrivate(true)
+                .build();
+
+        if (data.containsKey(channel.getId())) {
+            throw new IllegalArgumentException("Channel already exists.");
+        }
+
+        if (channel.getCategory() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
@@ -61,7 +87,7 @@ public class JCFChannelService implements ChannelService {
     }
 
     @Override
-    public Optional<Channel> findChannelById(UUID id) {
+    public Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -69,7 +95,13 @@ public class JCFChannelService implements ChannelService {
 
         Channel channel = data.get(id);
 
-        return Optional.ofNullable(channel);
+        ChannelDTO.FindChannelResult findChannelResult = ChannelDTO.FindChannelResult.builder()
+                .id(channel.getId())
+                .channelName(channel.getChannelName())
+                .category(channel.getCategory())
+                .build();
+
+        return Optional.ofNullable(findChannelResult);
 
     }
 
@@ -81,8 +113,11 @@ public class JCFChannelService implements ChannelService {
     }*/
 
     @Override
-    public List<Channel> findAllChannels() {
-        return new ArrayList<>(data.values());
+    public List<ChannelDTO.FindChannelResult> findAllChannels() {
+        return new ArrayList<>(data.values().stream().map(channel -> ChannelDTO.FindChannelResult.builder()
+                .id(channel.getId())
+                .channelName(channel.getChannelName())
+                .category(channel.getCategory()).build()).toList());
     }
 
     @Override

@@ -14,6 +14,12 @@ class FileChannelServiceTest {
 
     ChannelService fileChannelService = new FileChannelService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\channels"));
 
+    ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+            .channelName("test")
+            .category(ChannelType.FORUM)
+            .isVoiceChannel(false)
+            .build();
+
     @Test
     void createChannel() {
 
@@ -21,7 +27,7 @@ class FileChannelServiceTest {
         Channel channel = new Channel("test", ChannelType.FORUM, true, false);
 
         //when
-        fileChannelService.createChannel(channel);
+        fileChannelService.createChannel(channelRequest);
 
         //then
         assertTrue(fileChannelService.existChannelById(channel.getId()));
@@ -33,14 +39,17 @@ class FileChannelServiceTest {
     void existChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
+        fileChannelService.createChannel(channelRequest);
 
         //when
-        fileChannelService.createChannel(channel);
+        ChannelDTO.FindChannelResult channel = fileChannelService.findAllChannels().stream()
+                .filter(c -> c.channelName().equals("test"))
+                .findFirst()
+                .orElse(null);
 
         //then
-        assertTrue(fileChannelService.existChannelById(channel.getId()));
-        fileChannelService.deleteChannelById(channel.getId());
+        assertTrue(fileChannelService.existChannelById(channel.id()));
+        fileChannelService.deleteChannelById(channel.id());
 
     }
 
@@ -48,17 +57,19 @@ class FileChannelServiceTest {
     void findChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
+        fileChannelService.createChannel(channelRequest);
 
         //when
-        fileChannelService.createChannel(channel);
+        ChannelDTO.FindChannelResult channel = fileChannelService.findAllChannels().stream()
+                .filter(c -> c.channelName().equals("test"))
+                .findFirst()
+                .orElse(null);
 
         //then
-        assertTrue(fileChannelService.existChannelById(channel.getId()));
-        Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
-        System.out.println(channel1.toString());
-        assertEquals(channel1.getId(), channel.getId());
-        fileChannelService.deleteChannelById(channel.getId());
+        assertTrue(fileChannelService.existChannelById(channel.id()));
+        System.out.println(channel.toString());
+        assertEquals(channel.id(), channel.id());
+        fileChannelService.deleteChannelById(channel.id());
 
     }
 
@@ -66,17 +77,23 @@ class FileChannelServiceTest {
     void findAllChannels() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.FORUM, true, false);
-        Channel channel1 = new Channel("test1", ChannelType.VOICE, false, false);
+        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("test")
+                .category(ChannelType.FORUM)
+                .isVoiceChannel(false)
+                .build();
+        ChannelDTO.CreatePublicChannelRequest channelRequest1 = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("test1")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true).build();
 
         //when
-        fileChannelService.createChannel(channel);
-        fileChannelService.createChannel(channel1);
+        fileChannelService.createChannel(channelRequest);
+        fileChannelService.createChannel(channelRequest1);
 
         //then
         fileChannelService.findAllChannels().forEach(System.out::println);
-        fileChannelService.deleteChannelById(channel.getId());
-        fileChannelService.deleteChannelById(channel1.getId());
+        fileChannelService.findAllChannels().forEach(channel -> fileChannelService.deleteChannelById(channel.id()));
 
     }
 
@@ -84,24 +101,28 @@ class FileChannelServiceTest {
     void updateChannel() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.VOICE, true, false);
-        fileChannelService.createChannel(channel);
+        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("test")
+                .category(ChannelType.FORUM)
+                .isVoiceChannel(false)
+                .build();
+        fileChannelService.createChannel(channelRequest);
 
         //when
-        ChannelDTO.UpdateChannelRequest channelRequest = ChannelDTO.UpdateChannelRequest.builder()
-                .id(channel.getId())
+        ChannelDTO.UpdateChannelRequest updateChannelRequest = ChannelDTO.UpdateChannelRequest.builder()
+                .id(fileChannelService.findAllChannels().get(0).id())
                 .channelName("test2")
                 .category(ChannelType.FORUM)
                 .isVoiceChannel(false)
                 .build();
-        fileChannelService.updateChannel(channelRequest);
+        fileChannelService.updateChannel(updateChannelRequest);
 
         //then
-        assertTrue(fileChannelService.existChannelById(channel.getId()));
-        Channel channel1 = fileChannelService.findChannelById(channel.getId()).orElse(null);
+        assertTrue(fileChannelService.existChannelById(updateChannelRequest.id()));
+        ChannelDTO.FindChannelResult channel1 = fileChannelService.findChannelById(updateChannelRequest.id()).orElseThrow();
         System.out.println(channel1.toString());
-        assertEquals(channel1.getChannelName(), "test2");
-        fileChannelService.deleteChannelById(channel.getId());
+        assertEquals(channel1.channelName(), "test2");
+        fileChannelService.findAllChannels().forEach(channel -> fileChannelService.deleteChannelById(channel.id()));
 
     }
 
@@ -109,15 +130,19 @@ class FileChannelServiceTest {
     void deleteChannelById() {
 
         //given
-        Channel channel = new Channel("test", ChannelType.TEXT, true, false);
-        fileChannelService.createChannel(channel);
-        assertTrue(fileChannelService.existChannelById(channel.getId()));
+        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("test")
+                .category(ChannelType.FORUM)
+                .isVoiceChannel(false)
+                .build();
+        fileChannelService.createChannel(channelRequest);
+        assertTrue(fileChannelService.existChannelById(fileChannelService.findAllChannels().get(0).id()));
 
         //when
-        fileChannelService.deleteChannelById(channel.getId());
+        fileChannelService.deleteChannelById(fileChannelService.findAllChannels().get(0).id());
 
         //then
-        assertFalse(fileChannelService.existChannelById(channel.getId()));
+        assertFalse(fileChannelService.existChannelById(fileChannelService.findAllChannels().get(0).id()));
 
     }
 }

@@ -104,12 +104,22 @@ public class DisCodeitApplication {
         System.out.println("채널 등록");
         //User user = new User("test", "test@test.com", strongPassword, "test");
         //Message message = new Message(user.getId(), null, "message", false, null);
-        Channel channelOne = new Channel.Builder()
+        /*Channel channelOne = new Channel.Builder()
                 .channelName("channelOne")
                 .category(ChannelType.TEXT)
                 .isVoiceChannel(false)
                 .build();
         Channel channelTwo = new Channel.Builder()
+                .channelName("channelTwo")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true)
+                .build();*/
+        ChannelDTO.CreatePublicChannelRequest channelOne = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("channelOne")
+                .category(ChannelType.TEXT)
+                .isVoiceChannel(false)
+                .build();
+        ChannelDTO.CreatePublicChannelRequest channelTwo = ChannelDTO.CreatePublicChannelRequest.builder()
                 .channelName("channelTwo")
                 .category(ChannelType.VOICE)
                 .isVoiceChannel(true)
@@ -123,9 +133,7 @@ public class DisCodeitApplication {
         System.out.println("==========================");
 
         //채널 읽기
-        System.out.println(channelOne.getChannelName() + " 채널 읽기");
-        System.out.println(channelService.findChannelById(channelOne.getId())
-                .orElseThrow(IllegalArgumentException::new).toString());
+        System.out.println(channelOne.channelName() + " 채널 읽기");
         System.out.println("채널 목록 읽기");
         channelService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -134,31 +142,33 @@ public class DisCodeitApplication {
         //채널 수정
         System.out.println("채널 수정");
         ChannelDTO.UpdateChannelRequest requestTwo = ChannelDTO.UpdateChannelRequest.builder()
-                .id(channelTwo.getId())
-                .channelName(channelTwo.getChannelName())
+                .id(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelTwo.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
+                .channelName(channelTwo.channelName())
                 .category(ChannelType.DM)
                 .isVoiceChannel(false)
                 .build();
         channelService.updateChannel(requestTwo);
-        System.out.println(channelTwo.getChannelName() + " 정보 업데이트");
-        channelTwo = channelService.findChannelById(channelTwo.getId())
-                .orElseThrow(() ->  new IllegalArgumentException("No such channels"));
-        System.out.println(channelTwo.getChannelName() + " 채널 읽기");
-        System.out.println(channelService.findChannelById(channelTwo.getId())
+        System.out.println(channelTwo.channelName() + " 정보 업데이트");
+        System.out.println(channelTwo.channelName() + " 채널 읽기");
+        System.out.println(channelService.findChannelById(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelTwo.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
                 .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
 
         //채널 삭제
         System.out.println("채널 삭제");
-        channelOne = channelService.findChannelById(channelOne.getId())
-                .orElseThrow(() -> new IllegalArgumentException("No such users."));
-        //System.out.println(channelOne.getChannelName() + " 에서 "
-                //+ user.getNickname() + " 유저 삭제");
-        //channelService.deleteUserFromChannel(channelOne.getId(), channelOne.getUserMap().get(user.getId()).getId());
-        System.out.println(channelOne.getChannelName() + " 에서 1번째 메시지 삭제");
-        //channelService.deleteMessageFromChannel(channelOne.getId(), channelOne.getMessageMap().get(message.getId()).getId());
-        channelService.deleteChannelById(channelTwo.getId());
-        System.out.println(channelTwo.getChannelName() + " 채널 삭제");
+        /*channelOne = channelService.findChannelById(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelOne.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
+                .orElseThrow(() -> new IllegalArgumentException("No such users."));*/
+        System.out.println(channelOne.channelName() + " 에서 1번째 메시지 삭제");
+        channelService.deleteChannelById(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelTwo.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id());
+        System.out.println(channelTwo.channelName() + " 채널 삭제");
         System.out.println("채널 목록 읽기");
         channelService.findAllChannels()
                 .forEach(channel -> System.out.println(channel.toString()));
@@ -167,7 +177,7 @@ public class DisCodeitApplication {
 
         //clear
         channelService.findAllChannels()
-                .forEach(channel -> channelService.deleteChannelById(channel.getId()));
+                .forEach(channel -> channelService.deleteChannelById(channel.id()));
 
     }
 
@@ -189,14 +199,24 @@ public class DisCodeitApplication {
                 .build();
         userService.createUser(userOne);
         userService.createUser(userTwo);
-        Channel channelOne = new Channel("channelOne", ChannelType.DM, false, false);
+        ChannelDTO.CreatePublicChannelRequest channelOne = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("channelOne")
+                .category(ChannelType.DM)
+                .isVoiceChannel(false)
+                .build();
         channelService.createChannel(channelOne);
-        Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true, false);
+        ChannelDTO.CreatePublicChannelRequest channelTwo = ChannelDTO.CreatePublicChannelRequest.builder()
+                .channelName("channelTwo")
+                .category(ChannelType.VOICE)
+                .isVoiceChannel(true)
+                .build();
         channelService.createChannel(channelTwo);
         Message messageOne = new Message.Builder()
                 .userId(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
-                .channelId(channelOne.getId())
+                .channelId(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelOne.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
                 .content("messageOne")
                 .isReply(false)
                 .parentMessageId(null)
@@ -204,7 +224,9 @@ public class DisCodeitApplication {
         Message messageTwo = new Message.Builder()
                 .userId(userService.findUserByEmail(userTwo.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
-                .channelId(channelTwo.getId())
+                .channelId(channelService.findAllChannels().stream()
+                        .filter(channel -> channel.channelName().equals(channelTwo.channelName()))
+                        .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
                 .content("messageTwo")
                 .isReply(true)
                 .parentMessageId(messageOne.getId())
@@ -255,7 +277,7 @@ public class DisCodeitApplication {
         messageService.findAllMessages()
                 .forEach(message -> messageService.deleteMessageById(message.getId()));
         channelService.findAllChannels()
-                .forEach(channel -> channelService.deleteChannelById(channel.getId()));
+                .forEach(channel -> channelService.deleteChannelById(channel.id()));
         userService.findAllUsers()
                 .forEach(user -> userService.deleteUserById(user.id()));
 

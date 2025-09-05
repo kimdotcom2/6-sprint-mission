@@ -17,7 +17,7 @@ public class Channel extends BaseEntity implements Serializable {
     //private Map<UUID, Message> messageMap = new LinkedHashMap<>();
     private String channelName;
     private ChannelType category;
-    private boolean isVoiceChannel;
+    private boolean isVoiceChannel = false;
     private boolean isPrivate = false;
 
     /*public Map<UUID, User> getUserMap() {
