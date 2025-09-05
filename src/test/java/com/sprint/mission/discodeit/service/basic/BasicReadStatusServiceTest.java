@@ -99,6 +99,22 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
+    void createReadStatus_AlreadyExists_throws() {
+
+        //given
+        UUID userId = UUID.randomUUID();
+        UUID channelId = UUID.randomUUID();
+        when(userRepository.existById(userId)).thenReturn(true);
+        when(channelRepository.existById(channelId)).thenReturn(true);
+        ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
+        when(readStatusRepository.existByUserIdAndChannelId(userId, channelId)).thenReturn(true);
+
+        //then
+        Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.createReadStatus(request));
+
+    }
+
+    @Test
     void existReadStatusById_delegates() {
 
         // given
