@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
+
 @Service("basicChannelService")
 @RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
@@ -129,6 +131,23 @@ public class BasicChannelService implements ChannelService {
                         .map(ReadStatus::getUserId).toList() : new ArrayList<>())
                 .build());
 
+    }
+
+    @Override
+    public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
+        return readStatusRepository.findByUserId(userId).stream()
+                .map(readStatus -> channelRepository.findById(readStatus.getChannelId())
+                        .orElseThrow(() -> new IllegalArgumentException("No such channel.")))
+                        .map(channel -> ChannelDTO.FindChannelResult.builder()
+                        .id(channel.getId())
+                        .channelName(channel.getChannelName())
+                        .category(channel.getCategory())
+                        .isVoiceChannel(channel.isVoiceChannel())
+                        .isPrivate(channel.isPrivate())
+                        .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
+                                .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                        .build())
+                        .toList();
     }
 
     /*@Override

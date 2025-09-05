@@ -146,6 +146,11 @@ public class FileChannelService implements ChannelService {
 
     }
 
+    @Override
+    public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
+        return List.of();
+    }
+
     /*@Override
     public List<Channel> findChannelsByUserId(UUID userId) {
         return findAllChannels().stream()

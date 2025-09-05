@@ -20,7 +20,7 @@ public interface ChannelService {
 
     Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id);
 
-    //List<Channel> findChannelsByUserId(UUID userId);
+    List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId);
 
     List<ChannelDTO.FindChannelResult> findAllChannels();
 
