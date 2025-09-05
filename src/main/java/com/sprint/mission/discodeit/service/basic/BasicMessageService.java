@@ -175,10 +175,9 @@ public class BasicMessageService implements MessageService {
     @Override
     public void deleteMessageById(UUID id) {
 
-        if (!messageRepository.existById(id)) {
-            throw new IllegalArgumentException("No such message.");
-        }
-
+        binaryContentRepository.deleteAll(messageRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No such message."))
+                .getBinaryContentIdList().stream().toList());
         messageRepository.deleteById(id);
 
     }
