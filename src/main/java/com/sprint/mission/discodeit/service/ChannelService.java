@@ -12,10 +12,6 @@ public interface ChannelService {
 
     void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request);
 
-    //void addUserToChannel(UUID channelId, User user);
-
-    //void addMessageToChannel(UUID channelId, Message message);
-
     boolean existChannelById(UUID id);
 
     Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id);
@@ -27,9 +23,5 @@ public interface ChannelService {
     void updateChannel(ChannelDTO.UpdateChannelRequest request);
 
     void deleteChannelById(UUID id);
-
-    //void deleteUserFromChannel(UUID channelId, UUID userId);
-
-    //void deleteMessageFromChannel(UUID channelId, UUID messageId);
 
 }

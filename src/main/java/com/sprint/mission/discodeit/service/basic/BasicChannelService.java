@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-import static java.util.stream.Collectors.toList;
-
 @Service("basicChannelService")
 @RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
@@ -69,41 +67,6 @@ public class BasicChannelService implements ChannelService {
 
     }
 
-    /*@Override
-    public void addUserToChannel(UUID channelId, User user) {
-
-        if (!channelRepository.existById(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        if (channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("No such user.")).getUserMap().containsKey(user.getId())) {
-            throw new IllegalArgumentException("User already exists in channel.");
-        }
-
-        Channel updatedChannel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
-        updatedChannel.getUserMap().put(user.getId(), user);
-
-        channelRepository.save(updatedChannel);
-
-    }*/
-
-    /*@Override
-    public void addMessageToChannel(UUID channelId, Message message) {
-
-        if (!channelRepository.existById(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        Channel updatedChannel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
-        updatedChannel.getMessageMap().put(message.getId(), message);
-
-        channelRepository.save(updatedChannel);
-
-    }*/
-
     @Override
     public boolean existChannelById(UUID id) {
         return channelRepository.existById(id);
@@ -111,10 +74,6 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id) {
-
-        if (!channelRepository.existById(id)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
 
         Channel channel = channelRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such channel."));
@@ -151,13 +110,6 @@ public class BasicChannelService implements ChannelService {
                         .build())
                         .toList();
     }
-
-    /*@Override
-    public List<Channel> findChannelsByUserId(UUID userId) {
-        return findAllChannels().stream()
-                .filter(channel -> channel.getUserMap().containsKey(userId))
-                .toList();
-    }*/
 
     @Override
     public List<ChannelDTO.FindChannelResult> findAllChannels() {
@@ -212,33 +164,4 @@ public class BasicChannelService implements ChannelService {
 
     }
 
-    /*@Override
-    public void deleteUserFromChannel(UUID channelId, UUID userId) {
-
-        if (!channelRepository.existById(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
-
-        channel.getUserMap().remove(userId);
-        channelRepository.save(channel);
-
-    }
-
-    @Override
-    public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
-
-        if (!channelRepository.existById(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        Channel channel = channelRepository.findById(channelId)
-                .orElseThrow(() -> new IllegalArgumentException("No such channel."));
-
-        channel.getMessageMap().remove(messageId);
-        channelRepository.save(channel);
-
-    }*/
 }

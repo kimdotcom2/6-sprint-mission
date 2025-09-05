@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -20,9 +21,18 @@ public class BasicMessageService implements MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
+    private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createMessage(Message message) {
+    public void createMessage(MessageDTO.CreateMessageRequest request) {
+
+        Message message = new Message.Builder()
+                .userId(request.userId())
+                .channelId(request.channelId())
+                .content(request.content())
+                .isReply(request.isReply())
+                .parentMessageId(request.parentMessageId())
+                .build();
 
         if (!userRepository.existById(message.getUserId())) {
             throw new IllegalArgumentException("No such user.");
@@ -46,50 +56,98 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public Optional<Message> findMessageById(UUID id) {
+    public Optional<MessageDTO.FindMessageResult> findMessageById(UUID id) {
+
+        Message message = messageRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such message."));
+
+        return Optional.ofNullable(MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .binaryContentList(message.getBinaryContentIdList().stream().toList())
+                .build());
+    }
+
+    @Override
+    public List<MessageDTO.FindMessageResult> findChildMessagesById(UUID id) {
 
         if (!messageRepository.existById(id)) {
             throw new IllegalArgumentException("No such message.");
         }
 
-        return messageRepository.findById(id);
+        return messageRepository.findChildById(id).stream().map(message -> MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .binaryContentList(message.getBinaryContentIdList().stream().toList())
+                .build()).toList();
     }
 
     @Override
-    public List<Message> findChildMessagesById(UUID id) {
-
-        if (!messageRepository.existById(id)) {
-            throw new IllegalArgumentException("No such message.");
-        }
-
-        return messageRepository.findChildById(id);
-    }
-
-    @Override
-    public List<Message> findMessagesByUserId(UUID userId) {
+    public List<MessageDTO.FindMessageResult> findMessagesByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
             throw new IllegalArgumentException("No such user.");
         }
 
-        return messageRepository.findByUserId(userId);
+        return messageRepository.findByUserId(userId).stream().map(message -> MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .binaryContentList(message.getBinaryContentIdList().stream().toList())
+                .build()).toList();
 
     }
 
     @Override
-    public List<Message> findMessagesByChannelId(UUID channelId) {
+    public List<MessageDTO.FindMessageResult> findMessagesByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        return messageRepository.findByChannelId(channelId);
+        return messageRepository.findByChannelId(channelId).stream().map(message -> MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .binaryContentList(message.getBinaryContentIdList().stream().toList())
+                .build()).toList();
 
     }
 
     @Override
-    public List<Message> findAllMessages() {
-        return messageRepository.findAll();
+    public List<MessageDTO.FindMessageResult> findAllMessages() {
+        return messageRepository.findAll().stream().map(message -> MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .binaryContentList(message.getBinaryContentIdList().stream().toList())
+                .build()).toList();
     }
 
     @Override

@@ -18,14 +18,14 @@ public class ChannelDTO {
 
     }
 
-    //channel update를 위한 Request DTO
     @Builder
-    public record UpdateChannelRequest(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+    public record FindChannelResult(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, List<UUID> userIdList, Long recentMessageTime) {
 
     }
 
+    //channel update를 위한 Request DTO
     @Builder
-    public record FindChannelResult(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, List<UUID> userIdList, Long recentMessageTime) {
+    public record UpdateChannelRequest(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
 
     }
 

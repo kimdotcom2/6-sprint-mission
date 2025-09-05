@@ -41,6 +41,19 @@ public class UserDTO {
 
     }
 
+    //find user을 위한 DTO
+    @Builder
+    public record FindUserResult(
+            UUID id,
+            String nickname,
+            String email,
+            String description,
+            UUID profileImageId,
+            boolean isOnline
+    ) {
+
+    }
+
     //user update를 위한 Request DTO
     @Builder
     public record UpdateUserRequest(
@@ -73,20 +86,5 @@ public class UserDTO {
         }
 
     }
-
-    //find user을 위한 DTO
-    @Builder
-    public record FindUserResult(
-            UUID id,
-            String nickname,
-            String email,
-            String description,
-            UUID profileImageId,
-            boolean isOnline
-    ) {
-
-    }
-
-
 
 }

@@ -21,7 +21,9 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public void createMessage(Message message) {
+    public void createMessage(MessageDTO.CreateMessageRequest request) {
+
+        Message message = new Message(request.userId(), request.channelId(), request.content(), request.isReply(), request.parentMessageId());
 
         if (!userService.existUserById(message.getUserId())) {
             throw new IllegalArgumentException("No such user.");
@@ -45,7 +47,7 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public Optional<Message> findMessageById(UUID id) {
+    public Optional<MessageDTO.FindMessageResult> findMessageById(UUID id) {
 
         if (!data.containsKey(id)) {
             return Optional.empty();
@@ -53,12 +55,21 @@ public class JCFMessageService implements MessageService {
 
         Message message = data.get(id);
 
-        return Optional.ofNullable(message);
+        return Optional.ofNullable(MessageDTO.FindMessageResult.builder()
+                .id(message.getId())
+                .userId(message.getUserId())
+                .channelId(message.getChannelId())
+                .content(message.getContent())
+                .isReply(message.isReply())
+                .parentMessageId(message.getParentMessageId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .build());
 
     }
 
     @Override
-    public List<Message> findChildMessagesById(UUID id) {
+    public List<MessageDTO.FindMessageResult> findChildMessagesById(UUID id) {
 
         if (!data.containsKey(id)) {
             throw new IllegalArgumentException("No such message.");
@@ -66,40 +77,80 @@ public class JCFMessageService implements MessageService {
 
         return data.values().stream()
                 .filter(message -> message.isReply() && message.getParentMessageId() != null && message.getParentMessageId().equals(id))
+                .map(message -> MessageDTO.FindMessageResult.builder()
+                        .id(message.getId())
+                        .userId(message.getUserId())
+                        .channelId(message.getChannelId())
+                        .content(message.getContent())
+                        .isReply(message.isReply())
+                        .parentMessageId(message.getParentMessageId())
+                        .createdAt(message.getCreatedAt())
+                        .updatedAt(message.getUpdatedAt())
+                        .build())
                 .toList();
 
     }
 
     @Override
-    public List<Message> findMessagesByUserId(UUID userId) {
+    public List<MessageDTO.FindMessageResult> findMessagesByUserId(UUID userId) {
 
         if (!userService.existUserById(userId)) {
             throw new IllegalArgumentException("No such user.");
         }
 
         return findAllMessages().stream()
-                .filter(message -> message.getUserId().equals(userId))
+                .filter(message -> message.userId().equals(userId))
+                .map(message -> MessageDTO.FindMessageResult.builder()
+                        .id(message.id())
+                        .userId(message.userId())
+                        .channelId(message.channelId())
+                        .content(message.content())
+                        .isReply(message.isReply())
+                        .parentMessageId(message.parentMessageId())
+                        .createdAt(message.createdAt())
+                        .updatedAt(message.updatedAt())
+                        .build())
                 .toList();
 
     }
 
     @Override
-    public List<Message> findMessagesByChannelId(UUID channelId) {
+    public List<MessageDTO.FindMessageResult> findMessagesByChannelId(UUID channelId) {
 
         if (!channelService.existChannelById(channelId)) {
             throw new IllegalArgumentException("No such channel.");
         }
 
         return findAllMessages().stream()
-                .filter(message -> message.getChannelId().equals(channelId))
-                .sorted(Comparator.comparing(Message::getCreatedAt))
+                .filter(message -> message.channelId().equals(channelId))
+                .sorted(Comparator.comparing(MessageDTO.FindMessageResult::createdAt))
+                .map(message -> MessageDTO.FindMessageResult.builder()
+                        .id(message.id())
+                        .userId(message.userId())
+                        .channelId(message.channelId())
+                        .content(message.content())
+                        .isReply(message.isReply())
+                        .parentMessageId(message.parentMessageId())
+                        .createdAt(message.createdAt())
+                        .updatedAt(message.updatedAt())
+                        .build())
                 .toList();
 
     }
 
     @Override
-    public List<Message> findAllMessages() {
-        return new ArrayList<>(data.values());
+    public List<MessageDTO.FindMessageResult> findAllMessages() {
+        return new ArrayList<>(data.values().stream()
+                .map(message -> MessageDTO.FindMessageResult.builder()
+                        .id(message.getId())
+                        .userId(message.getUserId())
+                        .channelId(message.getChannelId())
+                        .content(message.getContent())
+                        .isReply(message.isReply())
+                        .parentMessageId(message.getParentMessageId())
+                        .createdAt(message.getCreatedAt())
+                        .updatedAt(message.getUpdatedAt())
+                        .build()).toList());
     }
 
     @Override

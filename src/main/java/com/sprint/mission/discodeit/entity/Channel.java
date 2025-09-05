@@ -13,52 +13,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class Channel extends BaseEntity implements Serializable {
 
-    //private Map<UUID, User> userMap = new TreeMap<>();
-    //private Map<UUID, Message> messageMap = new LinkedHashMap<>();
     private String channelName;
     private ChannelType category;
     private boolean isVoiceChannel = false;
     private boolean isPrivate = false;
-
-    /*public Map<UUID, User> getUserMap() {
-        return userMap;
-    }
-
-    public void setUserMap(Map<UUID, User> userMap) {
-        this.userMap = userMap;
-    }
-
-    public Map<UUID, Message> getMessageMap() {
-        return messageMap;
-    }
-
-    public void setMessageMap(Map<UUID, Message> messageMap) {
-        this.messageMap = messageMap;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
-
-    public ChannelType getCategory() {
-        return category;
-    }
-
-    public void setCategory(ChannelType category) {
-        this.category = category;
-    }
-
-    public boolean isVoiceChannel() {
-        return isVoiceChannel;
-    }
-
-    public void setVoiceChannel(boolean voiceChannel) {
-        isVoiceChannel = voiceChannel;
-    }*/
 
     public Channel(String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate) {
         super();

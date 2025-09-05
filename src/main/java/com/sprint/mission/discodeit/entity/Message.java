@@ -21,46 +21,6 @@ public class Message extends BaseEntity implements Serializable {
     private UUID userId;
     private List<UUID> binaryContentIdList = new ArrayList<>();
 
-    /*public UUID getUserId() {
-        return userId;
-    }
-
-    public void setUserId(UUID userId) {
-        this.userId = userId;
-    }
-
-    public UUID getChannelId() {
-        return channelId;
-    }
-
-    public void setChannelId(UUID channelId) {
-        this.channelId = channelId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public boolean isReply() {
-        return isReply;
-    }
-
-    public void setReply(boolean reply) {
-        isReply = reply;
-    }
-
-    public UUID getParentMessageId() {
-        return parentMessageId;
-    }
-
-    public void setParentMessageId(UUID parentMessageId) {
-        this.parentMessageId = parentMessageId;
-    }*/
-
     public Message(UUID userId, UUID channelId, String content, boolean isReply, UUID parentMessageId) {
         super();
         this.userId = userId;

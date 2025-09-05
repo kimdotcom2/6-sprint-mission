@@ -55,32 +55,6 @@ public class JCFChannelService implements ChannelService {
 
     }
 
-    /*@Override
-    public void addUserToChannel(UUID channelId, User user) {
-
-        if (!data.containsKey(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        if (data.get(channelId).getUserMap().containsKey(user.getId())) {
-            throw new IllegalArgumentException("User already exists in channel.");
-        }
-
-        data.get(channelId).getUserMap().put(user.getId(), user);
-
-    }*/
-
-    /*@Override
-    public void addMessageToChannel(UUID channelId, Message message) {
-
-        if (!data.containsKey(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        data.get(channelId).getMessageMap().put(message.getId(), message);
-
-    }*/
-
     @Override
     public boolean existChannelById(UUID id) {
         return data.containsKey(id);
@@ -109,13 +83,6 @@ public class JCFChannelService implements ChannelService {
     public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
         return List.of();
     }
-
-    /*@Override
-    public List<Channel> findChannelsByUserId(UUID userId) {
-        return findAllChannels().stream()
-                .filter(channel -> channel.getUserMap().containsKey(userId))
-                .toList();
-    }*/
 
     @Override
     public List<ChannelDTO.FindChannelResult> findAllChannels() {
@@ -155,25 +122,4 @@ public class JCFChannelService implements ChannelService {
 
     }
 
-    /*@Override
-    public void deleteUserFromChannel(UUID channelId, UUID userId) {
-
-        if (!data.containsKey(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        data.get(channelId).getUserMap().remove(userId);
-
-    }
-
-    @Override
-    public void deleteMessageFromChannel(UUID channelId, UUID messageId) {
-
-        if (!data.containsKey(channelId)) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        data.get(channelId).getMessageMap().remove(messageId);
-
-    }*/
 }

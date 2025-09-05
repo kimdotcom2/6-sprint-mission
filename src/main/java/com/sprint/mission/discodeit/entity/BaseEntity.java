@@ -22,18 +22,6 @@ public class BaseEntity implements Serializable {
         this.updatedAt = null;
     }
 
-    /*public UUID getId() {
-        return id;
-    }
-
-    public Long getCreatedAt() {
-        return createdAt;
-    }
-
-    public Long getUpdatedAt() {
-        return updatedAt;
-    }*/
-
     protected void update() {
         this.updatedAt = Instant.now().toEpochMilli();
     }
