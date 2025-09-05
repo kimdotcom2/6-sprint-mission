@@ -113,6 +113,8 @@ public class FileUserService implements UserService {
                     .email(user.getEmail())
                     .nickname(user.getNickname())
                     .description(user.getDescription())
+                    .createdAt(user.getCreatedAt())
+                    .updatedAt(user.getUpdatedAt())
                     .build());
 
         } catch (IOException | ClassNotFoundException e) {
@@ -149,6 +151,8 @@ public class FileUserService implements UserService {
                             .email(user.getEmail())
                             .nickname(user.getNickname())
                             .description(user.getDescription())
+                            .createdAt(user.getCreatedAt())
+                            .updatedAt(user.getUpdatedAt())
                             .build())
                     .findFirst();
         } catch (IOException e) {
@@ -180,6 +184,8 @@ public class FileUserService implements UserService {
                             .email(user.getEmail())
                             .nickname(user.getNickname())
                             .description(user.getDescription())
+                            .createdAt(user.getCreatedAt())
+                            .updatedAt(user.getUpdatedAt())
                             .build())
                     .toList();
         } catch (IOException e) {
@@ -190,13 +196,6 @@ public class FileUserService implements UserService {
 
     @Override
     public void updateUser(UserDTO.UpdateUserRequest request) {
-
-        /*if (!validator.isEmailValid(request.email()) ||
-                !validator.isPasswordValid(request.newPassword()) ||
-                !validator.isPasswordValid(request.currentPassword()) ||
-                request.nickname().isBlank()) {
-            throw new IllegalArgumentException("Invalid user data.");
-        }*/
 
         User user = parseUserById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));

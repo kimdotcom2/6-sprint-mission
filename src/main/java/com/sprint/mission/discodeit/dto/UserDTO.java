@@ -49,7 +49,9 @@ public class UserDTO {
             String email,
             String description,
             UUID profileImageId,
-            boolean isOnline
+            boolean isOnline,
+            Long createdAt,
+            Long updatedAt
     ) {
 
     }

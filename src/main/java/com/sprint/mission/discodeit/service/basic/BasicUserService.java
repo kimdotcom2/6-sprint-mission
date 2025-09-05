@@ -91,6 +91,8 @@ public class BasicUserService implements UserService {
                 .description(user.getDescription())
                 .profileImageId(user.getProfileImageId())
                 .isOnline(userStatus.isLogin())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build());
 
     }
@@ -111,6 +113,8 @@ public class BasicUserService implements UserService {
                 .description(user.getDescription())
                 .profileImageId(user.getProfileImageId())
                 .isOnline(userStatus.isLogin())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build());
 
     }
@@ -127,6 +131,8 @@ public class BasicUserService implements UserService {
                         .profileImageId(user.getProfileImageId())
                         .isOnline(userStatusRepository.findByUserId(user.getId())
                                 .orElseThrow(() -> new IllegalArgumentException("No such user status.")).isLogin())
+                        .createdAt(user.getCreatedAt())
+                        .updatedAt(user.getUpdatedAt())
                         .build())
                 .toList();
     }

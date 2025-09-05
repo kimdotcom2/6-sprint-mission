@@ -75,6 +75,8 @@ public class JCFUserService implements UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .description(user.getDescription())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build());
 
     }
@@ -95,6 +97,8 @@ public class JCFUserService implements UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .description(user.getDescription())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build());
 
     }
@@ -109,6 +113,8 @@ public class JCFUserService implements UserService {
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .description(user.getDescription())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
                 .build()).toList();
     }
 
