@@ -167,10 +167,6 @@ public class BasicUserService implements UserService {
     @Override
     public void deleteUserById(UUID id) {
 
-        if (!userRepository.existById(id)) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         binaryContentRepository.deleteById(user.getProfileImageId());
