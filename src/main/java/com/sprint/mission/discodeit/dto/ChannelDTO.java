@@ -25,7 +25,7 @@ public class ChannelDTO {
     }
 
     @Builder
-    public record FindChannelResult(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, List<UUID> userIdList) {
+    public record FindChannelResult(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, List<UUID> userIdList, Long recentMessageTime) {
 
     }
 

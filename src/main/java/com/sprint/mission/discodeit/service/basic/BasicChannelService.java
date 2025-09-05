@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.Channel;
+import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -10,10 +11,7 @@ import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -129,6 +127,8 @@ public class BasicChannelService implements ChannelService {
                 .isPrivate(channel.isPrivate())
                 .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
                         .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
+                        .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
                 .build());
 
     }
@@ -146,6 +146,8 @@ public class BasicChannelService implements ChannelService {
                         .isPrivate(channel.isPrivate())
                         .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
                                 .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                                .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
+                                        .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
                         .build())
                         .toList();
     }
@@ -168,6 +170,8 @@ public class BasicChannelService implements ChannelService {
                         .isPrivate(channel.isPrivate())
                         .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
                                 .map(ReadStatus::getUserId).toList() : new ArrayList<>())
+                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
+                                .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
                         .build())
                 .toList();
     }
