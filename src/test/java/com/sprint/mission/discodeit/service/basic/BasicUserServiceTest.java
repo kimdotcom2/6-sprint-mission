@@ -68,12 +68,12 @@ class BasicUserServiceTest {
     @Test
     void createUser() {
 
-        //given
+        // Given
 
-        //when
+        // When
         basicUserService.createUser(userRequest);
 
-        //then
+        // Then
         Assertions.assertEquals(userRequest.nickname(), user.getNickname());
         Assertions.assertEquals(userRequest.email(), user.getEmail());
         Assertions.assertEquals(userRequest.description(), user.getDescription());
@@ -83,13 +83,13 @@ class BasicUserServiceTest {
     @Test
     void existUserById() {
 
-        //given
+        // Given
         when(userRepository.existById(user.getId())).thenReturn(true);
 
-        //when
+        // When
         boolean result = basicUserService.existUserById(user.getId());
 
-        //then
+        // Then
         Assertions.assertTrue(result);
 
     }
@@ -97,13 +97,13 @@ class BasicUserServiceTest {
     @Test
     void existUserByEmail() {
 
-        //given
+        // Given
         when(userRepository.existByEmail(user.getEmail())).thenReturn(true);
 
-        //when
+        // When
         boolean result = basicUserService.existUserByEmail(user.getEmail());
 
-        //then
+        // Then
         Assertions.assertTrue(result);
 
     }
@@ -111,14 +111,14 @@ class BasicUserServiceTest {
     @Test
     void findUserById() {
 
-        //given
+        // Given
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         when(userStatusRepository.findById(user.getId())).thenReturn(Optional.of(new UserStatus(user.getId())));
 
-        //when
+        // When
         UserDTO.FindUserResult result = basicUserService.findUserById(user.getId()).orElse(null);
 
-        //then
+        // Then
         Assertions.assertEquals(user.getId(), result.id());
 
     }
@@ -126,14 +126,14 @@ class BasicUserServiceTest {
     @Test
     void findUserByEmail() {
 
-        //given
+        // Given
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
         when(userStatusRepository.findById(user.getId())).thenReturn(Optional.of(new UserStatus(user.getId())));
 
-        //when
+        // When
         UserDTO.FindUserResult result = basicUserService.findUserByEmail(user.getEmail()).orElse(null);
 
-        //then
+        // Then
         Assertions.assertEquals(user.getId(), result.id());
 
     }
@@ -141,14 +141,14 @@ class BasicUserServiceTest {
     @Test
     void findAllUsers() {
 
-        //given
+        // Given
         when(userRepository.findAll()).thenReturn(List.of(user));
         when(userStatusRepository.findByUserId(user.getId())).thenReturn(Optional.of(new UserStatus(user.getId())));
 
-        //when
+        // When
         List<UserDTO.FindUserResult> result = basicUserService.findAllUsers();
 
-        //then
+        // Then
         Assertions.assertEquals(user.getId(), result.get(0).id());
 
     }
@@ -156,30 +156,31 @@ class BasicUserServiceTest {
     @Test
     void updateUser() {
 
-        //given
+        // Given
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
         user.updatePassword(new SecurityUtil().hashPassword(user.getPassword()));
         when(userRepository.existByNickname(userRequest.nickname())).thenReturn(false);
         when(userRepository.existByEmail(userRequest.email())).thenReturn(false);
         when(userRepository.existById(user.getId())).thenReturn(true);
 
-        //when
+        // When
         basicUserService.updateUser(updateUserRequest);
+
+        // Then
 
     }
 
     @Test
     void deleteUserById() {
 
-        //given
+        // Given
         when(userRepository.existById(user.getId())).thenReturn(true);
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
 
-        //when
+        // When
         basicUserService.deleteUserById(user.getId());
 
-        //then
-
+        // Then
 
     }
 }
