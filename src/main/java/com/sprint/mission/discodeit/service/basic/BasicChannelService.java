@@ -24,19 +24,15 @@ public class BasicChannelService implements ChannelService {
     @Override
     public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
 
+        if (request.channelName().isBlank() || request.category() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
         Channel channel = new Channel.Builder()
                 .channelName(request.channelName())
                 .category(request.category())
                 .isVoiceChannel(request.isVoiceChannel())
                 .build();
-
-        if (channelRepository.existById(channel.getId())) {
-            throw new IllegalArgumentException("Channel already exists.");
-        }
-
-        if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
-            throw new IllegalArgumentException("Invalid channel data.");
-        }
 
         channelRepository.save(channel);
 
@@ -45,18 +41,14 @@ public class BasicChannelService implements ChannelService {
     @Override
     public void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request) {
 
+        if (request.category() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
         Channel channel = new Channel.Builder()
                 .category(request.category())
                 .isPrivate(true)
                 .build();
-
-        if (channelRepository.existById(channel.getId())) {
-            throw new IllegalArgumentException("Channel already exists.");
-        }
-
-        if (channel.getCategory() == null) {
-            throw new IllegalArgumentException("Invalid channel data.");
-        }
 
         List<ReadStatus> readStatusList = request.userIdList().stream()
                 .map(userId -> new ReadStatus(channel.getId(), userId))

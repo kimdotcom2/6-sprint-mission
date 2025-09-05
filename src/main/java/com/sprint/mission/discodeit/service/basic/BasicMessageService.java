@@ -26,6 +26,14 @@ public class BasicMessageService implements MessageService {
     @Override
     public void createMessage(MessageDTO.CreateMessageRequest request) {
 
+        if (!userRepository.existById(request.userId())) {
+            throw new IllegalArgumentException("No such user.");
+        }
+
+        if (!channelRepository.existById(request.channelId())) {
+            throw new IllegalArgumentException("No such channel.");
+        }
+
         Message message = new Message.Builder()
                 .userId(request.userId())
                 .channelId(request.channelId())
@@ -33,18 +41,6 @@ public class BasicMessageService implements MessageService {
                 .isReply(request.isReply())
                 .parentMessageId(request.parentMessageId())
                 .build();
-
-        if (!userRepository.existById(message.getUserId())) {
-            throw new IllegalArgumentException("No such user.");
-        }
-
-        if (!channelRepository.existById(message.getChannelId())) {
-            throw new IllegalArgumentException("No such channel.");
-        }
-
-        if (messageRepository.existById(message.getId())) {
-            throw new IllegalArgumentException("Message already exists.");
-        }
 
         messageRepository.save(message);
 

@@ -37,19 +37,21 @@ public class FileMessageService implements MessageService {
     @Override
     public void createMessage(MessageDTO.CreateMessageRequest request) {
 
-        Message message = new Message(request.userId(), request.channelId(), request.content(), request.isReply(), request.parentMessageId());
-
-        if (!userService.existUserById(message.getUserId())) {
+        if (!userService.existUserById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
         }
 
-        if (!channelService.existChannelById(message.getChannelId())) {
+        if (!channelService.existChannelById(request.channelId())) {
             throw new IllegalArgumentException("No such channel.");
         }
 
-        if (existMessageById(message.getId())) {
-            throw new IllegalArgumentException("Message already exists.");
-        }
+        Message message = new Message.Builder()
+                .userId(request.userId())
+                .channelId(request.channelId())
+                .content(request.content())
+                .isReply(request.isReply())
+                .parentMessageId(request.parentMessageId())
+                .build();
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve( message.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {

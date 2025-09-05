@@ -17,19 +17,15 @@ public class JCFChannelService implements ChannelService {
     @Override
     public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
 
+        if (request.channelName().isBlank() || request.category() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
         Channel channel = new Channel.Builder()
                 .channelName(request.channelName())
                 .category(request.category())
                 .isVoiceChannel(request.isVoiceChannel())
                 .build();
-
-        if (data.containsKey(channel.getId())) {
-            throw new IllegalArgumentException("Channel already exists.");
-        }
-
-        if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
-            throw new IllegalArgumentException("Invalid channel data.");
-        }
 
         data.put(channel.getId(), channel);
 

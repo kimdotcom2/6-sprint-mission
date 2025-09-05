@@ -34,19 +34,15 @@ public class FileChannelService implements ChannelService {
     @Override
     public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
 
+        if (request.channelName().isBlank() || request.category() == null) {
+            throw new IllegalArgumentException("Invalid channel data.");
+        }
+
         Channel channel = new Channel.Builder()
                 .channelName(request.channelName())
                 .category(request.category())
                 .isVoiceChannel(request.isVoiceChannel())
                 .build();
-
-        if (existChannelById(channel.getId())) {
-            throw new IllegalArgumentException("Channel already exists.");
-        }
-
-        if (channel.getChannelName().isBlank() || channel.getCategory() == null) {
-            throw new IllegalArgumentException("Invalid channel data.");
-        }
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve( channel.getId() + FILE_EXTENSION).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
