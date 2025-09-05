@@ -19,24 +19,16 @@ public class JCFUserService implements UserService {
     @Override
     public void createUser(UserDTO.CreateUserRequest request) {
 
+        if (existUserByEmail(request.email()) || existUserByNickname(request.nickname())) {
+            throw new IllegalArgumentException("User already exists.");
+        }
+
         User user = new User.Builder()
                 .email(request.email())
                 .password(request.password())
                 .nickname(request.nickname())
                 .description(request.description())
                 .build();
-
-        if (data.containsKey(user.getId())) {
-            throw new IllegalArgumentException("User already exists.");
-        }
-
-        /*if (!validator.isPasswordValid(user.getPassword()) || !validator.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
-            throw new IllegalArgumentException("Invalid user data.");
-        }*/
-
-        if (existUserByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists.");
-        }
 
         user.updatePassword(securityUtil.hashPassword(user.getPassword()));
         data.put(user.getId(), user);
@@ -53,6 +45,19 @@ public class JCFUserService implements UserService {
 
         for (User existingUser : data.values()) {
             if (existingUser.getEmail().equals(email)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean existUserByNickname(String nickname) {
+
+        for (User existingUser : data.values()) {
+            if (existingUser.getNickname().equals(nickname)) {
                 return true;
             }
         }
@@ -104,6 +109,28 @@ public class JCFUserService implements UserService {
     }
 
     @Override
+    public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
+
+        if (!existUserByNickname(nickname)) {
+            return Optional.empty();
+        }
+
+        User user = data.entrySet().stream()
+                .filter(entry -> entry.getValue().getNickname().equals(nickname))
+                .findFirst().map(Map.Entry::getValue).orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build());
+
+    }
+
+    @Override
     public List<UserDTO.FindUserResult> findAllUsers() {
 
         List<User> userList = new ArrayList<>(data.values());
@@ -120,13 +147,6 @@ public class JCFUserService implements UserService {
 
     @Override
     public void updateUser(UserDTO.UpdateUserRequest request) {
-
-        /*if (!validator.isEmailValid(request.email()) ||
-                request.nickname().isBlank() ||
-                !validator.isPasswordValid(request.newPassword()) ||
-                !validator.isPasswordValid(request.currentPassword())) {
-            throw new IllegalArgumentException("Invalid user data.");
-        }*/
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such user.");

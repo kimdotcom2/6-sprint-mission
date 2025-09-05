@@ -28,20 +28,16 @@ public class BasicUserService implements UserService {
     @Override
     public void createUser(UserDTO.CreateUserRequest request) {
 
-        User user = new User.Builder()
-                .email(request.email())
-                .password(request.password())
-                .nickname(request.nickname())
-                .description(request.description())
-                .build();
-
-        if (userRepository.existById(user.getId()) ||
-                userRepository.existByEmail(user.getEmail()) ||
-                userRepository.existByNickname(user.getNickname())) {
+        if (userRepository.existByEmail(request.email()) || userRepository.existByNickname(request.nickname())) {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        user.updatePassword(securityUtil.hashPassword(user.getPassword()));
+        User user = new User.Builder()
+                .email(request.email())
+                .password(securityUtil.hashPassword(request.password()))
+                .nickname(request.nickname())
+                .description(request.description())
+                .build();
 
         userStatusRepository.save(new UserStatus(user.getId()));
 
@@ -76,6 +72,11 @@ public class BasicUserService implements UserService {
     }
 
     @Override
+    public boolean existUserByNickname(String nickname) {
+        return userRepository.existByNickname(nickname);
+    }
+
+    @Override
     public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
 
         User user = userRepository.findById(id)
@@ -101,6 +102,28 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+
+        UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
+                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+
+        return Optional.ofNullable(UserDTO.FindUserResult.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .description(user.getDescription())
+                .profileImageId(user.getProfileImageId())
+                .isOnline(userStatus.isLogin())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build());
+
+    }
+
+    @Override
+    public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
+
+        User user = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         UserStatus userStatus = userStatusRepository.findByUserId(user.getId())

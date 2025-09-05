@@ -36,20 +36,16 @@ public class FileUserService implements UserService {
     @Override
     public void createUser(UserDTO.CreateUserRequest request) {
 
+        if (existUserByEmail(request.email()) || existUserByNickname(request.nickname())) {
+            throw new IllegalArgumentException("User already exists.");
+        }
+
         User user = new User.Builder()
                 .email(request.email())
                 .password(request.password())
                 .nickname(request.nickname())
                 .description(request.description())
                 .build();
-
-        if (existUserById(user.getId())) {
-            throw new IllegalArgumentException("User already exists.");
-        }
-
-        if (existUserByEmail(user.getEmail())) {
-            throw new IllegalArgumentException("Email already exists.");
-        }
 
         user.updatePassword(securityUtil.hashPassword(user.getPassword()));
 
@@ -73,6 +69,19 @@ public class FileUserService implements UserService {
 
         for (UserDTO.FindUserResult existingUser : findAllUsers()) {
             if (existingUser.email().equals(email)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    @Override
+    public boolean existUserByNickname(String nickname) {
+
+        for (UserDTO.FindUserResult existingUser : findAllUsers()) {
+            if (existingUser.nickname().equals(nickname)) {
                 return true;
             }
         }
@@ -155,6 +164,43 @@ public class FileUserService implements UserService {
             return Optional.empty();
         }
 
+    }
+
+    @Override
+    public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
+
+        if (existUserByNickname(nickname)) {
+            return Optional.empty();
+        }
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(path -> path.toString().endsWith(FILE_EXTENSION))
+                    .map(path -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(path.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (User) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(user -> user.getNickname().equals(nickname))
+                    .map(user -> UserDTO.FindUserResult.builder()
+                            .id(user.getId())
+                            .email(user.getEmail())
+                            .nickname(user.getNickname())
+                            .description(user.getDescription())
+                            .createdAt(user.getCreatedAt())
+                            .updatedAt(user.getUpdatedAt())
+                            .build())
+                    .findFirst();
+        } catch (IOException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
