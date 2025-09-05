@@ -4,12 +4,14 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import com.sprint.mission.discodeit.component.Validator;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class FileUserService implements UserService {
@@ -17,7 +19,6 @@ public class FileUserService implements UserService {
     private final Path path;
     private static final String FILE_EXTENSION = ".ser";
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final Validator validator = new Validator();
 
     public FileUserService(Path path) {
 
@@ -46,9 +47,9 @@ public class FileUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (!validator.isPasswordValid(user.getPassword())|| !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
+        /*if (!validator.isPasswordValid(user.getPassword())|| !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
-        }
+        }*/
 
         if (existUserByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists.");
@@ -190,12 +191,12 @@ public class FileUserService implements UserService {
     @Override
     public void updateUser(UserDTO.UpdateUserRequest request) {
 
-        if (!validator.isEmailValid(request.email()) ||
+        /*if (!validator.isEmailValid(request.email()) ||
                 !validator.isPasswordValid(request.newPassword()) ||
                 !validator.isPasswordValid(request.currentPassword()) ||
                 request.nickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
-        }
+        }*/
 
         User user = parseUserById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));

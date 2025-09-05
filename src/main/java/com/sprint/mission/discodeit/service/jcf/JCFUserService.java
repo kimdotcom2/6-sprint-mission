@@ -4,7 +4,6 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import com.sprint.mission.discodeit.component.Validator;
 
 import java.util.*;
 
@@ -12,7 +11,6 @@ public class JCFUserService implements UserService {
 
     private final Map<UUID, User> data;
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final Validator validator = new Validator();
 
     public JCFUserService() {
         data = new TreeMap<>();
@@ -32,9 +30,9 @@ public class JCFUserService implements UserService {
             throw new IllegalArgumentException("User already exists.");
         }
 
-        if (!validator.isPasswordValid(user.getPassword()) || !validator.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
+        /*if (!validator.isPasswordValid(user.getPassword()) || !validator.isPasswordValid(user.getPassword()) || user.getNickname().isBlank()) {
             throw new IllegalArgumentException("Invalid user data.");
-        }
+        }*/
 
         if (existUserByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists.");
@@ -117,12 +115,12 @@ public class JCFUserService implements UserService {
     @Override
     public void updateUser(UserDTO.UpdateUserRequest request) {
 
-        if (!validator.isEmailValid(request.email()) ||
+        /*if (!validator.isEmailValid(request.email()) ||
                 request.nickname().isBlank() ||
                 !validator.isPasswordValid(request.newPassword()) ||
                 !validator.isPasswordValid(request.currentPassword())) {
             throw new IllegalArgumentException("Invalid user data.");
-        }
+        }*/
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such user.");

@@ -1,16 +1,13 @@
 package com.sprint.mission.discodeit.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-//@Setter
+@ToString
 @RequiredArgsConstructor
 public class UserStatus extends BaseEntity implements Serializable {
 

@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.component.Validator;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
@@ -30,8 +29,7 @@ class BasicUserServiceTest {
     private UserStatusRepository userStatusRepository;
     @Mock
     private BinaryContentRepository binaryContentRepository;
-    @Mock
-    Validator validator;
+
 
     @InjectMocks
     private BasicUserService basicUserService;
@@ -71,8 +69,6 @@ class BasicUserServiceTest {
     void createUser() {
 
         //given
-        when(validator.isEmailValid(userRequest.email())).thenReturn(true);
-        when(validator.isPasswordValid(userRequest.password())).thenReturn(true);
 
         //when
         basicUserService.createUser(userRequest);
@@ -162,9 +158,6 @@ class BasicUserServiceTest {
 
         //given
         when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(validator.isEmailValid(userRequest.email())).thenReturn(true);
-        when(validator.isPasswordValid(updateUserRequest.newPassword())).thenReturn(true);
-        when(validator.isPasswordValid(updateUserRequest.currentPassword())).thenReturn(true);
         user.updatePassword(new SecurityUtil().hashPassword(user.getPassword()));
         when(userRepository.existByNickname(userRequest.nickname())).thenReturn(false);
         when(userRepository.existByEmail(userRequest.email())).thenReturn(false);

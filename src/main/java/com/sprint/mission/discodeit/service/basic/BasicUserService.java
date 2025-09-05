@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.component.Validator;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
@@ -25,7 +24,6 @@ public class BasicUserService implements UserService {
     private final UserStatusRepository userStatusRepository;
     private final BinaryContentRepository binaryContentRepository;
     private final SecurityUtil securityUtil = new SecurityUtil();
-    private final Validator validator;
 
     @Override
     public void createUser(UserDTO.CreateUserRequest request) {
@@ -41,10 +39,6 @@ public class BasicUserService implements UserService {
                 userRepository.existByEmail(user.getEmail()) ||
                 userRepository.existByNickname(user.getNickname())) {
             throw new IllegalArgumentException("User already exists.");
-        }
-
-        if (!validator.isPasswordValid(user.getPassword()) || !validator.isEmailValid(user.getEmail()) || user.getNickname().isBlank()) {
-            throw new IllegalArgumentException("Invalid user data.");
         }
 
         user.updatePassword(securityUtil.hashPassword(user.getPassword()));
@@ -139,13 +133,6 @@ public class BasicUserService implements UserService {
 
     @Override
     public void updateUser(UserDTO.UpdateUserRequest request) {
-
-        if (!validator.isEmailValid(request.email()) ||
-                !validator.isPasswordValid(request.newPassword()) ||
-                !validator.isPasswordValid(request.currentPassword()) ||
-                request.nickname().isBlank()) {
-            throw new IllegalArgumentException("Invalid user data.");
-        }
 
         User updatedUser = userRepository.findById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
