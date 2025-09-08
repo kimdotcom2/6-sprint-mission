@@ -10,10 +10,6 @@ public class BinaryContentDTO {
     @Builder
     public record CreateBinaryContentRequest(byte[] data, FileType fileType) {
 
-        public CreateBinaryContentRequest {
-
-        }
-
     }
 
     @Builder
