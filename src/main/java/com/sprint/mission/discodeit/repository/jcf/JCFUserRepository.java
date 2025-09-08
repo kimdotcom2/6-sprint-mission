@@ -16,7 +16,7 @@ public class JCFUserRepository implements UserRepository {
     private final Map<UUID, User> data;
 
     public JCFUserRepository() {
-        data = new TreeMap<>();
+        data = new HashMap<>();
     }
 
     @Override

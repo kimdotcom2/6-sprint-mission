@@ -16,7 +16,7 @@ public class JCFChannelRepository implements ChannelRepository {
     private final Map<UUID, Channel> data;
 
     public JCFChannelRepository() {
-        data = new TreeMap<>();
+        data = new HashMap<>();
     }
 
     @Override

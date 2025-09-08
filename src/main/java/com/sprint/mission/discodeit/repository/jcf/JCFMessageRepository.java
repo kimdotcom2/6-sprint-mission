@@ -16,7 +16,7 @@ public class JCFMessageRepository implements MessageRepository {
     private final Map<UUID, Message> data;
 
     public JCFMessageRepository() {
-        data = new TreeMap<>();
+        data = new HashMap<>();
     }
 
     @Override
