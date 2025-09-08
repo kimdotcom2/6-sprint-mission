@@ -34,6 +34,6 @@ public interface ReadStatusService {
 
     void deleteAllReadStatusByChannelId(UUID channelId);
 
-    void deleteAllReadStatus(List<UUID> uuidList);
+    void deleteAllReadStatusByIdIn(List<UUID> uuidList);
 
 }

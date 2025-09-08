@@ -44,7 +44,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public Optional<BinaryContentDTO.ReadBinaryContentResult> findBinaryContentById(UUID id) {
 
         BinaryContent binaryContent = binaryContentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("No such binary content"));
+                .orElseThrow(() -> new IllegalArgumentException("No such binary content"));
 
         return Optional.ofNullable(BinaryContentDTO.ReadBinaryContentResult.builder()
                 .id(binaryContent.getId())
@@ -82,7 +82,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public void deleteBinaryContentById(UUID id) {
 
         if (!binaryContentRepository.existById(id)) {
-            throw new RuntimeException("No such binary content");
+            throw new IllegalArgumentException("No such binary content");
         }
 
         binaryContentRepository.deleteById(id);

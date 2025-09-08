@@ -132,7 +132,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public void deleteAllUserStatus(List<UUID> uuidList) {
+    public void deleteAllUserStatusByIdIn(List<UUID> uuidList) {
 
         uuidList.forEach(uuid -> {
             if (!userStatusRepository.existById(uuid)) {

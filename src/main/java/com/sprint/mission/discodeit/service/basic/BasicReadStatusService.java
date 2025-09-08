@@ -211,7 +211,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public void deleteAllReadStatus(List<UUID> uuidList) {
+    public void deleteAllReadStatusByIdIn(List<UUID> uuidList) {
 
         uuidList.forEach(uuid -> {
             if (!readStatusRepository.existById(uuid)) {

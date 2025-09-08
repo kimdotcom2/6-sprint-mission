@@ -396,7 +396,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatusByUserId_success() {
+    void deleteAllReadStatusByIdInByUserId_success() {
 
         // given
         UUID userId = UUID.randomUUID();
@@ -411,7 +411,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatusByUserId_noUser_throws() {
+    void deleteAllReadStatusByIdInByUserId_noUser_throws() {
 
         // given
         UUID userId = UUID.randomUUID();
@@ -423,7 +423,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatusByChannelId_success() {
+    void deleteAllReadStatusByIdInByChannelId_success() {
 
         // given
         UUID channelId = UUID.randomUUID();
@@ -438,7 +438,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatusByChannelId_noChannel_throws() {
+    void deleteAllReadStatusByIdInByChannelId_noChannel_throws() {
 
         // given
         UUID channelId = UUID.randomUUID();
@@ -450,7 +450,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatus_success_afterValidatingAllIdsExist() {
+    void deleteAllReadStatus_success_afterValidatingAllIdsExistByIdIn() {
 
         // given
         UUID id1 = UUID.randomUUID();
@@ -460,7 +460,7 @@ class BasicReadStatusServiceTest {
         List<UUID> ids = List.of(id1, id2);
 
         // when
-        basicReadStatusService.deleteAllReadStatus(ids);
+        basicReadStatusService.deleteAllReadStatusByIdIn(ids);
 
         // then
         verify(readStatusRepository, times(1)).deleteAllByIdIn(ids);
@@ -468,7 +468,7 @@ class BasicReadStatusServiceTest {
     }
 
     @Test
-    void deleteAllReadStatus_containsMissingId_throws() {
+    void deleteAllReadStatus_ByIdIn_containsMissingId_throws() {
 
         // given
         UUID id1 = UUID.randomUUID();
@@ -478,7 +478,7 @@ class BasicReadStatusServiceTest {
         List<UUID> ids = List.of(id1, id2);
 
         // then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatus(ids));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByIdIn(ids));
 
     }
 }

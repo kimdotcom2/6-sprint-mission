@@ -26,6 +26,6 @@ public interface UserStatusService {
 
     void deleteUserStatusByUserId(UUID userId);
 
-    void deleteAllUserStatus(List<UUID> uuidList);
+    void deleteAllUserStatusByIdIn(List<UUID> idList);
 
 }
