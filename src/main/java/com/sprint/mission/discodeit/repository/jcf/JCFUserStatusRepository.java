@@ -69,8 +69,6 @@ public class JCFUserStatusRepository implements UserStatusRepository {
 
     @Override
     public void deleteAllByIdIn(Iterable<UUID> idList) {
-
        idList.forEach(this::deleteById);
-
     }
 }

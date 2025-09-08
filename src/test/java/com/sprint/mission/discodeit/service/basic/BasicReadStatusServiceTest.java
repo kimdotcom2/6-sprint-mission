@@ -54,17 +54,17 @@ class BasicReadStatusServiceTest {
     @Test
     void createReadStatus_success() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(true);
         ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
 
-        // when
+        //when
         basicReadStatusService.createReadStatus(request);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).save(any(ReadStatus.class));
 
     }
@@ -72,13 +72,13 @@ class BasicReadStatusServiceTest {
     @Test
     void createReadStatus_noUser_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
         ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.createReadStatus(request));
 
     }
@@ -86,14 +86,14 @@ class BasicReadStatusServiceTest {
     @Test
     void createReadStatus_noChannel_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(false);
         ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.createReadStatus(request));
 
     }
@@ -117,11 +117,11 @@ class BasicReadStatusServiceTest {
     @Test
     void existReadStatusById_delegates() {
 
-        // given
+        //given
         UUID id = UUID.randomUUID();
         when(readStatusRepository.existById(id)).thenReturn(true);
 
-        // then
+        //then
         Assertions.assertTrue(basicReadStatusService.existReadStatusById(id));
 
     }
@@ -129,12 +129,12 @@ class BasicReadStatusServiceTest {
     @Test
     void existReadStatusByUserIdAndChannelId_delegates() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(readStatusRepository.existByUserIdAndChannelId(userId, channelId)).thenReturn(true);
 
-        // then
+        //then
         Assertions.assertTrue(basicReadStatusService.existReadStatusByUserIdAndChannelId(userId, channelId));
 
     }
@@ -142,14 +142,14 @@ class BasicReadStatusServiceTest {
     @Test
     void findReadStatusById_success() {
 
-        // given
+        //given
         ReadStatus readStatus = sample(UUID.randomUUID(), UUID.randomUUID());
         when(readStatusRepository.findById(readStatus.getId())).thenReturn(Optional.of(readStatus));
 
-        // when
+        //when
         ReadStatusDTO.FindReadStatusResult result = basicReadStatusService.findReadStatusById(readStatus.getId()).orElse(null);
 
-        // then
+        //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(readStatus.getId(), result.id());
         Assertions.assertEquals(readStatus.getUserId(), result.userId());
@@ -160,11 +160,11 @@ class BasicReadStatusServiceTest {
     @Test
     void findReadStatusById_notFound_throws() {
 
-        // given
+        //given
         UUID id = UUID.randomUUID();
         when(readStatusRepository.findById(id)).thenReturn(Optional.empty());
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.findReadStatusById(id));
 
     }
@@ -172,7 +172,7 @@ class BasicReadStatusServiceTest {
     @Test
     void findReadStatusByUserIdAndChannelId_success() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         ReadStatus readStatus = sample(userId, channelId);
@@ -180,10 +180,10 @@ class BasicReadStatusServiceTest {
         when(channelRepository.existById(channelId)).thenReturn(true);
         when(readStatusRepository.findByUserIdAndChannelId(userId, channelId)).thenReturn(Optional.of(readStatus));
 
-        // when
+        //when
         ReadStatusDTO.FindReadStatusResult result = basicReadStatusService.findReadStatusByUserIdAndChannelId(userId, channelId).orElse(null);
 
-        // then
+        //then
         Assertions.assertNotNull(result);
         Assertions.assertEquals(readStatus.getId(), result.id());
 
@@ -192,12 +192,12 @@ class BasicReadStatusServiceTest {
     @Test
     void findReadStatusByUserIdAndChannelId_noUser_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.findReadStatusByUserIdAndChannelId(userId, channelId));
 
     }
@@ -205,13 +205,13 @@ class BasicReadStatusServiceTest {
     @Test
     void findReadStatusByUserIdAndChannelId_noChannel_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.findReadStatusByUserIdAndChannelId(userId, channelId));
 
     }
@@ -219,16 +219,16 @@ class BasicReadStatusServiceTest {
     @Test
     void findAllReadStatusByUserId_success() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         ReadStatus rs = sample(userId, UUID.randomUUID());
         when(readStatusRepository.findByUserId(userId)).thenReturn(List.of(rs));
 
-        // when
+        //when
         List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatusByUserId(userId);
 
-        // then
+        //then
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(rs.getId(), results.get(0).id());
 
@@ -237,11 +237,11 @@ class BasicReadStatusServiceTest {
     @Test
     void findAllReadStatusByUserId_noUser_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.findAllReadStatusByUserId(userId));
 
     }
@@ -249,16 +249,16 @@ class BasicReadStatusServiceTest {
     @Test
     void findAllReadStatusByChannelId_success() {
 
-        // given
+        //given
         UUID channelId = UUID.randomUUID();
         when(channelRepository.existById(channelId)).thenReturn(true);
         ReadStatus rs = sample(UUID.randomUUID(), channelId);
         when(readStatusRepository.findByChannelId(channelId)).thenReturn(List.of(rs));
 
-        // when
+        //when
         List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatusByChannelId(channelId);
 
-        // then
+        //then
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(rs.getId(), results.get(0).id());
 
@@ -267,11 +267,11 @@ class BasicReadStatusServiceTest {
     @Test
     void findAllReadStatusByChannelId_noChannel_throws() {
 
-        // given
+        //given
         UUID channelId = UUID.randomUUID();
         when(channelRepository.existById(channelId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.findAllReadStatusByChannelId(channelId));
 
     }
@@ -279,14 +279,14 @@ class BasicReadStatusServiceTest {
     @Test
     void findAllReadStatus_success() {
 
-        // given
+        //given
         ReadStatus rs = sample(UUID.randomUUID(), UUID.randomUUID());
         when(readStatusRepository.findAll()).thenReturn(List.of(rs));
 
-        // when
+        //when
         List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatus();
 
-        // then
+        //then
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals(rs.getId(), results.get(0).id());
 
@@ -295,18 +295,18 @@ class BasicReadStatusServiceTest {
     @Test
     void updateReadStatus_success_updatesTimestampAndSaves() {
 
-        // given
+        //given
         ReadStatus existing = sample(UUID.randomUUID(), UUID.randomUUID());
         long before = existing.getLastReadTimestamp();
         when(readStatusRepository.findById(existing.getId())).thenReturn(Optional.of(existing));
 
-        // when
+        //when
         ReadStatusDTO.UpdateReadStatusRequest request = ReadStatusDTO.UpdateReadStatusRequest.builder()
                 .id(existing.getId())
                 .build();
         basicReadStatusService.updateReadStatus(request);
 
-        // then
+        //then
         ArgumentCaptor<ReadStatus> captor = ArgumentCaptor.forClass(ReadStatus.class);
         verify(readStatusRepository, times(1)).save(captor.capture());
         ReadStatus saved = captor.getValue();
@@ -317,16 +317,16 @@ class BasicReadStatusServiceTest {
     @Test
     void updateReadStatus_notFound_throws() {
 
-        // given
+        //given
         UUID id = UUID.randomUUID();
         when(readStatusRepository.findById(id)).thenReturn(Optional.empty());
 
-        // when
+        //when
         ReadStatusDTO.UpdateReadStatusRequest request = ReadStatusDTO.UpdateReadStatusRequest.builder()
                 .id(id)
                 .build();
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.updateReadStatus(request));
 
     }
@@ -334,14 +334,14 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteReadStatusById_success() {
 
-        // given
+        //given
         UUID id = UUID.randomUUID();
         when(readStatusRepository.existById(id)).thenReturn(true);
 
-        // when
+        //when
         basicReadStatusService.deleteReadStatusById(id);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).deleteById(id);
 
     }
@@ -349,11 +349,11 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteReadStatusById_notFound_throws() {
 
-        // given
+        //given
         UUID id = UUID.randomUUID();
         when(readStatusRepository.existById(id)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteReadStatusById(id));
 
     }
@@ -361,16 +361,16 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteReadStatusByUserIdAndChannelId_success() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(true);
 
-        // when
+        //when
         basicReadStatusService.deleteReadStatusByUserIdAndChannelId(userId, channelId);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).deleteByUserIdAndChannelId(userId, channelId);
 
     }
@@ -378,19 +378,19 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteReadStatusByUserIdAndChannelId_checksAndThrows() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteReadStatusByUserIdAndChannelId(userId, channelId));
 
-        // given
+        //given
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteReadStatusByUserIdAndChannelId(userId, channelId));
 
     }
@@ -398,14 +398,14 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatusByIdInByUserId_success() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
 
-        // when
+        //when
         basicReadStatusService.deleteAllReadStatusByUserId(userId);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).deleteByUserId(userId);
 
     }
@@ -413,11 +413,11 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatusByIdInByUserId_noUser_throws() {
 
-        // given
+        //given
         UUID userId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByUserId(userId));
 
     }
@@ -425,14 +425,14 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatusByIdInByChannelId_success() {
 
-        // given
+        //given
         UUID channelId = UUID.randomUUID();
         when(channelRepository.existById(channelId)).thenReturn(true);
 
-        // when
+        //when
         basicReadStatusService.deleteAllReadStatusByChannelId(channelId);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).deleteByChannelId(channelId);
 
     }
@@ -440,11 +440,11 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatusByIdInByChannelId_noChannel_throws() {
 
-        // given
+        //given
         UUID channelId = UUID.randomUUID();
         when(channelRepository.existById(channelId)).thenReturn(false);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByChannelId(channelId));
 
     }
@@ -452,17 +452,17 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatus_success_afterValidatingAllIdsExistByIdIn() {
 
-        // given
+        //given
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
         when(readStatusRepository.existById(id1)).thenReturn(true);
         when(readStatusRepository.existById(id2)).thenReturn(true);
         List<UUID> ids = List.of(id1, id2);
 
-        // when
+        //when
         basicReadStatusService.deleteAllReadStatusByIdIn(ids);
 
-        // then
+        //then
         verify(readStatusRepository, times(1)).deleteAllByIdIn(ids);
 
     }
@@ -470,14 +470,14 @@ class BasicReadStatusServiceTest {
     @Test
     void deleteAllReadStatus_ByIdIn_containsMissingId_throws() {
 
-        // given
+        //given
         UUID id1 = UUID.randomUUID();
         UUID id2 = UUID.randomUUID();
         when(readStatusRepository.existById(id1)).thenReturn(true);
         when(readStatusRepository.existById(id2)).thenReturn(false);
         List<UUID> ids = List.of(id1, id2);
 
-        // then
+        //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByIdIn(ids));
 
     }
