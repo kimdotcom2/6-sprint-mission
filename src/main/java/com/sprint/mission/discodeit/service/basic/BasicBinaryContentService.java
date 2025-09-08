@@ -24,6 +24,8 @@ public class BasicBinaryContentService implements BinaryContentService {
             .data(request.data()).fileType(request.fileType())
             .build();
 
+        binaryContentRepository.save(binaryContent);
+
     }
 
     @Override
