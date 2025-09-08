@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 
 @Repository("fileChannelRepository")
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileChannelRepository implements ChannelRepository {
 
     @Value("${file.upload.path}")

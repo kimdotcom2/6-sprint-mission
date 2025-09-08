@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.Message;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 
 @Repository("fileMessageRepository")
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileMessageRepository implements MessageRepository {
 
     @Value("${file.upload.path}")

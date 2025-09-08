@@ -20,3 +20,12 @@ file:
 spring:
     application:
         name: discodeit
+
+code:
+  repository:
+          type: file
+
+
+
+
+

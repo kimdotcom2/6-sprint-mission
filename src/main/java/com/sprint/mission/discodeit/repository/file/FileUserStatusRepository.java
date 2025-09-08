@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.entity.UserStatus;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 
 @Repository("fileUserStatusRepository")
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileUserStatusRepository implements UserStatusRepository {
 
     @Value("${file.upload.path}")

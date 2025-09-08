@@ -2,7 +2,9 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
@@ -15,6 +17,8 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 @Repository
+@RequiredArgsConstructor
+@ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileBinaryContentRepository implements BinaryContentRepository {
 
     @Value("${file.upload.path}")
