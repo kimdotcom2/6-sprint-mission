@@ -87,7 +87,36 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     }
 
     @Override
+    public List<BinaryContent> findAllByIdIn(List<UUID> uuidList) {
+
+        Path path = initFolder();
+
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .map(file -> {
+                        try (
+                                FileInputStream fis = new FileInputStream(file.toFile());
+                                ObjectInputStream ois = new ObjectInputStream(fis)
+                        ) {
+                            Object data = ois.readObject();
+                            return (BinaryContent) data;
+                        } catch (IOException | ClassNotFoundException e) {
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .filter(binaryContent -> uuidList.contains(binaryContent.getId()))
+                    .toList();
+        } catch (IOException e) {
+            throw new RuntimeException();
+        }
+
+    }
+
+    @Override
     public List<BinaryContent> findAll() {
+
         Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
@@ -109,6 +138,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
         } catch (IOException e) {
             throw new RuntimeException();
         }
+
     }
 
     @Override

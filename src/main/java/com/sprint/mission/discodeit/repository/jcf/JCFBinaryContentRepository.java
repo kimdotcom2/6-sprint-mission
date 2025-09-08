@@ -34,6 +34,13 @@ public class JCFBinaryContentRepository implements BinaryContentRepository {
     }
 
     @Override
+    public List<BinaryContent> findAllByIdIn(List<UUID> uuidList) {
+        return uuidList.stream()
+                .map(data::get)
+                .toList();
+    }
+
+    @Override
     public List<BinaryContent> findAll() {
         return data.values().stream().toList();
     }
