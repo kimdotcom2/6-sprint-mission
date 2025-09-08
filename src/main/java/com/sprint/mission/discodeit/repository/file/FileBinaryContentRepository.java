@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-@Repository
+@Repository("fileBinaryContentRepository")
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileBinaryContentRepository implements BinaryContentRepository {

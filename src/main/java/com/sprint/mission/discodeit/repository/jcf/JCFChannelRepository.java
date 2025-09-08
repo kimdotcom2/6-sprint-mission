@@ -2,9 +2,15 @@ package com.sprint.mission.discodeit.repository.jcf;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+@Repository("jcfChannelRepository")
+@RequiredArgsConstructor
+@ConditionalOnProperty(name = "code.repository.type", havingValue = "jcf")
 public class JCFChannelRepository implements ChannelRepository {
 
     private final Map<UUID, Channel> data;
