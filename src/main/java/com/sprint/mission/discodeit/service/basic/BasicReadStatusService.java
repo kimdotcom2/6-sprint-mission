@@ -138,8 +138,7 @@ public class BasicReadStatusService implements ReadStatusService {
 
     @Override
     public List<ReadStatusDTO.FindReadStatusResult> findAllReadStatus() {
-        return readStatusRepository.findAll()
-                .stream()
+        return readStatusRepository.findAll().stream()
                 .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
                         .id(readStatus.getId())
                         .channelId(readStatus.getChannelId())
