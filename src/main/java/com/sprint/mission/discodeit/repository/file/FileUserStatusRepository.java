@@ -176,9 +176,9 @@ public class FileUserStatusRepository implements UserStatusRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<UUID> userStatus) {
+    public void deleteAllByIdIn(Iterable<UUID> idList) {
 
-        userStatus.forEach(this::deleteById);
+        idList.forEach(this::deleteById);
 
     }
 }

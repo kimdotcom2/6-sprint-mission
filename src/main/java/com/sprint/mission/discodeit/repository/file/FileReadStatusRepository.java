@@ -295,7 +295,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<UUID> readStatus) {
-        readStatus.forEach(this::deleteById);
+    public void deleteAllByIdIn(Iterable<UUID> idList) {
+        idList.forEach(this::deleteById);
     }
 }

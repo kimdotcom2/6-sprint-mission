@@ -219,7 +219,7 @@ public class BasicReadStatusService implements ReadStatusService {
             }
         });
 
-        readStatusRepository.deleteAll(uuidList);
+        readStatusRepository.deleteAllByIdIn(uuidList);
 
     }
 }

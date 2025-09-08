@@ -90,15 +90,29 @@ public class JCFReadStatusRepository implements ReadStatusRepository {
     @Override
     public void deleteByUserId(UUID userId) {
 
+        List<ReadStatus> readStatus = data.values().stream()
+                .filter(status -> status.getUserId().equals(userId))
+                .toList();
+
+        readStatus.forEach(status -> data.remove(status.getId()));
+
     }
 
     @Override
     public void deleteByChannelId(UUID channelId) {
 
+        List<ReadStatus> readStatus = data.values().stream()
+                .filter(status -> status.getChannelId().equals(channelId))
+                .toList();
+
+        readStatus.forEach(status -> data.remove(status.getId()));
+
     }
 
     @Override
-    public void deleteAll(Iterable<UUID> readStatus) {
+    public void deleteAllByIdIn(Iterable<UUID> idList) {
+
+        idList.forEach(this::deleteById);
 
     }
 }

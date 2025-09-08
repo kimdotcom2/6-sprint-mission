@@ -68,11 +68,9 @@ public class JCFUserStatusRepository implements UserStatusRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<UUID> userStatus) {
+    public void deleteAllByIdIn(Iterable<UUID> idList) {
 
-        data.values().stream()
-                .filter(status -> data.containsKey(status.getId()))
-                .forEach(status -> data.remove(status.getId()));
+       idList.forEach(this::deleteById);
 
     }
 }

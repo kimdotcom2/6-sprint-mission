@@ -374,7 +374,7 @@ class BasicMessageServiceTest {
         basicMessageService.deleteMessageById(existing.getId());
 
         //then
-        verify(binaryContentRepository, times(1)).deleteAll(argThat(list -> {
+        verify(binaryContentRepository, times(1)).deleteAllByIdIn(argThat(list -> {
             // ensure both ids present
             List<UUID> l = (List<UUID>) list;
             return l.contains(b1) && l.contains(b2) && l.size() == 2;

@@ -171,7 +171,7 @@ public class BasicMessageService implements MessageService {
     @Override
     public void deleteMessageById(UUID id) {
 
-        binaryContentRepository.deleteAll(messageRepository.findById(id)
+        binaryContentRepository.deleteAllByIdIn(messageRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such message."))
                 .getBinaryContentIdList().stream().toList());
         messageRepository.deleteById(id);

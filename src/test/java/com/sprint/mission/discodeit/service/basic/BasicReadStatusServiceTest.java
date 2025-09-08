@@ -463,7 +463,7 @@ class BasicReadStatusServiceTest {
         basicReadStatusService.deleteAllReadStatus(ids);
 
         // then
-        verify(readStatusRepository, times(1)).deleteAll(ids);
+        verify(readStatusRepository, times(1)).deleteAllByIdIn(ids);
 
     }
 

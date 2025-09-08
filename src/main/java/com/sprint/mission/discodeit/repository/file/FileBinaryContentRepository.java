@@ -155,7 +155,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     }
 
     @Override
-    public void deleteAll(Iterable<UUID> binaryContents) {
-        binaryContents.forEach(this::deleteById);
+    public void deleteAllByIdIn(Iterable<UUID> idList) {
+        idList.forEach(this::deleteById);
     }
 }

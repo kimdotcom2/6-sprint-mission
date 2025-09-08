@@ -140,7 +140,7 @@ public class BasicUserStatusService implements UserStatusService {
             }
         });
 
-        userStatusRepository.deleteAll(uuidList);
+        userStatusRepository.deleteAllByIdIn(uuidList);
 
     }
 }
