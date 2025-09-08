@@ -42,28 +42,6 @@ public class FileUserRepository implements UserRepository {
 
     }
 
-    //private static final String FILE_EXTENSION = ".ser";
-
-    /*public FileUserRepository(String folderName) {
-        this.folderName = folderName;
-        path = Path.of(FILE_PATH + folderName);
-
-        if (!path.toFile().exists()) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Failed to create directory.");
-            }
-        }
-
-    }
-
-    public FileUserRepository() {
-
-
-
-    }*/
-
     @Override
     public void save(User user) {
 
@@ -197,7 +175,7 @@ public class FileUserRepository implements UserRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
@@ -210,7 +188,7 @@ public class FileUserRepository implements UserRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

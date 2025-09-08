@@ -139,7 +139,7 @@ public class FileUserStatusRepository implements UserStatusRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -151,7 +151,7 @@ public class FileUserStatusRepository implements UserStatusRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

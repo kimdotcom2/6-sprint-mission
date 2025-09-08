@@ -193,7 +193,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -205,7 +205,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
@@ -233,7 +233,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                     .filter(status -> status.getUserId().equals(userId) && status.getChannelId().equals(channelId))
                     .forEach(status -> deleteById(status.getId()));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
@@ -261,7 +261,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                     .filter(status -> status.getUserId().equals(userId))
                     .forEach(status -> deleteById(status.getId()));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
@@ -289,7 +289,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
                     .filter(status -> status.getChannelId().equals(channelId))
                     .forEach(status -> deleteById(status.getId()));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

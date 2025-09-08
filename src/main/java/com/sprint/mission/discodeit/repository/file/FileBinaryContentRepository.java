@@ -109,7 +109,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
                     .filter(binaryContent -> uuidList.contains(binaryContent.getId()))
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
@@ -136,7 +136,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
@@ -149,7 +149,7 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

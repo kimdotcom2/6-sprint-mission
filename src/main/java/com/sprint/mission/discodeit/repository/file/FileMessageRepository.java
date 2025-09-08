@@ -48,7 +48,7 @@ public class FileMessageRepository implements MessageRepository {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(message);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
@@ -130,7 +130,7 @@ public class FileMessageRepository implements MessageRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
@@ -143,7 +143,7 @@ public class FileMessageRepository implements MessageRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }

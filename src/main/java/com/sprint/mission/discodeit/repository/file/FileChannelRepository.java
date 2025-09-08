@@ -42,24 +42,6 @@ public class FileChannelRepository implements ChannelRepository {
 
     }
 
-    /*private final Path path;
-    private static final String FILE_EXTENSION = ".ser";
-    private final String folderName;
-
-    public FileChannelRepository(String folderName) {
-        this.folderName = folderName;
-        path = Path.of(FILE_PATH + folderName);
-
-        if (!path.toFile().exists()) {
-            try {
-                Files.createDirectories(path);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Failed to create directory.");
-            }
-        }
-
-    }*/
-
     @Override
     public void save(Channel channel) {
 
@@ -69,7 +51,7 @@ public class FileChannelRepository implements ChannelRepository {
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(channel);
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
@@ -105,14 +87,6 @@ public class FileChannelRepository implements ChannelRepository {
 
     }
 
-    /*@Override
-    public List<Channel> findByUserId(UUID userId) {
-        return findAll().stream()
-                .filter(channel -> channel
-                        .getUserMap().containsKey(userId))
-                .toList();
-    }*/
-
     @Override
     public List<Channel> findAll() {
 
@@ -135,7 +109,7 @@ public class FileChannelRepository implements ChannelRepository {
                     .filter(Objects::nonNull)
                     .toList();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
     }
@@ -148,7 +122,7 @@ public class FileChannelRepository implements ChannelRepository {
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(e);
         }
 
     }
