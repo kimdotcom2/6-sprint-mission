@@ -20,6 +20,13 @@ public class BasicBinaryContentService implements BinaryContentService {
     @Override
     public void createBinaryContent(BinaryContentDTO.CreateBinaryContentRequest request) {
 
+        if (request.data() == null) {
+            throw new IllegalArgumentException("Data must not be null");
+        }
+        if (request.fileType() == null) {
+            throw new IllegalArgumentException("FileType must not be null");
+        }
+
         BinaryContent binaryContent = BinaryContent.builder()
             .data(request.data()).fileType(request.fileType())
             .build();

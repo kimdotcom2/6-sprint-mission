@@ -12,13 +12,6 @@ public class BinaryContentDTO {
 
         public CreateBinaryContentRequest {
 
-            if (data == null) {
-                throw new IllegalArgumentException("Data must not be null");
-            }
-            if (fileType == null) {
-                throw new IllegalArgumentException("FileType must not be null");
-            }
-
         }
 
     }
