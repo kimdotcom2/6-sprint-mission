@@ -70,8 +70,8 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public boolean existByUserIdAndChannelId(UUID userId, UUID channelId) {
 
-        try {
-            return Files.list(path)
+        try (Stream<Path> pathStream = Files.list(path)) {
+            return pathStream
                     .filter(file -> file.toString().endsWith(fileExtension))
                     .anyMatch(file -> {
                         try (FileInputStream fis = new FileInputStream(file.toFile());
