@@ -48,7 +48,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public void save(ReadStatus readStatus) {
 
-        try(FileOutputStream fos = new FileOutputStream(path.resolve(readStatus.getId() + fileExtension).toFile());
+        try (FileOutputStream fos = new FileOutputStream(path.resolve(readStatus.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(readStatus);
         } catch (IOException e) {
@@ -69,7 +69,24 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public boolean existByUserIdAndChannelId(UUID userId, UUID channelId) {
-        return findAll().stream().anyMatch(status -> status.getUserId().equals(userId) && status.getChannelId().equals(channelId));
+
+        try {
+            return Files.list(path)
+                    .filter(file -> file.toString().endsWith(fileExtension))
+                    .anyMatch(file -> {
+                        try (FileInputStream fis = new FileInputStream(file.toFile());
+                             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+                            ReadStatus readStatus = (ReadStatus) ois.readObject();
+
+                            return readStatus.getUserId().equals(userId) && readStatus.getChannelId().equals(channelId);
+                        } catch (IOException | ClassNotFoundException e) {
+                            return false;
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
