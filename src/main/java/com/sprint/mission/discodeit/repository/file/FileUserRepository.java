@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,7 +29,10 @@ public class FileUserRepository implements UserRepository {
     @Value("${file.upload.extension}")
     private String fileExtension;
 
-    private Path initFolder() {
+    private Path path;
+
+    @PostConstruct
+    private void initFolder() {
 
         Path path = Path.of(fileUploadFolder + folderName);
 
@@ -40,14 +44,14 @@ public class FileUserRepository implements UserRepository {
             }
         }
 
-        return path;
+        this.path = path;
 
     }
 
     @Override
     public void save(User user) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -66,7 +70,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public boolean existById(UUID id) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         return Files.exists(path.resolve(id + fileExtension));
     }
@@ -84,7 +88,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(UUID id) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -102,7 +106,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -130,7 +134,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findByNickname(String nickname) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -158,7 +162,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public List<User> findAll() {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -185,7 +189,7 @@ public class FileUserRepository implements UserRepository {
     @Override
     public void deleteById(UUID id) {
 
-        Path path = initFolder();
+        //Path path = initFolder();
 
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));

@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.ReadStatus;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -25,7 +26,10 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Value("${file.upload.extension}")
     private String fileExtension;
 
-    private Path initFolder() {
+    private Path path;
+
+    @PostConstruct
+    private void initFolder() {
 
         Path path = Path.of(fileUploadFolder + folderName);
 
@@ -37,14 +41,12 @@ public class FileReadStatusRepository implements ReadStatusRepository {
             }
         }
 
-        return path;
+        this.path = path;
 
     }
 
     @Override
     public void save(ReadStatus readStatus) {
-
-        Path path = initFolder();
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(readStatus.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -62,11 +64,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public boolean existById(UUID id) {
-
-        Path path = initFolder();
-
         return Files.exists(path.resolve(id + fileExtension));
-
     }
 
     @Override
@@ -76,8 +74,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public Optional<ReadStatus> findById(UUID id) {
-
-        Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -94,8 +90,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public Optional<ReadStatus> findByUserIdAndChannelId(UUID userId, UUID channelId) {
-
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -123,8 +117,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public List<ReadStatus> findByUserId(UUID userId) {
 
-        Path path = initFolder();
-
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
                     .filter(file -> file.toString().endsWith(fileExtension))
@@ -150,7 +142,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public List<ReadStatus> findByChannelId(UUID channelId) {
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -176,7 +167,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public List<ReadStatus> findAll() {
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -202,8 +192,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public void deleteById(UUID id) {
 
-        Path path = initFolder();
-
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
         } catch (IOException e) {
@@ -214,8 +202,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public void deleteByUserIdAndChannelId(UUID userId, UUID channelId) {
-
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             pathStream
@@ -243,7 +229,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
     @Override
     public void deleteByUserId(UUID userId) {
 
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             pathStream
@@ -270,8 +255,6 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public void deleteByChannelId(UUID channelId) {
-
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             pathStream

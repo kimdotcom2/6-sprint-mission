@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,7 +29,10 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     @Value("${file.upload.extension}")
     private String fileExtension;
 
-    private Path initFolder() {
+    private Path path;
+
+    @PostConstruct
+    private void initFolder() {
 
         Path path = Path.of(fileUploadFolder + folderName);
 
@@ -40,14 +44,12 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
             }
         }
 
-        return path;
+        this.path = path;
 
     }
 
     @Override
     public void save(BinaryContent binaryContent) {
-
-        Path path = initFolder();
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve(binaryContent.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -66,16 +68,12 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     @Override
     public boolean existById(UUID id) {
 
-        Path path = initFolder();
-
         return Files.exists(path.resolve(id + fileExtension));
 
     }
 
     @Override
     public Optional<BinaryContent> findById(UUID id) {
-
-        Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -92,8 +90,6 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
 
     @Override
     public List<BinaryContent> findAllByIdIn(List<UUID> uuidList) {
-
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -121,8 +117,6 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
     @Override
     public List<BinaryContent> findAll() {
 
-        Path path = initFolder();
-
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
                     .filter(file -> file.toString().endsWith(fileExtension))
@@ -147,8 +141,6 @@ public class FileBinaryContentRepository implements BinaryContentRepository {
 
     @Override
     public void deleteById(UUID id) {
-
-        Path path = initFolder();
 
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));

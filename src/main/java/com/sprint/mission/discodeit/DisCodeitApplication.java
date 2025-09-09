@@ -29,6 +29,8 @@ public class DisCodeitApplication {
         ChannelService channelService = context.getBean(ChannelService.class);
         MessageService messageService = context.getBean(MessageService.class);
 
+        testUserService(userService);
+        testChannelService(channelService);
         testMessageService(userService, channelService, messageService);
 
 	}

@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.repository.file;
 
 import com.sprint.mission.discodeit.entity.Channel;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -28,7 +29,10 @@ public class FileChannelRepository implements ChannelRepository {
     @Value("${file.upload.extension}")
     private String fileExtension;
 
-    private Path initFolder() {
+    private Path path;
+
+    @PostConstruct
+    private void initFolder() {
 
         Path path = Path.of(fileUploadFolder + folderName);
 
@@ -40,14 +44,12 @@ public class FileChannelRepository implements ChannelRepository {
             }
         }
 
-        return path;
+        this.path = path;
 
     }
 
     @Override
     public void save(Channel channel) {
-
-        Path path = initFolder();
 
         try(FileOutputStream fos = new FileOutputStream(path.resolve( channel.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
@@ -66,15 +68,11 @@ public class FileChannelRepository implements ChannelRepository {
     @Override
     public boolean existById(UUID id) {
 
-        Path path = initFolder();
-
         return Files.exists(path.resolve(id + fileExtension));
     }
 
     @Override
     public Optional<Channel> findById(UUID id) {
-
-        Path path = initFolder();
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -91,8 +89,6 @@ public class FileChannelRepository implements ChannelRepository {
 
     @Override
     public List<Channel> findAll() {
-
-        Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -118,8 +114,6 @@ public class FileChannelRepository implements ChannelRepository {
 
     @Override
     public void deleteById(UUID id) {
-
-        Path path = initFolder();
 
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
