@@ -52,9 +52,9 @@ class BasicBinaryContentServiceTest {
         //then
         ArgumentCaptor<BinaryContent> captor = ArgumentCaptor.forClass(BinaryContent.class);
         verify(binaryContentRepository, times(1)).save(captor.capture());
-        BinaryContent saved = captor.getValue();
-        assertThat(saved.getData()).isEqualTo(sampleData);
-        assertThat(saved.getFileType()).isEqualTo(FileType.IMAGE);
+        BinaryContent binaryContent = captor.getValue();
+        assertThat(binaryContent.getData()).isEqualTo(sampleData);
+        assertThat(binaryContent.getFileType()).isEqualTo(FileType.IMAGE);
 
         //given
         BinaryContentDTO.CreateBinaryContentRequest nullDataRequest = BinaryContentDTO.CreateBinaryContentRequest.builder()

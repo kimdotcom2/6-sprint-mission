@@ -51,8 +51,6 @@ public class FileUserRepository implements UserRepository {
     @Override
     public void save(User user) {
 
-        //Path path = initFolder();
-
         try(FileOutputStream fos = new FileOutputStream(path.resolve(user.getId() + fileExtension).toFile());
             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
             oos.writeObject(user);
@@ -69,9 +67,6 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public boolean existById(UUID id) {
-
-        //Path path = initFolder();
-
         return Files.exists(path.resolve(id + fileExtension));
     }
 

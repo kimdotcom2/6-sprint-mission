@@ -154,9 +154,7 @@ public class FileUserStatusRepository implements UserStatusRepository {
     @Override
     public void deleteByUserId(UUID userId) {
 
-        List<UserStatus> userStatusList = findAll();
-
-        userStatusList.forEach(status -> {
+        findAll().forEach(status -> {
             if (status.getUserId().equals(userId)) {
                 try {
                     Files.deleteIfExists(path.resolve(status.getId() + fileExtension));

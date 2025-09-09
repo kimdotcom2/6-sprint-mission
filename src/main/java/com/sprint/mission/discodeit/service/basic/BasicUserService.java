@@ -199,7 +199,7 @@ public class BasicUserService implements UserService {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
 
         binaryContentRepository.deleteById(user.getProfileImageId());
-        userStatusRepository.deleteById(user.getId());
+        userStatusRepository.deleteByUserId(user.getId());
         userRepository.deleteById(id);
 
     }

@@ -222,15 +222,15 @@ class BasicReadStatusServiceTest {
         //given
         UUID userId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
-        ReadStatus rs = sample(userId, UUID.randomUUID());
-        when(readStatusRepository.findByUserId(userId)).thenReturn(List.of(rs));
+        ReadStatus readStatus = sample(userId, UUID.randomUUID());
+        when(readStatusRepository.findByUserId(userId)).thenReturn(List.of(readStatus));
 
         //when
         List<ReadStatusDTO.FindReadStatusResult> results = basicReadStatusService.findAllReadStatusByUserId(userId);
 
         //then
         Assertions.assertEquals(1, results.size());
-        Assertions.assertEquals(rs.getId(), results.get(0).id());
+        Assertions.assertEquals(readStatus.getId(), results.get(0).id());
 
     }
 
@@ -457,13 +457,13 @@ class BasicReadStatusServiceTest {
         UUID id2 = UUID.randomUUID();
         when(readStatusRepository.existById(id1)).thenReturn(true);
         when(readStatusRepository.existById(id2)).thenReturn(true);
-        List<UUID> ids = List.of(id1, id2);
+        List<UUID> uuidList = List.of(id1, id2);
 
         //when
-        basicReadStatusService.deleteAllReadStatusByIdIn(ids);
+        basicReadStatusService.deleteAllReadStatusByIdIn(uuidList);
 
         //then
-        verify(readStatusRepository, times(1)).deleteAllByIdIn(ids);
+        verify(readStatusRepository, times(1)).deleteAllByIdIn(uuidList);
 
     }
 
@@ -475,10 +475,10 @@ class BasicReadStatusServiceTest {
         UUID id2 = UUID.randomUUID();
         when(readStatusRepository.existById(id1)).thenReturn(true);
         when(readStatusRepository.existById(id2)).thenReturn(false);
-        List<UUID> ids = List.of(id1, id2);
+        List<UUID> uuidList = List.of(id1, id2);
 
         //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByIdIn(ids));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.deleteAllReadStatusByIdIn(uuidList));
 
     }
 }

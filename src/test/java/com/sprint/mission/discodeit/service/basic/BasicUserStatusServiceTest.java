@@ -182,15 +182,15 @@ class BasicUserStatusServiceTest {
 
         //given
         UUID id = UUID.randomUUID();
-        UserStatus entity = spy(new UserStatus(UUID.randomUUID()));
-        when(userStatusRepository.findById(id)).thenReturn(Optional.of(entity));
+        UserStatus userStatus = spy(new UserStatus(UUID.randomUUID()));
+        when(userStatusRepository.findById(id)).thenReturn(Optional.of(userStatus));
 
         //when
         service.updateUserStatus(UserStatusDTO.UpdateReadStatusRequest.builder().id(id).build());
 
         //then
-        verify(entity).updateLastActiveTimestamp();
-        verify(userStatusRepository).save(entity);
+        verify(userStatus).updateLastActiveTimestamp();
+        verify(userStatusRepository).save(userStatus);
 
     }
 
@@ -246,16 +246,16 @@ class BasicUserStatusServiceTest {
     void deleteAllUserStatusByIdIn_validatesAllThenDeletes() {
 
         //given
-        UUID a = UUID.randomUUID();
-        UUID b = UUID.randomUUID();
-        when(userStatusRepository.existById(a)).thenReturn(true);
-        when(userStatusRepository.existById(b)).thenReturn(true);
+        UUID uuid = UUID.randomUUID();
+        UUID uuid1 = UUID.randomUUID();
+        when(userStatusRepository.existById(uuid)).thenReturn(true);
+        when(userStatusRepository.existById(uuid1)).thenReturn(true);
 
         //when
-        service.deleteAllUserStatusByIdIn(List.of(a, b));
+        service.deleteAllUserStatusByIdIn(List.of(uuid, uuid1));
 
         //then
-        verify(userStatusRepository).deleteAllByIdIn(List.of(a, b));
+        verify(userStatusRepository).deleteAllByIdIn(List.of(uuid, uuid1));
 
         //given
         UUID c = UUID.randomUUID();
