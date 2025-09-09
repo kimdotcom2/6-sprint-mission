@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service("basicReadStatusService")
+@Service
 @RequiredArgsConstructor
 public class BasicReadStatusService implements ReadStatusService {
 

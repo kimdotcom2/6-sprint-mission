@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
-@Service("basicChannelService")
+@Service
 @RequiredArgsConstructor
 public class BasicChannelService implements ChannelService {
 

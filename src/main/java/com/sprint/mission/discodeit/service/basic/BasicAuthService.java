@@ -8,7 +8,7 @@ import com.sprint.mission.discodeit.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service("basicAuthService")
+@Service
 @RequiredArgsConstructor
 public class BasicAuthService implements AuthService {
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
-@Repository("jcfUserRepository")
+@Repository
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "code.repository.type", havingValue = "jcf")
 public class JCFUserRepository implements UserRepository {

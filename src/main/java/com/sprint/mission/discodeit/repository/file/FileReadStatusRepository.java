@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Stream;
 
-@Repository("fileReadStatusRepository")
+@Repository
 @RequiredArgsConstructor
 @ConditionalOnProperty(name = "code.repository.type", havingValue = "file")
 public class FileReadStatusRepository implements ReadStatusRepository {
