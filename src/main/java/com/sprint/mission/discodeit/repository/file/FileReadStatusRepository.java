@@ -69,24 +69,7 @@ public class FileReadStatusRepository implements ReadStatusRepository {
 
     @Override
     public boolean existByUserIdAndChannelId(UUID userId, UUID channelId) {
-
-        try (Stream<Path> pathStream = Files.list(path)) {
-            return pathStream
-                    .filter(file -> file.toString().endsWith(fileExtension))
-                    .anyMatch(file -> {
-                        try (FileInputStream fis = new FileInputStream(file.toFile());
-                             ObjectInputStream ois = new ObjectInputStream(fis)) {
-
-                            ReadStatus readStatus = (ReadStatus) ois.readObject();
-
-                            return readStatus.getUserId().equals(userId) && readStatus.getChannelId().equals(channelId);
-                        } catch (IOException | ClassNotFoundException e) {
-                            return false;
-                        }
-                    });
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return findAll().stream().anyMatch(status -> status.getUserId().equals(userId) && status.getChannelId().equals(channelId));
     }
 
     @Override

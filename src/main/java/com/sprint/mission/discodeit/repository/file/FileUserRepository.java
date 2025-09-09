@@ -88,8 +88,6 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findById(UUID id) {
 
-        //Path path = initFolder();
-
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());
              ObjectInputStream ois = new ObjectInputStream(fis)) {
 
@@ -105,8 +103,6 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-
-        //Path path = initFolder();
 
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
@@ -134,8 +130,6 @@ public class FileUserRepository implements UserRepository {
     @Override
     public Optional<User> findByNickname(String nickname) {
 
-        //Path path = initFolder();
-
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
                     .filter(file -> file.toString().endsWith(fileExtension))
@@ -162,8 +156,6 @@ public class FileUserRepository implements UserRepository {
     @Override
     public List<User> findAll() {
 
-        //Path path = initFolder();
-
         try (Stream<Path> pathStream = Files.list(path)) {
             return pathStream
                     .filter(file -> file.toString().endsWith(fileExtension))
@@ -188,8 +180,6 @@ public class FileUserRepository implements UserRepository {
 
     @Override
     public void deleteById(UUID id) {
-
-        //Path path = initFolder();
 
         try {
             Files.deleteIfExists(path.resolve(id + fileExtension));
