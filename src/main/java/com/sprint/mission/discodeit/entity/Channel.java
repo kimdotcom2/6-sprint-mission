@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.*;
 
 @Getter
-//@Setter
 @RequiredArgsConstructor
 public class Channel extends BaseEntity implements Serializable {
 
