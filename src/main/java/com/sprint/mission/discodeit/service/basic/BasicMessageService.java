@@ -153,7 +153,7 @@ public class BasicMessageService implements MessageService {
             throw new IllegalArgumentException("No such message.");
         }
 
-        if (request.isReply() && (request.parentMessageId() == null || !messageRepository.existById(request.id()))) {
+        if (request.isReply() && (request.parentMessageId() == null || !messageRepository.existById(request.parentMessageId()))) {
             throw new IllegalArgumentException("No such parent message.");
         }
 
