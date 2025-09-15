@@ -23,15 +23,16 @@ public class DisCodeitApplication {
 
 	public static void main(String[] args) {
 
-        ConfigurableApplicationContext context = SpringApplication.run(DisCodeitApplication.class, args);
+        SpringApplication.run(DisCodeitApplication.class, args);
+        //ConfigurableApplicationContext context = SpringApplication.run(DisCodeitApplication.class, args);
 
-        UserService userService = context.getBean(UserService.class);
-        ChannelService channelService = context.getBean(ChannelService.class);
-        MessageService messageService = context.getBean(MessageService.class);
+        //UserService userService = context.getBean(UserService.class);
+        //ChannelService channelService = context.getBean(ChannelService.class);
+        //MessageService messageService = context.getBean(MessageService.class);
 
-        testUserService(userService);
-        testChannelService(channelService);
-        testMessageService(userService, channelService, messageService);
+        //testUserService(userService);
+        //testChannelService(channelService);
+        //testMessageService(userService, channelService, messageService);
 
 	}
 
