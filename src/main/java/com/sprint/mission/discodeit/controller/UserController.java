@@ -85,8 +85,7 @@ public class UserController {
     @RequestMapping(value = "/api/user/check-is-online", method = RequestMethod.GET)
     public ResponseEntity<UserApiDTO.CheckUserOnline> checkIsOnline(@RequestParam String id) {
 
-        UserDTO.FindUserResult user = userService.findUserById(UUID.fromString(id))
-                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+        UserDTO.FindUserResult user = userService.findUserById(UUID.fromString(id)).get();
 
         return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
                 .isOnline(user.isOnline())
