@@ -32,7 +32,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
+    public void createChannel(ChannelDTO.CreatePublicChannelCommand request) {
 
         if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
@@ -56,7 +56,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request) {
+    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request) {
 
         Channel channel = new Channel.Builder()
                 .category(request.category())
@@ -152,7 +152,7 @@ public class FileChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(ChannelDTO.UpdateChannelRequest request) {
+    public void updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
         if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");

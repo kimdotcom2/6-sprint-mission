@@ -22,7 +22,7 @@ public class BasicChannelService implements ChannelService {
     private final ReadStatusRepository readStatusRepository;
 
     @Override
-    public void createChannel(ChannelDTO.CreatePublicChannelRequest request) {
+    public void createChannel(ChannelDTO.CreatePublicChannelCommand request) {
 
         if (request.channelName().isBlank() || request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
@@ -39,7 +39,7 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelRequest request) {
+    public void createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request) {
 
         if (request.category() == null) {
             throw new IllegalArgumentException("Invalid channel data.");
@@ -127,7 +127,7 @@ public class BasicChannelService implements ChannelService {
     }
 
     @Override
-    public void updateChannel(ChannelDTO.UpdateChannelRequest request) {
+    public void updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
         if (!channelRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such channel.");

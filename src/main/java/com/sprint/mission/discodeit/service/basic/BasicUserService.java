@@ -4,6 +4,8 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.exception.AllreadyExistDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -29,7 +31,7 @@ public class BasicUserService implements UserService {
     public void createUser(UserDTO.CreateUserCommand request) {
 
         if (userRepository.existByEmail(request.email()) || userRepository.existByNickname(request.nickname())) {
-            throw new IllegalArgumentException("User already exists.");
+            throw new AllreadyExistDataException("User already exists.");
         }
 
         User user = new User.Builder()
@@ -52,9 +54,9 @@ public class BasicUserService implements UserService {
             user.updateProfileImageId(binaryContent.getId());
 
         } else if (request.profileImage() == null && request.fileType() != null) {
-            throw new IllegalArgumentException("Invalid user data.");
+            throw new IllegalArgumentException("Invalid profile image data.");
         } else if (request.profileImage() != null) {
-            throw new IllegalArgumentException("Invalid user data.");
+            throw new IllegalArgumentException("Invalid profile image data.");
         }
 
         userRepository.save(user);
@@ -80,10 +82,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
 
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         UserStatus userStatus = userStatusRepository.findByUserId(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
                 .id(user.getId())
@@ -102,10 +104,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
                 .id(user.getId())
@@ -124,10 +126,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
 
         User user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new IllegalArgumentException("No such user."));
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
                 .id(user.getId())
@@ -153,7 +155,7 @@ public class BasicUserService implements UserService {
                         .description(user.getDescription())
                         .profileImageId(user.getProfileImageId())
                         .isOnline(userStatusRepository.findByUserId(user.getId())
-                                .orElseThrow(() -> new IllegalArgumentException("No such user status.")).isLogin())
+                                .orElseThrow(() -> new NoSuchDataException("No such user status.")).isLogin())
                         .createdAt(user.getCreatedAt())
                         .updatedAt(user.getUpdatedAt())
                         .build())
@@ -163,12 +165,13 @@ public class BasicUserService implements UserService {
     @Override
     public void updateUser(UserDTO.UpdateUserCommand request) {
 
-        User updatedUser = userRepository.findById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
+        User updatedUser = userRepository.findById(request.id())
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         if ((userRepository.existByNickname(request.nickname()) ||
                 userRepository.existByEmail(request.email())) &&
                 !updatedUser.getId().equals(request.id())) {
-            throw new IllegalArgumentException("User already exists.");
+            throw new AllreadyExistDataException("User already exists.");
         }
 
         if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUser.getPassword())) {
@@ -196,7 +199,8 @@ public class BasicUserService implements UserService {
     @Override
     public void deleteUserById(UUID id) {
 
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No such user."));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         binaryContentRepository.deleteById(user.getProfileImageId());
         userStatusRepository.deleteByUserId(user.getId());

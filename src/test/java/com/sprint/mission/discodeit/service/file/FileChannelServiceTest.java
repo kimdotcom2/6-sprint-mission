@@ -14,7 +14,7 @@ class FileChannelServiceTest {
 
     ChannelService fileChannelService = new FileChannelService(Path.of("C:\\spring\\codeit-bootcamp-spring\\6-sprint-mission\\src\\main\\resources\\data\\channels"));
 
-    ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+    ChannelDTO.CreatePublicChannelCommand channelRequest = ChannelDTO.CreatePublicChannelCommand.builder()
             .channelName("test")
             .category(ChannelType.FORUM)
             .isVoiceChannel(false)
@@ -77,12 +77,12 @@ class FileChannelServiceTest {
     void findAllChannels() {
 
         //given
-        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelRequest = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("test")
                 .category(ChannelType.FORUM)
                 .isVoiceChannel(false)
                 .build();
-        ChannelDTO.CreatePublicChannelRequest channelRequest1 = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelRequest1 = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("test1")
                 .category(ChannelType.VOICE)
                 .isVoiceChannel(true).build();
@@ -101,7 +101,7 @@ class FileChannelServiceTest {
     void updateChannel() {
 
         //given
-        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelRequest = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("test")
                 .category(ChannelType.FORUM)
                 .isVoiceChannel(false)
@@ -109,17 +109,17 @@ class FileChannelServiceTest {
         fileChannelService.createChannel(channelRequest);
 
         //when
-        ChannelDTO.UpdateChannelRequest updateChannelRequest = ChannelDTO.UpdateChannelRequest.builder()
+        ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
                 .id(fileChannelService.findAllChannels().get(0).id())
                 .channelName("test2")
                 .category(ChannelType.FORUM)
                 .isVoiceChannel(false)
                 .build();
-        fileChannelService.updateChannel(updateChannelRequest);
+        fileChannelService.updateChannel(updateChannelCommand);
 
         //then
-        assertTrue(fileChannelService.existChannelById(updateChannelRequest.id()));
-        ChannelDTO.FindChannelResult channel1 = fileChannelService.findChannelById(updateChannelRequest.id()).orElseThrow();
+        assertTrue(fileChannelService.existChannelById(updateChannelCommand.id()));
+        ChannelDTO.FindChannelResult channel1 = fileChannelService.findChannelById(updateChannelCommand.id()).orElseThrow();
         System.out.println(channel1.toString());
         assertEquals(channel1.channelName(), "test2");
         fileChannelService.findAllChannels().forEach(channel -> fileChannelService.deleteChannelById(channel.id()));
@@ -130,7 +130,7 @@ class FileChannelServiceTest {
     void deleteChannelById() {
 
         //given
-        ChannelDTO.CreatePublicChannelRequest channelRequest = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelRequest = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("test")
                 .category(ChannelType.FORUM)
                 .isVoiceChannel(false)

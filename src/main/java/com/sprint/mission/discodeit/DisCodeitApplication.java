@@ -113,12 +113,12 @@ public class DisCodeitApplication {
                 .category(ChannelType.VOICE)
                 .isVoiceChannel(true)
                 .build();*/
-        ChannelDTO.CreatePublicChannelRequest channelOne = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelOne = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("channelOne")
                 .category(ChannelType.TEXT)
                 .isVoiceChannel(false)
                 .build();
-        ChannelDTO.CreatePublicChannelRequest channelTwo = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelTwo = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("channelTwo")
                 .category(ChannelType.VOICE)
                 .isVoiceChannel(true)
@@ -140,7 +140,7 @@ public class DisCodeitApplication {
 
         //채널 수정
         System.out.println("채널 수정");
-        ChannelDTO.UpdateChannelRequest requestTwo = ChannelDTO.UpdateChannelRequest.builder()
+        ChannelDTO.UpdateChannelCommand requestTwo = ChannelDTO.UpdateChannelCommand.builder()
                 .id(channelService.findAllChannels().stream()
                         .filter(channel -> channel.channelName().equals(channelTwo.channelName()))
                         .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id())
@@ -198,13 +198,13 @@ public class DisCodeitApplication {
                 .build();
         userService.createUser(userOne);
         userService.createUser(userTwo);
-        ChannelDTO.CreatePublicChannelRequest channelOne = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelOne = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("channelOne")
                 .category(ChannelType.DM)
                 .isVoiceChannel(false)
                 .build();
         channelService.createChannel(channelOne);
-        ChannelDTO.CreatePublicChannelRequest channelTwo = ChannelDTO.CreatePublicChannelRequest.builder()
+        ChannelDTO.CreatePublicChannelCommand channelTwo = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName("channelTwo")
                 .category(ChannelType.VOICE)
                 .isVoiceChannel(true)
