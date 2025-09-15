@@ -60,7 +60,7 @@ public class UserController {
     @RequestMapping(value = "/api/user/delete", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(@RequestBody UserApiDTO.DeleteUserRequest deleteUserRequest) {
 
-        userService.deleteUserById(UUID.fromString(deleteUserRequest.id()));
+        userService.deleteUserById(deleteUserRequest.id());
 
         return ResponseEntity.ok("User deleted successfully");
 

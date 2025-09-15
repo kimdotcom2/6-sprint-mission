@@ -34,7 +34,7 @@ public class UserApiDTO {
     }
 
     @Builder
-    public record DeleteUserRequest(String id) {
+    public record DeleteUserRequest(UUID id) {
 
     }
 
