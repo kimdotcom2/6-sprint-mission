@@ -21,7 +21,7 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public void createMessage(MessageDTO.CreateMessageRequest request) {
+    public void createMessage(MessageDTO.CreateMessageCommand request) {
 
         if (!userService.existUserById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
@@ -156,7 +156,7 @@ public class JCFMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(MessageDTO.UpdateMessageRequest request) {
+    public void updateMessage(MessageDTO.UpdateMessageCommand request) {
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such message.");

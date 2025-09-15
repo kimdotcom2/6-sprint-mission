@@ -230,7 +230,7 @@ public class DisCodeitApplication {
                 .isReply(true)
                 .parentMessageId(messageOne.getId())
                 .build();*/
-        MessageDTO.CreateMessageRequest messageOne = MessageDTO.CreateMessageRequest.builder()
+        MessageDTO.CreateMessageCommand messageOne = MessageDTO.CreateMessageCommand.builder()
                 .userId(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
@@ -241,7 +241,7 @@ public class DisCodeitApplication {
                 .parentMessageId(null)
                 .build();
         messageService.createMessage(messageOne);
-        MessageDTO.CreateMessageRequest messageTwo = MessageDTO.CreateMessageRequest.builder()
+        MessageDTO.CreateMessageCommand messageTwo = MessageDTO.CreateMessageCommand.builder()
                 .userId(userService.findUserByEmail(userTwo.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
@@ -266,7 +266,7 @@ public class DisCodeitApplication {
         MessageDTO.FindMessageResult findMessageResult = messageService.findMessagesByChannelId(channelService.findAllChannels().stream()
                 .filter(channel -> channel.channelName().equals(channelOne.channelName()))
                 .findFirst().orElseThrow(() -> new IllegalArgumentException("No such channels")).id()).get(0);
-        MessageDTO.UpdateMessageRequest requestOne = MessageDTO.UpdateMessageRequest.builder()
+        MessageDTO.UpdateMessageCommand requestOne = MessageDTO.UpdateMessageCommand.builder()
                 .id(findMessageResult.id())
                 .content("messageOne edited")
                 .isReply(messageOne.isReply())

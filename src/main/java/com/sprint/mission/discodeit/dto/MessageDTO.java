@@ -8,9 +8,9 @@ import java.util.UUID;
 public class MessageDTO {
 
     @Builder
-    public record CreateMessageRequest(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<UUID> binaryContentList) {
+    public record CreateMessageCommand(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<UUID> binaryContentList) {
 
-        public CreateMessageRequest {
+        public CreateMessageCommand {
 
             if (isReply && parentMessageId == null) {
                 throw new IllegalArgumentException("Parent message id is required.");
@@ -32,8 +32,7 @@ public class MessageDTO {
             UUID parentMessageId,
             UUID channelId,
             UUID userId,
-            List<UUID>
-            binaryContentList,
+            List<UUID> binaryContentList,
             Long createdAt,
             Long updatedAt) {
 
@@ -41,9 +40,9 @@ public class MessageDTO {
 
     //message update를 위한 Request DTO
     @Builder
-    public record UpdateMessageRequest(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public record UpdateMessageCommand(UUID id, String content, boolean isReply, UUID parentMessageId) {
 
-        public UpdateMessageRequest {
+        public UpdateMessageCommand {
 
             if (isReply && parentMessageId == null) {
                 throw new IllegalArgumentException("Parent message id is required.");

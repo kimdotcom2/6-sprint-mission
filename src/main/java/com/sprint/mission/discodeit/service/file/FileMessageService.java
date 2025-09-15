@@ -35,7 +35,7 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
-    public void createMessage(MessageDTO.CreateMessageRequest request) {
+    public void createMessage(MessageDTO.CreateMessageCommand request) {
 
         if (!userService.existUserById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
@@ -198,7 +198,7 @@ public class FileMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(MessageDTO.UpdateMessageRequest request) {
+    public void updateMessage(MessageDTO.UpdateMessageCommand request) {
 
         if (request.isReply() && (request.parentMessageId() == null || !existMessageById(request.parentMessageId()))) {
             throw new IllegalArgumentException("No such parent message.");

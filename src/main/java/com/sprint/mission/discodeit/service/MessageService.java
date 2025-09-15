@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface MessageService {
 
-    void createMessage(MessageDTO.CreateMessageRequest request);
+    void createMessage(MessageDTO.CreateMessageCommand request);
 
     boolean existMessageById(UUID id);
 
@@ -22,7 +22,7 @@ public interface MessageService {
 
     List<MessageDTO.FindMessageResult> findAllMessages();
 
-    void updateMessage(MessageDTO.UpdateMessageRequest request);
+    void updateMessage(MessageDTO.UpdateMessageCommand request);
 
     void deleteMessageById(UUID id);
 

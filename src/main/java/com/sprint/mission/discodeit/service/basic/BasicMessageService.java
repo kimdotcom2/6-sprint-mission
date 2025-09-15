@@ -24,7 +24,7 @@ public class BasicMessageService implements MessageService {
     private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createMessage(MessageDTO.CreateMessageRequest request) {
+    public void createMessage(MessageDTO.CreateMessageCommand request) {
 
         if (!userRepository.existById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
@@ -147,7 +147,7 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public void updateMessage(MessageDTO.UpdateMessageRequest request) {
+    public void updateMessage(MessageDTO.UpdateMessageCommand request) {
 
         if (!messageRepository.existById(request.id())) {
             throw new IllegalArgumentException("No such message.");
