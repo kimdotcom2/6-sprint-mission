@@ -83,4 +83,9 @@ public class UserApiDTO {
 
     }
 
+    @Builder
+    public record CheckUserOnline(boolean isOnline) {
+
+    }
+
 }

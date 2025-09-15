@@ -18,7 +18,7 @@ public class UserController {
     private final AuthService authService;
     private final UserService userService;
 
-    @RequestMapping(name = "/api/user/signup", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/user/signup", method = RequestMethod.POST)
     public ResponseEntity<String> signup(@RequestBody UserApiDTO.SignUpRequest signUpRequest) {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
@@ -36,7 +36,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(name = "/api/user/update", method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/user/update", method = RequestMethod.PUT)
     public ResponseEntity<String> updateUserProfile(@RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
@@ -57,7 +57,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(name = "/api/user/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/api/user/delete", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteUser(@RequestBody UserApiDTO.DeleteUserRequest deleteUserRequest) {
 
         userService.deleteUserById(UUID.fromString(deleteUserRequest.id()));
@@ -66,7 +66,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(name = "/api/user/findAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/findAll", method = RequestMethod.GET)
     public List<UserApiDTO.FindUserResponse> findAllUsers() {
 
         return userService.findAllUsers().stream()
@@ -82,13 +82,15 @@ public class UserController {
 
     }
 
-    @RequestMapping(name = "api/user/check-is-online", method = RequestMethod.GET)
-    public ResponseEntity<Boolean> checkIsOnline(@RequestParam String id) {
+    @RequestMapping(value = "/api/user/check-is-online", method = RequestMethod.GET)
+    public ResponseEntity<UserApiDTO.CheckUserOnline> checkIsOnline(@RequestParam String id) {
 
         UserDTO.FindUserResult user = userService.findUserById(UUID.fromString(id))
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        return ResponseEntity.ok(user.isOnline());
+        return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
+                .isOnline(user.isOnline())
+                .build());
 
     }
 
