@@ -72,10 +72,10 @@ public class ChannelController {
 
     }
 
-    @RequestMapping(value = "/api/channel/find-user-id", method = RequestMethod.GET)
-    public List<ChannelApiDTO.FindChannelResponse> findChannelsByUserId(@RequestParam UUID id) {
+    @RequestMapping(value = "/api/user/{userId}/channels", method = RequestMethod.GET)
+    public List<ChannelApiDTO.FindChannelResponse> findChannelsByUserId(@PathVariable UUID userId) {
 
-        return channelService.findChannelsByUserId(id).stream()
+        return channelService.findChannelsByUserId(userId).stream()
                 .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
                         .id(channel.id())
                         .channelName(channel.channelName())
