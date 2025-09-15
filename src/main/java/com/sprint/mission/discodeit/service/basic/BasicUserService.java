@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.entity.UserStatus;
-import com.sprint.mission.discodeit.exception.AllreadyExistDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -31,7 +31,7 @@ public class BasicUserService implements UserService {
     public void createUser(UserDTO.CreateUserCommand request) {
 
         if (userRepository.existByEmail(request.email()) || userRepository.existByNickname(request.nickname())) {
-            throw new AllreadyExistDataException("User already exists.");
+            throw new AllReadyExistDataException("User already exists.");
         }
 
         User user = new User.Builder()
@@ -171,7 +171,7 @@ public class BasicUserService implements UserService {
         if ((userRepository.existByNickname(request.nickname()) ||
                 userRepository.existByEmail(request.email())) &&
                 !updatedUser.getId().equals(request.id())) {
-            throw new AllreadyExistDataException("User already exists.");
+            throw new AllReadyExistDataException("User already exists.");
         }
 
         if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUser.getPassword())) {
