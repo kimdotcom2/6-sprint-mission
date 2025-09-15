@@ -16,12 +16,12 @@ public class BasicAuthService implements AuthService {
     private final SecurityUtil securityUtil = new SecurityUtil();
 
     @Override
-    public User login(UserDTO.LoginRequest loginRequest) {
+    public User login(UserDTO.LoginCommand loginCommand) {
 
-        User user = userRepository.findByNickname(loginRequest.nickname())
+        User user = userRepository.findByNickname(loginCommand.nickname())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));
 
-        if (user.getPassword().equals(securityUtil.hashPassword(loginRequest.password()))) {
+        if (user.getPassword().equals(securityUtil.hashPassword(loginCommand.password()))) {
             return user;
         } else {
             throw new IllegalArgumentException("Invalid password.");

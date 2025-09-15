@@ -26,7 +26,7 @@ public class BasicUserService implements UserService {
     private final SecurityUtil securityUtil = new SecurityUtil();
 
     @Override
-    public void createUser(UserDTO.CreateUserRequest request) {
+    public void createUser(UserDTO.CreateUserCommand request) {
 
         if (userRepository.existByEmail(request.email()) || userRepository.existByNickname(request.nickname())) {
             throw new IllegalArgumentException("User already exists.");
@@ -161,7 +161,7 @@ public class BasicUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserCommand request) {
 
         User updatedUser = userRepository.findById(request.id()).orElseThrow(() -> new IllegalArgumentException("No such user."));
 

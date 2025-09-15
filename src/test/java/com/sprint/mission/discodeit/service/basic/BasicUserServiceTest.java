@@ -45,7 +45,7 @@ class BasicUserServiceTest {
             .password("A39ffcsdg&fdsldsf")
             .description("test")
             .build();
-    UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+    UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
             .nickname("test")
             .email("test@test.com")
             .password("A39ffcsdg&fdsldsf")
@@ -54,7 +54,7 @@ class BasicUserServiceTest {
             .fileType(FileType.IMAGE)
             .build();
 
-    UserDTO.UpdateUserRequest updateUserRequest = UserDTO.UpdateUserRequest.builder()
+    UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
             .id(user.getId())
             .nickname("test")
             .email("test@test.com")
@@ -162,7 +162,7 @@ class BasicUserServiceTest {
         when(userRepository.existById(user.getId())).thenReturn(true);
 
         //when
-        basicUserService.updateUser(updateUserRequest);
+        basicUserService.updateUser(updateUserCommand);
 
     }
 

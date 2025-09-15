@@ -5,6 +5,6 @@ import com.sprint.mission.discodeit.entity.User;
 
 public interface AuthService {
 
-    User login(UserDTO.LoginRequest loginRequest);
+    User login(UserDTO.LoginCommand loginCommand);
 
 }

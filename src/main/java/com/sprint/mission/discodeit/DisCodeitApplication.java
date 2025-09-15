@@ -3,9 +3,6 @@ package com.sprint.mission.discodeit;
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.dto.UserDTO;
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -13,7 +10,6 @@ import com.sprint.mission.discodeit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -40,13 +36,13 @@ public class DisCodeitApplication {
 
         //유저 등록
         System.out.println("유저 등록");
-        UserDTO.CreateUserRequest userOne = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userOne = UserDTO.CreateUserCommand.builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
-        UserDTO.CreateUserRequest userTwo = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userTwo = UserDTO.CreateUserCommand.builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
@@ -67,7 +63,7 @@ public class DisCodeitApplication {
 
         //유저 수정
         System.out.println("유저 수정");
-        UserDTO.UpdateUserRequest requestOne = UserDTO.UpdateUserRequest.builder()
+        UserDTO.UpdateUserCommand requestOne = UserDTO.UpdateUserCommand.builder()
                 .id(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .nickname(userOne.nickname())
@@ -188,13 +184,13 @@ public class DisCodeitApplication {
 
         //메시지 등록
         System.out.println("메시지 등록");
-        UserDTO.CreateUserRequest userOne = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userOne = UserDTO.CreateUserCommand.builder()
                 .nickname("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
-        UserDTO.CreateUserRequest userTwo = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userTwo = UserDTO.CreateUserCommand.builder()
                 .nickname("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)

@@ -17,7 +17,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void createUser(UserDTO.CreateUserRequest request) {
+    public void createUser(UserDTO.CreateUserCommand request) {
 
         if (existUserByEmail(request.email()) || existUserByNickname(request.nickname())) {
             throw new IllegalArgumentException("User already exists.");
@@ -146,7 +146,7 @@ public class JCFUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserCommand request) {
 
         if (!data.containsKey(request.id())) {
             throw new IllegalArgumentException("No such user.");

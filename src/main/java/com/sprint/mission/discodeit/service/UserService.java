@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    void createUser(UserDTO.CreateUserRequest request);
+    void createUser(UserDTO.CreateUserCommand request);
 
     boolean existUserById(UUID id);
 
@@ -24,7 +24,7 @@ public interface UserService {
 
     List<UserDTO.FindUserResult> findAllUsers();
 
-    void updateUser(UserDTO.UpdateUserRequest request);
+    void updateUser(UserDTO.UpdateUserCommand request);
 
     void deleteUserById(UUID id);
 

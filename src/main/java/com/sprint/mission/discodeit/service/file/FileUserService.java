@@ -34,7 +34,7 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void createUser(UserDTO.CreateUserRequest request) {
+    public void createUser(UserDTO.CreateUserCommand request) {
 
         if (existUserByEmail(request.email()) || existUserByNickname(request.nickname())) {
             throw new IllegalArgumentException("User already exists.");
@@ -237,7 +237,7 @@ public class FileUserService implements UserService {
     }
 
     @Override
-    public void updateUser(UserDTO.UpdateUserRequest request) {
+    public void updateUser(UserDTO.UpdateUserCommand request) {
 
         User user = parseUserById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user."));

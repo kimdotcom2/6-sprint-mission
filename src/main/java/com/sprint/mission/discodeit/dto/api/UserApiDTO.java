@@ -1,20 +1,14 @@
-package com.sprint.mission.discodeit.dto;
+package com.sprint.mission.discodeit.dto.api;
 
 import com.sprint.mission.discodeit.enums.FileType;
 import lombok.Builder;
 
 import java.util.UUID;
 
-public class UserDTO {
-
-    //login request DTO
-    @Builder
-    public record LoginCommand(String nickname, String password) {
-
-    }
+public class UserApiDTO {
 
     @Builder
-    public record CreateUserCommand(
+    public record SignUpRequest(
             String nickname,
             String email,
             String password,
@@ -31,7 +25,7 @@ public class UserDTO {
             return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$");
         }
 
-        public CreateUserCommand {
+        public SignUpRequest {
 
             if (!isPasswordValid(password) || !isEmailValid(email) || nickname.isBlank()) {
                 throw new IllegalArgumentException("Invalid user data.");
@@ -41,24 +35,8 @@ public class UserDTO {
 
     }
 
-    //find user을 위한 DTO
     @Builder
-    public record FindUserResult(
-            UUID id,
-            String nickname,
-            String email,
-            String description,
-            UUID profileImageId,
-            boolean isOnline,
-            Long createdAt,
-            Long updatedAt
-    ) {
-
-    }
-
-    //user update를 위한 Request DTO
-    @Builder
-    public record UpdateUserCommand(
+    public record UpdateUserProfileRequest(
             UUID id,
             String nickname,
             String email,
@@ -79,13 +57,29 @@ public class UserDTO {
             return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{8,}$");
         }
 
-        public UpdateUserCommand {
+        public UpdateUserProfileRequest {
 
             if (!isPasswordValid(newPassword) || !isEmailValid(email) || nickname.isBlank()) {
                 throw new IllegalArgumentException("Invalid user data.");
             }
 
         }
+
+    }
+
+    @Builder
+    public record DeleteUserRequest(String id) {
+
+    }
+
+    @Builder
+    public record FindUserResponse(
+            UUID id,
+            String nickname,
+            String email,
+            String description,
+            UUID profileImageId
+    ) {
 
     }
 

@@ -1,7 +1,6 @@
 package com.sprint.mission.discodeit.service.file;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
-import com.sprint.mission.discodeit.entity.User;
 import com.sprint.mission.discodeit.service.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,7 @@ class FileUserServiceTest {
     void createUser() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -42,7 +41,7 @@ class FileUserServiceTest {
     void existUserById() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -62,7 +61,7 @@ class FileUserServiceTest {
     void findUserById() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -83,7 +82,7 @@ class FileUserServiceTest {
     void findAllUsers() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -104,7 +103,7 @@ class FileUserServiceTest {
     void updateUser() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -114,7 +113,7 @@ class FileUserServiceTest {
 
         //when
         UserDTO.FindUserResult user1 = userService.findUserByEmail(userRequest.email()).orElse(null);
-        UserDTO.UpdateUserRequest updateUserRequest = UserDTO.UpdateUserRequest.builder()
+        UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
                 .id(user1.id())
                 .nickname("test2")
                 .email("test2@test.com")
@@ -122,7 +121,7 @@ class FileUserServiceTest {
                 .newPassword("A39ffcsdg&fdsldsf")
                 .description("test2")
                 .build();
-        userService.updateUser(updateUserRequest);
+        userService.updateUser(updateUserCommand);
         user1 = userService.findUserById(user1.id()).orElse(null);
 
         //then
@@ -136,7 +135,7 @@ class FileUserServiceTest {
     void deleteUserById() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
@@ -158,7 +157,7 @@ class FileUserServiceTest {
     void findUserByEmail() {
 
         //given
-        UserDTO.CreateUserRequest userRequest = UserDTO.CreateUserRequest.builder()
+        UserDTO.CreateUserCommand userRequest = UserDTO.CreateUserCommand.builder()
                 .nickname("test")
                 .email("test@test.com")
                 .password("A39ffcsdg&fdsldsf")
