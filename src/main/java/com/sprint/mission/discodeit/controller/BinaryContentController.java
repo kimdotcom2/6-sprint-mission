@@ -5,9 +5,7 @@ import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,7 +16,7 @@ public class BinaryContentController {
 
     private final BinaryContentService binaryContentService;
 
-    @GetMapping("/api/binary-content/read")
+    @RequestMapping(value = "/api/binary-content/read", method = RequestMethod.GET)
     public ResponseEntity<BinaryContentApiDTO.ReadBinaryContentResponse> readBinaryContent(@RequestParam UUID id) {
 
         BinaryContentDTO.ReadBinaryContentResult readBinaryContentResult = binaryContentService.findBinaryContentById(id).get();
@@ -31,7 +29,7 @@ public class BinaryContentController {
 
     }
 
-    @GetMapping("/api/binary-content/find-by-id-in")
+    @RequestMapping(value = "/api/binary-content/read-by-id-in", method = RequestMethod.GET)
     public List<BinaryContentApiDTO.ReadBinaryContentResponse> readBinaryContentsByIdIn(List<UUID> idList) {
 
         return binaryContentService.findAllBinaryContentByIdIn(idList).stream()
