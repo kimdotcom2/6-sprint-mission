@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller.global;
 
+import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,38 +16,50 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchDataException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> NoSuchDataException(NoSuchDataException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
 
         log.error("NoSuchDataException: {}", e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
+                .code(HttpStatus.NOT_FOUND.value())
+                .message(e.getMessage())
+                .build());
     }
 
     @ExceptionHandler(AllReadyExistDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
 
         log.error("AllReadyExistDataException: {}", e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .build());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<String> IllegalArgumentException(IllegalArgumentException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> IllegalArgumentException(IllegalArgumentException e) {
 
         log.error("IllegalArgumentException: {}", e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
+                .code(HttpStatus.BAD_REQUEST.value())
+                .message(e.getMessage())
+                .build());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<String> Exception(Exception e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> Exception(Exception e) {
 
         log.error("Exception: {}", e.getMessage());
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorApiDTO.ErrorApiResponse.builder()
+                .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .message("Internal Server Error")
+                .build());
     }
 
 }
