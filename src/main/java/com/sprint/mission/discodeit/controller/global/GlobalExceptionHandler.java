@@ -16,18 +16,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoSuchDataException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<String> NoSuchDataException(NoSuchDataException e) {
+
+        log.error("NoSuchDataException: {}", e.getMessage());
+
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
     @ExceptionHandler(AllReadyExistDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
+
+        log.error("AllReadyExistDataException: {}", e.getMessage());
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<String> IllegalArgumentException(IllegalArgumentException e) {
+
+        log.error("IllegalArgumentException: {}", e.getMessage());
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
@@ -38,7 +47,6 @@ public class GlobalExceptionHandler {
         log.error("Exception: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal Server Error");
-
     }
 
 }
