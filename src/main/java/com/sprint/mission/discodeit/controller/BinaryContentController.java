@@ -17,7 +17,7 @@ public class BinaryContentController {
     private final BinaryContentService binaryContentService;
 
     @RequestMapping(value = "/api/binary-content/read", method = RequestMethod.GET)
-    public ResponseEntity<BinaryContentApiDTO.ReadBinaryContentResponse> readBinaryContent(@RequestParam UUID id) {
+    public ResponseEntity<BinaryContentApiDTO.ReadBinaryContentResponse> readBinaryContent(@RequestParam(value = "id") UUID id) {
 
         BinaryContentDTO.ReadBinaryContentResult readBinaryContentResult = binaryContentService.findBinaryContentById(id).get();
 
