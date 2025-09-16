@@ -36,8 +36,8 @@ class BasicReadStatusServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    private ReadStatusDTO.CreateReadStatusRequest createReadStatusRequest(UUID userId, UUID channelId) {
-        return ReadStatusDTO.CreateReadStatusRequest.builder()
+    private ReadStatusDTO.CreateReadStatusCommand createReadStatusRequest(UUID userId, UUID channelId) {
+        return ReadStatusDTO.CreateReadStatusCommand.builder()
                 .userId(userId)
                 .channelId(channelId)
                 .messageId(null)
@@ -59,7 +59,7 @@ class BasicReadStatusServiceTest {
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(true);
-        ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
+        ReadStatusDTO.CreateReadStatusCommand request = createReadStatusRequest(userId, channelId);
 
         //when
         basicReadStatusService.createReadStatus(request);
@@ -76,7 +76,7 @@ class BasicReadStatusServiceTest {
         UUID userId = UUID.randomUUID();
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(false);
-        ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
+        ReadStatusDTO.CreateReadStatusCommand request = createReadStatusRequest(userId, channelId);
 
         //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.createReadStatus(request));
@@ -91,7 +91,7 @@ class BasicReadStatusServiceTest {
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(false);
-        ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
+        ReadStatusDTO.CreateReadStatusCommand request = createReadStatusRequest(userId, channelId);
 
         //then
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicReadStatusService.createReadStatus(request));
@@ -106,7 +106,7 @@ class BasicReadStatusServiceTest {
         UUID channelId = UUID.randomUUID();
         when(userRepository.existById(userId)).thenReturn(true);
         when(channelRepository.existById(channelId)).thenReturn(true);
-        ReadStatusDTO.CreateReadStatusRequest request = createReadStatusRequest(userId, channelId);
+        ReadStatusDTO.CreateReadStatusCommand request = createReadStatusRequest(userId, channelId);
         when(readStatusRepository.existByUserIdAndChannelId(userId, channelId)).thenReturn(true);
 
         //then
@@ -301,7 +301,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findById(existing.getId())).thenReturn(Optional.of(existing));
 
         //when
-        ReadStatusDTO.UpdateReadStatusRequest request = ReadStatusDTO.UpdateReadStatusRequest.builder()
+        ReadStatusDTO.UpdateReadStatusCommand request = ReadStatusDTO.UpdateReadStatusCommand.builder()
                 .id(existing.getId())
                 .build();
         basicReadStatusService.updateReadStatus(request);
@@ -322,7 +322,7 @@ class BasicReadStatusServiceTest {
         when(readStatusRepository.findById(id)).thenReturn(Optional.empty());
 
         //when
-        ReadStatusDTO.UpdateReadStatusRequest request = ReadStatusDTO.UpdateReadStatusRequest.builder()
+        ReadStatusDTO.UpdateReadStatusCommand request = ReadStatusDTO.UpdateReadStatusCommand.builder()
                 .id(id)
                 .build();
 

@@ -22,7 +22,7 @@ public class BasicReadStatusService implements ReadStatusService {
     private final ChannelRepository channelRepository;
 
     @Override
-    public void createReadStatus(ReadStatusDTO.CreateReadStatusRequest request) {
+    public void createReadStatus(ReadStatusDTO.CreateReadStatusCommand request) {
 
         if (!userRepository.existById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
@@ -151,7 +151,7 @@ public class BasicReadStatusService implements ReadStatusService {
     }
 
     @Override
-    public void updateReadStatus(ReadStatusDTO.UpdateReadStatusRequest request) {
+    public void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request) {
 
         ReadStatus readStatus = readStatusRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such read status."));

@@ -7,7 +7,7 @@ import java.util.UUID;
 public class ReadStatusDTO {
 
     @Builder
-    public record CreateReadStatusRequest(UUID channelId, UUID userId, UUID messageId){
+    public record CreateReadStatusCommand(UUID channelId, UUID userId, UUID messageId){
 
     }
 
@@ -25,7 +25,7 @@ public class ReadStatusDTO {
     }
 
     @Builder
-    public record UpdateReadStatusRequest(UUID id){
+    public record UpdateReadStatusCommand(UUID id){
 
     }
 

@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface ReadStatusService {
 
-    void createReadStatus(ReadStatusDTO.CreateReadStatusRequest request);
+    void createReadStatus(ReadStatusDTO.CreateReadStatusCommand request);
 
     boolean existReadStatusById(UUID id);
 
@@ -24,7 +24,7 @@ public interface ReadStatusService {
 
     List<ReadStatusDTO.FindReadStatusResult> findAllReadStatus();
 
-    void updateReadStatus(ReadStatusDTO.UpdateReadStatusRequest request);
+    void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request);
 
     void deleteReadStatusById(UUID id);
 
