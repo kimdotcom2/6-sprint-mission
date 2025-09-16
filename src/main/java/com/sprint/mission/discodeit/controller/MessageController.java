@@ -17,7 +17,7 @@ public class MessageController {
     private final MessageService messageService;
 
     @RequestMapping(value = "/api/message/send", method = RequestMethod.POST)
-    public ResponseEntity<String> sendMessage(MessageApiDTO.CreateMessageRequest request) {
+    public ResponseEntity<String> sendMessage(@RequestBody MessageApiDTO.CreateMessageRequest request) {
 
         MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
                 .content(request.content())
@@ -35,7 +35,7 @@ public class MessageController {
     }
 
     @RequestMapping(value = "/api/message/update", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateMessage(MessageApiDTO.UpdateMessageRequest request) {
+    public ResponseEntity<String> updateMessage(@RequestBody MessageApiDTO.UpdateMessageRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
                 .id(request.id())
