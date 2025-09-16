@@ -39,6 +39,7 @@ public class ReadStatusController {
 
     }
 
+    @RequestMapping(value = "/api/read-status/{userId}", method = RequestMethod.GET)
     public List<ReadStatusApiDTO.FindReadStatusResponse> findReadStatusByUserId(@PathVariable UUID userId) {
 
         return readStatusService.findAllReadStatusByUserId(userId).stream()
