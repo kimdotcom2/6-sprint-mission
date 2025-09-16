@@ -35,7 +35,7 @@ public class ChannelDTO {
 
     //channel update를 위한 Request DTO
     @Builder
-    public record UpdateChannelCommand(UUID id, String channelName, ChannelType category, boolean isVoiceChannel) {
+    public record UpdateChannelCommand(UUID id, String channelName, ChannelType category, boolean isVoiceChannel, List<UUID> userIdList) {
 
     }
 
