@@ -16,7 +16,6 @@ public class ReadStatusDTO {
             UUID id,
             UUID channelId,
             UUID userId,
-            UUID messageId,
             Long lastReadTimestamp,
             Long createdAt,
             Long updatedAt
