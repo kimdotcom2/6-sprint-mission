@@ -25,6 +25,7 @@ public class BinaryContentController {
                 .id(id)
                 .data(readBinaryContentResult.data())
                 .fileType(readBinaryContentResult.fileType())
+                .createdAt(readBinaryContentResult.createdAt())
                 .build());
 
     }
@@ -37,6 +38,7 @@ public class BinaryContentController {
                         .id(binaryContent.id())
                         .data(binaryContent.data())
                         .fileType(binaryContent.fileType())
+                        .createdAt(binaryContent.createdAt())
                         .build())
                 .toList();
 

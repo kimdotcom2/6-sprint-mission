@@ -76,6 +76,9 @@ public class UserController {
                         .email(user.email())
                         .description(user.description())
                         .profileImageId(user.profileImageId())
+                        .isOnline(user.isOnline())
+                        .createdAt(user.createdAt())
+                        .updatedAt(user.updatedAt())
                         .build())
 
                 .toList();

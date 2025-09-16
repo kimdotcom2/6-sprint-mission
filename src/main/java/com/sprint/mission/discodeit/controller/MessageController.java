@@ -68,6 +68,11 @@ public class MessageController {
                         .content(message.content())
                         .isReply(message.isReply())
                         .parentMessageId(message.parentMessageId())
+                        .channelId(message.channelId())
+                        .userId(message.userId())
+                        .binaryContentList(message.binaryContentList())
+                        .createdAt(message.createdAt())
+                        .updatedAt(message.updatedAt())
                         .build())
                 .toList();
 
