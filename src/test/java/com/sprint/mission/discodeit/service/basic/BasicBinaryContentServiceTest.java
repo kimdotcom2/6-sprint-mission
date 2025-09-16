@@ -5,7 +5,6 @@ import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.enums.FileType;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +40,7 @@ class BasicBinaryContentServiceTest {
     void createBinaryContent_behaviour() {
 
         //given
-        BinaryContentDTO.CreateBinaryContentRequest request = BinaryContentDTO.CreateBinaryContentRequest.builder()
+        BinaryContentDTO.CreateBinaryContentCommand request = BinaryContentDTO.CreateBinaryContentCommand.builder()
                 .data(sampleData)
                 .fileType(FileType.IMAGE)
                 .build();
@@ -57,11 +56,11 @@ class BasicBinaryContentServiceTest {
         assertThat(binaryContent.getFileType()).isEqualTo(FileType.IMAGE);
 
         //given
-        BinaryContentDTO.CreateBinaryContentRequest nullDataRequest = BinaryContentDTO.CreateBinaryContentRequest.builder()
+        BinaryContentDTO.CreateBinaryContentCommand nullDataRequest = BinaryContentDTO.CreateBinaryContentCommand.builder()
                 .data(null)
                 .fileType(FileType.DOCUMENT)
                 .build();
-        BinaryContentDTO.CreateBinaryContentRequest nullTypeRequest = BinaryContentDTO.CreateBinaryContentRequest.builder()
+        BinaryContentDTO.CreateBinaryContentCommand nullTypeRequest = BinaryContentDTO.CreateBinaryContentCommand.builder()
                 .data(sampleData)
                 .fileType(null)
                 .build();

@@ -18,7 +18,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     private final BinaryContentRepository binaryContentRepository;
 
     @Override
-    public void createBinaryContent(BinaryContentDTO.CreateBinaryContentRequest request) {
+    public void createBinaryContent(BinaryContentDTO.CreateBinaryContentCommand request) {
 
         if (request.data() == null) {
             throw new IllegalArgumentException("Data must not be null");
