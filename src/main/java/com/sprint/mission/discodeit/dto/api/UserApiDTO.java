@@ -44,7 +44,10 @@ public class UserApiDTO {
             String nickname,
             String email,
             String description,
-            UUID profileImageId
+            UUID profileImageId,
+            boolean isOnline,
+            Long createdAt,
+            Long updatedAt
     ) {
 
     }

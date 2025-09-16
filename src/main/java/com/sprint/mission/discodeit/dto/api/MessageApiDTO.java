@@ -30,7 +30,9 @@ public class MessageApiDTO {
             UUID parentMessageId,
             UUID channelId,
             UUID userId,
-            List<UUID> binaryContentList
+            List<UUID> binaryContentList,
+            Long createdAt,
+            Long updatedAt
     ) {
 
     }
