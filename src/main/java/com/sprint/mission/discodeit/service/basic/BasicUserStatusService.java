@@ -20,7 +20,7 @@ public class BasicUserStatusService implements UserStatusService {
     private final UserRepository userRepository;
 
     @Override
-    public void createUserStatus(UserStatusDTO.CreateReadStatusCommand request) {
+    public void createUserStatus(UserStatusDTO.CreateUserStatusCommand request) {
 
         if (!userRepository.existById(request.userId())) {
             throw new IllegalArgumentException("No such user.");
@@ -49,12 +49,12 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public Optional<UserStatusDTO.FindReadStatusResult> findUserStatusById(UUID id) {
+    public Optional<UserStatusDTO.FindUserStatusResult> findUserStatusById(UUID id) {
 
         UserStatus userStatus = userStatusRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
-        return Optional.ofNullable(UserStatusDTO.FindReadStatusResult.builder()
+        return Optional.ofNullable(UserStatusDTO.FindUserStatusResult.builder()
                 .id(userStatus.getId())
                 .userId(userStatus.getUserId())
                 .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
@@ -65,7 +65,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public Optional<UserStatusDTO.FindReadStatusResult> findUserStatusByUserId(UUID userId) {
+    public Optional<UserStatusDTO.FindUserStatusResult> findUserStatusByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
             throw new IllegalArgumentException("No such user.");
@@ -74,7 +74,7 @@ public class BasicUserStatusService implements UserStatusService {
         UserStatus userStatus = userStatusRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
-        return Optional.ofNullable(UserStatusDTO.FindReadStatusResult.builder()
+        return Optional.ofNullable(UserStatusDTO.FindUserStatusResult.builder()
                 .id(userStatus.getId())
                 .userId(userStatus.getUserId())
                 .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
@@ -85,9 +85,9 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public List<UserStatusDTO.FindReadStatusResult> findAllUserStatus() {
+    public List<UserStatusDTO.FindUserStatusResult> findAllUserStatus() {
         return userStatusRepository.findAll().stream()
-                .map(userStatus -> UserStatusDTO.FindReadStatusResult.builder()
+                .map(userStatus -> UserStatusDTO.FindUserStatusResult.builder()
                         .id(userStatus.getId())
                         .userId(userStatus.getUserId())
                         .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
@@ -99,7 +99,7 @@ public class BasicUserStatusService implements UserStatusService {
     }
 
     @Override
-    public void updateUserStatus(UserStatusDTO.UpdateReadStatusCommand request) {
+    public void updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request) {
 
         UserStatus userStatus = userStatusRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));

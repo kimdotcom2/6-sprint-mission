@@ -35,7 +35,7 @@ class BasicUserStatusServiceTest {
 
         //given
         UUID userId = UUID.randomUUID();
-        UserStatusDTO.CreateReadStatusCommand request = UserStatusDTO.CreateReadStatusCommand.builder()
+        UserStatusDTO.CreateUserStatusCommand request = UserStatusDTO.CreateUserStatusCommand.builder()
                 .userId(userId)
                 .build();
         when(userRepository.existById(userId)).thenReturn(true);
@@ -52,7 +52,7 @@ class BasicUserStatusServiceTest {
 
         //given
         UUID missingUserId = UUID.randomUUID();
-        UserStatusDTO.CreateReadStatusCommand requestMissingUser = UserStatusDTO.CreateReadStatusCommand.builder()
+        UserStatusDTO.CreateUserStatusCommand requestMissingUser = UserStatusDTO.CreateUserStatusCommand.builder()
                 .userId(missingUserId)
                 .build();
         when(userRepository.existById(missingUserId)).thenReturn(false);
@@ -64,7 +64,7 @@ class BasicUserStatusServiceTest {
 
         //given
         UUID duplicatedUserId = UUID.randomUUID();
-        UserStatusDTO.CreateReadStatusCommand duplicatedRequest = UserStatusDTO.CreateReadStatusCommand.builder()
+        UserStatusDTO.CreateUserStatusCommand duplicatedRequest = UserStatusDTO.CreateUserStatusCommand.builder()
                 .userId(duplicatedUserId)
                 .build();
         when(userRepository.existById(duplicatedUserId)).thenReturn(true);
@@ -106,7 +106,7 @@ class BasicUserStatusServiceTest {
         when(userStatusRepository.findById(id)).thenReturn(Optional.of(entity));
 
         //when
-        Optional<UserStatusDTO.FindReadStatusResult> found = service.findUserStatusById(id);
+        Optional<UserStatusDTO.FindUserStatusResult> found = service.findUserStatusById(id);
 
         //then
         assertThat(found).isPresent();
@@ -134,7 +134,7 @@ class BasicUserStatusServiceTest {
         when(userStatusRepository.findByUserId(userId)).thenReturn(Optional.of(entity));
 
         //when
-        Optional<UserStatusDTO.FindReadStatusResult> found = service.findUserStatusByUserId(userId);
+        Optional<UserStatusDTO.FindUserStatusResult> found = service.findUserStatusByUserId(userId);
 
         //then
         assertThat(found).isPresent();
@@ -168,7 +168,7 @@ class BasicUserStatusServiceTest {
         when(userStatusRepository.findAll()).thenReturn(List.of(new UserStatus(UUID.randomUUID())));
 
         //when
-        List<UserStatusDTO.FindReadStatusResult> list = service.findAllUserStatus();
+        List<UserStatusDTO.FindUserStatusResult> list = service.findAllUserStatus();
 
         //then
         assertThat(list).hasSize(1);
@@ -185,7 +185,7 @@ class BasicUserStatusServiceTest {
         when(userStatusRepository.findById(id)).thenReturn(Optional.of(userStatus));
 
         //when
-        service.updateUserStatus(UserStatusDTO.UpdateReadStatusCommand.builder().id(id).build());
+        service.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder().id(id).build());
 
         //then
         verify(userStatus).updateLastActiveTimestamp();

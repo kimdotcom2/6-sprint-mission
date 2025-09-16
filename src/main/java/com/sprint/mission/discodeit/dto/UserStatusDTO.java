@@ -7,12 +7,12 @@ import java.util.UUID;
 public class UserStatusDTO {
 
     @Builder
-    public record CreateReadStatusCommand(UUID userId) {
+    public record CreateUserStatusCommand(UUID userId) {
 
     }
 
     @Builder
-    public record FindReadStatusResult(
+    public record FindUserStatusResult(
             UUID id,
             UUID userId,
             Long lastActiveTimestamp,
@@ -23,7 +23,7 @@ public class UserStatusDTO {
     }
 
     @Builder
-    public record UpdateReadStatusCommand(UUID id) {
+    public record UpdateUserStatusCommand(UUID id) {
 
     }
 

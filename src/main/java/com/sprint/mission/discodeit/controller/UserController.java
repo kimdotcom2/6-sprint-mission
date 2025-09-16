@@ -102,8 +102,10 @@ public class UserController {
     @RequestMapping(value = "/api/user/{userId}/update-online-status", method = RequestMethod.PUT)
     public ResponseEntity<String> updateUserOnlineStatus(@PathVariable UUID userId) {
 
-        userStatusService.updateUserStatus(UserStatusDTO.UpdateReadStatusCommand.builder()
-                .id(userId)
+        UserStatusDTO.FindUserStatusResult findUserResult = userStatusService.findUserStatusByUserId(userId).get();
+
+        userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
+                .id(findUserResult.id())
                 .build());
 
         return ResponseEntity.ok("User online status updated successfully");
