@@ -40,7 +40,6 @@ class BasicReadStatusServiceTest {
         return ReadStatusDTO.CreateReadStatusCommand.builder()
                 .userId(userId)
                 .channelId(channelId)
-                .messageId(null)
                 .build();
     }
 
