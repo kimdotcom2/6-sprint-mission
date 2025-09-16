@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.entity.BinaryContent;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public Optional<BinaryContentDTO.ReadBinaryContentResult> findBinaryContentById(UUID id) {
 
         BinaryContent binaryContent = binaryContentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such binary content"));
+                .orElseThrow(() -> new NoSuchDataException("No such binary content"));
 
         return Optional.ofNullable(BinaryContentDTO.ReadBinaryContentResult.builder()
                 .id(binaryContent.getId())
@@ -82,7 +83,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public void deleteBinaryContentById(UUID id) {
 
         if (!binaryContentRepository.existById(id)) {
-            throw new IllegalArgumentException("No such binary content");
+            throw new NoSuchDataException("No such binary content");
         }
 
         binaryContentRepository.deleteById(id);
