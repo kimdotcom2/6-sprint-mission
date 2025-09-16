@@ -8,19 +8,19 @@ import java.util.UUID;
 
 public interface UserStatusService {
 
-    void createUserStatus(UserStatusDTO.CreateReadStatusRequest request);
+    void createUserStatus(UserStatusDTO.CreateReadStatusCommand request);
 
     boolean existUserStatusById(UUID id);
 
     boolean existUserStatusByUserId(UUID userId);
 
-    Optional<UserStatusDTO.FindReadStatusRequest> findUserStatusById(UUID id);
+    Optional<UserStatusDTO.FindReadStatusResult> findUserStatusById(UUID id);
 
-    Optional<UserStatusDTO.FindReadStatusRequest> findUserStatusByUserId(UUID userId);
+    Optional<UserStatusDTO.FindReadStatusResult> findUserStatusByUserId(UUID userId);
 
-    List<UserStatusDTO.FindReadStatusRequest> findAllUserStatus();
+    List<UserStatusDTO.FindReadStatusResult> findAllUserStatus();
 
-    void updateUserStatus(UserStatusDTO.UpdateReadStatusRequest request);
+    void updateUserStatus(UserStatusDTO.UpdateReadStatusCommand request);
 
     void deleteUserStatusById(UUID id);
 

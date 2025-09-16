@@ -1,9 +1,11 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
+import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ public class UserController {
 
     private final AuthService authService;
     private final UserService userService;
+    private final UserStatusService userStatusService;
 
     @RequestMapping(value = "/api/user/signup", method = RequestMethod.POST)
     public ResponseEntity<String> signup(@RequestBody UserApiDTO.SignUpRequest signUpRequest) {
@@ -93,6 +96,17 @@ public class UserController {
         return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
                 .isOnline(user.isOnline())
                 .build());
+
+    }
+
+    @RequestMapping(value = "/api/user/{userId}/update-online-status", method = RequestMethod.PUT)
+    public ResponseEntity<String> updateUserOnlineStatus(@PathVariable UUID userId) {
+
+        userStatusService.updateUserStatus(UserStatusDTO.UpdateReadStatusCommand.builder()
+                .id(userId)
+                .build());
+
+        return ResponseEntity.ok("User online status updated successfully");
 
     }
 
