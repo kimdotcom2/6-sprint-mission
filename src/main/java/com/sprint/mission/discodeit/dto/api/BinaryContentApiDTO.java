@@ -10,7 +10,7 @@ public class BinaryContentApiDTO {
     @Builder
     public record ReadBinaryContentResponse(
             UUID id,
-            long createdAt,
+            Long createdAt,
             byte[] data,
             FileType fileType
     ) {

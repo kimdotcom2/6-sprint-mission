@@ -15,7 +15,7 @@ public class BinaryContentDTO {
     @Builder
     public record ReadBinaryContentResult(
             UUID id,
-            long createdAt,
+            Long createdAt,
             byte[] data,
             FileType fileType) {
 
