@@ -66,7 +66,6 @@ public class BasicMessageService implements MessageService {
                 .parentMessageId(message.getParentMessageId())
                 .createdAt(message.getCreatedAt())
                 .updatedAt(message.getUpdatedAt())
-                .binaryContentList(message.getBinaryContentIdList().stream().toList())
                 .build());
     }
 
