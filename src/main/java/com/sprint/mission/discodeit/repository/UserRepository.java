@@ -18,6 +18,8 @@ public interface UserRepository {
 
     boolean existByNickname(String nickname);
 
+    boolean existByEmailOrNickname(String email, String nickname);
+
     Optional<User> findById(UUID id);
 
     Optional<User> findByEmail(String email);

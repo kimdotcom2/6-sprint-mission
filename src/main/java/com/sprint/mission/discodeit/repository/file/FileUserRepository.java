@@ -81,6 +81,11 @@ public class FileUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existByEmailOrNickname(String email, String nickname) {
+        return findAll().stream().anyMatch(user -> user.getEmail().equals(email) || user.getNickname().equals(nickname));
+    }
+
+    @Override
     public Optional<User> findById(UUID id) {
 
         try (FileInputStream fis = new FileInputStream(path.resolve(id + fileExtension).toFile());

@@ -30,7 +30,7 @@ public class BasicUserService implements UserService {
     @Override
     public void createUser(UserDTO.CreateUserCommand request) {
 
-        if (userRepository.existByEmail(request.email()) || userRepository.existByNickname(request.nickname())) {
+        if (userRepository.existByEmailOrNickname(request.email(), request.nickname())) {
             throw new AllReadyExistDataException("User already exists.");
         }
 
@@ -168,8 +168,7 @@ public class BasicUserService implements UserService {
         User updatedUser = userRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        if ((userRepository.existByNickname(request.nickname()) ||
-                userRepository.existByEmail(request.email())) &&
+        if (userRepository.existByEmailOrNickname(request.email(), request.nickname()) &&
                 !updatedUser.getId().equals(request.id())) {
             throw new AllReadyExistDataException("User already exists.");
         }

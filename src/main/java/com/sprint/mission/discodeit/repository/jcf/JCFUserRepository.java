@@ -45,6 +45,11 @@ public class JCFUserRepository implements UserRepository {
     }
 
     @Override
+    public boolean existByEmailOrNickname(String email, String nickname) {
+        return data.values().stream().anyMatch(user -> user.getEmail().equals(email) || user.getNickname().equals(nickname));
+    }
+
+    @Override
     public Optional<User> findById(UUID id) {
         return Optional.ofNullable(data.get(id));
     }
