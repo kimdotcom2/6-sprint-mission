@@ -8,7 +8,6 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-@Builder
 public class BinaryContent implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -16,5 +15,11 @@ public class BinaryContent implements Serializable {
     private final Long createdAt = Instant.now().toEpochMilli();
     private final byte[] data;
     private final FileType fileType;
+
+    @Builder
+    public BinaryContent(byte[] data, FileType fileType) {
+        this.data = data;
+        this.fileType = fileType;
+    }
 
 }
