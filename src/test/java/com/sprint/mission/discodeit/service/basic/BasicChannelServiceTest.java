@@ -10,9 +10,11 @@ import com.sprint.mission.discodeit.repository.ReadStatusRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class BasicChannelServiceTest {
 
     @Mock
@@ -32,11 +35,6 @@ class BasicChannelServiceTest {
 
     @InjectMocks
     private BasicChannelService basicChannelService;
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     private Channel publicChannel() {
         return new Channel.Builder()
