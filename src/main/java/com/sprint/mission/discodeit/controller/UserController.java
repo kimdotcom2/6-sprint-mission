@@ -69,7 +69,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/api/user/findAll", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/user/all", method = RequestMethod.GET)
     public List<UserApiDTO.FindUserResponse> findAllUsers() {
 
         return userService.findAllUsers().stream()
@@ -99,7 +99,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/api/user/{userId}/update-online-status", method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/user/{userId}/online-status-update", method = RequestMethod.PUT)
     public ResponseEntity<String> updateUserOnlineStatus(@PathVariable UUID userId) {
 
         UserStatusDTO.FindUserStatusResult findUserResult = userStatusService.findUserStatusByUserId(userId).get();

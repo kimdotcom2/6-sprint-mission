@@ -17,7 +17,7 @@ public class ChannelController {
 
     private final ChannelService channelService;
 
-    @RequestMapping(value = "/api/channel/create-public", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/channel/public-channel", method = RequestMethod.POST)
     public ResponseEntity<String> createPublicChannel(@RequestBody ChannelApiDTO.CreatePublicChannelRequest createPublicChannelRequest) {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
@@ -32,7 +32,7 @@ public class ChannelController {
 
     }
 
-    @RequestMapping(value = "/api/channel/create-private", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/channel/private-channel", method = RequestMethod.POST)
     public ResponseEntity<String> createPrivateChannel(@RequestBody ChannelApiDTO.CreatePrivateChannelRequest createPrivateChannelRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
@@ -47,7 +47,7 @@ public class ChannelController {
 
     }
 
-    @RequestMapping(value = "/api/channel/update-public", method = RequestMethod.PUT)
+    @RequestMapping(value = "/api/channel/public-channel", method = RequestMethod.PUT)
     public ResponseEntity<String> updatePublicChannel(@RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
