@@ -46,6 +46,8 @@ public class BasicUserService implements UserService {
         if (request.profileImage() != null && request.fileType() != null) {
 
             BinaryContent binaryContent = BinaryContent.builder()
+                    .fileName(user.getNickname() + "_profileImage")
+                    .size((long) request.profileImage().length)
                     .data(request.profileImage())
                     .fileType(request.fileType())
                     .build();

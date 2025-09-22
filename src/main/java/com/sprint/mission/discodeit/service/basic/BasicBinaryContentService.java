@@ -29,7 +29,10 @@ public class BasicBinaryContentService implements BinaryContentService {
         }
 
         BinaryContent binaryContent = BinaryContent.builder()
-            .data(request.data()).fileType(request.fileType())
+            .fileName(request.fileName())
+            .size((long) request.data().length)
+            .data(request.data())
+            .fileType(request.fileType())
             .build();
 
         binaryContentRepository.save(binaryContent);
@@ -49,6 +52,8 @@ public class BasicBinaryContentService implements BinaryContentService {
 
         return Optional.ofNullable(BinaryContentDTO.ReadBinaryContentResult.builder()
                 .id(binaryContent.getId())
+                .fileName(binaryContent.getFileName())
+                .size(binaryContent.getSize())
                 .data(binaryContent.getData())
                 .createdAt(binaryContent.getCreatedAt())
                 .fileType(binaryContent.getFileType())
@@ -60,6 +65,8 @@ public class BasicBinaryContentService implements BinaryContentService {
         return binaryContentRepository.findAllByIdIn(uuidList).stream()
                 .map(binaryContent -> BinaryContentDTO.ReadBinaryContentResult.builder()
                         .id(binaryContent.getId())
+                        .fileName(binaryContent.getFileName())
+                        .size(binaryContent.getSize())
                         .data(binaryContent.getData())
                         .createdAt(binaryContent.getCreatedAt())
                         .fileType(binaryContent.getFileType())
@@ -72,6 +79,8 @@ public class BasicBinaryContentService implements BinaryContentService {
         return binaryContentRepository.findAll().stream()
                 .map(binaryContent -> BinaryContentDTO.ReadBinaryContentResult.builder()
                         .id(binaryContent.getId())
+                        .fileName(binaryContent.getFileName())
+                        .size(binaryContent.getSize())
                         .data(binaryContent.getData())
                         .createdAt(binaryContent.getCreatedAt())
                         .fileType(binaryContent.getFileType())

@@ -14,10 +14,12 @@ public class BinaryContent implements Serializable {
     private final UUID id = UUID.randomUUID();
     private final Long createdAt = Instant.now().toEpochMilli();
     private final byte[] data;
+    private String fileName;
+    private Long size;
     private final FileType fileType;
 
     @Builder
-    public BinaryContent(byte[] data, FileType fileType) {
+    public BinaryContent(byte[] data, String fileName, Long size, FileType fileType) {
         this.data = data;
         this.fileType = fileType;
     }

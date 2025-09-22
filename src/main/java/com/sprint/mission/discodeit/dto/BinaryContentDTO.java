@@ -8,7 +8,7 @@ import java.util.UUID;
 public class BinaryContentDTO {
 
     @Builder
-    public record CreateBinaryContentCommand(byte[] data, FileType fileType) {
+    public record CreateBinaryContentCommand(String fileName, byte[] data, FileType fileType) {
 
     }
 
@@ -16,6 +16,8 @@ public class BinaryContentDTO {
     public record ReadBinaryContentResult(
             UUID id,
             Long createdAt,
+            String fileName,
+            Long size,
             byte[] data,
             FileType fileType) {
 
