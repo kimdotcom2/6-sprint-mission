@@ -22,17 +22,19 @@ public class UserApiDTO {
     }
 
     @Builder
-    public record UpdateUserProfileRequest(
-            UUID id,
+    public record UserUpdateRequest(
+            @JsonProperty("newUsername")
             String nickname,
+            @JsonProperty("newEmail")
             String email,
             String currentPassword,
-            String newPassword,
-            String description,
-            boolean isProfileImageUpdated,
-            byte[] profileImage,
-            FileType fileType
+            String newPassword
     ) {
+
+    }
+
+    @Builder
+    public record UserStatusUpdateRequest(LocalDateTime newLastActiveAt) {
 
     }
 

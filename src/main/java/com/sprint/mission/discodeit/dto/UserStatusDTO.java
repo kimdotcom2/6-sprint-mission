@@ -23,7 +23,7 @@ public class UserStatusDTO {
     }
 
     @Builder
-    public record UpdateUserStatusCommand(UUID id) {
+    public record UpdateUserStatusCommand(UUID id, Long lastActiveTimestamp) {
 
     }
 

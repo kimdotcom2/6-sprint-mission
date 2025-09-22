@@ -4,11 +4,13 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
+import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
+import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -59,18 +61,15 @@ public class UserController {
     }
 
     @PatchMapping()
-    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@RequestParam UUID userId, @RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
+    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@RequestParam UUID userId, @RequestBody UserUpdateRequest userUpdateRequest) {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
                 .id(userId)
-                .nickname(updateUserProfileRequest.nickname())
-                .email(updateUserProfileRequest.email())
-                .currentPassword(updateUserProfileRequest.currentPassword())
-                .newPassword(updateUserProfileRequest.newPassword())
-                .description(updateUserProfileRequest.description())
-                .isProfileImageUpdated(updateUserProfileRequest.isProfileImageUpdated())
-                .profileImage(updateUserProfileRequest.profileImage())
-                .fileType(updateUserProfileRequest.fileType())
+                .nickname(userUpdateRequest.nickname())
+                .email(userUpdateRequest.email())
+                .currentPassword(userUpdateRequest.currentPassword())
+                .newPassword(userUpdateRequest.newPassword())
+                .isProfileImageUpdated(false)
                 .build();
 
         userService.updateUser(updateUserCommand);
@@ -136,19 +135,15 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}/userStatus")
-    public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(@PathVariable UUID userId) {
-
-        UserStatusDTO.FindUserStatusResult findUserResult = userStatusService.findUserStatusByUserId(userId).get();
-
-        userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
-                .id(findUserResult.id())
-                .build());
-
-        UserDTO.FindUserResult user = userService.findUserById(userId)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+    public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(@PathVariable UUID userId, @RequestBody UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
 
         UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)
             .orElseThrow(() -> new NoSuchDataException("No such user status."));
+
+        userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
+                .id(userStatus.id())
+                .lastActiveTimestamp(userStatusUpdateRequest.newLastActiveAt().toEpochSecond(ZoneOffset.UTC))
+                .build());
 
         return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
                 .id(userStatus.id())
