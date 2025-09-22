@@ -43,17 +43,6 @@ public class ReadStatusController {
 
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<String> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body("Channel 또는 User를 찾을 수 없음");
-    }
-
-    @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<String> handleAllReadyExistDataException(AllReadyExistDataException e) {
-        return ResponseEntity.status(400).body("이미 읽음 상태가 존재함");
-    }
-
-
     @PutMapping
     public ResponseEntity<String> updateReadStatus(@RequestBody ReadStatusApiDTO.UpdateReadStatusRequest updateReadStatusRequest) {
 
@@ -81,6 +70,16 @@ public class ReadStatusController {
 
         return ResponseEntity.ok(readStatusList);
 
+    }
+
+    @ExceptionHandler(NoSuchDataException.class)
+    public ResponseEntity<String> handleNoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body("Channel 또는 User를 찾을 수 없음");
+    }
+
+    @ExceptionHandler(AllReadyExistDataException.class)
+    public ResponseEntity<String> handleAllReadyExistDataException(AllReadyExistDataException e) {
+        return ResponseEntity.status(400).body("이미 읽음 상태가 존재함");
     }
 
 }

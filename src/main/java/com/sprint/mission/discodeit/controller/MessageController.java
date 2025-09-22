@@ -2,22 +2,26 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@RestController("/api/messages")
 @RequiredArgsConstructor
 public class MessageController {
 
     private final MessageService messageService;
 
-    @RequestMapping(value = "/api/message/send", method = RequestMethod.POST)
-    public ResponseEntity<String> sendMessage(@RequestBody MessageApiDTO.CreateMessageRequest request) {
+    @PostMapping()
+    public ResponseEntity<MessageApiDTO.FindMessageResponse> sendMessage(@RequestBody MessageApiDTO.MessageCreateRequest request) {
 
         MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
                 .content(request.content())
@@ -30,7 +34,24 @@ public class MessageController {
 
         messageService.createMessage(createMessageCommand);
 
-        return ResponseEntity.ok("Message sent successfully");
+        MessageDTO.FindMessageResult message = messageService.findMessagesByUserId(request.userId()).stream()
+                .filter(message1 -> message1.content().equals(request.channelId()))
+                .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
+                .limit(1)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchDataException("No such message."));
+
+        return ResponseEntity.status(201).body(MessageApiDTO.FindMessageResponse.builder()
+                .id(message.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()), ZoneId.systemDefault()))
+                .content(message.content())
+                .isReply(message.isReply())
+                .parentMessageId(message.parentMessageId())
+                .channelId(message.channelId())
+                .userId(message.userId())
+                .binaryContentList(message.binaryContentList())
+                .build());
 
     }
 
@@ -59,23 +80,30 @@ public class MessageController {
 
     }
 
-    @RequestMapping(value = "/api/channel/{channelId}/messages", method = RequestMethod.GET)
-    public List<MessageApiDTO.FindMessageResponse> findMessagesByChannelId(@PathVariable UUID channelId) {
+    @GetMapping()
+    public ResponseEntity<List<MessageApiDTO.FindMessageResponse>> findAllByChannelId(@RequestParam UUID channelId) {
 
-        return messageService.findMessagesByChannelId(channelId).stream()
+        List<MessageDTO.FindMessageResult> messages = messageService.findMessagesByChannelId(channelId);
+
+        return ResponseEntity.ok(messages.stream()
                 .map(message -> MessageApiDTO.FindMessageResponse.builder()
                         .id(message.id())
+                        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()), ZoneId.systemDefault()))
+                        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()), ZoneId.systemDefault()))
                         .content(message.content())
                         .isReply(message.isReply())
                         .parentMessageId(message.parentMessageId())
                         .channelId(message.channelId())
                         .userId(message.userId())
                         .binaryContentList(message.binaryContentList())
-                        .createdAt(message.createdAt())
-                        .updatedAt(message.updatedAt())
                         .build())
-                .toList();
+                .toList());
 
+    }
+
+    @ExceptionHandler(NoSuchDataException.class)
+    public ResponseEntity<String> handleNoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body("Channel 또는 User를 찾을 수 없음");
     }
 
 }

@@ -55,13 +55,6 @@ public class UserController {
 
     }
 
-    @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
-
-        return ResponseEntity.status(400).body("같은 email 또는 username를 사용하는 User가 이미 존재함");
-
-    }
-
     @PutMapping()
     public ResponseEntity<String> updateUserProfile(@RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
 
@@ -133,6 +126,13 @@ public class UserController {
                 .build());
 
         return ResponseEntity.ok("User online status updated successfully");
+
+    }
+
+    @ExceptionHandler(AllReadyExistDataException.class)
+    public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
+
+        return ResponseEntity.status(400).body("같은 email 또는 username를 사용하는 User가 이미 존재함");
 
     }
 
