@@ -158,7 +158,7 @@ public class BasicReadStatusService implements ReadStatusService {
         ReadStatus readStatus = readStatusRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such read status."));
 
-        readStatus.updateLastReadTimestamp();
+        readStatus.updateLastReadTimestamp(request.lastReadTimestamp());
 
         readStatusRepository.save(readStatus);
 

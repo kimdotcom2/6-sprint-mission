@@ -3,9 +3,11 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.dto.ReadStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO;
+import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO.ReadStatusUpdateRequest;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.ReadStatusService;
+import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +49,11 @@ public class ReadStatusController {
     }
 
     @PatchMapping("/{readStatusId}")
-    public ResponseEntity<ReadStatusApiDTO.FindReadStatusResponse> updateReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusApiDTO.UpdateReadStatusRequest updateReadStatusRequest) {
+    public ResponseEntity<ReadStatusApiDTO.FindReadStatusResponse> updateReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusUpdateRequest readStatusUpdateRequest) {
 
         readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()
-                .id(updateReadStatusRequest.id())
+                .id(readStatusId)
+                .lastReadTimestamp(readStatusUpdateRequest.newLastReadAt().toEpochSecond(ZoneOffset.UTC))
                 .build());
 
         ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusById(readStatusId)

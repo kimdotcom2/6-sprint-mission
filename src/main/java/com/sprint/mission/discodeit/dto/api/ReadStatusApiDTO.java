@@ -13,7 +13,7 @@ public class ReadStatusApiDTO {
     }
 
     @Builder
-    public record UpdateReadStatusRequest(UUID id){
+    public record ReadStatusUpdateRequest(LocalDateTime newLastReadAt){
 
     }
 

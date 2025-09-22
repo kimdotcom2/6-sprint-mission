@@ -21,8 +21,8 @@ public class ReadStatus extends BaseEntity implements Serializable {
         this.lastReadTimestamp = lastReadTimestamp;
     }
 
-    public void updateLastReadTimestamp() {
-        this.lastReadTimestamp = Instant.now().toEpochMilli();
+    public void updateLastReadTimestamp(Long lastReadTimestamp) {
+        this.lastReadTimestamp = lastReadTimestamp;
     }
 
     public static class Builder {

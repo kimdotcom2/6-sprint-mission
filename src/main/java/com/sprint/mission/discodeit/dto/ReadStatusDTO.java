@@ -24,7 +24,7 @@ public class ReadStatusDTO {
     }
 
     @Builder
-    public record UpdateReadStatusCommand(UUID id){
+    public record UpdateReadStatusCommand(UUID id, Long lastReadTimestamp){
 
     }
 

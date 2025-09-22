@@ -23,7 +23,7 @@ public class MessageApiDTO {
     }
 
     @Builder
-    public record UpdateMessageRequest(UUID id, String content, boolean isReply, UUID parentMessageId) {
+    public record UpdateMessageRequest(String content, boolean isReply, UUID parentMessageId) {
 
     }
 

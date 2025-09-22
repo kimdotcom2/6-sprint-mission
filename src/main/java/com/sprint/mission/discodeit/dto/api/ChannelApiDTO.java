@@ -21,7 +21,7 @@ public class ChannelApiDTO {
     }
 
     @Builder
-    public record UpdateChannelRequest(UUID id, String channelName, String category, boolean isVoiceChannel, String description) {
+    public record UpdateChannelRequest(String channelName, String category, boolean isVoiceChannel, String description) {
 
     }
 
