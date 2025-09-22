@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.api.AuthApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import java.time.Instant;
@@ -37,7 +38,7 @@ public class AuthController {
                 .build());
 
         UserDTO.FindUserResult findUserResult = userService.findUserByNickname(loginRequest.nickname())
-            .orElseThrow(() -> new NoSuchElementException("No such user"));
+            .orElseThrow(() -> new NoSuchDataException("No such user"));
 
         return ResponseEntity.ok(UserApiDTO.FindUserResponse.builder()
             .id(findUserResult.id())
@@ -51,10 +52,18 @@ public class AuthController {
             .build());
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleException(Exception e) {
+    @ExceptionHandler(NoSuchDataException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());
     }

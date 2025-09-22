@@ -125,7 +125,12 @@ public class UserController {
         UserDTO.FindUserResult user = userService.findUserById(userId).get();
 
         return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
-                .isOnline(user.isOnline())
+                .id(user.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
+                .userId(user.id())
+                .lastOnlineAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
+                .isOnline(true)
                 .build());
 
     }

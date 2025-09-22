@@ -42,7 +42,7 @@ public class ChannelController {
             .filter(
                 channel -> channel.channelName().equals(publicChannelCreateRequest.channelName()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchElementException("No such channels"));
+                .orElseThrow(() -> new NoSuchDataException("No such channels"));
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
@@ -72,7 +72,7 @@ public class ChannelController {
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchElementException("No such channels"));
+                .orElseThrow(() -> new NoSuchDataException("No such channels"));
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
@@ -102,7 +102,7 @@ public class ChannelController {
         channelService.updateChannel(updateChannelCommand);
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findChannelById(channelId)
-                .orElseThrow(() -> new NoSuchElementException("No such channel."));
+                .orElseThrow(() -> new NoSuchDataException("No such channel."));
 
         return ResponseEntity.ok(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
