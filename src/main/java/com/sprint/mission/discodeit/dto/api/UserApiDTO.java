@@ -1,14 +1,17 @@
 package com.sprint.mission.discodeit.dto.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sprint.mission.discodeit.enums.FileType;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class UserApiDTO {
 
     @Builder
-    public record SignUpRequest(
+    public record UserCreateRequest(
+            @JsonProperty("username")
             String nickname,
             String email,
             String password,
@@ -41,13 +44,13 @@ public class UserApiDTO {
     @Builder
     public record FindUserResponse(
             UUID id,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            @JsonProperty("username")
             String nickname,
             String email,
-            String description,
             UUID profileImageId,
-            boolean isOnline,
-            Long createdAt,
-            Long updatedAt
+            boolean isOnline
     ) {
 
     }

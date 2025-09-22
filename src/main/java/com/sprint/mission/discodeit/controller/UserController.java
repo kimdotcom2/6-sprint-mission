@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,15 +26,15 @@ public class UserController {
     private final UserStatusService userStatusService;
 
     @PostMapping()
-    public ResponseEntity<String> signup(@RequestBody UserApiDTO.SignUpRequest signUpRequest) {
+    public ResponseEntity<String> signup(@RequestBody UserApiDTO.UserCreateRequest userCreateRequest) {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
-                .nickname(signUpRequest.nickname())
-                .email(signUpRequest.email())
-                .password(signUpRequest.password())
-                .description(signUpRequest.description())
-                .profileImage(signUpRequest.profileImage())
-                .fileType(signUpRequest.fileType())
+                .nickname(userCreateRequest.nickname())
+                .email(userCreateRequest.email())
+                .password(userCreateRequest.password())
+                .description(userCreateRequest.description())
+                .profileImage(userCreateRequest.profileImage())
+                .fileType(userCreateRequest.fileType())
                 .build();
 
         userService.createUser(createUserCommand);
@@ -78,18 +81,17 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserApiDTO.FindUserResponse>> findAllUsers() {
+    public ResponseEntity<List<UserApiDTO.FindUserResponse>> findAll() {
 
         List<UserApiDTO.FindUserResponse> userList = userService.findAllUsers().stream()
                 .map(user -> UserApiDTO.FindUserResponse.builder()
                         .id(user.id())
                         .nickname(user.nickname())
                         .email(user.email())
-                        .description(user.description())
                         .profileImageId(user.profileImageId())
                         .isOnline(user.isOnline())
-                        .createdAt(user.createdAt())
-                        .updatedAt(user.updatedAt())
+                        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
+                        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
                         .build())
 
                 .toList();
