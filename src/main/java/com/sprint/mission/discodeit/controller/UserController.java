@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@RestController
+@RestController("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
     private final UserStatusService userStatusService;
 
-    @RequestMapping(value = "/api/user/signup", method = RequestMethod.POST)
+    @PostMapping()
     public ResponseEntity<String> signup(@RequestBody UserApiDTO.SignUpRequest signUpRequest) {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
@@ -35,11 +36,18 @@ public class UserController {
 
         userService.createUser(createUserCommand);
 
-        return ResponseEntity.ok("User created successfully");
+        return ResponseEntity.status(201).body("User가 성공적으로 생성됨");
 
     }
 
-    @RequestMapping(value = "/api/user/update", method = RequestMethod.PUT)
+    @ExceptionHandler(AllReadyExistDataException.class)
+    public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
+
+        return ResponseEntity.status(400).body("같은 email 또는 username를 사용하는 User가 이미 존재함");
+
+    }
+
+    @PutMapping()
     public ResponseEntity<String> updateUserProfile(@RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
@@ -60,7 +68,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/api/user/delete", method = RequestMethod.DELETE)
+    @DeleteMapping()
     public ResponseEntity<String> deleteUser(@RequestBody UserApiDTO.DeleteUserRequest deleteUserRequest) {
 
         userService.deleteUserById(deleteUserRequest.id());
@@ -69,10 +77,10 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/api/user/all", method = RequestMethod.GET)
-    public List<UserApiDTO.FindUserResponse> findAllUsers() {
+    @GetMapping()
+    public ResponseEntity<List<UserApiDTO.FindUserResponse>> findAllUsers() {
 
-        return userService.findAllUsers().stream()
+        List<UserApiDTO.FindUserResponse> userList = userService.findAllUsers().stream()
                 .map(user -> UserApiDTO.FindUserResponse.builder()
                         .id(user.id())
                         .nickname(user.nickname())
@@ -86,9 +94,11 @@ public class UserController {
 
                 .toList();
 
+        return ResponseEntity.status(201).body(userList);
+
     }
 
-    @RequestMapping(value = "/api/user/{userId}/online-status", method = RequestMethod.GET)
+    @GetMapping("/{userId}/online-status")
     public ResponseEntity<UserApiDTO.CheckUserOnline> checkUserOnlineStatus(@PathVariable UUID userId) {
 
         UserDTO.FindUserResult user = userService.findUserById(userId).get();
@@ -99,7 +109,7 @@ public class UserController {
 
     }
 
-    @RequestMapping(value = "/api/user/{userId}/online-status-update", method = RequestMethod.PUT)
+    @PutMapping("/{userId}/online-status-update")
     public ResponseEntity<String> updateUserOnlineStatus(@PathVariable UUID userId) {
 
         UserStatusDTO.FindUserStatusResult findUserResult = userStatusService.findUserStatusByUserId(userId).get();
