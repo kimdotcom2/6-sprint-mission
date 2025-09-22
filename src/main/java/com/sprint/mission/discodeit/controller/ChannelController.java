@@ -2,7 +2,9 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO;
+import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -10,6 +12,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -141,6 +144,22 @@ public class ChannelController {
                         .build())
                 .toList();
 
+    }
+
+    @ExceptionHandler(NoSuchDataException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.BAD_REQUEST.value())
+            .message(e.getMessage())
+            .build());
     }
 
 }
