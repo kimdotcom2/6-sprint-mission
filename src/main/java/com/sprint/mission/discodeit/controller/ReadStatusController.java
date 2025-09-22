@@ -1,11 +1,13 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.ReadStatusDTO;
+import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -74,13 +76,19 @@ public class ReadStatusController {
     }
 
     @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<String> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body("Channel 또는 User를 찾을 수 없음");
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
     }
 
     @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<String> handleAllReadyExistDataException(AllReadyExistDataException e) {
-        return ResponseEntity.status(400).body("이미 읽음 상태가 존재함");
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleAllReadyExistDataException(AllReadyExistDataException e) {
+        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.BAD_REQUEST.value())
+            .message(e.getMessage())
+            .build());
     }
 
 }

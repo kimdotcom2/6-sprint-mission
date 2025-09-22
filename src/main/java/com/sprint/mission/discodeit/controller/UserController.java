@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
+import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
@@ -9,6 +10,7 @@ import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -131,9 +133,12 @@ public class UserController {
     }
 
     @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<String> AllReadyExistDataException(AllReadyExistDataException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
 
-        return ResponseEntity.status(400).body("같은 email 또는 username를 사용하는 User가 이미 존재함");
+        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.BAD_REQUEST.value())
+            .message(e.getMessage())
+            .build());
 
     }
 

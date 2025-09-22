@@ -1,10 +1,12 @@
 package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -103,8 +105,11 @@ public class MessageController {
     }
 
     @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<String> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body("Channel 또는 User를 찾을 수 없음");
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
     }
 
 }
