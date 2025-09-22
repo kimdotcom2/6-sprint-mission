@@ -58,11 +58,11 @@ public class MessageController {
 
     }
 
-    @RequestMapping(value = "/api/message/update", method = RequestMethod.PUT)
-    public ResponseEntity<String> updateMessage(@RequestBody MessageApiDTO.UpdateMessageRequest request) {
+    @PatchMapping("/{messageId}")
+    public ResponseEntity<String> updateMessage(@PathVariable UUID messageId, @RequestBody MessageApiDTO.UpdateMessageRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
-                .id(request.id())
+                .id(messageId)
                 .content(request.content())
                 .isReply(request.isReply())
                 .parentMessageId(request.parentMessageId())
@@ -74,12 +74,25 @@ public class MessageController {
 
     }
 
-    @RequestMapping(value = "/api/message/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteMessage(@RequestBody MessageApiDTO.DeleteMessageRequest deleteMessageRequest) {
+    @DeleteMapping("/{messageId}")
+    public ResponseEntity<MessageApiDTO.FindMessageResponse> deleteMessage(@PathVariable UUID messageId) {
 
-        messageService.deleteMessageById(deleteMessageRequest.id());
+        messageService.deleteMessageById(messageId);
 
-        return ResponseEntity.ok("Message deleted successfully");
+        MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
+                .orElseThrow(() -> new NoSuchDataException("No such message."));
+
+        return ResponseEntity.ok(MessageApiDTO.FindMessageResponse.builder()
+                .id(message.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()), ZoneId.systemDefault()))
+                .content(message.content())
+                .isReply(message.isReply())
+                .parentMessageId(message.parentMessageId())
+                .channelId(message.channelId())
+                .userId(message.userId())
+                .binaryContentList(message.binaryContentList())
+                .build());
 
     }
 

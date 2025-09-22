@@ -46,14 +46,24 @@ public class ReadStatusController {
 
     }
 
-    @PutMapping()
-    public ResponseEntity<String> updateReadStatus(@RequestBody ReadStatusApiDTO.UpdateReadStatusRequest updateReadStatusRequest) {
+    @PatchMapping("/{readStatusId}")
+    public ResponseEntity<ReadStatusApiDTO.FindReadStatusResponse> updateReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusApiDTO.UpdateReadStatusRequest updateReadStatusRequest) {
 
         readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()
                 .id(updateReadStatusRequest.id())
                 .build());
 
-        return ResponseEntity.ok("Read status updated successfully");
+        ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusById(readStatusId)
+                .orElseThrow(() -> new NoSuchDataException("No such read status."));
+
+        return ResponseEntity.ok(ReadStatusApiDTO.FindReadStatusResponse.builder()
+                .id(readStatus.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.updatedAt()), ZoneId.systemDefault()))
+                .channelId(readStatus.channelId())
+                .userId(readStatus.userId())
+                .lastReadAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.lastReadTimestamp()), ZoneId.systemDefault()))
+                .build());
 
     }
 
