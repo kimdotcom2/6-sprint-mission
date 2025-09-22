@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -26,7 +27,7 @@ public class UserController {
     private final UserStatusService userStatusService;
 
     @PostMapping()
-    public ResponseEntity<String> signup(@RequestBody UserApiDTO.UserCreateRequest userCreateRequest) {
+    public ResponseEntity<UserApiDTO.FindUserResponse> signup(@RequestBody UserApiDTO.UserCreateRequest userCreateRequest) {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
                 .nickname(userCreateRequest.nickname())
@@ -39,7 +40,18 @@ public class UserController {
 
         userService.createUser(createUserCommand);
 
-        return ResponseEntity.status(201).body("User가 성공적으로 생성됨");
+        UserDTO.FindUserResult user = userService.findUserByEmail(userCreateRequest.email())
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
+
+        return ResponseEntity.status(201).body(UserApiDTO.FindUserResponse.builder()
+                .id(user.id())
+                .nickname(user.nickname())
+                .email(user.email())
+                .profileImageId(user.profileImageId())
+                .isOnline(user.isOnline())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
+                .build());
 
     }
 

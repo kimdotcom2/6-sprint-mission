@@ -12,6 +12,7 @@ import com.sprint.mission.discodeit.service.ChannelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.*;
 
 @Service
@@ -52,7 +53,7 @@ public class BasicChannelService implements ChannelService {
                 .build();
 
         List<ReadStatus> readStatusList = request.userIdList().stream()
-                .map(userId -> new ReadStatus(channel.getId(), userId))
+                .map(userId -> new ReadStatus(channel.getId(), userId, Instant.now().toEpochMilli()))
                 .toList();
 
         readStatusRepository.saveAll(readStatusList);
