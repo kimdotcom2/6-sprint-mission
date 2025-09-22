@@ -37,11 +37,6 @@ public class UserApiDTO {
     }
 
     @Builder
-    public record DeleteUserRequest(UUID id) {
-
-    }
-
-    @Builder
     public record FindUserResponse(
             UUID id,
             LocalDateTime createdAt,
@@ -56,8 +51,17 @@ public class UserApiDTO {
     }
 
     @Builder
-    public record CheckUserOnline(boolean isOnline) {
+    public record CheckUserOnline(
+        UUID id,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt,
+        UUID userId,
+        @JsonProperty("lastActiveAt")
+        LocalDateTime lastOnlineAt,
+        boolean isOnline
+    ) {
 
     }
+
 
 }

@@ -58,11 +58,11 @@ public class UserController {
 
     }
 
-    @PutMapping()
-    public ResponseEntity<String> updateUserProfile(@RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
+    @PatchMapping("/{userId}")
+    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@PathVariable UUID userId, @RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
-                .id(updateUserProfileRequest.id())
+                .id(userId)
                 .nickname(updateUserProfileRequest.nickname())
                 .email(updateUserProfileRequest.email())
                 .currentPassword(updateUserProfileRequest.currentPassword())
@@ -75,16 +75,27 @@ public class UserController {
 
         userService.updateUser(updateUserCommand);
 
-        return ResponseEntity.ok("User updated successfully");
+        UserDTO.FindUserResult user = userService.findUserById(userId)
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
+
+        return ResponseEntity.status(204).body(UserApiDTO.FindUserResponse.builder()
+                .id(user.id())
+                .nickname(user.nickname())
+                .email(user.email())
+                .profileImageId(user.profileImageId())
+                .isOnline(user.isOnline())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
+                .build());
 
     }
 
-    @DeleteMapping()
-    public ResponseEntity<String> deleteUser(@RequestBody UserApiDTO.DeleteUserRequest deleteUserRequest) {
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
 
-        userService.deleteUserById(deleteUserRequest.id());
+        userService.deleteUserById(userId);
 
-        return ResponseEntity.ok("User deleted successfully");
+        return ResponseEntity.status(204).body("User deleted successfully");
 
     }
 
@@ -108,7 +119,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/{userId}/online-status")
+    @GetMapping("/{userId}/userStatus")
     public ResponseEntity<UserApiDTO.CheckUserOnline> checkUserOnlineStatus(@PathVariable UUID userId) {
 
         UserDTO.FindUserResult user = userService.findUserById(userId).get();
@@ -119,8 +130,8 @@ public class UserController {
 
     }
 
-    @PutMapping("/{userId}/online-status-update")
-    public ResponseEntity<String> updateUserOnlineStatus(@PathVariable UUID userId) {
+    @PatchMapping("/{userId}/userStatus")
+    public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(@PathVariable UUID userId) {
 
         UserStatusDTO.FindUserStatusResult findUserResult = userStatusService.findUserStatusByUserId(userId).get();
 
@@ -128,18 +139,37 @@ public class UserController {
                 .id(findUserResult.id())
                 .build());
 
-        return ResponseEntity.ok("User online status updated successfully");
+        UserDTO.FindUserResult user = userService.findUserById(userId)
+                .orElseThrow(() -> new NoSuchDataException("No such user."));
 
+        UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)
+            .orElseThrow(() -> new NoSuchDataException("No such user status."));
+
+        return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
+                .id(userStatus.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.updatedAt()), ZoneId.systemDefault()))
+                .userId(userStatus.userId())
+                .lastOnlineAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.lastActiveTimestamp()), ZoneId.systemDefault()))
+                .isOnline(true)
+                .build());
+
+    }
+
+    @ExceptionHandler(NoSuchDataException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
+        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
     }
 
     @ExceptionHandler(AllReadyExistDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
-
         return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());
-
     }
 
 }
