@@ -58,8 +58,8 @@ public class MessageController {
 
     }
 
-    @PatchMapping("/{messageId}")
-    public ResponseEntity<String> updateMessage(@PathVariable UUID messageId, @RequestBody MessageApiDTO.UpdateMessageRequest request) {
+    @PatchMapping()
+    public ResponseEntity<String> updateMessage(@RequestParam UUID messageId, @RequestBody MessageApiDTO.UpdateMessageRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
                 .id(messageId)

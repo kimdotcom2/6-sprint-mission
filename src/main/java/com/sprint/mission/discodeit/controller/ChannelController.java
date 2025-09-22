@@ -85,11 +85,11 @@ public class ChannelController {
 
     }
 
-    @RequestMapping(value = "/api/channel/public-channel", method = RequestMethod.PUT)
-    public ResponseEntity<String> updatePublicChannel(@RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
+    @PatchMapping()
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@RequestParam UUID channelId, @RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
-                .id(updateChannelRequest.id())
+                .id(channelId)
                 .channelName(updateChannelRequest.channelName())
                 .category(ChannelType.valueOf(updateChannelRequest.category()))
                 .isVoiceChannel(updateChannelRequest.isVoiceChannel())
@@ -98,29 +98,46 @@ public class ChannelController {
 
         channelService.updateChannel(updateChannelCommand);
 
-        return ResponseEntity.ok("Public channel updated successfully");
+        ChannelDTO.FindChannelResult findChannelResult = channelService.findChannelById(channelId)
+                .orElseThrow(() -> new NoSuchElementException("No such channel."));
+
+        return ResponseEntity.ok(ChannelApiDTO.FindChannelResponse.builder()
+                .id(findChannelResult.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
+                .category(findChannelResult.category())
+                .isVoiceChannel(findChannelResult.isVoiceChannel())
+                .type("PUBLIC")
+                .channelName(findChannelResult.channelName())
+                .description(findChannelResult.description())
+                .userIdList(new ArrayList<>())
+                .build());
 
     }
 
-    @RequestMapping(value = "/api/channel/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteChannel(@RequestBody ChannelApiDTO.DeleteChannelRequest deleteChannelRequest) {
+    @DeleteMapping("/{channelId}")
+    public ResponseEntity<String> deleteChannel(@PathVariable UUID channelId) {
 
-        channelService.deleteChannelById(deleteChannelRequest.id());
+        channelService.deleteChannelById(channelId);
 
         return ResponseEntity.ok("Channel deleted successfully");
 
     }
 
-    @RequestMapping(value = "/api/user/{userId}/channels", method = RequestMethod.GET)
-    public List<ChannelApiDTO.FindChannelResponse> findChannelsByUserId(@PathVariable UUID userId) {
+    @GetMapping()
+    public List<ChannelApiDTO.FindChannelResponse> findChannelsByUserId(@RequestParam UUID userId) {
 
         return channelService.findChannelsByUserId(userId).stream()
                 .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
                         .id(channel.id())
-                        .channelName(channel.channelName())
+                        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.createdAt()), ZoneId.systemDefault()))
+                        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.updatedAt()), ZoneId.systemDefault()))
                         .category(channel.category())
                         .isVoiceChannel(channel.isVoiceChannel())
+                        .type(channel.isPrivate() ? "PRIVATE" : "PUBLIC")
+                        .channelName(channel.channelName())
                         .description(channel.description())
+                        .userIdList(new ArrayList<>())
                         .build())
                 .toList();
 

@@ -58,8 +58,8 @@ public class UserController {
 
     }
 
-    @PatchMapping("/{userId}")
-    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@PathVariable UUID userId, @RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
+    @PatchMapping()
+    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@RequestParam UUID userId, @RequestBody UserApiDTO.UpdateUserProfileRequest updateUserProfileRequest) {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
                 .id(userId)

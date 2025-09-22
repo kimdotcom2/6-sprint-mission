@@ -26,11 +26,6 @@ public class ChannelApiDTO {
     }
 
     @Builder
-    public record DeleteChannelRequest(UUID id) {
-
-    }
-
-    @Builder
     public record FindChannelResponse(
             UUID id,
             LocalDateTime createdAt,

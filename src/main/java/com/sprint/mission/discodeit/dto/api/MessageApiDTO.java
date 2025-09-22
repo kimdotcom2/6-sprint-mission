@@ -28,11 +28,6 @@ public class MessageApiDTO {
     }
 
     @Builder
-    public record DeleteMessageRequest(UUID id) {
-
-    }
-
-    @Builder
     public record FindMessageResponse(
             UUID id,
             LocalDateTime createdAt,
