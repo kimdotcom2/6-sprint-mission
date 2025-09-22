@@ -18,7 +18,8 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
-@RestController("/api/users")
+@RestController
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 

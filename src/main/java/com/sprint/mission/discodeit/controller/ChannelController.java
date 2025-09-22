@@ -4,6 +4,11 @@ import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.service.ChannelService;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,37 +18,70 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/channels")
 public class ChannelController {
 
     private final ChannelService channelService;
 
-    @RequestMapping(value = "/api/channel/public-channel", method = RequestMethod.POST)
-    public ResponseEntity<String> createPublicChannel(@RequestBody ChannelApiDTO.CreatePublicChannelRequest createPublicChannelRequest) {
+    @PostMapping("/public")
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPublicChannel(@RequestBody ChannelApiDTO.PublicChannelCreateRequest publicChannelCreateRequest) {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
-                .channelName(createPublicChannelRequest.channelName())
-                .category(ChannelType.valueOf(createPublicChannelRequest.category()))
-                .isVoiceChannel(createPublicChannelRequest.isVoiceChannel())
+                .channelName(publicChannelCreateRequest.channelName())
+                .category(ChannelType.valueOf(publicChannelCreateRequest.category()))
+                .isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
+                .description(publicChannelCreateRequest.description())
                 .build();
 
         channelService.createChannel(createPublicChannelCommand);
 
-        return ResponseEntity.ok("Public channel created successfully");
+        ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
+            .filter(
+                channel -> channel.channelName().equals(publicChannelCreateRequest.channelName()))
+            .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
+                .orElseThrow(() -> new NoSuchElementException("No such channels"));
+
+        return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
+                .id(findChannelResult.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
+                .category(findChannelResult.category())
+                .isVoiceChannel(findChannelResult.isVoiceChannel())
+                .type("PUBLIC")
+                .channelName(findChannelResult.channelName())
+                .description(findChannelResult.description())
+                .userIdList(new ArrayList<>())
+                .build());
 
     }
 
-    @RequestMapping(value = "/api/channel/private-channel", method = RequestMethod.POST)
-    public ResponseEntity<String> createPrivateChannel(@RequestBody ChannelApiDTO.CreatePrivateChannelRequest createPrivateChannelRequest) {
+    @PostMapping("/private")
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPrivateChannel(@RequestBody ChannelApiDTO.CreatePrivateChannelRequest createPrivateChannelRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
                 .category(createPrivateChannelRequest.category())
                 .isVoiceChannel(createPrivateChannelRequest.isVoiceChannel())
                 .userIdList(createPrivateChannelRequest.userIdList())
+                .description(createPrivateChannelRequest.description())
                 .build();
 
         channelService.createPrivateChannel(createPrivateChannelCommand);
 
-        return ResponseEntity.ok("Private channel created successfully");
+        ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
+            .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
+                .orElseThrow(() -> new NoSuchElementException("No such channels"));
+
+        return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
+                .id(findChannelResult.id())
+                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
+                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
+                .category(findChannelResult.category())
+                .isVoiceChannel(findChannelResult.isVoiceChannel())
+                .type("PRIVATE")
+                .channelName(findChannelResult.channelName())
+                .description(findChannelResult.description())
+                .userIdList(new ArrayList<>())
+                .build());
 
     }
 
@@ -55,6 +93,7 @@ public class ChannelController {
                 .channelName(updateChannelRequest.channelName())
                 .category(ChannelType.valueOf(updateChannelRequest.category()))
                 .isVoiceChannel(updateChannelRequest.isVoiceChannel())
+                .description(updateChannelRequest.description())
                 .build();
 
         channelService.updateChannel(updateChannelCommand);
@@ -81,6 +120,7 @@ public class ChannelController {
                         .channelName(channel.channelName())
                         .category(channel.category())
                         .isVoiceChannel(channel.isVoiceChannel())
+                        .description(channel.description())
                         .build())
                 .toList();
 

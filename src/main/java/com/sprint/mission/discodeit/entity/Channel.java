@@ -16,25 +16,28 @@ public class Channel extends BaseEntity implements Serializable {
     private ChannelType category;
     private boolean isVoiceChannel = false;
     private boolean isPrivate = false;
+    private String description;
 
-    public Channel(String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate) {
+    public Channel(String channelName, ChannelType category, boolean isVoiceChannel, boolean isPrivate, String description) {
         super();
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
         this.isPrivate = isPrivate;
+        this.description = description;
     }
 
-    public void update(String channelName, ChannelType category, boolean isVoiceChannel) {
+    public void update(String channelName, ChannelType category, boolean isVoiceChannel, String description) {
         this.channelName = channelName;
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
+        this.description = description;
         super.update();
     }
 
     @Override
     public String toString() {
-        return "Channel [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", channelName=" + channelName + ", category=" + category + ", isVoiceChannel=" + isVoiceChannel + "]";
+        return "Channel [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", channelName=" + channelName + ", category=" + category + ", isVoiceChannel=" + isVoiceChannel + ", isPrivate=" + isPrivate + ", description=" + description + "]";
     }
 
     public static class Builder {
@@ -43,6 +46,7 @@ public class Channel extends BaseEntity implements Serializable {
         private ChannelType category;
         private boolean isVoiceChannel;
         private boolean isPrivate;
+        private String description;
 
         public Builder channelName(String channelName) {
             this.channelName = channelName;
@@ -64,8 +68,13 @@ public class Channel extends BaseEntity implements Serializable {
             return this;
         }
 
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
         public Channel build() {
-            return new Channel(channelName, category, isVoiceChannel, isPrivate);
+            return new Channel(channelName, category, isVoiceChannel, isPrivate, description);
         }
 
     }

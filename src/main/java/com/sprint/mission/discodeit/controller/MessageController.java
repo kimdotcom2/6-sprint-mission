@@ -14,8 +14,9 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
-@RestController("/api/messages")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/messages")
 public class MessageController {
 
     private final MessageService messageService;

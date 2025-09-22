@@ -15,8 +15,9 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
-@RestController("/api/readStatus")
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/readStatus")
 public class ReadStatusController {
 
     private final ReadStatusService readStatusService;
@@ -43,7 +44,7 @@ public class ReadStatusController {
 
     }
 
-    @PutMapping
+    @PutMapping()
     public ResponseEntity<String> updateReadStatus(@RequestBody ReadStatusApiDTO.UpdateReadStatusRequest updateReadStatusRequest) {
 
         readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()
@@ -54,7 +55,7 @@ public class ReadStatusController {
 
     }
 
-    @GetMapping()
+    @GetMapping("/user")
     public ResponseEntity<List<ReadStatusApiDTO.FindReadStatusResponse>> findAllReadStatusByUserId(@RequestParam UUID userId) {
 
         List<ReadStatusApiDTO.FindReadStatusResponse> readStatusList = readStatusService.findAllReadStatusByUserId(userId).stream()
