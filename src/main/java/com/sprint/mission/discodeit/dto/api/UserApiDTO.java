@@ -46,7 +46,9 @@ public class UserApiDTO {
             @JsonProperty("username")
             String nickname,
             String email,
+            @JsonProperty("profileId")
             UUID profileImageId,
+            @JsonProperty("online")
             boolean isOnline
     ) {
 

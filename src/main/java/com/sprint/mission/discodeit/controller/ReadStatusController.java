@@ -10,6 +10,7 @@ import com.sprint.mission.discodeit.service.ReadStatusService;
 import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ReadStatusController {
 
     private final ReadStatusService readStatusService;
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReadStatusApiDTO.FindReadStatusResponse> createReadStatus(@RequestBody ReadStatusApiDTO.ReadStatusCreateRequest readStatusCreateRequest) {
 
         readStatusService.createReadStatus(ReadStatusDTO.CreateReadStatusCommand.builder()
@@ -48,7 +49,7 @@ public class ReadStatusController {
 
     }
 
-    @PatchMapping("/{readStatusId}")
+    @PatchMapping(value = "/{readStatusId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ReadStatusApiDTO.FindReadStatusResponse> updateReadStatus(@PathVariable UUID readStatusId, @RequestBody ReadStatusUpdateRequest readStatusUpdateRequest) {
 
         readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()

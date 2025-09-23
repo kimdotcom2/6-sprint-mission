@@ -5,14 +5,17 @@ import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
+import com.sprint.mission.discodeit.enums.FileType;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
+import java.io.IOException;
 import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/users")
@@ -31,16 +35,17 @@ public class UserController {
     private final UserService userService;
     private final UserStatusService userStatusService;
 
-    @PostMapping()
-    public ResponseEntity<UserApiDTO.FindUserResponse> signup(@RequestBody UserApiDTO.UserCreateRequest userCreateRequest) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserApiDTO.FindUserResponse> signup(@RequestPart UserApiDTO.UserCreateRequest userCreateRequest, @RequestPart(value = "profile", required = false) MultipartFile profile)
+        throws IOException {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
                 .nickname(userCreateRequest.nickname())
                 .email(userCreateRequest.email())
                 .password(userCreateRequest.password())
                 .description(userCreateRequest.description())
-                .profileImage(userCreateRequest.profileImage())
-                .fileType(userCreateRequest.fileType())
+                .profileImage(profile.isEmpty() ? null : profile.getBytes())
+                .fileType(FileType.IMAGE)
                 .build();
 
         userService.createUser(createUserCommand);
@@ -60,8 +65,9 @@ public class UserController {
 
     }
 
-    @PatchMapping()
-    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@RequestParam UUID userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+    @PatchMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@PathVariable UUID userId, @RequestPart UserUpdateRequest userUpdateRequest, @RequestPart(value = "profile", required = false) MultipartFile profile)
+        throws IOException {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
                 .id(userId)
@@ -69,7 +75,9 @@ public class UserController {
                 .email(userUpdateRequest.email())
                 .currentPassword(userUpdateRequest.currentPassword())
                 .newPassword(userUpdateRequest.newPassword())
-                .isProfileImageUpdated(false)
+                .isProfileImageUpdated(profile.isEmpty() ? false : true)
+                .profileImage(profile.isEmpty() ? null : profile.getBytes())
+                .fileType(profile.isEmpty() ? null : FileType.IMAGE)
                 .build();
 
         userService.updateUser(updateUserCommand);
@@ -134,7 +142,7 @@ public class UserController {
 
     }
 
-    @PatchMapping("/{userId}/userStatus")
+    @PatchMapping(value = "/{userId}/userStatus", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(@PathVariable UUID userId, @RequestBody UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
 
         UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)

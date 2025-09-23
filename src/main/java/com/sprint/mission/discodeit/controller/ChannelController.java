@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class ChannelController {
 
     private final ChannelService channelService;
 
-    @PostMapping("/public")
+    @PostMapping(value = "/public", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPublicChannel(@RequestBody ChannelApiDTO.PublicChannelCreateRequest publicChannelCreateRequest) {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
@@ -58,7 +59,7 @@ public class ChannelController {
 
     }
 
-    @PostMapping("/private")
+    @PostMapping(value = "/private", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPrivateChannel(@RequestBody ChannelApiDTO.CreatePrivateChannelRequest createPrivateChannelRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
@@ -88,7 +89,7 @@ public class ChannelController {
 
     }
 
-    @PatchMapping("/{channelId}")
+    @PatchMapping(value = "/{channelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@PathVariable UUID channelId, @RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
@@ -118,7 +119,7 @@ public class ChannelController {
 
     }
 
-    @DeleteMapping("/{channelId}")
+    @DeleteMapping(value = "/{channelId}")
     public ResponseEntity<String> deleteChannel(@PathVariable UUID channelId) {
 
         channelService.deleteChannelById(channelId);

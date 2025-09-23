@@ -7,6 +7,7 @@ import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.MessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,7 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @PostMapping()
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageApiDTO.FindMessageResponse> sendMessage(@RequestBody MessageApiDTO.MessageCreateRequest request) {
 
         MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
@@ -58,7 +59,7 @@ public class MessageController {
 
     }
 
-    @PatchMapping()
+    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateMessage(@RequestParam UUID messageId, @RequestBody MessageApiDTO.UpdateMessageRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
@@ -121,6 +122,14 @@ public class MessageController {
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
         return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
+            .message(e.getMessage())
+            .build());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+            .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());
     }
