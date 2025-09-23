@@ -81,8 +81,10 @@ public class ChannelController {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName(publicChannelCreateRequest.channelName())
-                .category(ChannelType.valueOf(publicChannelCreateRequest.category()))
-                .isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
+                //.category(ChannelType.valueOf(publicChannelCreateRequest.category()))
+                .category(ChannelType.TEXT)
+                //.isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
+                .isVoiceChannel(false)
                 .description(publicChannelCreateRequest.description())
                 .build();
 
@@ -140,15 +142,16 @@ public class ChannelController {
             @RequestBody @Valid PrivateChannelCreateRequest privateChannelCreateRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
-                .category(privateChannelCreateRequest.category())
-                .isVoiceChannel(privateChannelCreateRequest.isVoiceChannel())
+                //.category(privateChannelCreateRequest.category())
+                //.isVoiceChannel(privateChannelCreateRequest.isVoiceChannel())
                 .userIdList(privateChannelCreateRequest.userIdList())
-                .description(privateChannelCreateRequest.description())
+                //.description(privateChannelCreateRequest.description())
                 .build();
 
         channelService.createPrivateChannel(createPrivateChannelCommand);
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
+            .filter(channel1 -> channel1.userIdList().equals(privateChannelCreateRequest.userIdList()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
                 .orElseThrow(() -> new NoSuchDataException("No such channels"));
 
@@ -312,6 +315,9 @@ public class ChannelController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+
+        e.printStackTrace();
+
         return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())

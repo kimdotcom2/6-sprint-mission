@@ -22,11 +22,12 @@ public class ChannelApiDTO {
 
     @Builder
     public record PrivateChannelCreateRequest(
-        ChannelType category,
-        boolean isVoiceChannel,
+        //ChannelType category,
+        //boolean isVoiceChannel,
         @JsonProperty("participantIds")
-        List<UUID> userIdList,
-        String description) {
+        List<UUID> userIdList
+        //String description
+    ) {
 
     }
 

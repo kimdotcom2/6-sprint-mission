@@ -44,10 +44,6 @@ public class BasicChannelService implements ChannelService {
     @Override
     public void createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request) {
 
-        if (request.category() == null) {
-            throw new IllegalArgumentException("Invalid channel data.");
-        }
-
         Channel channel = new Channel.Builder()
                 .category(request.category())
                 .isPrivate(true)
