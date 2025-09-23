@@ -73,12 +73,12 @@ public class UserController {
             )
         }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UserApiDTO.FindUserResponse> signup(
             @Parameter(description = "사용자 생성 요청 정보", required = true,
                 content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = UserApiDTO.UserCreateRequest.class)))
-            @RequestPart @Valid UserApiDTO.UserCreateRequest userCreateRequest,
+            @RequestPart("userCreateRequest") @Valid UserApiDTO.UserCreateRequest userCreateRequest,
             @Parameter(description = "프로필 이미지 파일")
             @RequestPart(value = "profile", required = false) MultipartFile profile)
         throws IOException {
@@ -143,7 +143,7 @@ public class UserController {
             )
         }
     )
-    @PatchMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(
             @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
             @PathVariable UUID userId,

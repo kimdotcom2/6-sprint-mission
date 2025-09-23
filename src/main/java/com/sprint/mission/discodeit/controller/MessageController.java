@@ -63,7 +63,7 @@ public class MessageController {
             )
         }
     )
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<MessageApiDTO.FindMessageResponse> sendMessage(
             @Parameter(description = "메시지 생성 요청 정보", required = true,
                 content = @Content(mediaType = "application/json", 
