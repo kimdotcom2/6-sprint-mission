@@ -12,6 +12,15 @@ import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.io.IOException;
 import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +36,10 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 사용자 관련 API 컨트롤러
+ */
+@Tag(name = "사용자 API", description = "사용자 계정 및 프로필 관리 API")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -36,8 +49,38 @@ public class UserController {
     private final UserService userService;
     private final UserStatusService userStatusService;
 
+    /**
+     * 사용자 등록
+     *
+     * @param userCreateRequest 사용자 생성 요청 정보
+     * @param profile 프로필 이미지 파일
+     * @return 생성된 사용자 정보
+     * @throws IOException 파일 처리 중 오류 발생 시
+     */
+    @Operation(
+        summary = "사용자 등록",
+        description = "새로운 사용자를 등록합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "201",
+                description = "사용자 생성 성공",
+                content = @Content(schema = @Schema(implementation = UserApiDTO.FindUserResponse.class))
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "잘못된 요청",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            )
+        }
+    )
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserApiDTO.FindUserResponse> signup(@RequestPart UserApiDTO.UserCreateRequest userCreateRequest, @RequestPart(value = "profile", required = false) MultipartFile profile)
+    public ResponseEntity<UserApiDTO.FindUserResponse> signup(
+            @Parameter(description = "사용자 생성 요청 정보", required = true,
+                content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = UserApiDTO.UserCreateRequest.class)))
+            @RequestPart @Valid UserApiDTO.UserCreateRequest userCreateRequest,
+            @Parameter(description = "프로필 이미지 파일")
+            @RequestPart(value = "profile", required = false) MultipartFile profile)
         throws IOException {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
@@ -57,20 +100,59 @@ public class UserController {
         UserDTO.FindUserResult user = userService.findUserByEmail(userCreateRequest.email())
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        return ResponseEntity.status(201).body(UserApiDTO.FindUserResponse.builder()
+        UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
                 .id(user.id())
                 .nickname(user.nickname())
                 .email(user.email())
                 .profileImageId(user.profileImageId())
                 .isOnline(user.isOnline())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
-                .build());
+                .build();
+
+        return ResponseEntity.status(201).body(response);
 
     }
 
+    /**
+     * 사용자 프로필 수정
+     *
+     * @param userId 사용자 ID
+     * @param userUpdateRequest 사용자 수정 정보
+     * @param profile 프로필 이미지 파일
+     * @return 수정된 사용자 정보
+     * @throws IOException 파일 처리 중 오류 발생 시
+     */
+    @Operation(
+        summary = "사용자 프로필 수정",
+        description = "사용자 프로필 정보를 수정합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "프로필 수정 성공",
+                content = @Content(schema = @Schema(implementation = UserApiDTO.FindUserResponse.class))
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "잘못된 요청",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "사용자를 찾을 수 없음",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            )
+        }
+    )
     @PatchMapping(value = "/{userId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(@PathVariable UUID userId, @RequestPart UserUpdateRequest userUpdateRequest, @RequestPart(value = "profile", required = false) MultipartFile profile)
+    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(
+            @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+            @PathVariable UUID userId,
+            @Parameter(description = "사용자 수정 정보", required = true,
+                content = @Content(mediaType = "application/json", 
+                    schema = @Schema(implementation = UserUpdateRequest.class)))
+            @RequestPart @Valid UserUpdateRequest userUpdateRequest,
+            @Parameter(description = "프로필 이미지 파일")
+            @RequestPart(value = "profile", required = false) MultipartFile profile)
         throws IOException {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
@@ -104,8 +186,31 @@ public class UserController {
 
     }
 
+    /**
+     * 사용자 삭제
+     *
+     * @param userId 사용자 ID
+     * @return 삭제 결과 메시지
+     */
+    @Operation(
+        summary = "사용자 삭제",
+        description = "사용자 계정을 삭제합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "204",
+                description = "사용자 삭제 성공"
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "사용자를 찾을 수 없음",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            )
+        }
+    )
     @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
+    public ResponseEntity<String> deleteUser(
+            @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+            @PathVariable UUID userId) {
 
         userService.deleteUserById(userId);
 
@@ -113,6 +218,22 @@ public class UserController {
 
     }
 
+    /**
+     * 전체 사용자 조회
+     *
+     * @return 사용자 목록
+     */
+    @Operation(
+        summary = "전체 사용자 조회",
+        description = "모든 사용자 정보를 조회합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "사용자 목록 조회 성공",
+                content = @Content(array = @ArraySchema(schema = @Schema(implementation = UserApiDTO.FindUserResponse.class)))
+            )
+        }
+    )
     @GetMapping()
     public ResponseEntity<List<UserApiDTO.FindUserResponse>> findAll() {
 
@@ -133,8 +254,32 @@ public class UserController {
 
     }
 
+    /**
+     * 사용자 온라인 상태 확인
+     *
+     * @param userId 사용자 ID
+     * @return 사용자 온라인 상태 정보
+     */
+    @Operation(
+        summary = "사용자 온라인 상태 확인",
+        description = "사용자의 온라인 상태를 확인합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "상태 조회 성공",
+                content = @Content(schema = @Schema(implementation = UserApiDTO.CheckUserOnline.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "사용자를 찾을 수 없음",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            )
+        }
+    )
     @GetMapping("/{userId}/userStatus")
-    public ResponseEntity<UserApiDTO.CheckUserOnline> checkUserOnlineStatus(@PathVariable UUID userId) {
+    public ResponseEntity<UserApiDTO.CheckUserOnline> checkUserOnlineStatus(
+            @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+            @PathVariable UUID userId) {
 
         UserDTO.FindUserResult user = userService.findUserById(userId).get();
 
@@ -149,8 +294,44 @@ public class UserController {
 
     }
 
+    /**
+     * 사용자 온라인 상태 업데이트
+     *
+     * @param userId 사용자 ID
+     * @param userStatusUpdateRequest 상태 업데이트 요청 정보
+     * @return 업데이트된 사용자 상태 정보
+     */
+    @Operation(
+        summary = "사용자 온라인 상태 업데이트",
+        description = "사용자의 온라인 상태를 업데이트합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "상태 업데이트 성공",
+                content = @Content(schema = @Schema(implementation = UserApiDTO.CheckUserOnline.class))
+            ),
+            @ApiResponse(
+                responseCode = "400",
+                description = "잘못된 요청",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "사용자를 찾을 수 없음",
+                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+            )
+        }
+    )
     @PatchMapping(value = "/{userId}/userStatus", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(@PathVariable UUID userId, @RequestBody UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
+    public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(
+            @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+            @PathVariable UUID userId,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "사용자 상태 업데이트 정보",
+                required = true,
+                content = @Content(schema = @Schema(implementation = UserApiDTO.UserStatusUpdateRequest.class))
+            )
+            @RequestBody @Valid UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
 
         UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)
             .orElseThrow(() -> new NoSuchDataException("No such user status."));

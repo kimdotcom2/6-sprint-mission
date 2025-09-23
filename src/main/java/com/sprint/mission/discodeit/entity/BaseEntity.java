@@ -19,7 +19,7 @@ public class BaseEntity implements Serializable {
     public BaseEntity() {
         this.id = UUID.randomUUID();
         this.createdAt = Instant.now().toEpochMilli();
-        this.updatedAt = null;
+        this.updatedAt = Instant.now().toEpochMilli();
     }
 
     protected void update() {
