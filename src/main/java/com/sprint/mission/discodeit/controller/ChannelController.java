@@ -142,10 +142,10 @@ public class ChannelController {
             @RequestBody @Valid PrivateChannelCreateRequest privateChannelCreateRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
-                //.category(privateChannelCreateRequest.category())
-                //.isVoiceChannel(privateChannelCreateRequest.isVoiceChannel())
+                .category(ChannelType.DM)
+                .isVoiceChannel(false)
                 .userIdList(privateChannelCreateRequest.userIdList())
-                //.description(privateChannelCreateRequest.description())
+                .description("DM")
                 .build();
 
         channelService.createPrivateChannel(createPrivateChannelCommand);
