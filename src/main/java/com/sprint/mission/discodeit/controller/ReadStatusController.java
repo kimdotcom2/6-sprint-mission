@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/readStatus")
+@RequestMapping("/api/readStatuses")
 public class ReadStatusController {
 
     private final ReadStatusService readStatusService;
@@ -70,7 +70,7 @@ public class ReadStatusController {
 
     }
 
-    @GetMapping("/user")
+    @GetMapping()
     public ResponseEntity<List<ReadStatusApiDTO.FindReadStatusResponse>> findAllReadStatusByUserId(@RequestParam UUID userId) {
 
         List<ReadStatusApiDTO.FindReadStatusResponse> readStatusList = readStatusService.findAllReadStatusByUserId(userId).stream()
