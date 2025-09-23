@@ -88,8 +88,8 @@ public class ChannelController {
 
     }
 
-    @PatchMapping()
-    public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@RequestParam UUID channelId, @RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
+    @PatchMapping("/{channelId}")
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@PathVariable UUID channelId, @RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
                 .id(channelId)

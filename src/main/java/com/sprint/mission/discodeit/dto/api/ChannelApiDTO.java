@@ -11,17 +11,33 @@ import java.util.UUID;
 public class ChannelApiDTO {
 
     @Builder
-    public record PublicChannelCreateRequest(String channelName, String category, boolean isVoiceChannel, String description) {
+    public record PublicChannelCreateRequest(
+        @JsonProperty("name")
+        String channelName,
+        String category,
+        boolean isVoiceChannel,
+        String description) {
 
     }
 
     @Builder
-    public record CreatePrivateChannelRequest(ChannelType category, boolean isVoiceChannel, List<UUID> userIdList, String description) {
+    public record CreatePrivateChannelRequest(
+        ChannelType category,
+        boolean isVoiceChannel,
+        @JsonProperty("participantIds")
+        List<UUID> userIdList,
+        String description) {
 
     }
 
     @Builder
-    public record UpdateChannelRequest(String channelName, String category, boolean isVoiceChannel, String description) {
+    public record UpdateChannelRequest(
+        @JsonProperty("newName")
+        String channelName,
+        String category,
+        boolean isVoiceChannel,
+        @JsonProperty("newDescription")
+        String description) {
 
     }
 
