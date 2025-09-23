@@ -53,6 +53,7 @@ public class ChannelApiDTO {
             @JsonProperty("name")
             String channelName,
             String description,
+            @JsonProperty("participantIds")
             List<UUID> userIdList,
             Long recentMessageTime
     ) {
