@@ -1,10 +1,14 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
+import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
+import com.sprint.mission.discodeit.enums.FileType;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.MessageService;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,7 +30,19 @@ public class MessageController {
     private final MessageService messageService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<MessageApiDTO.FindMessageResponse> sendMessage(@RequestBody MessageApiDTO.MessageCreateRequest request) {
+    public ResponseEntity<MessageApiDTO.FindMessageResponse> sendMessage(@RequestPart MessageApiDTO.MessageCreateRequest request, @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments) {
+
+        List<BinaryContentDTO.CreateBinaryContentCommand> binaryContentList = attachments.stream().map(file -> {
+          try {
+            return BinaryContentDTO.CreateBinaryContentCommand.builder()
+                    .fileName(file.getOriginalFilename())
+                    .fileType(FileType.ETC)
+                    .data(file.getBytes())
+                    .build();
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          }
+        }).toList();
 
         MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
                 .content(request.content())
@@ -33,7 +50,7 @@ public class MessageController {
                 .parentMessageId(request.parentMessageId())
                 .channelId(request.channelId())
                 .userId(request.userId())
-                .binaryContentList(request.binaryContentList())
+                .binaryContentList(binaryContentList)
                 .build();
 
         messageService.createMessage(createMessageCommand);
@@ -60,7 +77,7 @@ public class MessageController {
     }
 
     @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateMessage(@RequestParam UUID messageId, @RequestBody MessageApiDTO.UpdateMessageRequest request) {
+    public ResponseEntity<String> updateMessage(@RequestParam UUID messageId, @RequestBody MessageUpdateRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
                 .id(messageId)

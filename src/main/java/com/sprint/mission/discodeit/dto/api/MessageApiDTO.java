@@ -16,14 +16,12 @@ public class MessageApiDTO {
             UUID parentMessageId,
             UUID channelId,
             @JsonProperty("authorId")
-            UUID userId,
-            @JsonProperty("attachmentIds")
-            List<UUID> binaryContentList) {
+            UUID userId) {
 
     }
 
     @Builder
-    public record UpdateMessageRequest(
+    public record MessageUpdateRequest(
         @JsonProperty("newContent")
         String content,
         boolean isReply,

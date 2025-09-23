@@ -8,7 +8,7 @@ import java.util.UUID;
 public class MessageDTO {
 
     @Builder
-    public record CreateMessageCommand(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<UUID> binaryContentList) {
+    public record CreateMessageCommand(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<BinaryContentDTO.CreateBinaryContentCommand> binaryContentList) {
 
         public CreateMessageCommand {
 

@@ -1,11 +1,9 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sprint.mission.discodeit.enums.FileType;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.Builder;
 
 public class UserApiDTO {
 
@@ -15,9 +13,7 @@ public class UserApiDTO {
             String nickname,
             String email,
             String password,
-            String description,
-            byte[] profileImage,
-            FileType fileType) {
+            String description) {
 
     }
 

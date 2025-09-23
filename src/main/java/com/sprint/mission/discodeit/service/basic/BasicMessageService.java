@@ -1,7 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.entity.BinaryContent;
 import com.sprint.mission.discodeit.entity.Message;
+import com.sprint.mission.discodeit.enums.FileType;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
@@ -44,6 +46,19 @@ public class BasicMessageService implements MessageService {
                 .build();
 
         messageRepository.save(message);
+
+      if (!request.binaryContentList().isEmpty()) {
+
+        binaryContentRepository.saveAll(request.binaryContentList().stream()
+            .map(binaryContent -> BinaryContent.builder()
+                .fileName(binaryContent.fileName())
+                .size((long) binaryContent.data().length)
+                .data(binaryContent.data())
+                .fileType(binaryContent.fileType())
+                .build())
+            .toList());
+
+      }
 
     }
 
