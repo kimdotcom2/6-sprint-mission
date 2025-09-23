@@ -43,22 +43,18 @@ public class BasicUserService implements UserService {
 
         userStatusRepository.save(new UserStatus(user.getId()));
 
-        if (request.profileImage() != null && request.fileType() != null) {
+        if (request.profileImage() != null) {
 
             BinaryContent binaryContent = BinaryContent.builder()
                     .fileName(user.getNickname() + "_profileImage")
-                    .size((long) request.profileImage().length)
-                    .data(request.profileImage())
-                    .fileType(request.fileType())
+                    .size((long) request.profileImage().data().length)
+                    .data(request.profileImage().data())
+                    .fileType(request.profileImage().fileType())
                     .build();
 
             binaryContentRepository.save(binaryContent);
             user.updateProfileImageId(binaryContent.getId());
 
-        } else if (request.profileImage() == null && request.fileType() != null) {
-            throw new IllegalArgumentException("Invalid profile image data.");
-        } else if (request.profileImage() != null) {
-            throw new IllegalArgumentException("Invalid profile image data.");
         }
 
         userRepository.save(user);
@@ -184,9 +180,15 @@ public class BasicUserService implements UserService {
         if (request.isProfileImageUpdated()) {
 
             BinaryContent binaryContent = BinaryContent.builder()
-                    .data(request.profileImage())
-                    .fileType(request.fileType())
+                    .fileName(request.profileImage().fileName())
+                    .size((long) request.profileImage().data().length)
+                    .data(request.profileImage().data())
+                    .fileType(request.profileImage().fileType())
                     .build();
+
+            if (updatedUser.getProfileImageId() != null) {
+              binaryContentRepository.deleteById(updatedUser.getProfileImageId());
+            }
 
             binaryContentRepository.save(binaryContent);
             updatedUser.updateProfileImageId(binaryContent.getId());

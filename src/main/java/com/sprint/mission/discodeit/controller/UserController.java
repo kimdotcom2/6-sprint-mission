@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.controller;
 
+import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
@@ -44,8 +45,11 @@ public class UserController {
                 .email(userCreateRequest.email())
                 .password(userCreateRequest.password())
                 .description(userCreateRequest.description())
-                .profileImage(profile.isEmpty() ? null : profile.getBytes())
-                .fileType(FileType.IMAGE)
+                .profileImage(profile.isEmpty() ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                    .fileName(profile.getName())
+                    .data(profile.getBytes())
+                    .fileType(FileType.IMAGE)
+                    .build())
                 .build();
 
         userService.createUser(createUserCommand);
@@ -75,9 +79,12 @@ public class UserController {
                 .email(userUpdateRequest.email())
                 .currentPassword(userUpdateRequest.currentPassword())
                 .newPassword(userUpdateRequest.newPassword())
-                .isProfileImageUpdated(profile.isEmpty() ? false : true)
-                .profileImage(profile.isEmpty() ? null : profile.getBytes())
-                .fileType(profile.isEmpty() ? null : FileType.IMAGE)
+                .isProfileImageUpdated(!profile.isEmpty())
+                .profileImage(profile.isEmpty() ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                    .fileName(profile.getName())
+                    .data(profile.getBytes())
+                    .fileType(FileType.IMAGE)
+                    .build())
                 .build();
 
         userService.updateUser(updateUserCommand);

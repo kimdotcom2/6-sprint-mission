@@ -19,8 +19,7 @@ public class UserDTO {
             String email,
             String password,
             String description,
-            byte[] profileImage,
-            FileType fileType) {
+            BinaryContentDTO.CreateBinaryContentCommand profileImage) {
 
         public boolean isEmailValid(String email) {
             return email.matches( "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
@@ -66,8 +65,7 @@ public class UserDTO {
             String newPassword,
             String description,
             boolean isProfileImageUpdated,
-            byte[] profileImage,
-            FileType fileType
+            BinaryContentDTO.CreateBinaryContentCommand profileImage
     ) {
 
         public boolean isEmailValid(String email) {
