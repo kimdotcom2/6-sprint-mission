@@ -57,6 +57,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> Exception(Exception e) {
 
+        e.printStackTrace();
         log.error("Exception: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorApiDTO.ErrorApiResponse.builder()
