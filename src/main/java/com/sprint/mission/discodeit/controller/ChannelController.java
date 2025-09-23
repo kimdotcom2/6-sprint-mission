@@ -123,7 +123,7 @@ public class ChannelController {
 
         channelService.deleteChannelById(channelId);
 
-        return ResponseEntity.ok("Channel deleted successfully");
+        return ResponseEntity.status(204).body("Channel deleted successfully");
 
     }
 
