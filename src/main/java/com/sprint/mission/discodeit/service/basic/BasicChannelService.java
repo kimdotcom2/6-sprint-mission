@@ -89,6 +89,7 @@ public class BasicChannelService implements ChannelService {
 
     @Override
     public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
+
         return readStatusRepository.findByUserId(userId).stream()
                 .map(readStatus -> channelRepository.findById(readStatus.getChannelId())
                         .orElseThrow(() -> new IllegalArgumentException("No such channel.")))

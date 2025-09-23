@@ -164,7 +164,7 @@ public class ChannelController {
                 .type("PRIVATE")
                 .channelName(findChannelResult.channelName())
                 .description(findChannelResult.description())
-                .userIdList(new ArrayList<>())
+                .userIdList(findChannelResult.userIdList())
                 .build());
 
     }
