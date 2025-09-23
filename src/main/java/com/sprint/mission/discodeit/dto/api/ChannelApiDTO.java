@@ -21,7 +21,7 @@ public class ChannelApiDTO {
     }
 
     @Builder
-    public record CreatePrivateChannelRequest(
+    public record PrivateChannelCreateRequest(
         ChannelType category,
         boolean isVoiceChannel,
         @JsonProperty("participantIds")
@@ -31,7 +31,7 @@ public class ChannelApiDTO {
     }
 
     @Builder
-    public record UpdateChannelRequest(
+    public record ChannelUpdateRequest(
         @JsonProperty("newName")
         String channelName,
         String category,

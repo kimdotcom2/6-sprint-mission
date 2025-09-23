@@ -76,8 +76,8 @@ public class MessageController {
 
     }
 
-    @PatchMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateMessage(@RequestParam UUID messageId, @RequestBody MessageUpdateRequest request) {
+    @PatchMapping(value = "/{messageId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<MessageApiDTO.FindMessageResponse> updateMessage(@PathVariable UUID messageId, @RequestBody MessageUpdateRequest request) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
                 .id(messageId)
@@ -88,19 +88,10 @@ public class MessageController {
 
         messageService.updateMessage(updateMessageCommand);
 
-        return ResponseEntity.ok("Message updated successfully");
-
-    }
-
-    @DeleteMapping("/{messageId}")
-    public ResponseEntity<MessageApiDTO.FindMessageResponse> deleteMessage(@PathVariable UUID messageId) {
-
-        messageService.deleteMessageById(messageId);
-
         MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
-                .orElseThrow(() -> new NoSuchDataException("No such message."));
+            .orElseThrow(() -> new NoSuchDataException("No such message."));
 
-        return ResponseEntity.status(204).body(MessageApiDTO.FindMessageResponse.builder()
+        return ResponseEntity.ok().body(MessageApiDTO.FindMessageResponse.builder()
                 .id(message.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()), ZoneId.systemDefault()))
@@ -111,6 +102,18 @@ public class MessageController {
                 .userId(message.userId())
                 .binaryContentList(message.binaryContentList())
                 .build());
+
+    }
+
+    @DeleteMapping("/{messageId}")
+    public ResponseEntity<String> deleteMessage(@PathVariable UUID messageId) {
+
+        messageService.deleteMessageById(messageId);
+
+        MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
+                .orElseThrow(() -> new NoSuchDataException("No such message."));
+
+        return ResponseEntity.status(204).build();
 
     }
 

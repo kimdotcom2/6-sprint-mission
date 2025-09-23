@@ -2,6 +2,8 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO;
+import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.ChannelUpdateRequest;
+import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.PrivateChannelCreateRequest;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
@@ -10,7 +12,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,13 +61,13 @@ public class ChannelController {
     }
 
     @PostMapping(value = "/private", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPrivateChannel(@RequestBody ChannelApiDTO.CreatePrivateChannelRequest createPrivateChannelRequest) {
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> createPrivateChannel(@RequestBody PrivateChannelCreateRequest privateChannelCreateRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
-                .category(createPrivateChannelRequest.category())
-                .isVoiceChannel(createPrivateChannelRequest.isVoiceChannel())
-                .userIdList(createPrivateChannelRequest.userIdList())
-                .description(createPrivateChannelRequest.description())
+                .category(privateChannelCreateRequest.category())
+                .isVoiceChannel(privateChannelCreateRequest.isVoiceChannel())
+                .userIdList(privateChannelCreateRequest.userIdList())
+                .description(privateChannelCreateRequest.description())
                 .build();
 
         channelService.createPrivateChannel(createPrivateChannelCommand);
@@ -90,14 +91,14 @@ public class ChannelController {
     }
 
     @PatchMapping(value = "/{channelId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@PathVariable UUID channelId, @RequestBody ChannelApiDTO.UpdateChannelRequest updateChannelRequest) {
+    public ResponseEntity<ChannelApiDTO.FindChannelResponse> updatePublicChannel(@PathVariable UUID channelId, @RequestBody ChannelUpdateRequest channelUpdateRequest) {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
                 .id(channelId)
-                .channelName(updateChannelRequest.channelName())
-                .category(ChannelType.valueOf(updateChannelRequest.category()))
-                .isVoiceChannel(updateChannelRequest.isVoiceChannel())
-                .description(updateChannelRequest.description())
+                .channelName(channelUpdateRequest.channelName())
+                .category(ChannelType.valueOf(channelUpdateRequest.category()))
+                .isVoiceChannel(channelUpdateRequest.isVoiceChannel())
+                .description(channelUpdateRequest.description())
                 .build();
 
         channelService.updateChannel(updateChannelCommand);
