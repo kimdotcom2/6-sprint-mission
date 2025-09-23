@@ -17,13 +17,17 @@ public class MessageApiDTO {
             UUID channelId,
             @JsonProperty("authorId")
             UUID userId,
-            @JsonProperty("attachments")
+            @JsonProperty("attachmentIds")
             List<UUID> binaryContentList) {
 
     }
 
     @Builder
-    public record UpdateMessageRequest(String content, boolean isReply, UUID parentMessageId) {
+    public record UpdateMessageRequest(
+        @JsonProperty("newContent")
+        String content,
+        boolean isReply,
+        UUID parentMessageId) {
 
     }
 
@@ -38,7 +42,7 @@ public class MessageApiDTO {
             UUID userId,
             boolean isReply,
             UUID parentMessageId,
-            @JsonProperty("attachments")
+            @JsonProperty("attachmentIds")
             List<UUID> binaryContentList
     ) {
 

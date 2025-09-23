@@ -82,7 +82,7 @@ public class MessageController {
         MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
                 .orElseThrow(() -> new NoSuchDataException("No such message."));
 
-        return ResponseEntity.ok(MessageApiDTO.FindMessageResponse.builder()
+        return ResponseEntity.status(204).body(MessageApiDTO.FindMessageResponse.builder()
                 .id(message.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()), ZoneId.systemDefault()))
