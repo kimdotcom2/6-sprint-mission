@@ -18,6 +18,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "바이너리 콘텐츠 API", description = "바이너리 파일 업로드 및 관리를 위한 API")
 @RestController
+@Slf4j
 @RequestMapping("/api/binaryContents")
 @RequiredArgsConstructor
 public class BinaryContentController {
@@ -122,7 +124,10 @@ public class BinaryContentController {
 
     @ExceptionHandler(NoSuchDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("NoSuchDataException occurred", e);
+
+      return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
                 .message(e.getMessage())
                 .build());
@@ -137,7 +142,10 @@ public class BinaryContentController {
     @io.swagger.v3.oas.annotations.Hidden
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("IllegalArgumentException occurred", e);
+
+      return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
                 .message(e.getMessage())
                 .build());

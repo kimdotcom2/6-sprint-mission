@@ -23,6 +23,7 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.time.ZoneOffset;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Tag(name = "사용자 API", description = "사용자 계정 및 프로필 관리 API")
 @RestController
+@Slf4j
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -353,7 +355,10 @@ public class UserController {
 
     @ExceptionHandler(NoSuchDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("NoSuchDataException occurred", e);
+
+      return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
             .message(e.getMessage())
             .build());
@@ -361,7 +366,10 @@ public class UserController {
 
     @ExceptionHandler(AllReadyExistDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
-        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("AllReadyExistDataException occurred", e);
+
+      return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());

@@ -308,7 +308,10 @@ public class ChannelController {
 
     @ExceptionHandler(NoSuchDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("NoSuchDataException occurred", e);
+
+      return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
             .message(e.getMessage())
             .build());
@@ -316,7 +319,10 @@ public class ChannelController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("IllegalArgumentException occurred", e);
+
+      return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());

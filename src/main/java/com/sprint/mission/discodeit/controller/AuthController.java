@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "인증 API", description = "사용자 인증 관련 API")
 @RestController
+@Slf4j
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
@@ -96,7 +98,10 @@ public class AuthController {
 
     @ExceptionHandler(NoSuchDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("NoSuchDataException occurred", e);
+
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
             .message(e.getMessage())
             .build());
@@ -104,7 +109,10 @@ public class AuthController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("IllegalArgumentException occurred", e);
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());

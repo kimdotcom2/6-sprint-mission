@@ -22,6 +22,7 @@ import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Tag(name = "읽음 상태 API", description = "사용자의 메시지 읽음 상태 관리를 위한 API")
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/readStatuses")
 public class ReadStatusController {
@@ -188,7 +190,10 @@ public class ReadStatusController {
     @io.swagger.v3.oas.annotations.Hidden
     @ExceptionHandler(NoSuchDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
-        return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("NoSuchDataException occurred", e);
+
+      return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
             .message(e.getMessage())
             .build());
@@ -203,7 +208,10 @@ public class ReadStatusController {
     @io.swagger.v3.oas.annotations.Hidden
     @ExceptionHandler(AllReadyExistDataException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleAllReadyExistDataException(AllReadyExistDataException e) {
-        return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
+
+      log.error("AllReadyExistDataException occurred", e);
+
+      return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
             .build());
