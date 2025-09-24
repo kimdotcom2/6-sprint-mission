@@ -94,7 +94,7 @@ public class ChannelController {
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
             .filter(
-                channel -> channel.channelName().equals(publicChannelCreateRequest.channelName()))
+                channel -> !channel.isPrivate() && publicChannelCreateRequest.channelName().equals(channel.channelName()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
                 .orElseThrow(() -> new NoSuchDataException("No such channels"));
 
