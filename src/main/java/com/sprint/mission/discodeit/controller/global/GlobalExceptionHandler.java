@@ -19,7 +19,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
 
         e.printStackTrace();
-        log.error("NoSuchDataException: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
@@ -32,7 +31,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
 
         e.printStackTrace();
-        log.error("AllReadyExistDataException: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
@@ -45,7 +43,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> IllegalArgumentException(IllegalArgumentException e) {
 
         e.printStackTrace();
-        log.error("IllegalArgumentException: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
@@ -58,7 +55,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> Exception(Exception e) {
 
         e.printStackTrace();
-        log.error("Exception: {}", e.getMessage());
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
