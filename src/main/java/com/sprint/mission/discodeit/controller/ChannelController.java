@@ -315,9 +315,6 @@ public class ChannelController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
-
-        e.printStackTrace();
-
         return ResponseEntity.status(400).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.BAD_REQUEST.value())
             .message(e.getMessage())
