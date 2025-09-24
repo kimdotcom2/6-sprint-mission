@@ -122,7 +122,7 @@ public class BasicChannelService implements ChannelService {
                         .category(channel.getCategory())
                         .isVoiceChannel(channel.isVoiceChannel())
                         .isPrivate(channel.isPrivate())
-                        .userIdList(new ArrayList<>()) // Public channels have empty user list
+                        .userIdList(new ArrayList<>())
                         .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
                                 .max(Comparator.comparing(Message::getCreatedAt))
                                 .map(Message::getCreatedAt)
