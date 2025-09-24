@@ -8,7 +8,7 @@ import java.util.UUID;
 public class ReadStatusApiDTO {
 
     @Builder
-    public record ReadStatusCreateRequest(UUID channelId, UUID userId, LocalDateTime lastReadAt){
+    public record ReadStatusCreateRequest(UUID userId, UUID channelId, LocalDateTime lastReadAt){
 
     }
 

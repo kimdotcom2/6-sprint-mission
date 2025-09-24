@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -88,7 +87,7 @@ public class UserController {
                 .email(userCreateRequest.email())
                 .password(userCreateRequest.password())
                 .description(userCreateRequest.description())
-                .profileImage(profile.isEmpty() ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                .profileImage(profile == null ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
                     .fileName(profile.getName())
                     .data(profile.getBytes())
                     .fileType(FileType.IMAGE)
@@ -144,7 +143,7 @@ public class UserController {
         }
     )
     @PatchMapping(value = "/{userId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UserApiDTO.FindUserResponse> updateUserProfile(
+    public ResponseEntity<UserApiDTO.FindUserResponse> userUpdateProfile(
             @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
             @PathVariable UUID userId,
             @Parameter(description = "사용자 수정 정보", required = true,
@@ -162,7 +161,7 @@ public class UserController {
                 .currentPassword(userUpdateRequest.currentPassword())
                 .newPassword(userUpdateRequest.newPassword())
                 .isProfileImageUpdated(!profile.isEmpty())
-                .profileImage(profile.isEmpty() ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                .profileImage(profile == null ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
                     .fileName(profile.getName())
                     .data(profile.getBytes())
                     .fileType(FileType.IMAGE)

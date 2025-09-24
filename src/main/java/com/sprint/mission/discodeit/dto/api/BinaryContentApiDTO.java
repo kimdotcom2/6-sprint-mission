@@ -15,10 +15,10 @@ public class BinaryContentApiDTO {
             LocalDateTime createdAt,
             String fileName,
             Long size,
-            @JsonProperty("bytes")
-            byte[] data,
             @JsonProperty("contentType")
-            FileType fileType
+            FileType fileType,
+            @JsonProperty("bytes")
+            byte[] data
     ) {
 
     }

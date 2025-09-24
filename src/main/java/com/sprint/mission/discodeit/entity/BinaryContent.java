@@ -22,6 +22,8 @@ public class BinaryContent implements Serializable {
     public BinaryContent(byte[] data, String fileName, Long size, FileType fileType) {
         this.data = data;
         this.fileType = fileType;
+        this.fileName = fileName;
+        this.size = size;
     }
 
 }
