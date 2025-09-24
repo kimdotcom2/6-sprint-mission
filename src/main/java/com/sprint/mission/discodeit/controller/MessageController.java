@@ -43,7 +43,7 @@ public class MessageController {
     /**
      * 메시지 전송
      *
-     * @param request 메시지 생성 요청 정보
+     * @param messageCreateRequest 메시지 생성 요청 정보
      * @param attachments 첨부 파일 목록
      * @return 생성된 메시지 정보
      */
@@ -68,7 +68,7 @@ public class MessageController {
             @Parameter(description = "메시지 생성 요청 정보", required = true,
                 content = @Content(mediaType = "application/json", 
                     schema = @Schema(implementation = MessageApiDTO.MessageCreateRequest.class)))
-            @RequestPart @Valid MessageApiDTO.MessageCreateRequest request,
+            @RequestPart @Valid MessageApiDTO.MessageCreateRequest messageCreateRequest,
             @Parameter(description = "첨부 파일 목록")
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments) {
 
@@ -86,18 +86,18 @@ public class MessageController {
             }).toList() : List.of();
 
         MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
-                .content(request.content())
-                .isReply(request.isReply())
-                .parentMessageId(request.parentMessageId())
-                .channelId(request.channelId())
-                .userId(request.userId())
+                .content(messageCreateRequest.content())
+                .isReply(messageCreateRequest.isReply())
+                .parentMessageId(messageCreateRequest.parentMessageId())
+                .channelId(messageCreateRequest.channelId())
+                .userId(messageCreateRequest.userId())
                 .binaryContentList(binaryContentList)
                 .build();
 
         messageService.createMessage(createMessageCommand);
 
-        MessageDTO.FindMessageResult message = messageService.findMessagesByUserId(request.userId()).stream()
-                .filter(message1 -> message1.channelId().equals(request.channelId()))
+        MessageDTO.FindMessageResult message = messageService.findMessagesByUserId(messageCreateRequest.userId()).stream()
+                .filter(message1 -> message1.channelId().equals(messageCreateRequest.channelId()))
                 .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
                 .limit(1)
                 .findFirst()
@@ -121,7 +121,7 @@ public class MessageController {
      * 메시지 수정
      *
      * @param messageId 메시지 ID
-     * @param request 메시지 수정 정보
+     * @param messageUpdateRequest 메시지 수정 정보
      * @return 수정된 메시지 정보
      */
     @Operation(
@@ -154,13 +154,13 @@ public class MessageController {
                 required = true,
                 content = @Content(schema = @Schema(implementation = MessageUpdateRequest.class))
             )
-            @RequestBody @Valid MessageUpdateRequest request) {
+            @RequestBody @Valid MessageUpdateRequest messageUpdateRequest) {
 
         MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
                 .id(messageId)
-                .content(request.content())
-                .isReply(request.isReply())
-                .parentMessageId(request.parentMessageId())
+                .content(messageUpdateRequest.content())
+                .isReply(messageUpdateRequest.isReply())
+                .parentMessageId(messageUpdateRequest.parentMessageId())
                 .build();
 
         messageService.updateMessage(updateMessageCommand);
