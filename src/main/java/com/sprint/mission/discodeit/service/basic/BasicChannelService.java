@@ -90,24 +90,54 @@ public class BasicChannelService implements ChannelService {
     @Override
     public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
 
-        return readStatusRepository.findByUserId(userId).stream()
+        List<ChannelDTO.FindChannelResult> privateChannelList = readStatusRepository.findByUserId(userId).stream()
                 .map(readStatus -> channelRepository.findById(readStatus.getChannelId())
-                        .orElseThrow(() -> new IllegalArgumentException("No such channel.")))
-                        .map(channel -> ChannelDTO.FindChannelResult.builder()
+                        .orElseThrow(() -> new NoSuchDataException("No such channel.")))
+                .map(channel -> ChannelDTO.FindChannelResult.builder()
                         .id(channel.getId())
                         .channelName(channel.getChannelName())
                         .category(channel.getCategory())
                         .isVoiceChannel(channel.isVoiceChannel())
                         .isPrivate(channel.isPrivate())
-                        .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
-                                .map(ReadStatus::getUserId).toList() : new ArrayList<>())
-                                .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
-                                        .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
-                                .description(channel.getDescription())
-                                .createdAt(channel.getCreatedAt())
-                                .updatedAt(channel.getUpdatedAt())
+                        .userIdList(channel.isPrivate() ? 
+                                readStatusRepository.findByChannelId(channel.getId()).stream()
+                                        .map(ReadStatus::getUserId)
+                                        .toList() : 
+                                new ArrayList<>())
+                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
+                                .max(Comparator.comparing(Message::getCreatedAt))
+                                .map(Message::getCreatedAt)
+                                .orElse(null))
+                        .description(channel.getDescription())
+                        .createdAt(channel.getCreatedAt())
+                        .updatedAt(channel.getUpdatedAt())
                         .build())
-                        .toList();
+                .toList();
+
+        List<ChannelDTO.FindChannelResult> publicChannelList = channelRepository.findAll().stream()
+                .filter(channel -> !channel.isPrivate())
+                .map(channel -> ChannelDTO.FindChannelResult.builder()
+                        .id(channel.getId())
+                        .channelName(channel.getChannelName())
+                        .category(channel.getCategory())
+                        .isVoiceChannel(channel.isVoiceChannel())
+                        .isPrivate(channel.isPrivate())
+                        .userIdList(new ArrayList<>()) // Public channels have empty user list
+                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
+                                .max(Comparator.comparing(Message::getCreatedAt))
+                                .map(Message::getCreatedAt)
+                                .orElse(null))
+                        .description(channel.getDescription())
+                        .createdAt(channel.getCreatedAt())
+                        .updatedAt(channel.getUpdatedAt())
+                        .build())
+                .toList();
+
+        Set<ChannelDTO.FindChannelResult> combined = new HashSet<>();
+        combined.addAll(privateChannelList);
+        combined.addAll(publicChannelList);
+        
+        return new ArrayList<>(combined);
     }
 
     @Override

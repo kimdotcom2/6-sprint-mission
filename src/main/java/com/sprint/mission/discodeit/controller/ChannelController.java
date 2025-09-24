@@ -291,8 +291,7 @@ public class ChannelController {
             @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
             @RequestParam UUID userId) {
 
-        List<ChannelApiDTO.FindChannelResponse> channelResponseList = new ArrayList<>(channelService.findAllChannels().stream()
-            .filter(channel -> !channel.isPrivate())
+        return channelService.findChannelsByUserId(userId).stream()
             .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
                 .id(channel.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.createdAt()), ZoneId.systemDefault()))
@@ -304,24 +303,7 @@ public class ChannelController {
                 .description(channel.description())
                 .userIdList(channel.userIdList())
                 .build())
-            .toList());
-
-        channelResponseList.addAll(channelService.findChannelsByUserId(userId).stream()
-            .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
-                .id(channel.id())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.updatedAt()), ZoneId.systemDefault()))
-                .category(channel.category())
-                .isVoiceChannel(channel.isVoiceChannel())
-                .type(channel.isPrivate() ? "PRIVATE" : "PUBLIC")
-                .channelName(channel.channelName())
-                .description(channel.description())
-                .userIdList(channel.userIdList())
-                .build())
-            .toList());
-
-        return channelResponseList;
-
+            .toList();
     }
 
     @ExceptionHandler(NoSuchDataException.class)
