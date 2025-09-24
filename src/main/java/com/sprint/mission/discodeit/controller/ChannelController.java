@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "채널 API", description = "채널 생성 및 관리를 위한 API")
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/channels")
 public class ChannelController {
@@ -230,7 +232,7 @@ public class ChannelController {
                 .type("PUBLIC")
                 .channelName(findChannelResult.channelName())
                 .description(findChannelResult.description())
-                .userIdList(new ArrayList<>())
+                .userIdList(findChannelResult.userIdList())
                 .build());
 
     }
@@ -299,7 +301,7 @@ public class ChannelController {
                         .type(channel.isPrivate() ? "PRIVATE" : "PUBLIC")
                         .channelName(channel.channelName())
                         .description(channel.description())
-                        .userIdList(new ArrayList<>())
+                        .userIdList(channel.userIdList())
                         .build())
                 .toList();
 
