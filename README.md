@@ -8,4 +8,6 @@
 
 ### 심화
 - [x] 다음의 정적 리소스를 서빙하여 프론트엔드와 통합해보세요. API 스펙을 준수했다면 잘 동작할거예요.
-- [ ] Railway.app을 활용하여 애플리케이션을 배포해보세요.
+- [x] Railway.app을 활용하여 애플리케이션을 배포해보세요.
+
+https://6-sprint-mission-production.up.railway.app/
