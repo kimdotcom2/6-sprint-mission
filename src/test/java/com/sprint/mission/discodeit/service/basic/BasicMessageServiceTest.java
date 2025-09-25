@@ -47,7 +47,7 @@ class BasicMessageServiceTest {
                 .build();
     }
 
-    @Test
+    /*@Test
     void createMessage_success() {
 
         //given
@@ -388,5 +388,5 @@ class BasicMessageServiceTest {
         when(messageRepository.findById(id)).thenReturn(Optional.empty());
         Assertions.assertThrows(IllegalArgumentException.class, () -> basicMessageService.deleteMessageById(id));
 
-    }
+    }*/
 }

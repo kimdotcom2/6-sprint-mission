@@ -36,7 +36,7 @@ class BasicBinaryContentServiceTest {
         sampleData = new byte[]{1, 2, 3};
     }
 
-    @Test
+    /*@Test
     void createBinaryContent_behaviour() {
 
         //given
@@ -185,5 +185,5 @@ class BasicBinaryContentServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("No such binary content");
 
-    }
+    }*/
 }

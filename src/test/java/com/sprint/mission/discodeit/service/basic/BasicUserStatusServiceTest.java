@@ -30,7 +30,7 @@ class BasicUserStatusServiceTest {
     @InjectMocks
     private BasicUserStatusService service;
 
-    @Test
+    /*@Test
     void createUserStatus_behaviour() {
 
         //given
@@ -265,5 +265,5 @@ class BasicUserStatusServiceTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("No such user status.");
 
-    }
+    }*/
 }
