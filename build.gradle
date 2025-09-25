@@ -13,6 +13,10 @@ java {
     targetCompatibility = '17'
 }
 
+bootJar {
+    archiveFileName = "app.jar"
+}
+
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
