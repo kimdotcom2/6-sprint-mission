@@ -10,9 +10,11 @@ import com.sprint.mission.discodeit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableJpaAuditing
 public class DisCodeitApplication {
 
     static final String strongPassword = "fe5A3sad@lks^";

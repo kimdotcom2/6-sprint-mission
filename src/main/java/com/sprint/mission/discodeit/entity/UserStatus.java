@@ -1,45 +1,30 @@
 package com.sprint.mission.discodeit.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.UUID;
+import org.hibernate.annotations.CascadeType;
 
 @Getter
 @RequiredArgsConstructor
-public class UserStatus extends BaseEntity implements Serializable {
+@NoArgsConstructor
+@Entity
+@Table(name = "user_statuses")
+public class UserStatus extends BaseUpdatableEntity {
 
-    private UUID userId;
-    private Long lastActiveTimestamp = Instant.now().toEpochMilli();
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false, unique = true)
+  private User user;
 
-    public boolean isLogin() {
-
-        //1000ms = 1초
-        return ((Instant.now().toEpochMilli() - lastActiveTimestamp) <= 1000 * 60 * 5);
-
-    }
-
-    public UserStatus(UUID userId) {
-        super();
-        this.userId = userId;
-    }
-
-    public void updateLastActiveTimestamp() {
-        this.lastActiveTimestamp = Instant.now().toEpochMilli();
-    }
-
-    public static class Builder {
-        private UUID userId;
-
-        public Builder userId(UUID userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public UserStatus build() {
-            return new UserStatus(userId);
-        }
-    }
+  @Column(nullable = false)
+  private Instant lastActiveAt;
 
 }

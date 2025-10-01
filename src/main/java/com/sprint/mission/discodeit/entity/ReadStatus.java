@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
-public class ReadStatus extends BaseEntity implements Serializable {
+public class ReadStatus extends BaseUpdatableEntity {
 
     private UUID channelId;
     private UUID userId;

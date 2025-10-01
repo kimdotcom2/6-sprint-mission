@@ -10,7 +10,7 @@ import java.util.*;
 
 @Getter
 @RequiredArgsConstructor
-public class Channel extends BaseEntity implements Serializable {
+public class Channel extends BaseUpdatableEntity {
 
     private String channelName;
     private ChannelType category;
@@ -32,7 +32,6 @@ public class Channel extends BaseEntity implements Serializable {
         this.category = category;
         this.isVoiceChannel = isVoiceChannel;
         this.description = description;
-        super.update();
     }
 
     @Override

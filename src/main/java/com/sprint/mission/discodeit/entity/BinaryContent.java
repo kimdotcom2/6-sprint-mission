@@ -1,6 +1,11 @@
 package com.sprint.mission.discodeit.entity;
 
 import com.sprint.mission.discodeit.enums.FileType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.io.Serializable;
@@ -8,22 +13,19 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Getter
-public class BinaryContent implements Serializable {
+@NoArgsConstructor
+@Entity
+@Table(name = "binary_contents")
+public class BinaryContent extends BaseEntity {
 
-    private static final long serialVersionUID = 1L;
-    private final UUID id = UUID.randomUUID();
-    private final Long createdAt = Instant.now().toEpochMilli();
-    private final byte[] data;
-    private String fileName;
-    private Long size;
-    private final FileType fileType;
-
-    @Builder
-    public BinaryContent(byte[] data, String fileName, Long size, FileType fileType) {
-        this.data = data;
-        this.fileType = fileType;
-        this.fileName = fileName;
-        this.size = size;
-    }
+  @Column(nullable = false)
+  private String fileName;
+  @Column(nullable = false)
+  private Long size;
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private FileType contentType;
+  @Column(nullable = false)
+  private byte[] bytes;
 
 }

@@ -84,7 +84,7 @@ public class ChannelController {
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName(publicChannelCreateRequest.channelName())
                 //.category(ChannelType.valueOf(publicChannelCreateRequest.category()))
-                .category(ChannelType.TEXT)
+                .category(ChannelType.PUBLIC)
                 //.isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
                 .isVoiceChannel(false)
                 .description(publicChannelCreateRequest.description())
@@ -144,7 +144,7 @@ public class ChannelController {
             @RequestBody @Valid PrivateChannelCreateRequest privateChannelCreateRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
-                .category(ChannelType.DM)
+                .category(ChannelType.PRIVATE)
                 .isVoiceChannel(false)
                 .userIdList(privateChannelCreateRequest.userIdList())
                 .description("DM")

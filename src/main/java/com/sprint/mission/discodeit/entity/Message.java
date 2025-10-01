@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
-public class Message extends BaseEntity implements Serializable {
+public class Message extends BaseUpdatableEntity {
 
     private String content;
     private boolean isReply;
@@ -33,7 +33,6 @@ public class Message extends BaseEntity implements Serializable {
         this.content = content;
         this.isReply = isReply;
         this.parentMessageId = parentMessageId;
-        super.update();
     }
 
     public void addBinaryContent(UUID binaryContentId) {
