@@ -20,11 +20,14 @@ public class BinaryContent extends BaseEntity {
 
   @Column(nullable = false)
   private String fileName;
+
   @Column(nullable = false)
   private Long size;
+
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private FileType contentType;
+
   @Column(nullable = false)
   private byte[] bytes;
 

@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
@@ -18,36 +19,45 @@ import java.util.UUID;
 @Table(name = "users")
 public class User extends BaseUpdatableEntity {
 
-    private String username;
-    private String email;
-    private String password;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private BinaryContent profileId;
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user")
-    private UserStatus userStatus;
+  @Column(nullable = false)
+  private String username;
 
-    public void update(String nickname, String email, String password) {
-        this.username = nickname;
-        this.email = email;
-        this.password = password;
-    }
+  @Column(nullable = false)
+  private String email;
 
-    public void updatePassword(String password) {
-        this.password = password;
-    }
+  @Column(nullable = false)
+  private String password;
 
-    public void updateProfile(BinaryContent profileId) {
-        this.profileId = profileId;
-    }
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @Column(name = "profile_id", unique = true)
+  private BinaryContent profileId;
 
-    public void updateUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-    }
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
+  @Column(nullable = false)
+  private UserStatus userStatus;
 
-    @Override
-    public String toString() {
-        return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", nickname=" + username
-                + ", email=" + email + "]";
-    }
+  public void update(String nickname, String email, String password) {
+    this.username = nickname;
+    this.email = email;
+    this.password = password;
+  }
+
+  public void updatePassword(String password) {
+    this.password = password;
+  }
+
+  public void updateProfile(BinaryContent profileId) {
+    this.profileId = profileId;
+  }
+
+  public void updateUserStatus(UserStatus userStatus) {
+    this.userStatus = userStatus;
+  }
+
+  @Override
+  public String toString() {
+    return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", nickname=" + username
+        + ", email=" + email + "]";
+  }
 
 }

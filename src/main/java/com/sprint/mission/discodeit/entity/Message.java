@@ -1,6 +1,17 @@
 package com.sprint.mission.discodeit.entity;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -11,88 +22,28 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "messages")
 public class Message extends BaseUpdatableEntity {
 
-    private String content;
-    private boolean isReply;
-    private UUID parentMessageId = null;
-    private UUID channelId;
-    private UUID userId;
-    private final List<UUID> binaryContentIdList = new ArrayList<>();
+  @Column(nullable = true)
+  private String content;
 
-    public Message(UUID userId, UUID channelId, String content, boolean isReply, UUID parentMessageId) {
-        super();
-        this.userId = userId;
-        this.channelId = channelId;
-        this.content = content;
-        this.isReply = isReply;
-        this.parentMessageId = parentMessageId;
-    }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "channel_id", nullable = false)
+  private Channel channel;
 
-    public void update(String content, boolean isReply, UUID parentMessageId) {
-        this.content = content;
-        this.isReply = isReply;
-        this.parentMessageId = parentMessageId;
-    }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "author_id", nullable = false)
+  private User author;
 
-    public void addBinaryContent(UUID binaryContentId) {
-        binaryContentIdList.add(binaryContentId);
-    }
-
-    public void removeBinaryContent(UUID... binaryContentIds) {
-        for (UUID binaryContentId : binaryContentIds) {
-            binaryContentIdList.remove(binaryContentId);
-        }
-    }
-
-    public void removeAllBinaryContent() {
-        binaryContentIdList.clear();
-    }
-
-    @Override
-    public String toString() {
-        return "Message [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", content=" + content
-                + ", isReply=" + isReply + ", parentMessageId=" + parentMessageId + ", channelId=" + channelId
-                + ", userId=" + userId + "]";
-    }
-
-    public static class Builder {
-
-        private String content;
-        private boolean isReply;
-        private UUID parentMessageId = null;
-        private UUID channelId;
-        private UUID userId;
-
-        public Builder content(String content) {
-            this.content = content;
-            return this;
-        }
-
-        public Builder isReply(boolean isReply) {
-            this.isReply = isReply;
-            return this;
-        }
-
-        public Builder parentMessageId(UUID parentMessageId) {
-            this.parentMessageId = parentMessageId;
-            return this;
-        }
-
-        public Builder channelId(UUID channelId) {
-            this.channelId = channelId;
-            return this;
-        }
-
-        public Builder userId(UUID userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Message build() {
-            return new Message(userId, channelId, content, isReply, parentMessageId);
-        }
-
-    }
+  @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+  @JoinTable(
+      name = "message_attachments",
+      joinColumns = @JoinColumn(name = "message_id"),
+      inverseJoinColumns = @JoinColumn(name = "attachment_id")
+  )
+  private List<BinaryContent> attachments;
 
 }

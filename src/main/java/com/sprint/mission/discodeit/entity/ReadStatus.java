@@ -1,5 +1,11 @@
 package com.sprint.mission.discodeit.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.io.Serializable;
@@ -8,46 +14,24 @@ import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "read_statuses")
 public class ReadStatus extends BaseUpdatableEntity {
 
-    private UUID channelId;
-    private UUID userId;
-    private Long lastReadTimestamp;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "message_id", nullable = false)
+  private User user;
 
-    public ReadStatus(UUID channelId, UUID userId, Long lastReadTimestamp) {
-        super();
-        this.channelId = channelId;
-        this.userId = userId;
-        this.lastReadTimestamp = lastReadTimestamp;
-    }
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "channel_id", nullable = false)
+  private Channel channel;
 
-    public void updateLastReadTimestamp(Long lastReadTimestamp) {
-        this.lastReadTimestamp = lastReadTimestamp;
-    }
+  @Column(nullable = false)
+  private Instant lastReadAt;
 
-    public static class Builder {
-        private UUID channelId;
-        private UUID userId;
-        private Long lastReadTimestamp;
-
-        public Builder channelId(UUID channelId) {
-            this.channelId = channelId;
-            return this;
-        }
-
-        public Builder userId(UUID userId) {
-            this.userId = userId;
-            return this;
-        }
-
-        public Builder lastReadTimestamp(Long lastReadTimestamp) {
-            this.lastReadTimestamp = lastReadTimestamp;
-            return this;
-        }
-
-        public ReadStatus build() {
-            return new ReadStatus(channelId, userId, lastReadTimestamp);
-        }
-    }
+  public void updateLastReadAt(Instant lastReadAt) {
+    this.lastReadAt = lastReadAt;
+  }
 
 }
