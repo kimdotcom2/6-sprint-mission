@@ -28,7 +28,4 @@ public class BinaryContent extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private FileType contentType;
 
-  @Column(nullable = false)
-  private byte[] bytes;
-
 }
