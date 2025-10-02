@@ -80,7 +80,7 @@ public class AuthController {
                 .password(loginRequest.password())
                 .build());
 
-        UserDTO.FindUserResult findUserResult = userService.findUserByNickname(loginRequest.nickname())
+        UserDTO.FindUserResult findUserResult = userService.findUserByUsername(loginRequest.nickname())
             .orElseThrow(() -> new NoSuchDataException("No such user"));
 
         UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()

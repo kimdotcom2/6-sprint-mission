@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,14 @@ public class UserEntity extends BaseUpdatableEntity {
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
   @Column(nullable = false)
-  private UserStatusEntity userStatusEntity;
+  private UserStatusEntity userStatus;
+
+  @Builder
+  public UserEntity(String username, String email, String password) {
+    this.username = username;
+    this.email = email;
+    this.password = password;
+  }
 
   public void update(String nickname, String email, String password) {
     this.username = nickname;
@@ -48,8 +56,8 @@ public class UserEntity extends BaseUpdatableEntity {
     this.profileId = profileId;
   }
 
-  public void updateUserStatus(UserStatusEntity userStatusEntity) {
-    this.userStatusEntity = userStatusEntity;
+  public void updateUserStatus(UserStatusEntity userStatus) {
+    this.userStatus = userStatus;
   }
 
   @Override

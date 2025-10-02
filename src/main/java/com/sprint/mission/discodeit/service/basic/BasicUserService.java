@@ -6,10 +6,12 @@ import com.sprint.mission.discodeit.entity.UserEntity;
 import com.sprint.mission.discodeit.entity.UserStatusEntity;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.mapper.UserEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
+import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,39 +28,38 @@ public class BasicUserService implements UserService {
     private final UserRepository userRepository;
     private final UserStatusRepository userStatusRepository;
     private final BinaryContentRepository binaryContentRepository;
+    private final BinaryContentStorage binaryContentStorage;
+    private final UserEntityMapper userEntityMapper;
     private final SecurityUtil securityUtil = new SecurityUtil();
 
+    @Transactional
     @Override
-    public void createUser(UserDTO.CreateUserCommand request) {
+    public UserDTO.User createUser(UserDTO.CreateUserCommand request) {
 
-        if (userRepository.existByEmailOrNickname(request.email(), request.username())) {
+        if (userRepository.existByEmailOrUsername(request.email(), request.username())) {
             throw new AllReadyExistDataException("User already exists.");
         }
 
-        UserEntity userEntity = new UserEntity.Builder()
+        UserEntity userEntity = UserEntity.builder()
                 .email(request.email())
                 .password(securityUtil.hashPassword(request.password()))
-                .nickname(request.username())
-                .description(request.description())
+                .username(request.username())
                 .build();
-
-        userStatusRepository.save(new UserStatusEntity(userEntity.getId()));
 
         if (request.profileImage() != null) {
 
-            BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
-                    .fileName(userEntity.getUsername() + "_profileImage")
-                    .size((long) request.profileImage().data().length)
-                    .data(request.profileImage().data())
-                    .fileType(request.profileImage().contentType())
-                    .build();
+          BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
+              .fileName(request.profileImage().fileName())
+              .size((long) request.profileImage().data().length)
+              .contentType(request.profileImage().contentType())
+              .build();
 
-            binaryContentRepository.save(binaryContentEntity);
-            userEntity.updateProfileImageId(binaryContentEntity.getId());
+          binaryContentEntity = binaryContentRepository.save(binaryContentEntity);
+          binaryContentStorage.put(binaryContentEntity.getId(), request.profileImage().data());
 
         }
 
-        userRepository.save(userEntity);
+        return userEntityMapper.entityToUser(userRepository.save(userEntity));
 
     }
 
@@ -76,8 +78,9 @@ public class BasicUserService implements UserService {
         return userRepository.existByNickname(nickname);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
+    public Optional<UserDTO.User> findUserById(UUID id) {
 
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
@@ -85,21 +88,12 @@ public class BasicUserService implements UserService {
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(userEntity.getId())
-                .email(userEntity.getEmail())
-                .nickname(userEntity.getUsername())
-                .description(userEntity.getDescription())
-                .profileImageId(userEntity.getProfileImageId())
-                .isOnline(userStatusEntity.isLogin())
-                .createdAt(userEntity.getCreatedAt())
-                .updatedAt(userEntity.getUpdatedAt())
-                .build());
+        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
 
     }
 
     @Override
-    public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
+    public Optional<UserDTO.User> findUserByEmail(String email) {
 
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
@@ -107,56 +101,28 @@ public class BasicUserService implements UserService {
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(userEntity.getId())
-                .email(userEntity.getEmail())
-                .nickname(userEntity.getUsername())
-                .description(userEntity.getDescription())
-                .profileImageId(userEntity.getProfileImageId())
-                .isOnline(userStatusEntity.isLogin())
-                .createdAt(userEntity.getCreatedAt())
-                .updatedAt(userEntity.getUpdatedAt())
-                .build());
+        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
 
     }
 
     @Override
-    public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
+    public Optional<UserDTO.User> findUserByUsername(String username) {
 
-        UserEntity userEntity = userRepository.findByNickname(nickname)
+        UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(userEntity.getId())
-                .email(userEntity.getEmail())
-                .nickname(userEntity.getUsername())
-                .description(userEntity.getDescription())
-                .profileImageId(userEntity.getProfileImageId())
-                .isOnline(userStatusEntity.isLogin())
-                .createdAt(userEntity.getCreatedAt())
-                .updatedAt(userEntity.getUpdatedAt())
-                .build());
+        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
 
     }
 
     @Override
-    public List<UserDTO.FindUserResult> findAllUsers() {
+    public List<UserDTO.User> findAllUsers() {
 
         return userRepository.findAll().stream()
-                .map(user -> UserDTO.FindUserResult.builder()
-                        .id(user.getId())
-                        .email(user.getEmail())
-                        .nickname(user.getUsername())
-                        .description(user.getDescription())
-                        .profileImageId(user.getProfileImageId())
-                        .isOnline(userStatusRepository.findByUserId(user.getId())
-                                .orElseThrow(() -> new NoSuchDataException("No such user status.")).isLogin())
-                        .createdAt(user.getCreatedAt())
-                        .updatedAt(user.getUpdatedAt())
-                        .build())
+                .map(userEntityMapper::entityToUser)
                 .toList();
     }
 
@@ -166,7 +132,7 @@ public class BasicUserService implements UserService {
         UserEntity updatedUserEntity = userRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        if (userRepository.existByEmailOrNickname(request.email(), request.username()) &&
+        if (userRepository.existByEmailOrUsername(request.email(), request.username()) &&
                 !updatedUserEntity.getId().equals(request.id())) {
             throw new AllReadyExistDataException("User already exists.");
         }
@@ -175,27 +141,25 @@ public class BasicUserService implements UserService {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        updatedUserEntity.update(request.username(), request.email(), securityUtil.hashPassword(request.currentPassword()), request.description());
+        updatedUserEntity.update(request.username(), request.email(), securityUtil.hashPassword(request.currentPassword()));
+        userRepository.save(updatedUserEntity);
 
         if (request.isProfileImageUpdated()) {
 
             BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
                     .fileName(request.profileImage().fileName())
                     .size((long) request.profileImage().data().length)
-                    .data(request.profileImage().data())
-                    .fileType(request.profileImage().contentType())
+                    .contentType(request.profileImage().contentType())
                     .build();
 
-            if (updatedUserEntity.getProfileImageId() != null) {
-              binaryContentRepository.deleteById(updatedUserEntity.getProfileImageId());
+            if (updatedUserEntity.getProfileId() != null) {
+              binaryContentRepository.deleteById(updatedUserEntity.getProfileId().getId());
             }
 
-            binaryContentRepository.save(binaryContentEntity);
-            updatedUserEntity.updateProfileImageId(binaryContentEntity.getId());
+            updatedUserEntity.updateProfile(binaryContentEntity);
+            binaryContentStorage.put(binaryContentRepository.save(binaryContentEntity).getId(), request.profileImage().data());
 
         }
-
-        userRepository.save(updatedUserEntity);
 
     }
 
@@ -205,7 +169,7 @@ public class BasicUserService implements UserService {
         UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        binaryContentRepository.deleteById(userEntity.getProfileImageId());
+        binaryContentRepository.deleteById(userEntity.getProfileId().getId());
         userStatusRepository.deleteByUserId(userEntity.getId());
         userRepository.deleteById(id);
 

@@ -6,10 +6,14 @@ import java.util.UUID;
 
 public class UserStatusDTO {
 
-    @Builder
-    public record CreateUserStatusCommand(UUID userId) {
+  @Builder
+  public record CreateUserStatusCommand(UUID userId) {
 
-    }
+  }
+
+  public static class UserStatus {
+
+  }
 
     @Builder
     public record FindUserStatusResult(

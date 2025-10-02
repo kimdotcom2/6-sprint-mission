@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface UserService {
 
-    void createUser(UserDTO.CreateUserCommand request);
+    UserDTO.User createUser(UserDTO.CreateUserCommand request);
 
     boolean existUserById(UUID id);
 
@@ -16,13 +16,13 @@ public interface UserService {
 
     boolean existUserByNickname(String nickname);
 
-    Optional<UserDTO.FindUserResult> findUserById(UUID id);
+    Optional<UserDTO.User> findUserById(UUID id);
 
-    Optional<UserDTO.FindUserResult> findUserByEmail(String email);
+    Optional<UserDTO.User> findUserByEmail(String email);
 
-    Optional<UserDTO.FindUserResult> findUserByNickname(String nickname);
+    Optional<UserDTO.User> findUserByUsername(String username);
 
-    List<UserDTO.FindUserResult> findAllUsers();
+    List<UserDTO.User> findAllUsers();
 
     void updateUser(UserDTO.UpdateUserCommand request);
 
