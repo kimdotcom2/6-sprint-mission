@@ -60,10 +60,4 @@ public class UserEntity extends BaseUpdatableEntity {
     this.userStatus = userStatus;
   }
 
-  @Override
-  public String toString() {
-    return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", username=" + username
-        + ", email=" + email + "]";
-  }
-
 }

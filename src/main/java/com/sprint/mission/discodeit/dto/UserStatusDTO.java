@@ -1,8 +1,11 @@
 package com.sprint.mission.discodeit.dto;
 
+import java.time.Instant;
 import lombok.Builder;
 
 import java.util.UUID;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public class UserStatusDTO {
 
@@ -11,24 +14,22 @@ public class UserStatusDTO {
 
   }
 
+  @Getter
+  @RequiredArgsConstructor
+  @Builder
   public static class UserStatus {
+
+    private UUID id;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private UserDTO.User user;
+    private Instant lastActiveAt;
 
   }
 
-    @Builder
-    public record FindUserStatusResult(
-            UUID id,
-            UUID userId,
-            Long lastActiveTimestamp,
-            Long createdAt,
-            Long updatedAt
-    ) {
+  @Builder
+  public record UpdateUserStatusCommand(UUID id, Instant lastActiveAt) {
 
-    }
-
-    @Builder
-    public record UpdateUserStatusCommand(UUID id, Long lastActiveTimestamp) {
-
-    }
+  }
 
 }

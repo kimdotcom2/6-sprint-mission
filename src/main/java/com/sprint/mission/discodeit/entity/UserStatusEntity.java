@@ -19,9 +19,19 @@ public class UserStatusEntity extends BaseUpdatableEntity {
 
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false, unique = true)
-  private UserEntity userEntity;
+  private UserEntity user;
 
   @Column(nullable = false)
   private Instant lastActiveAt;
+
+  @Builder
+  public UserStatusEntity(UserEntity user, Instant lastActiveAt) {
+    this.user = user;
+    this.lastActiveAt = lastActiveAt;
+  }
+
+  public void updateLastActiveAt(Instant lastActiveAt) {
+    this.lastActiveAt = lastActiveAt;
+  }
 
 }
