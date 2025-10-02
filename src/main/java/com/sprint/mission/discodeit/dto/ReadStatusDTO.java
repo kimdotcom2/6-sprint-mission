@@ -21,8 +21,8 @@ public class ReadStatusDTO {
     UUID id;
     Instant createdAt;
     Instant updatedAt;
-    UserDTO.User user;
-    ChannelDTO.Channel channel;
+    UUID userId;
+    UUID channelId;
     Instant lastReadAt;
   }
 

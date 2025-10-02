@@ -20,6 +20,7 @@ public class BinaryContentDTO {
     private String fileName;
     private Long size;
     private ContentType contentType;
+    private byte[] bytes;
 
   }
 

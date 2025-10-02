@@ -88,7 +88,10 @@ public class BasicUserService implements UserService {
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
+        UserDTO.User user = userEntityMapper.entityToUser(userEntity);
+        user.updateStatus(userStatusEntity.isOnline());
+
+        return Optional.ofNullable(user);
 
     }
 
@@ -101,7 +104,10 @@ public class BasicUserService implements UserService {
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
+        UserDTO.User user = userEntityMapper.entityToUser(userEntity);
+        user.updateStatus(userStatusEntity.isOnline());
+
+        return Optional.ofNullable(user);
 
     }
 
@@ -114,7 +120,10 @@ public class BasicUserService implements UserService {
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
-        return Optional.ofNullable(userEntityMapper.entityToUser(userEntity));
+        UserDTO.User user = userEntityMapper.entityToUser(userEntity);
+        user.updateStatus(userStatusEntity.isOnline());
+
+        return Optional.ofNullable(user);
 
     }
 
@@ -123,6 +132,11 @@ public class BasicUserService implements UserService {
 
         return userRepository.findAll().stream()
                 .map(userEntityMapper::entityToUser)
+                .peek(user -> {
+                  UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(user.getId())
+                      .orElseThrow(() -> new NoSuchDataException("No such user status."));
+                  user.updateStatus(userStatusEntity.isOnline());
+                })
                 .toList();
     }
 

@@ -8,6 +8,7 @@ import com.sprint.mission.discodeit.mapper.BinaryContentEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,39 +61,61 @@ public class BasicBinaryContentService implements BinaryContentService {
         BinaryContentEntity binaryContentEntity = binaryContentRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such binary content"));
 
-        return Optional.ofNullable(BinaryContentDTO.BinaryContent.builder()
+        byte[] bytes = null;
+
+        try {
+          bytes = binaryContentStorage.get(binaryContentEntity.getId()).readAllBytes();
+        } catch (IOException e) {
+          throw new RuntimeException(e);
+        }
+
+      return Optional.ofNullable(BinaryContentDTO.BinaryContent.builder()
                 .id(binaryContentEntity.getId())
                 .fileName(binaryContentEntity.getFileName())
                 .size(binaryContentEntity.getSize())
                 .createdAt(binaryContentEntity.getCreatedAt())
                 .contentType(binaryContentEntity.getContentType())
+                .bytes(bytes)
                 .build());
     }
 
     @Override
     public List<BinaryContentDTO.BinaryContent> findAllBinaryContentByIdIn(List<UUID> uuidList) {
         return binaryContentRepository.findAllByIdIn(uuidList).stream()
-                .map(binaryContent -> BinaryContentDTO.BinaryContent.builder()
-                        .id(binaryContent.getId())
-                        .fileName(binaryContent.getFileName())
-                        .size(binaryContent.getSize())
-                        .createdAt(binaryContent.getCreatedAt())
-                        .contentType(binaryContent.getContentType())
-                        .build())
+                .map(binaryContent -> {
+                  try {
+                    return BinaryContentDTO.BinaryContent.builder()
+                            .id(binaryContent.getId())
+                            .fileName(binaryContent.getFileName())
+                            .size(binaryContent.getSize())
+                            .createdAt(binaryContent.getCreatedAt())
+                            .contentType(binaryContent.getContentType())
+                            .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
+                            .build();
+                  } catch (IOException e) {
+                    throw new NoSuchDataException("No such binary content");
+                  }
+                })
                 .toList();
     }
 
     @Override
     public List<BinaryContentDTO.BinaryContent> findAllBinaryContent() {
         return binaryContentRepository.findAll().stream()
-                .map(binaryContent -> BinaryContentDTO.BinaryContent.builder()
-                        .id(binaryContent.getId())
-                        .fileName(binaryContent.getFileName())
-                        .size(binaryContent.getSize())
-                        //.data(binaryContent.getData())
-                        .createdAt(binaryContent.getCreatedAt())
-                        .contentType(binaryContent.getContentType())
-                        .build())
+                .map(binaryContent -> {
+                  try {
+                    return BinaryContentDTO.BinaryContent.builder()
+                            .id(binaryContent.getId())
+                            .fileName(binaryContent.getFileName())
+                            .size(binaryContent.getSize())
+                            .createdAt(binaryContent.getCreatedAt())
+                            .contentType(binaryContent.getContentType())
+                            .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
+                            .build();
+                  } catch (IOException e) {
+                    throw new NoSuchDataException("No such binary content");
+                  }
+                })
                 .toList();
     }
 

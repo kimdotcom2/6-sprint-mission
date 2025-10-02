@@ -28,7 +28,11 @@ public class UserDTO {
     private String email;
     private String password;
     private BinaryContentDTO.BinaryContent profileId;
-    private UserStatusDTO.UserStatus userStatus;
+    private Boolean isOnline;
+
+    public void updateStatus(boolean online) {
+      this.isOnline = online;
+    }
 
   }
 

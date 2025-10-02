@@ -22,7 +22,7 @@ public class UserStatusDTO {
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
-    private UserDTO.User user;
+    private UUID userId;
     private Instant lastActiveAt;
 
   }

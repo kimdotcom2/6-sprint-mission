@@ -6,6 +6,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.temporal.ChronoUnit;
 import lombok.*;
 
 import java.time.Instant;
@@ -32,6 +33,14 @@ public class UserStatusEntity extends BaseUpdatableEntity {
 
   public void updateLastActiveAt(Instant lastActiveAt) {
     this.lastActiveAt = lastActiveAt;
+  }
+
+  public boolean isOnline() {
+
+    Instant threshold = Instant.now().minus(5, ChronoUnit.MINUTES);
+
+    return !lastActiveAt.isBefore(threshold);
+
   }
 
 }

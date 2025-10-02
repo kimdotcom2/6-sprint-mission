@@ -10,14 +10,14 @@ import org.mapstruct.Mappings;
 public interface MessageEntityMapper {
 
   @Mappings({
-      @Mapping(target = "channel", source = "channel"),
+      @Mapping(target = "channelId", source = "channel.id"),
       @Mapping(target = "author", source = "author"),
       @Mapping(target = "attachments", source = "binaryContentList")
   })
   MessageDTO.Message entityToMessage(MessageEntity messageEntity);
 
   @Mappings({
-      @Mapping(target = "channel", source = "channel"),
+      @Mapping(target = "channel.id", source = "channelId"),
       @Mapping(target = "author", source = "author"),
       @Mapping(target = "binaryContentList", source = "attachments")
   })

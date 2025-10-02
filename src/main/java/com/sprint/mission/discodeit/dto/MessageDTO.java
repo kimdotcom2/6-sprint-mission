@@ -24,7 +24,7 @@ public class MessageDTO {
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
-    private ChannelDTO.Channel channel;
+    private UUID channelId;
     private UserDTO.User author;
     private String content;
     private List<BinaryContentDTO.BinaryContent> attachments;

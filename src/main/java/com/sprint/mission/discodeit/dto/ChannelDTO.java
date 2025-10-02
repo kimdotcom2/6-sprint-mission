@@ -18,9 +18,11 @@ public class ChannelDTO {
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
-    private String name;
     private ChannelType type;
+    private String name;
     private String description;
+    private List<UserDTO.User> participants;
+    private Instant lastMessageAt;
 
   }
 
