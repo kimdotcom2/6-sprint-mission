@@ -1,16 +1,13 @@
 package com.sprint.mission.discodeit.repository;
 
 import com.sprint.mission.discodeit.entity.Message;
-
+import com.sprint.mission.discodeit.entity.User;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MessageRepository {
-
-    void save(Message message);
-
-    void saveAll(Iterable<Message> messages);
+public interface MessageRepository extends JpaRepository<Message, UUID> {
 
     boolean existById(UUID id);
 
@@ -18,11 +15,9 @@ public interface MessageRepository {
 
     List<Message> findChildById(UUID id);
 
-    List<Message> findByUserId(UUID userId);
+    List<Message> findByAuthorId(UUID authorId);
 
     List<Message> findByChannelId(UUID channelId);
-
-    List<Message> findAll();
 
     void deleteById(UUID id);
 
