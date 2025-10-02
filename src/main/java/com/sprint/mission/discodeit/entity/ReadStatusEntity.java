@@ -19,14 +19,21 @@ public class ReadStatusEntity extends BaseUpdatableEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "message_id", nullable = false)
-  private UserEntity userEntity;
+  private UserEntity user;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "channel_id", nullable = false)
-  private ChannelEntity channelEntity;
+  private ChannelEntity channel;
 
   @Column(nullable = false)
   private Instant lastReadAt;
+
+  @Builder
+  public ReadStatusEntity(UserEntity user, ChannelEntity channel, Instant lastReadAt) {
+    this.user = user;
+    this.channel = channel;
+    this.lastReadAt = lastReadAt;
+  }
 
   public void updateLastReadAt(Instant lastReadAt) {
     this.lastReadAt = lastReadAt;

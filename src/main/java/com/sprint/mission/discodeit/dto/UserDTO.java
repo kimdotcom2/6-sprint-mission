@@ -13,6 +13,10 @@ public class UserDTO {
 
     }
 
+    public static class User {
+
+    }
+
     @Builder
     public record CreateUserCommand(
             String username,

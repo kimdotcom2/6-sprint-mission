@@ -83,7 +83,7 @@ public class ChannelController {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
                 .channelName(publicChannelCreateRequest.channelName())
-                //.category(ChannelType.valueOf(publicChannelCreateRequest.category()))
+                //.type(ChannelType.valueOf(publicChannelCreateRequest.type()))
                 .category(ChannelType.PUBLIC)
                 //.isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
                 .isVoiceChannel(false)
@@ -94,7 +94,7 @@ public class ChannelController {
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
             .filter(
-                channel -> !channel.isPrivate() && publicChannelCreateRequest.channelName().equals(channel.channelName()))
+                channel -> !channel.isPrivate() && publicChannelCreateRequest.channelName().equals(channel.name()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
                 .orElseThrow(() -> new NoSuchDataException("No such channels"));
 
@@ -102,10 +102,10 @@ public class ChannelController {
                 .id(findChannelResult.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.category())
+                .category(findChannelResult.type())
                 .isVoiceChannel(findChannelResult.isVoiceChannel())
                 .type("PUBLIC")
-                .channelName(findChannelResult.channelName())
+                .channelName(findChannelResult.name())
                 .description(findChannelResult.description())
                 .userIdList(new ArrayList<>())
                 .build());
@@ -161,10 +161,10 @@ public class ChannelController {
                 .id(findChannelResult.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.category())
+                .category(findChannelResult.type())
                 .isVoiceChannel(findChannelResult.isVoiceChannel())
                 .type("PRIVATE")
-                .channelName(findChannelResult.channelName())
+                .channelName(findChannelResult.name())
                 .description(findChannelResult.description())
                 .userIdList(findChannelResult.userIdList())
                 .build());
@@ -227,10 +227,10 @@ public class ChannelController {
                 .id(findChannelResult.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.category())
+                .category(findChannelResult.type())
                 .isVoiceChannel(findChannelResult.isVoiceChannel())
                 .type("PUBLIC")
-                .channelName(findChannelResult.channelName())
+                .channelName(findChannelResult.name())
                 .description(findChannelResult.description())
                 .userIdList(findChannelResult.userIdList())
                 .build());
@@ -296,10 +296,10 @@ public class ChannelController {
                 .id(channel.id())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.createdAt()), ZoneId.systemDefault()))
                 .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.updatedAt()), ZoneId.systemDefault()))
-                .category(channel.category())
+                .category(channel.type())
                 .isVoiceChannel(channel.isVoiceChannel())
                 .type(channel.isPrivate() ? "PRIVATE" : "PUBLIC")
-                .channelName(channel.channelName())
+                .channelName(channel.name())
                 .description(channel.description())
                 .userIdList(channel.userIdList())
                 .build())

@@ -8,19 +8,17 @@ import java.util.UUID;
 
 public interface MessageService {
 
-    void createMessage(MessageDTO.CreateMessageCommand request);
+    MessageDTO.Message createMessage(MessageDTO.CreateMessageCommand request);
 
     boolean existMessageById(UUID id);
 
-    Optional<MessageDTO.FindMessageResult> findMessageById(UUID id);
+    Optional<MessageDTO.Message> findMessageById(UUID id);
 
-    List<MessageDTO.FindMessageResult> findChildMessagesById(UUID id);
+    List<MessageDTO.Message> findMessagesByAuthorId(UUID authorId);
 
-    List<MessageDTO.FindMessageResult> findMessagesByUserId(UUID userId);
+    List<MessageDTO.Message> findMessagesByChannelId(UUID channelId);
 
-    List<MessageDTO.FindMessageResult> findMessagesByChannelId(UUID channelId);
-
-    List<MessageDTO.FindMessageResult> findAllMessages();
+    List<MessageDTO.Message> findAllMessages();
 
     void updateMessage(MessageDTO.UpdateMessageCommand request);
 

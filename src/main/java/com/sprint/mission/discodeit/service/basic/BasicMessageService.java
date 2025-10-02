@@ -1,20 +1,24 @@
 package com.sprint.mission.discodeit.service.basic;
 
+import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContent;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
 import com.sprint.mission.discodeit.entity.MessageEntity;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.mapper.MessageEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
+import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +28,12 @@ public class BasicMessageService implements MessageService {
     private final UserRepository userRepository;
     private final ChannelRepository channelRepository;
     private final BinaryContentRepository binaryContentRepository;
+    private final BinaryContentStorage binaryContentStorage;
+    private final MessageEntityMapper messageEntityMapper;
 
+    @Transactional
     @Override
-    public void createMessage(MessageDTO.CreateMessageCommand request) {
+    public MessageDTO.Message createMessage(MessageDTO.CreateMessageCommand request) {
 
         if (!userRepository.existById(request.userId())) {
             throw new NoSuchDataException("No such user.");
@@ -36,28 +43,31 @@ public class BasicMessageService implements MessageService {
             throw new NoSuchDataException("No such channel.");
         }
 
-        MessageEntity messageEntity = new MessageEntity.Builder()
-                .userId(request.userId())
-                .channelId(request.channelId())
+        MessageEntity messageEntity = MessageEntity.builder()
+                .author(userRepository.findById(request.userId())
+                    .orElseThrow(() -> new NoSuchDataException("No such user.")))
+                .channel(channelRepository.findById(request.channelId())
+                    .orElseThrow(() -> new NoSuchDataException("No such channel.")))
                 .content(request.content())
-                .isReply(request.isReply())
-                .parentMessageId(request.parentMessageId())
                 .build();
-
-        messageRepository.save(messageEntity);
 
       if (!request.binaryContentList().isEmpty()) {
 
-        binaryContentRepository.saveAll(request.binaryContentList().stream()
+        List<BinaryContentEntity> binaryContentList = binaryContentRepository.saveAll(request.binaryContentList().stream()
             .map(binaryContent -> BinaryContentEntity.builder()
                 .fileName(binaryContent.fileName())
                 .size((long) binaryContent.data().length)
-                .data(binaryContent.data())
-                .fileType(binaryContent.contentType())
+                .contentType(binaryContent.contentType())
                 .build())
             .toList());
 
+        for (int i = 0; i < binaryContentList.size(); i++) {
+          binaryContentStorage.put(binaryContentList.get(i).getId(), request.binaryContentList().get(i).data());
+        }
+
       }
+
+      return messageEntityMapper.entityToMessage(messageRepository.save(messageEntity));
 
     }
 
@@ -67,99 +77,49 @@ public class BasicMessageService implements MessageService {
     }
 
     @Override
-    public Optional<MessageDTO.FindMessageResult> findMessageById(UUID id) {
+    public Optional<MessageDTO.Message> findMessageById(UUID id) {
 
         MessageEntity messageEntity = messageRepository.findById(id).orElseThrow(() -> new NoSuchDataException("No such message."));
 
-        return Optional.ofNullable(MessageDTO.FindMessageResult.builder()
-                .id(messageEntity.getId())
-                .userId(messageEntity.getUserId())
-                .channelId(messageEntity.getChannelId())
-                .content(messageEntity.getContent())
-                .isReply(messageEntity.isReply())
-                .parentMessageId(messageEntity.getParentMessageId())
-                .createdAt(messageEntity.getCreatedAt())
-                .updatedAt(messageEntity.getUpdatedAt())
-                .build());
+        return Optional.ofNullable(messageEntityMapper.entityToMessage(messageEntity));
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<MessageDTO.FindMessageResult> findChildMessagesById(UUID id) {
+    public List<MessageDTO.Message> findMessagesByAuthorId(UUID authorId) {
 
-        if (!messageRepository.existById(id)) {
-            throw new NoSuchDataException("No such message.");
-        }
-
-        return messageRepository.findChildById(id).stream().map(message -> MessageDTO.FindMessageResult.builder()
-                .id(message.getId())
-                .userId(message.getUserId())
-                .channelId(message.getChannelId())
-                .content(message.getContent())
-                .isReply(message.isReply())
-                .parentMessageId(message.getParentMessageId())
-                .createdAt(message.getCreatedAt())
-                .updatedAt(message.getUpdatedAt())
-                .binaryContentList(message.getBinaryContentIdList().stream().toList())
-                .build()).toList();
-    }
-
-    @Override
-    public List<MessageDTO.FindMessageResult> findMessagesByUserId(UUID userId) {
-
-        if (!userRepository.existById(userId)) {
+        if (!userRepository.existById(authorId)) {
             throw new NoSuchDataException("No such user.");
         }
 
-        return messageRepository.findByUserId(userId).stream().map(message -> MessageDTO.FindMessageResult.builder()
-                .id(message.getId())
-                .userId(message.getUserId())
-                .channelId(message.getChannelId())
-                .content(message.getContent())
-                .isReply(message.isReply())
-                .parentMessageId(message.getParentMessageId())
-                .createdAt(message.getCreatedAt())
-                .updatedAt(message.getUpdatedAt())
-                .binaryContentList(message.getBinaryContentIdList().stream().toList())
-                .build()).toList();
+        return messageRepository.findByAuthorId(authorId).stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList();
 
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<MessageDTO.FindMessageResult> findMessagesByChannelId(UUID channelId) {
+    public List<MessageDTO.Message> findMessagesByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
             throw new NoSuchDataException("No such channel.");
         }
 
-        return messageRepository.findByChannelId(channelId).stream().map(messageEntity -> MessageDTO.FindMessageResult.builder()
-                .id(messageEntity.getId())
-                .userId(messageEntity.getUserId())
-                .channelId(messageEntity.getChannelId())
-                .content(messageEntity.getContent())
-                .isReply(messageEntity.isReply())
-                .parentMessageId(messageEntity.getParentMessageId())
-                .createdAt(messageEntity.getCreatedAt())
-                .updatedAt(messageEntity.getUpdatedAt())
-                .binaryContentList(messageEntity.getBinaryContentIdList().stream().toList())
-                .build()).toList();
+        return messageRepository.findByChannelId(channelId).stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList();
 
     }
 
     @Override
-    public List<MessageDTO.FindMessageResult> findAllMessages() {
-        return messageRepository.findAll().stream().map(messageEntity -> MessageDTO.FindMessageResult.builder()
-                .id(messageEntity.getId())
-                .userId(messageEntity.getUserId())
-                .channelId(messageEntity.getChannelId())
-                .content(messageEntity.getContent())
-                .isReply(messageEntity.isReply())
-                .parentMessageId(messageEntity.getParentMessageId())
-                .createdAt(messageEntity.getCreatedAt())
-                .updatedAt(messageEntity.getUpdatedAt())
-                .binaryContentList(messageEntity.getBinaryContentIdList().stream().toList())
-                .build()).toList();
+    public List<MessageDTO.Message> findAllMessages() {
+        return messageRepository.findAll().stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList();
     }
 
+    @Transactional
     @Override
     public void updateMessage(MessageDTO.UpdateMessageCommand request) {
 
@@ -167,27 +127,23 @@ public class BasicMessageService implements MessageService {
             throw new NoSuchDataException("No such message.");
         }
 
-        if (request.isReply() && (request.parentMessageId() == null || !messageRepository.existById(request.parentMessageId()))) {
-            throw new NoSuchDataException("No such parent message.");
-        }
-
-        if (request.parentMessageId() != null && !request.isReply()) {
-            throw new NoSuchDataException("No reply message.");
-        }
-
         MessageEntity updatedMessageEntity = messageRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such message."));
-        updatedMessageEntity.update(request.content(), request.isReply(), request.parentMessageId());
+        updatedMessageEntity.updateMessage(request.content());
         messageRepository.save(updatedMessageEntity);
 
     }
 
+    @Transactional
     @Override
     public void deleteMessageById(UUID id) {
 
         binaryContentRepository.deleteAllByIdIn(messageRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such message."))
-                .getBinaryContentIdList().stream().toList());
+                .orElseThrow(() -> new NoSuchDataException("No such message.")).getAttachments()
+            .stream()
+            .map(BinaryContentEntity::getId)
+            .toList());
+
         messageRepository.deleteById(id);
 
     }

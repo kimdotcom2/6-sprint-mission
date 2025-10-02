@@ -222,13 +222,13 @@ public class JavaApplication {
         //Channel channelOne = new Channel("channelOne", ChannelType.TEXT, false);
         //Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         Channel channelOne = new Channel.Builder()
-                .channelName("channelOne")
-                .category(ChannelType.TEXT)
+                .name("channelOne")
+                .type(ChannelType.TEXT)
                 .isVoiceChannel(false)
                 .build();
         Channel channelTwo = new Channel.Builder()
-                .channelName("channelTwo")
-                .category(ChannelType.VOICE)
+                .name("channelTwo")
+                .type(ChannelType.VOICE)
                 .isVoiceChannel(true)
                 .build();
         jcfChannelCrudService.createChannel(channelOne);
@@ -252,8 +252,8 @@ public class JavaApplication {
         System.out.println("채널 수정");
         DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
-                .channelName(channelTwo.getChannelName())
-                .category(ChannelType.DM)
+                .name(channelTwo.getChannelName())
+                .type(ChannelType.DM)
                 .isVoiceChannel(false)
                 .build();
         jcfChannelCrudService.updateChannel(requestTwo);
@@ -289,13 +289,13 @@ public class JavaApplication {
         User user = new User("test", "test@test.com", strongPassword, "test");
         Message message = new Message(user.getId(), null, "message", false, null);
         Channel channelOne = new Channel.Builder()
-                .channelName("channelOne")
-                .category(ChannelType.TEXT)
+                .name("channelOne")
+                .type(ChannelType.TEXT)
                 .isVoiceChannel(false)
                 .build();
         Channel channelTwo = new Channel.Builder()
-                .channelName("channelTwo")
-                .category(ChannelType.VOICE)
+                .name("channelTwo")
+                .type(ChannelType.VOICE)
                 .isVoiceChannel(true)
                 .build();
         fileChannelCrudService.createChannel(channelOne);
@@ -319,8 +319,8 @@ public class JavaApplication {
         System.out.println("채널 수정");
         DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
-                .channelName(channelTwo.getChannelName())
-                .category(ChannelType.DM)
+                .name(channelTwo.getChannelName())
+                .type(ChannelType.DM)
                 .isVoiceChannel(false)
                 .build();
         fileChannelCrudService.updateChannel(requestTwo);
@@ -366,13 +366,13 @@ public class JavaApplication {
         User user = new User("test", "test@test.com", strongPassword, "test");
         Message message = new Message(user.getId(), null, "message", false, null);
         Channel channelOne = new Channel.Builder()
-                .channelName("channelOne")
-                .category(ChannelType.TEXT)
+                .name("channelOne")
+                .type(ChannelType.TEXT)
                 .isVoiceChannel(false)
                 .build();
         Channel channelTwo = new Channel.Builder()
-                .channelName("channelTwo")
-                .category(ChannelType.VOICE)
+                .name("channelTwo")
+                .type(ChannelType.VOICE)
                 .isVoiceChannel(true)
                 .build();
         basicChannelCrudService.createChannel(channelOne);
@@ -396,8 +396,8 @@ public class JavaApplication {
         System.out.println("채널 수정");
         DiscordDTO.UpdateChannelRequest requestTwo = DiscordDTO.UpdateChannelRequest.builder()
                 .id(channelTwo.getId())
-                .channelName(channelTwo.getChannelName())
-                .category(ChannelType.DM)
+                .name(channelTwo.getChannelName())
+                .type(ChannelType.DM)
                 .isVoiceChannel(false)
                 .build();
         basicChannelCrudService.updateChannel(requestTwo);

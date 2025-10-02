@@ -98,7 +98,7 @@ public class MessageController {
 
         messageService.createMessage(createMessageCommand);
 
-        MessageDTO.FindMessageResult message = messageService.findMessagesByUserId(messageCreateRequest.userId()).stream()
+        MessageDTO.FindMessageResult message = messageService.findMessagesByAuthorId(messageCreateRequest.userId()).stream()
                 .filter(message1 -> message1.channelId().equals(messageCreateRequest.channelId()))
                 .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
                 .limit(1)

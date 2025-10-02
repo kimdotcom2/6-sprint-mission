@@ -9,6 +9,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class MessageEntity extends BaseUpdatableEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "channel_id", nullable = false)
-  private ChannelEntity channelEntity;
+  private ChannelEntity channel;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "author_id", nullable = false)
@@ -40,5 +41,16 @@ public class MessageEntity extends BaseUpdatableEntity {
       inverseJoinColumns = @JoinColumn(name = "attachment_id")
   )
   private List<BinaryContentEntity> attachments;
+
+  @Builder
+  public MessageEntity(String content, ChannelEntity channel, UserEntity author) {
+    this.content = content;
+    this.channel = channel;
+    this.author = author;
+  }
+
+  public void updateMessage(String content) {
+    this.content = content;
+  }
 
 }
