@@ -1,12 +1,12 @@
 package com.sprint.mission.discodeit.controller;
 
-import com.sprint.mission.discodeit.dto.BinaryContentDTO;
+import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.AuthService;
@@ -89,10 +89,10 @@ public class UserController {
                 .email(userCreateRequest.email())
                 .password(userCreateRequest.password())
                 .description(userCreateRequest.description())
-                .profileImage(profile == null ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                .profileImage(profile == null ? null : BinaryContentCreateCommand.builder()
                     .fileName(profile.getName())
                     .data(profile.getBytes())
-                    .fileType(FileType.IMAGE)
+                    .fileType(ContentType.IMAGE)
                     .build())
                 .build();
 
@@ -163,10 +163,10 @@ public class UserController {
                 .currentPassword(userUpdateRequest.currentPassword())
                 .newPassword(userUpdateRequest.newPassword())
                 .isProfileImageUpdated(!profile.isEmpty())
-                .profileImage(profile == null ? null : BinaryContentDTO.CreateBinaryContentCommand.builder()
+                .profileImage(profile == null ? null : BinaryContentCreateCommand.builder()
                     .fileName(profile.getName())
                     .data(profile.getBytes())
-                    .fileType(FileType.IMAGE)
+                    .fileType(ContentType.IMAGE)
                     .build())
                 .build();
 

@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ReadStatusDTO;
-import com.sprint.mission.discodeit.entity.ReadStatus;
+import com.sprint.mission.discodeit.entity.ReadStatusEntity;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
@@ -38,13 +38,13 @@ public class BasicReadStatusService implements ReadStatusService {
             throw new AllReadyExistDataException("Read status already exists.");
         }
 
-        ReadStatus readStatus = new ReadStatus.Builder()
+        ReadStatusEntity readStatusEntity = new ReadStatusEntity.Builder()
                 .channelId(request.channelId())
                 .userId(request.userId())
                 .lastReadTimestamp(request.lastReadTimestamp())
                 .build();
 
-        readStatusRepository.save(readStatus);
+        readStatusRepository.save(readStatusEntity);
 
     }
 
@@ -61,16 +61,16 @@ public class BasicReadStatusService implements ReadStatusService {
     @Override
     public Optional<ReadStatusDTO.FindReadStatusResult> findReadStatusById(UUID id) {
 
-        ReadStatus readStatus = readStatusRepository.findById(id)
+        ReadStatusEntity readStatusEntity = readStatusRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such read status."));
 
         return Optional.ofNullable(ReadStatusDTO.FindReadStatusResult.builder()
-                .id(readStatus.getId())
-                .channelId(readStatus.getChannelId())
-                .userId(readStatus.getUserId())
-                .lastReadTimestamp(readStatus.getLastReadTimestamp())
-                .createdAt(readStatus.getCreatedAt())
-                .updatedAt(readStatus.getUpdatedAt())
+                .id(readStatusEntity.getId())
+                .channelId(readStatusEntity.getChannelId())
+                .userId(readStatusEntity.getUserId())
+                .lastReadTimestamp(readStatusEntity.getLastReadTimestamp())
+                .createdAt(readStatusEntity.getCreatedAt())
+                .updatedAt(readStatusEntity.getUpdatedAt())
                 .build());
     }
 
@@ -85,16 +85,16 @@ public class BasicReadStatusService implements ReadStatusService {
             throw new NoSuchDataException("No such channel.");
         }
 
-        ReadStatus readStatus = readStatusRepository.findByUserIdAndChannelId(userId, channelId)
+        ReadStatusEntity readStatusEntity = readStatusRepository.findByUserIdAndChannelId(userId, channelId)
                 .orElseThrow(() -> new IllegalArgumentException("No such read status."));
 
         return Optional.ofNullable(ReadStatusDTO.FindReadStatusResult.builder()
-                .id(readStatus.getId())
-                .channelId(readStatus.getChannelId())
-                .userId(readStatus.getUserId())
-                .lastReadTimestamp(readStatus.getLastReadTimestamp())
-                .createdAt(readStatus.getCreatedAt())
-                .updatedAt(readStatus.getUpdatedAt())
+                .id(readStatusEntity.getId())
+                .channelId(readStatusEntity.getChannelId())
+                .userId(readStatusEntity.getUserId())
+                .lastReadTimestamp(readStatusEntity.getLastReadTimestamp())
+                .createdAt(readStatusEntity.getCreatedAt())
+                .updatedAt(readStatusEntity.getUpdatedAt())
                 .build());
 
     }
@@ -108,13 +108,13 @@ public class BasicReadStatusService implements ReadStatusService {
 
         return readStatusRepository.findByUserId(userId)
                 .stream()
-                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
-                        .id(readStatus.getId())
-                        .channelId(readStatus.getChannelId())
-                        .userId(readStatus.getUserId())
-                        .lastReadTimestamp(readStatus.getLastReadTimestamp())
-                        .createdAt(readStatus.getCreatedAt())
-                        .updatedAt(readStatus.getUpdatedAt())
+                .map(readStatusEntity -> ReadStatusDTO.FindReadStatusResult.builder()
+                        .id(readStatusEntity.getId())
+                        .channelId(readStatusEntity.getChannelId())
+                        .userId(readStatusEntity.getUserId())
+                        .lastReadTimestamp(readStatusEntity.getLastReadTimestamp())
+                        .createdAt(readStatusEntity.getCreatedAt())
+                        .updatedAt(readStatusEntity.getUpdatedAt())
                         .build())
                 .toList();
     }
@@ -128,13 +128,13 @@ public class BasicReadStatusService implements ReadStatusService {
 
         return readStatusRepository.findByChannelId(channelId)
                 .stream()
-                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
-                        .id(readStatus.getId())
-                        .channelId(readStatus.getChannelId())
-                        .userId(readStatus.getUserId())
-                        .lastReadTimestamp(readStatus.getLastReadTimestamp())
-                        .createdAt(readStatus.getCreatedAt())
-                        .updatedAt(readStatus.getUpdatedAt())
+                .map(readStatusEntity -> ReadStatusDTO.FindReadStatusResult.builder()
+                        .id(readStatusEntity.getId())
+                        .channelId(readStatusEntity.getChannelId())
+                        .userId(readStatusEntity.getUserId())
+                        .lastReadTimestamp(readStatusEntity.getLastReadTimestamp())
+                        .createdAt(readStatusEntity.getCreatedAt())
+                        .updatedAt(readStatusEntity.getUpdatedAt())
                         .build())
                 .toList();
     }
@@ -142,13 +142,13 @@ public class BasicReadStatusService implements ReadStatusService {
     @Override
     public List<ReadStatusDTO.FindReadStatusResult> findAllReadStatus() {
         return readStatusRepository.findAll().stream()
-                .map(readStatus -> ReadStatusDTO.FindReadStatusResult.builder()
-                        .id(readStatus.getId())
-                        .channelId(readStatus.getChannelId())
-                        .userId(readStatus.getUserId())
-                        .lastReadTimestamp(readStatus.getLastReadTimestamp())
-                        .createdAt(readStatus.getCreatedAt())
-                        .updatedAt(readStatus.getUpdatedAt())
+                .map(readStatusEntity -> ReadStatusDTO.FindReadStatusResult.builder()
+                        .id(readStatusEntity.getId())
+                        .channelId(readStatusEntity.getChannelId())
+                        .userId(readStatusEntity.getUserId())
+                        .lastReadTimestamp(readStatusEntity.getLastReadTimestamp())
+                        .createdAt(readStatusEntity.getCreatedAt())
+                        .updatedAt(readStatusEntity.getUpdatedAt())
                         .build())
                 .toList();
     }
@@ -156,12 +156,12 @@ public class BasicReadStatusService implements ReadStatusService {
     @Override
     public void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request) {
 
-        ReadStatus readStatus = readStatusRepository.findById(request.id())
+        ReadStatusEntity readStatusEntity = readStatusRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such read status."));
 
-        readStatus.updateLastReadTimestamp(request.lastReadTimestamp());
+        readStatusEntity.updateLastReadTimestamp(request.lastReadTimestamp());
 
-        readStatusRepository.save(readStatus);
+        readStatusRepository.save(readStatusEntity);
 
     }
 

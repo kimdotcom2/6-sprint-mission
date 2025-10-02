@@ -1,9 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
-import com.sprint.mission.discodeit.entity.BinaryContent;
-import com.sprint.mission.discodeit.entity.User;
-import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.entity.BinaryContentEntity;
+import com.sprint.mission.discodeit.entity.UserEntity;
+import com.sprint.mission.discodeit.entity.UserStatusEntity;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
@@ -30,34 +30,34 @@ public class BasicUserService implements UserService {
     @Override
     public void createUser(UserDTO.CreateUserCommand request) {
 
-        if (userRepository.existByEmailOrNickname(request.email(), request.nickname())) {
+        if (userRepository.existByEmailOrNickname(request.email(), request.username())) {
             throw new AllReadyExistDataException("User already exists.");
         }
 
-        User user = new User.Builder()
+        UserEntity userEntity = new UserEntity.Builder()
                 .email(request.email())
                 .password(securityUtil.hashPassword(request.password()))
-                .nickname(request.nickname())
+                .nickname(request.username())
                 .description(request.description())
                 .build();
 
-        userStatusRepository.save(new UserStatus(user.getId()));
+        userStatusRepository.save(new UserStatusEntity(userEntity.getId()));
 
         if (request.profileImage() != null) {
 
-            BinaryContent binaryContent = BinaryContent.builder()
-                    .fileName(user.getUsername() + "_profileImage")
+            BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
+                    .fileName(userEntity.getUsername() + "_profileImage")
                     .size((long) request.profileImage().data().length)
                     .data(request.profileImage().data())
-                    .fileType(request.profileImage().fileType())
+                    .fileType(request.profileImage().contentType())
                     .build();
 
-            binaryContentRepository.save(binaryContent);
-            user.updateProfileImageId(binaryContent.getId());
+            binaryContentRepository.save(binaryContentEntity);
+            userEntity.updateProfileImageId(binaryContentEntity.getId());
 
         }
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
     }
 
@@ -79,21 +79,21 @@ public class BasicUserService implements UserService {
     @Override
     public Optional<UserDTO.FindUserResult> findUserById(UUID id) {
 
-        User user = userRepository.findById(id)
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        UserStatus userStatus = userStatusRepository.findByUserId(id)
+        UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getUsername())
-                .description(user.getDescription())
-                .profileImageId(user.getProfileImageId())
-                .isOnline(userStatus.isLogin())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .nickname(userEntity.getUsername())
+                .description(userEntity.getDescription())
+                .profileImageId(userEntity.getProfileImageId())
+                .isOnline(userStatusEntity.isLogin())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
                 .build());
 
     }
@@ -101,21 +101,21 @@ public class BasicUserService implements UserService {
     @Override
     public Optional<UserDTO.FindUserResult> findUserByEmail(String email) {
 
-        User user = userRepository.findByEmail(email)
+        UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
+        UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getUsername())
-                .description(user.getDescription())
-                .profileImageId(user.getProfileImageId())
-                .isOnline(userStatus.isLogin())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .nickname(userEntity.getUsername())
+                .description(userEntity.getDescription())
+                .profileImageId(userEntity.getProfileImageId())
+                .isOnline(userStatusEntity.isLogin())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
                 .build());
 
     }
@@ -123,21 +123,21 @@ public class BasicUserService implements UserService {
     @Override
     public Optional<UserDTO.FindUserResult> findUserByNickname(String nickname) {
 
-        User user = userRepository.findByNickname(nickname)
+        UserEntity userEntity = userRepository.findByNickname(nickname)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        UserStatus userStatus = userStatusRepository.findByUserId(user.getId())
+        UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
                 .orElseThrow(() -> new NoSuchDataException("No such user status."));
 
         return Optional.ofNullable(UserDTO.FindUserResult.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .nickname(user.getUsername())
-                .description(user.getDescription())
-                .profileImageId(user.getProfileImageId())
-                .isOnline(userStatus.isLogin())
-                .createdAt(user.getCreatedAt())
-                .updatedAt(user.getUpdatedAt())
+                .id(userEntity.getId())
+                .email(userEntity.getEmail())
+                .nickname(userEntity.getUsername())
+                .description(userEntity.getDescription())
+                .profileImageId(userEntity.getProfileImageId())
+                .isOnline(userStatusEntity.isLogin())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
                 .build());
 
     }
@@ -163,50 +163,50 @@ public class BasicUserService implements UserService {
     @Override
     public void updateUser(UserDTO.UpdateUserCommand request) {
 
-        User updatedUser = userRepository.findById(request.id())
+        UserEntity updatedUserEntity = userRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        if (userRepository.existByEmailOrNickname(request.email(), request.nickname()) &&
-                !updatedUser.getId().equals(request.id())) {
+        if (userRepository.existByEmailOrNickname(request.email(), request.username()) &&
+                !updatedUserEntity.getId().equals(request.id())) {
             throw new AllReadyExistDataException("User already exists.");
         }
 
-        if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUser.getPassword())) {
+        if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUserEntity.getPassword())) {
             throw new IllegalArgumentException("Invalid password.");
         }
 
-        updatedUser.update(request.nickname(), request.email(), securityUtil.hashPassword(request.currentPassword()), request.description());
+        updatedUserEntity.update(request.username(), request.email(), securityUtil.hashPassword(request.currentPassword()), request.description());
 
         if (request.isProfileImageUpdated()) {
 
-            BinaryContent binaryContent = BinaryContent.builder()
+            BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
                     .fileName(request.profileImage().fileName())
                     .size((long) request.profileImage().data().length)
                     .data(request.profileImage().data())
-                    .fileType(request.profileImage().fileType())
+                    .fileType(request.profileImage().contentType())
                     .build();
 
-            if (updatedUser.getProfileImageId() != null) {
-              binaryContentRepository.deleteById(updatedUser.getProfileImageId());
+            if (updatedUserEntity.getProfileImageId() != null) {
+              binaryContentRepository.deleteById(updatedUserEntity.getProfileImageId());
             }
 
-            binaryContentRepository.save(binaryContent);
-            updatedUser.updateProfileImageId(binaryContent.getId());
+            binaryContentRepository.save(binaryContentEntity);
+            updatedUserEntity.updateProfileImageId(binaryContentEntity.getId());
 
         }
 
-        userRepository.save(updatedUser);
+        userRepository.save(updatedUserEntity);
 
     }
 
     @Override
     public void deleteUserById(UUID id) {
 
-        User user = userRepository.findById(id)
+        UserEntity userEntity = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such user."));
 
-        binaryContentRepository.deleteById(user.getProfileImageId());
-        userStatusRepository.deleteByUserId(user.getId());
+        binaryContentRepository.deleteById(userEntity.getProfileImageId());
+        userStatusRepository.deleteByUserId(userEntity.getId());
         userRepository.deleteById(id);
 
     }

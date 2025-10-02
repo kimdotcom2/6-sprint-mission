@@ -10,14 +10,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.util.UUID;
-
 @Getter
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User extends BaseUpdatableEntity {
+public class UserEntity extends BaseUpdatableEntity {
 
   @Column(nullable = false)
   private String username;
@@ -30,11 +28,11 @@ public class User extends BaseUpdatableEntity {
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
   @Column(name = "profile_id", unique = true)
-  private BinaryContent profileId;
+  private BinaryContentEntity profileId;
 
   @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
   @Column(nullable = false)
-  private UserStatus userStatus;
+  private UserStatusEntity userStatusEntity;
 
   public void update(String nickname, String email, String password) {
     this.username = nickname;
@@ -46,17 +44,17 @@ public class User extends BaseUpdatableEntity {
     this.password = password;
   }
 
-  public void updateProfile(BinaryContent profileId) {
+  public void updateProfile(BinaryContentEntity profileId) {
     this.profileId = profileId;
   }
 
-  public void updateUserStatus(UserStatus userStatus) {
-    this.userStatus = userStatus;
+  public void updateUserStatus(UserStatusEntity userStatusEntity) {
+    this.userStatusEntity = userStatusEntity;
   }
 
   @Override
   public String toString() {
-    return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", nickname=" + username
+    return "User [id=" + super.getId() + ", createdAt=" + super.getCreatedAt() + ", updatedAt=" + super.getUpdatedAt() + ", username=" + username
         + ", email=" + email + "]";
   }
 

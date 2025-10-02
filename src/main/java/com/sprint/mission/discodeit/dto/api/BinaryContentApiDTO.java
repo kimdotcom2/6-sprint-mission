@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.enums.ContentType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 
@@ -16,7 +16,7 @@ public class BinaryContentApiDTO {
             String fileName,
             Long size,
             @JsonProperty("contentType")
-            FileType fileType,
+            ContentType contentType,
             @JsonProperty("bytes")
             byte[] data
     ) {

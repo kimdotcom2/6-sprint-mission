@@ -31,7 +31,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
       try {
         Files.createDirectories(root);
       } catch (IOException e) {
-        throw new IllegalArgumentException("Failed to create directory.");
+        throw new IllegalArgumentException("폴더가 존재하지 않습니다.");
       }
     }
 
@@ -46,14 +46,23 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
 
     try(FileOutputStream fos = new FileOutputStream(String.valueOf(resolvePath(id).toFile()));
         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-
       oos.writeObject(bytes);
-
     } catch (IOException e) {
-      throw new IllegalArgumentException("Failed to store file.");
+      throw new IllegalArgumentException("파일을 저장할 수 없습니다.");
     }
 
     return id;
+
+  }
+
+  @Override
+  public void deleteById(UUID id) {
+
+    try {
+      Files.deleteIfExists(resolvePath(id));
+    } catch (IOException e) {
+      throw new IllegalArgumentException("파일을 삭제할 수 없습니다.");
+    }
 
   }
 

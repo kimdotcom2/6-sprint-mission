@@ -9,17 +9,13 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.*;
 
 @Getter
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "channels")
-public class Channel extends BaseUpdatableEntity {
+public class ChannelEntity extends BaseUpdatableEntity {
 
   @Enumerated(EnumType.STRING)
   private ChannelType type;

@@ -1,9 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
-import com.sprint.mission.discodeit.entity.Channel;
-import com.sprint.mission.discodeit.entity.Message;
-import com.sprint.mission.discodeit.entity.ReadStatus;
+import com.sprint.mission.discodeit.entity.ChannelEntity;
+import com.sprint.mission.discodeit.entity.MessageEntity;
+import com.sprint.mission.discodeit.entity.ReadStatusEntity;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -30,32 +30,32 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
-        Channel channel = new Channel.Builder()
+        ChannelEntity channelEntity = new ChannelEntity.Builder()
                 .channelName(request.channelName())
                 .category(request.category())
                 .isVoiceChannel(request.isVoiceChannel())
                 .description(request.description())
                 .build();
 
-        channelRepository.save(channel);
+        channelRepository.save(channelEntity);
 
     }
 
     @Override
     public void createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request) {
 
-        Channel channel = new Channel.Builder()
+        ChannelEntity channelEntity = new ChannelEntity.Builder()
                 .category(request.category())
                 .isPrivate(true)
                 .description(request.description())
                 .build();
 
-        List<ReadStatus> readStatusList = request.userIdList().stream()
-                .map(userId -> new ReadStatus(channel.getId(), userId, Instant.now().toEpochMilli()))
+        List<ReadStatusEntity> readStatusEntityList = request.userIdList().stream()
+                .map(userId -> new ReadStatusEntity(channelEntity.getId(), userId, Instant.now().toEpochMilli()))
                 .toList();
 
-        readStatusRepository.saveAll(readStatusList);
-        channelRepository.save(channel);
+        readStatusRepository.saveAll(readStatusEntityList);
+        channelRepository.save(channelEntity);
 
     }
 
@@ -67,22 +67,23 @@ public class BasicChannelService implements ChannelService {
     @Override
     public Optional<ChannelDTO.FindChannelResult> findChannelById(UUID id) {
 
-        Channel channel = channelRepository.findById(id)
+        ChannelEntity channelEntity = channelRepository.findById(id)
                 .orElseThrow(() -> new NoSuchDataException("No such channel."));
 
         return Optional.of(ChannelDTO.FindChannelResult.builder()
-                .id(channel.getId())
-                .channelName(channel.getChannelName())
-                .category(channel.getCategory())
-                .isVoiceChannel(channel.isVoiceChannel())
-                .isPrivate(channel.isPrivate())
-                .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
-                        .map(ReadStatus::getUserId).toList() : new ArrayList<>())
-                .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
-                        .max(Comparator.comparing(Message::getCreatedAt)).map(Message::getCreatedAt).orElse(null))
-                .description(channel.getDescription())
-                .createdAt(channel.getCreatedAt())
-                .updatedAt(channel.getUpdatedAt())
+                .id(channelEntity.getId())
+                .channelName(channelEntity.getChannelName())
+                .category(channelEntity.getCategory())
+                .isVoiceChannel(channelEntity.isVoiceChannel())
+                .isPrivate(channelEntity.isPrivate())
+                .userIdList(
+                    channelEntity.isPrivate() ? readStatusRepository.findByChannelId(channelEntity.getId()).stream()
+                        .map(ReadStatusEntity::getUserId).toList() : new ArrayList<>())
+                .recentMessageTime(messageRepository.findByChannelId(channelEntity.getId()).stream()
+                        .max(Comparator.comparing(MessageEntity::getCreatedAt)).map(MessageEntity::getCreatedAt).orElse(null))
+                .description(channelEntity.getDescription())
+                .createdAt(channelEntity.getCreatedAt())
+                .updatedAt(channelEntity.getUpdatedAt())
                 .build());
 
     }
@@ -91,45 +92,45 @@ public class BasicChannelService implements ChannelService {
     public List<ChannelDTO.FindChannelResult> findChannelsByUserId(UUID userId) {
 
         List<ChannelDTO.FindChannelResult> privateChannelList = readStatusRepository.findByUserId(userId).stream()
-                .map(readStatus -> channelRepository.findById(readStatus.getChannelId())
+                .map(readStatusEntity -> channelRepository.findById(readStatusEntity.getChannelId())
                         .orElseThrow(() -> new NoSuchDataException("No such channel.")))
-                .map(channel -> ChannelDTO.FindChannelResult.builder()
-                        .id(channel.getId())
-                        .channelName(channel.getChannelName())
-                        .category(channel.getCategory())
-                        .isVoiceChannel(channel.isVoiceChannel())
-                        .isPrivate(channel.isPrivate())
-                        .userIdList(channel.isPrivate() ? 
-                                readStatusRepository.findByChannelId(channel.getId()).stream()
-                                        .map(ReadStatus::getUserId)
+                .map(channelEntity -> ChannelDTO.FindChannelResult.builder()
+                        .id(channelEntity.getId())
+                        .channelName(channelEntity.getChannelName())
+                        .category(channelEntity.getCategory())
+                        .isVoiceChannel(channelEntity.isVoiceChannel())
+                        .isPrivate(channelEntity.isPrivate())
+                        .userIdList(channelEntity.isPrivate() ?
+                                readStatusRepository.findByChannelId(channelEntity.getId()).stream()
+                                        .map(ReadStatusEntity::getUserId)
                                         .toList() : 
                                 new ArrayList<>())
-                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
-                                .max(Comparator.comparing(Message::getCreatedAt))
-                                .map(Message::getCreatedAt)
+                        .recentMessageTime(messageRepository.findByChannelId(channelEntity.getId()).stream()
+                                .max(Comparator.comparing(MessageEntity::getCreatedAt))
+                                .map(MessageEntity::getCreatedAt)
                                 .orElse(null))
-                        .description(channel.getDescription())
-                        .createdAt(channel.getCreatedAt())
-                        .updatedAt(channel.getUpdatedAt())
+                        .description(channelEntity.getDescription())
+                        .createdAt(channelEntity.getCreatedAt())
+                        .updatedAt(channelEntity.getUpdatedAt())
                         .build())
                 .toList();
 
         List<ChannelDTO.FindChannelResult> publicChannelList = channelRepository.findAll().stream()
-                .filter(channel -> !channel.isPrivate())
-                .map(channel -> ChannelDTO.FindChannelResult.builder()
-                        .id(channel.getId())
-                        .channelName(channel.getChannelName())
-                        .category(channel.getCategory())
-                        .isVoiceChannel(channel.isVoiceChannel())
-                        .isPrivate(channel.isPrivate())
+                .filter(channelEntity -> !channelEntity.isPrivate())
+                .map(channelEntity -> ChannelDTO.FindChannelResult.builder()
+                        .id(channelEntity.getId())
+                        .channelName(channelEntity.getChannelName())
+                        .category(channelEntity.getCategory())
+                        .isVoiceChannel(channelEntity.isVoiceChannel())
+                        .isPrivate(channelEntity.isPrivate())
                         .userIdList(new ArrayList<>())
-                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
-                                .max(Comparator.comparing(Message::getCreatedAt))
-                                .map(Message::getCreatedAt)
+                        .recentMessageTime(messageRepository.findByChannelId(channelEntity.getId()).stream()
+                                .max(Comparator.comparing(MessageEntity::getCreatedAt))
+                                .map(MessageEntity::getCreatedAt)
                                 .orElse(null))
-                        .description(channel.getDescription())
-                        .createdAt(channel.getCreatedAt())
-                        .updatedAt(channel.getUpdatedAt())
+                        .description(channelEntity.getDescription())
+                        .createdAt(channelEntity.getCreatedAt())
+                        .updatedAt(channelEntity.getUpdatedAt())
                         .build())
                 .toList();
 
@@ -143,20 +144,21 @@ public class BasicChannelService implements ChannelService {
     @Override
     public List<ChannelDTO.FindChannelResult> findAllChannels() {
         return channelRepository.findAll().stream()
-                .map(channel -> ChannelDTO.FindChannelResult.builder()
-                        .id(channel.getId())
-                        .channelName(channel.getChannelName())
-                        .category(channel.getCategory())
-                        .isVoiceChannel(channel.isVoiceChannel())
-                        .isPrivate(channel.isPrivate())
-                        .userIdList(channel.isPrivate() ? readStatusRepository.findByChannelId(channel.getId()).stream()
-                                .map(ReadStatus::getUserId).toList() : new ArrayList<>())
-                        .recentMessageTime(messageRepository.findByChannelId(channel.getId()).stream()
-                                .max(Comparator.comparing(Message::getCreatedAt))
-                                .map(Message::getCreatedAt).orElse(null))
-                        .description(channel.getDescription())
-                        .createdAt(channel.getCreatedAt())
-                        .updatedAt(channel.getUpdatedAt())
+                .map(channelEntity -> ChannelDTO.FindChannelResult.builder()
+                        .id(channelEntity.getId())
+                        .channelName(channelEntity.getChannelName())
+                        .category(channelEntity.getCategory())
+                        .isVoiceChannel(channelEntity.isVoiceChannel())
+                        .isPrivate(channelEntity.isPrivate())
+                        .userIdList(channelEntity.isPrivate() ? readStatusRepository.findByChannelId(
+                                channelEntity.getId()).stream()
+                                .map(ReadStatusEntity::getUserId).toList() : new ArrayList<>())
+                        .recentMessageTime(messageRepository.findByChannelId(channelEntity.getId()).stream()
+                                .max(Comparator.comparing(MessageEntity::getCreatedAt))
+                                .map(MessageEntity::getCreatedAt).orElse(null))
+                        .description(channelEntity.getDescription())
+                        .createdAt(channelEntity.getCreatedAt())
+                        .updatedAt(channelEntity.getUpdatedAt())
                         .build())
                 .toList();
     }
@@ -172,15 +174,15 @@ public class BasicChannelService implements ChannelService {
             throw new IllegalArgumentException("Invalid channel data.");
         }
 
-        Channel updatedChannel = channelRepository.findById(request.id())
+        ChannelEntity updatedChannelEntity = channelRepository.findById(request.id())
                 .orElseThrow(() -> new NoSuchDataException("No such channel."));
 
-        if (updatedChannel.isPrivate()) {
+        if (updatedChannelEntity.isPrivate()) {
             throw new IllegalArgumentException("Private channel cannot be updated.");
         }
 
-        updatedChannel.update(request.channelName(), request.category(), request.isVoiceChannel(), request.description());
-        channelRepository.save(updatedChannel);
+        updatedChannelEntity.update(request.channelName(), request.category(), request.isVoiceChannel(), request.description());
+        channelRepository.save(updatedChannelEntity);
 
     }
 

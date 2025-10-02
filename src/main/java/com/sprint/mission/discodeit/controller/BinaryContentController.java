@@ -75,7 +75,7 @@ public class BinaryContentController {
                 .size(readBinaryContentResult.size())
                 .data(readBinaryContentResult.data())
                 .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readBinaryContentResult.createdAt()), ZoneId.systemDefault()))
-                .fileType(readBinaryContentResult.fileType())
+                .fileType(readBinaryContentResult.contentType())
                 .build());
 
     }
@@ -116,7 +116,7 @@ public class BinaryContentController {
                         .fileName(binaryContent.fileName())
                         .size(binaryContent.size())
                         .data(binaryContent.data())
-                        .fileType(binaryContent.fileType())
+                        .fileType(binaryContent.contentType())
                         .build())
                 .toList());
 

@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto;
 
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.enums.ContentType;
+import java.time.Instant;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -15,27 +16,15 @@ public class BinaryContentDTO {
   public static class BinaryContent {
 
     private UUID id;
-    private Long createdAt;
+    private Instant createdAt;
     private String fileName;
     private Long size;
-    private FileType fileType;
-    private byte[] bytes;
+    private ContentType contentType;
 
   }
 
   @Builder
-  public record CreateBinaryContentCommand(String fileName, byte[] data, FileType fileType) {
-
-  }
-
-  @Builder
-  public record ReadBinaryContentResult(
-      UUID id,
-      Long createdAt,
-      String fileName,
-      Long size,
-      byte[] data,
-      FileType fileType) {
+  public record BinaryContentCreateCommand(String fileName, byte[] data, ContentType contentType) {
 
   }
 

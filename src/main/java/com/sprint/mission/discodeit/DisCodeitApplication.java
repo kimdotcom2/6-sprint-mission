@@ -39,13 +39,13 @@ public class DisCodeitApplication {
         //유저 등록
         System.out.println("유저 등록");
         UserDTO.CreateUserCommand userOne = UserDTO.CreateUserCommand.builder()
-                .nickname("Kim")
+                .username("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
         UserDTO.CreateUserCommand userTwo = UserDTO.CreateUserCommand.builder()
-                .nickname("Kim2")
+                .username("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
@@ -55,7 +55,7 @@ public class DisCodeitApplication {
         System.out.println("==========================");
 
         //유저 읽기
-        System.out.println(userOne.nickname() + " 유저 읽기");
+        System.out.println(userOne.username() + " 유저 읽기");
         System.out.println(userService.findUserByEmail(userOne.email())
                 .orElseThrow((IllegalArgumentException::new)).toString());
         System.out.println("유저 목록 읽기");
@@ -68,15 +68,15 @@ public class DisCodeitApplication {
         UserDTO.UpdateUserCommand requestOne = UserDTO.UpdateUserCommand.builder()
                 .id(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
-                .nickname(userOne.nickname())
+                .username(userOne.username())
                 .email(userOne.email())
                 .currentPassword(strongPassword)
                 .newPassword(strongPassword + "k")
                 .description("Bye")
                 .build();
         userService.updateUser(requestOne);
-        System.out.println(userOne.nickname() + " 정보 업데이트");
-        System.out.println(userOne.nickname() + " 유저 읽기");
+        System.out.println(userOne.username() + " 정보 업데이트");
+        System.out.println(userOne.username() + " 유저 읽기");
         System.out.println(userService.findUserByEmail(userOne.email())
                 .orElseThrow(IllegalArgumentException::new).toString());
         System.out.println("==========================");
@@ -85,7 +85,7 @@ public class DisCodeitApplication {
         System.out.println("유저 삭제");
         userService.deleteUserById(userService.findUserByEmail(userOne.email())
                 .orElseThrow((IllegalArgumentException::new)).id());
-        System.out.println(userTwo.nickname() + " 유저 삭제");
+        System.out.println(userTwo.username() + " 유저 삭제");
 
         System.out.println("유저 목록 읽기");
         userService.findAllUsers()
@@ -187,13 +187,13 @@ public class DisCodeitApplication {
         //메시지 등록
         System.out.println("메시지 등록");
         UserDTO.CreateUserCommand userOne = UserDTO.CreateUserCommand.builder()
-                .nickname("Kim")
+                .username("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
         UserDTO.CreateUserCommand userTwo = UserDTO.CreateUserCommand.builder()
-                .nickname("Kim2")
+                .username("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
                 .description("Hi")

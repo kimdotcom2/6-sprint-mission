@@ -1,7 +1,7 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
-import com.sprint.mission.discodeit.entity.UserStatus;
+import com.sprint.mission.discodeit.entity.UserStatusEntity;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -30,11 +30,11 @@ public class BasicUserStatusService implements UserStatusService {
             throw new IllegalArgumentException("User status already exists.");
         }
 
-        UserStatus userStatus = new UserStatus.Builder()
+        UserStatusEntity userStatusEntity = new UserStatusEntity.Builder()
                 .userId(request.userId())
                 .build();
 
-        userStatusRepository.save(userStatus);
+        userStatusRepository.save(userStatusEntity);
 
     }
 
@@ -51,15 +51,15 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public Optional<UserStatusDTO.FindUserStatusResult> findUserStatusById(UUID id) {
 
-        UserStatus userStatus = userStatusRepository.findById(id)
+        UserStatusEntity userStatusEntity = userStatusRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
         return Optional.ofNullable(UserStatusDTO.FindUserStatusResult.builder()
-                .id(userStatus.getId())
-                .userId(userStatus.getUserId())
-                .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
-                .createdAt(userStatus.getCreatedAt())
-                .updatedAt(userStatus.getUpdatedAt())
+                .id(userStatusEntity.getId())
+                .userId(userStatusEntity.getUserId())
+                .lastActiveTimestamp(userStatusEntity.getLastActiveTimestamp())
+                .createdAt(userStatusEntity.getCreatedAt())
+                .updatedAt(userStatusEntity.getUpdatedAt())
                 .build());
 
     }
@@ -71,15 +71,15 @@ public class BasicUserStatusService implements UserStatusService {
             throw new IllegalArgumentException("No such user.");
         }
 
-        UserStatus userStatus = userStatusRepository.findByUserId(userId)
+        UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userId)
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
         return Optional.ofNullable(UserStatusDTO.FindUserStatusResult.builder()
-                .id(userStatus.getId())
-                .userId(userStatus.getUserId())
-                .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
-                .createdAt(userStatus.getCreatedAt())
-                .updatedAt(userStatus.getUpdatedAt())
+                .id(userStatusEntity.getId())
+                .userId(userStatusEntity.getUserId())
+                .lastActiveTimestamp(userStatusEntity.getLastActiveTimestamp())
+                .createdAt(userStatusEntity.getCreatedAt())
+                .updatedAt(userStatusEntity.getUpdatedAt())
                 .build());
 
     }
@@ -87,12 +87,12 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public List<UserStatusDTO.FindUserStatusResult> findAllUserStatus() {
         return userStatusRepository.findAll().stream()
-                .map(userStatus -> UserStatusDTO.FindUserStatusResult.builder()
-                        .id(userStatus.getId())
-                        .userId(userStatus.getUserId())
-                        .lastActiveTimestamp(userStatus.getLastActiveTimestamp())
-                        .createdAt(userStatus.getCreatedAt())
-                        .updatedAt(userStatus.getUpdatedAt())
+                .map(userStatusEntity -> UserStatusDTO.FindUserStatusResult.builder()
+                        .id(userStatusEntity.getId())
+                        .userId(userStatusEntity.getUserId())
+                        .lastActiveTimestamp(userStatusEntity.getLastActiveTimestamp())
+                        .createdAt(userStatusEntity.getCreatedAt())
+                        .updatedAt(userStatusEntity.getUpdatedAt())
                         .build())
                 .toList();
 
@@ -101,12 +101,12 @@ public class BasicUserStatusService implements UserStatusService {
     @Override
     public void updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request) {
 
-        UserStatus userStatus = userStatusRepository.findById(request.id())
+        UserStatusEntity userStatusEntity = userStatusRepository.findById(request.id())
                 .orElseThrow(() -> new IllegalArgumentException("No such user status."));
 
-        userStatus.updateLastActiveTimestamp();
+        userStatusEntity.updateLastActiveTimestamp();
 
-        userStatusRepository.save(userStatus);
+        userStatusRepository.save(userStatusEntity);
     }
 
     @Override

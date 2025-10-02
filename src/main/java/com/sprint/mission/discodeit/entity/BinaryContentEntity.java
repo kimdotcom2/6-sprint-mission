@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.entity;
 
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.enums.ContentType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,15 +8,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.UUID;
-
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "binary_contents")
-public class BinaryContent extends BaseEntity {
+public class BinaryContentEntity extends BaseEntity {
 
   @Column(nullable = false)
   private String fileName;
@@ -26,6 +22,13 @@ public class BinaryContent extends BaseEntity {
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private FileType contentType;
+  private ContentType contentType;
+
+  @Builder
+  public BinaryContentEntity(String fileName, Long size, ContentType contentType) {
+    this.fileName = fileName;
+    this.size = size;
+    this.contentType = contentType;
+  }
 
 }

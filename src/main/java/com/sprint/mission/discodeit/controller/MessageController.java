@@ -1,11 +1,11 @@
 package com.sprint.mission.discodeit.controller;
 
-import com.sprint.mission.discodeit.dto.BinaryContentDTO;
+import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataException;
 import com.sprint.mission.discodeit.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,12 +74,12 @@ public class MessageController {
             @Parameter(description = "첨부 파일 목록")
             @RequestPart(value = "attachments", required = false) List<MultipartFile> attachments) {
 
-        List<BinaryContentDTO.CreateBinaryContentCommand> binaryContentList = attachments != null ? 
+        List<BinaryContentCreateCommand> binaryContentList = attachments != null ?
             attachments.stream().map(file -> {
                 try {
-                    return BinaryContentDTO.CreateBinaryContentCommand.builder()
+                    return BinaryContentCreateCommand.builder()
                             .fileName(file.getOriginalFilename())
-                            .fileType(FileType.ETC)
+                            .fileType(ContentType.ETC)
                             .data(file.getBytes())
                             .build();
                 } catch (IOException e) {

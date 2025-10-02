@@ -27,13 +27,13 @@ public class JavaApplication {
         //유저 등록
         System.out.println("유저 등록");
         User userOne = new User.Builder()
-                .nickname("Kim")
+                .username("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
-                .nickname("Kim2")
+                .username("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
@@ -55,7 +55,7 @@ public class JavaApplication {
         System.out.println("유저 수정");
         DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
-                .nickname(userOne.getNickname())
+                .username(userOne.getNickname())
                 .email(userOne.getEmail())
                 .currentPassword(strongPassword)
                 .newPassword(strongPassword + "k")
@@ -87,13 +87,13 @@ public class JavaApplication {
         //유저 등록
         System.out.println("유저 등록");
         User userOne = new User.Builder()
-                .nickname("Kim")
+                .username("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
-                .nickname("Kim2")
+                .username("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
@@ -115,7 +115,7 @@ public class JavaApplication {
         System.out.println("유저 수정");
         DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
-                .nickname(userOne.getNickname())
+                .username(userOne.getNickname())
                 .email(userOne.getEmail())
                 .currentPassword(strongPassword)
                 .newPassword(strongPassword + "k")
@@ -153,13 +153,13 @@ public class JavaApplication {
         //유저 등록
         System.out.println("유저 등록");
         User userOne = new User.Builder()
-                .nickname("Kim")
+                .username("Kim")
                 .email("kimjaewon@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
                 .build();
         User userTwo = new User.Builder()
-                .nickname("Kim2")
+                .username("Kim2")
                 .email("kimjaewon2@gmail.com")
                 .password(strongPassword)
                 .description("Hi")
@@ -181,7 +181,7 @@ public class JavaApplication {
         System.out.println("유저 수정");
         DiscordDTO.UpdateUserRequest requestOne = DiscordDTO.UpdateUserRequest.builder()
                 .id(userOne.getId())
-                .nickname(userOne.getNickname())
+                .username(userOne.getNickname())
                 .email(userOne.getEmail())
                 .currentPassword(strongPassword)
                 .newPassword(strongPassword + "k")

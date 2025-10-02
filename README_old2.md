@@ -113,9 +113,9 @@
 ## TodoList
 
 ## 스크린샷
-<img width="1446" height="464" alt="유저서비스" src="https://github.com/user-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
-<img width="1446" height="477" alt="채널서비스" src="https://github.com/user-attachments/assets/c9dab0b7-4876-4caa-9833-34ee3be53892" />
-<img width="1755" height="523" alt="메시지서비스" src="https://github.com/user-attachments/assets/42cf590a-f0c0-4827-93b5-5587510f82e0" />
+<img width="1446" height="464" alt="유저서비스" src="https://github.com/userEntity-attachments/assets/53600849-0200-4265-8455-2f1ec4ef4f31" />
+<img width="1446" height="477" alt="채널서비스" src="https://github.com/userEntity-attachments/assets/c9dab0b7-4876-4caa-9833-34ee3be53892" />
+<img width="1755" height="523" alt="메시지서비스" src="https://github.com/userEntity-attachments/assets/42cf590a-f0c0-4827-93b5-5587510f82e0" />
 
 
 ## 멘토에게

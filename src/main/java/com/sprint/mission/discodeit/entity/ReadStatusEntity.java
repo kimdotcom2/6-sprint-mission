@@ -8,24 +8,22 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.*;
 
-import java.io.Serializable;
 import java.time.Instant;
-import java.util.UUID;
 
 @Getter
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "read_statuses")
-public class ReadStatus extends BaseUpdatableEntity {
+public class ReadStatusEntity extends BaseUpdatableEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "message_id", nullable = false)
-  private User user;
+  private UserEntity userEntity;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "channel_id", nullable = false)
-  private Channel channel;
+  private ChannelEntity channelEntity;
 
   @Column(nullable = false)
   private Instant lastReadAt;

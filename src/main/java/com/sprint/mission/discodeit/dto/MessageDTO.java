@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto;
 
+import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import lombok.Builder;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.UUID;
 public class MessageDTO {
 
     @Builder
-    public record CreateMessageCommand(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<BinaryContentDTO.CreateBinaryContentCommand> binaryContentList) {
+    public record CreateMessageCommand(String content, boolean isReply, UUID parentMessageId, UUID channelId, UUID userId, List<BinaryContentCreateCommand> binaryContentList) {
 
         public CreateMessageCommand {
 

@@ -1,6 +1,6 @@
 package com.sprint.mission.discodeit.dto;
 
-import com.sprint.mission.discodeit.enums.FileType;
+import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -9,17 +9,17 @@ public class UserDTO {
 
     //login request DTO
     @Builder
-    public record LoginCommand(String nickname, String password) {
+    public record LoginCommand(String username, String password) {
 
     }
 
     @Builder
     public record CreateUserCommand(
-            String nickname,
+            String username,
             String email,
             String password,
             String description,
-            BinaryContentDTO.CreateBinaryContentCommand profileImage) {
+            BinaryContentCreateCommand profileImage) {
 
         public boolean isEmailValid(String email) {
             return email.matches( "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
@@ -32,7 +32,7 @@ public class UserDTO {
 
         public CreateUserCommand {
 
-            if (!isPasswordValid(password) || !isEmailValid(email) || nickname.isBlank()) {
+            if (!isPasswordValid(password) || !isEmailValid(email) || username.isBlank()) {
                 throw new IllegalArgumentException("Invalid user data.");
             }
 
@@ -59,13 +59,13 @@ public class UserDTO {
     @Builder
     public record UpdateUserCommand(
             UUID id,
-            String nickname,
+            String username,
             String email,
             String currentPassword,
             String newPassword,
             String description,
             boolean isProfileImageUpdated,
-            BinaryContentDTO.CreateBinaryContentCommand profileImage
+            BinaryContentCreateCommand profileImage
     ) {
 
         public boolean isEmailValid(String email) {
@@ -79,7 +79,7 @@ public class UserDTO {
 
         public UpdateUserCommand {
 
-            if (!isPasswordValid(newPassword) || !isEmailValid(email) || nickname.isBlank()) {
+            if (!isPasswordValid(newPassword) || !isEmailValid(email) || username.isBlank()) {
                 throw new IllegalArgumentException("Invalid user data.");
             }
 
