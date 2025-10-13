@@ -73,24 +73,21 @@ public class AuthController {
       )
       @RequestBody @Valid AuthApiDTO.LoginRequest loginRequest) {
 
-    authService.login(UserDTO.LoginCommand.builder()
+    UserDTO.User user = authService.login(UserDTO.LoginCommand.builder()
         .username(loginRequest.username())
         .password(loginRequest.password())
         .build());
 
-    UserDTO.User findUserResult = userService.findUserByUsername(loginRequest.username())
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user"));
-
     UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-        .id(findUserResult.getId())
-        .username(findUserResult.getUsername())
-        .email(findUserResult.getEmail())
+        .id(user.getId())
+        .username(user.getUsername())
+        .email(user.getEmail())
         .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-            .id(findUserResult.getProfileId().getId())
-            .fileName(findUserResult.getProfileId().getFileName())
-            .contentType(findUserResult.getProfileId().getContentType())
+            .id(user.getProfileId().getId())
+            .fileName(user.getProfileId().getFileName())
+            .contentType(user.getProfileId().getContentType())
             .build())
-        .isOnline(findUserResult.getIsOnline())
+        .isOnline(user.getIsOnline())
         .build();
 
     return ResponseEntity.ok(response);
