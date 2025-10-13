@@ -157,6 +157,7 @@ public class MessageController {
           )
       }
   )
+
   @PatchMapping(value = "/{messageId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<MessageApiDTO.FindMessageResponse> updateMessage(
       @Parameter(description = "메시지 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")

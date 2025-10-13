@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.api.AuthApiDTO;
+import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -84,12 +85,16 @@ public class AuthController {
         .id(findUserResult.getId())
         .username(findUserResult.getUsername())
         .email(findUserResult.getEmail())
-        .profileImageId(findUserResult.getProfileId().getId())
+        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+            .id(findUserResult.getProfileId().getId())
+            .fileName(findUserResult.getProfileId().getFileName())
+            .contentType(findUserResult.getProfileId().getContentType())
+            .build())
         .isOnline(findUserResult.getIsOnline())
-        .createdAt(findUserResult.getCreatedAt())
         .build();
 
     return ResponseEntity.ok(response);
+
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
