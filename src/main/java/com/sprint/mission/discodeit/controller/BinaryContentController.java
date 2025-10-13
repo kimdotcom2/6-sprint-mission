@@ -122,6 +122,28 @@ public class BinaryContentController {
 
   }
 
+  /**
+   * 바이너리 콘텐츠 다운로드
+   *
+   * @param id 바이너리 콘텐츠 ID
+   * @return 다운로드할 바이너리 파일
+   */
+  @Operation(
+      summary = "바이너리 콘텐츠 다운로드",
+      description = "지정된 ID의 바이너리 콘텐츠를 다운로드합니다.",
+      responses = {
+          @ApiResponse(
+              responseCode = "200",
+              description = "다운로드 성공",
+              content = @Content(mediaType = "application/octet-stream")
+          ),
+          @ApiResponse(
+              responseCode = "404",
+              description = "바이너리 콘텐츠를 찾을 수 없음",
+              content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+          )
+      }
+  )
   @GetMapping("{binaryContentId}/download")
   public ResponseEntity<?> downloadBinaryContent(
       @Parameter(description = "바이너리 콘텐츠 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
