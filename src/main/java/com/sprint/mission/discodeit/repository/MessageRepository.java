@@ -16,12 +16,14 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
   @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.id = :id")
   Optional<MessageEntity> findById(UUID id);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.author.id = :authorId")
-  List<MessageEntity> findByAuthorId(UUID authorId);
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.author.id = :authorId ORDER BY m.createdAt ASC")
+  Page<MessageEntity> findByAuthorId(UUID authorId, Pageable pageable);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.channel.id = :channelId")
-  List<MessageEntity> findByChannelId(UUID channelId);
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.channel.id = :channelId ORDER BY m.createdAt ASC")
+  Page<MessageEntity> findByChannelId(UUID channelId, Pageable pageable);
 
+  @Query(value = "SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel",
+      countQuery = "SELECT count(m) FROM MessageEntity m")
   Page<MessageEntity> findAll(Pageable pageable);
 
   void deleteById(UUID id);

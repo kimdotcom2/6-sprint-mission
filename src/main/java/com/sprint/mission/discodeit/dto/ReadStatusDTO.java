@@ -19,12 +19,13 @@ public class ReadStatusDTO {
   @RequiredArgsConstructor
   public static class ReadStatus {
 
-    UUID id;
-    Instant createdAt;
-    Instant updatedAt;
-    UUID userId;
-    UUID channelId;
-    Instant lastReadAt;
+    private UUID id;
+    private Instant createdAt;
+    private Instant updatedAt;
+    private UUID userId;
+    private UUID channelId;
+    private Instant lastReadAt;
+
   }
 
   @Builder

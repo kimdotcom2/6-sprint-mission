@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "messages")

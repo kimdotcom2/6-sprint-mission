@@ -12,7 +12,6 @@ import lombok.*;
 import java.time.Instant;
 
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "user_statuses")

@@ -10,14 +10,14 @@ import org.mapstruct.Mappings;
 public interface ReadStatusEntityMapper {
 
   @Mappings({
-      @Mapping(target = "authorId", source = "user.id"),
+      @Mapping(target = "userId", source = "user.id"),
       @Mapping(target = "channelId", source = "channel.id")
   })
   ReadStatusDTO.ReadStatus entityToReadStatus(ReadStatusEntity readStatusEntity);
 
   @Mappings({
-      @Mapping(target = "user.id", source = "authorId"),
-      @Mapping(target = "channel.id", source = "channelId")
+      //@Mapping(target = "user.id", source = "userId"),
+      //@Mapping(target = "channel.id", source = "channelId")
   })
   ReadStatusEntity readStatusToEntity(ReadStatusDTO.ReadStatus readStatusDTO);
 

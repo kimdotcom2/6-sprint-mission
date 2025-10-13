@@ -15,7 +15,7 @@ public interface UserEntityMapper {
   UserDTO.User entityToUser(UserEntity userEntity);
 
   @Mappings({
-      @Mapping(target = "profileId", source = "profileId")
+      //@Mapping(target = "profileId", source = "profileId")
   })
   UserEntity userToEntity(UserDTO.User user);
 

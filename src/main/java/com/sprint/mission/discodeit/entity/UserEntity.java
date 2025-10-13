@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "users")

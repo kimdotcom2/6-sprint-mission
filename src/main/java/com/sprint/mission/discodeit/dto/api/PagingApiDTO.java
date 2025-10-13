@@ -1,10 +1,20 @@
 package com.sprint.mission.discodeit.dto.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import lombok.Builder;
 
 public class PagingApiDTO {
 
-  public record Response<T>(
+  @Builder
+  public record OffsetRequest(
+      int size,
+      int page,
+      String sort
+  ) {}
+
+  @Builder
+  public record OffsetResponse<T>(
       List<T> content,
       int number,
       int size,

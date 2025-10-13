@@ -2,6 +2,9 @@ package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
 
+import com.sprint.mission.discodeit.dto.MessageDTO.Message;
+import com.sprint.mission.discodeit.dto.PagingDTO;
+import com.sprint.mission.discodeit.dto.PagingDTO.OffsetPage;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -14,11 +17,11 @@ public interface MessageService {
 
   Optional<MessageDTO.Message> findMessageById(UUID id);
 
-  List<MessageDTO.Message> findMessagesByAuthorId(UUID authorId);
+  OffsetPage<MessageDTO.Message> findMessagesByAuthorId(UUID authorId, PagingDTO.OffsetRequest pageable);
 
-  List<MessageDTO.Message> findMessagesByChannelId(UUID channelId);
+  OffsetPage<MessageDTO.Message> findMessagesByChannelId(UUID channelId, PagingDTO.OffsetRequest pageable);
 
-  List<MessageDTO.Message> findAllMessages();
+  OffsetPage<Message> findAllMessages(PagingDTO.OffsetRequest pageable);
 
   MessageDTO.Message updateMessage(MessageDTO.UpdateMessageCommand request);
 

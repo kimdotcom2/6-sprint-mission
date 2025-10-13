@@ -17,9 +17,9 @@ public interface MessageEntityMapper {
   MessageDTO.Message entityToMessage(MessageEntity messageEntity);
 
   @Mappings({
-      @Mapping(target = "channel.id", source = "channelId"),
+      //@Mapping(target = "channel", source = "channelId"),
       @Mapping(target = "author", source = "author"),
-      @Mapping(target = "attachments", source = "attachments")
+      //@Mapping(target = "attachments", source = "attachments")
   })
   MessageEntity messageToEntity(MessageDTO.Message messageDTO);
 

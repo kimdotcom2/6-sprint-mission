@@ -2,10 +2,12 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.PagingDTO;
 import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
+import com.sprint.mission.discodeit.dto.api.PagingApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -157,7 +159,6 @@ public class MessageController {
           )
       }
   )
-
   @PatchMapping(value = "/{messageId}", consumes = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<MessageApiDTO.FindMessageResponse> updateMessage(
       @Parameter(description = "메시지 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
@@ -258,11 +259,18 @@ public class MessageController {
   @GetMapping()
   public ResponseEntity<List<MessageApiDTO.FindMessageResponse>> findAllByChannelId(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
-      @RequestParam UUID channelId) {
+      @RequestParam UUID channelId,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+          description = "페이징 요청 정보",
+          required = true,
+          content = @Content(schema = @Schema(implementation = PagingApiDTO.OffsetRequest.class))
+      )
+      @RequestBody PagingApiDTO.OffsetRequest pageable) {
 
-    List<MessageDTO.Message> messageList = messageService.findMessagesByChannelId(channelId);
+    PagingDTO.OffsetPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelId(
+        channelId, PagingDTO.OffsetRequest.of(pageable.page(), pageable.size()));
 
-    return ResponseEntity.ok(messageList.stream()
+    return ResponseEntity.ok(messagePage.getContent().stream()
         .map(message -> MessageApiDTO.FindMessageResponse.builder()
             .id(message.getId())
             .createdAt(message.getCreatedAt())

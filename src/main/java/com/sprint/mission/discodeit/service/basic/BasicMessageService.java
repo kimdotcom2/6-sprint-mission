@@ -1,6 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.MessageDTO.Message;
+import com.sprint.mission.discodeit.dto.PagingDTO;
+import com.sprint.mission.discodeit.dto.PagingDTO.OffsetPage;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
 import com.sprint.mission.discodeit.entity.MessageEntity;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -12,6 +15,8 @@ import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -88,37 +93,63 @@ public class BasicMessageService implements MessageService {
 
   @Transactional(readOnly = true)
   @Override
-  public List<MessageDTO.Message> findMessagesByAuthorId(UUID authorId) {
+  public OffsetPage<MessageDTO.Message> findMessagesByAuthorId(UUID authorId, PagingDTO.OffsetRequest pageable) {
 
     if (!userRepository.existById(authorId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
-    return messageRepository.findByAuthorId(authorId).stream()
-        .map(messageEntityMapper::entityToMessage)
-        .toList();
+    Page<MessageEntity> paging = messageRepository.findByAuthorId(authorId, PageRequest.of(pageable.getPage(), pageable.getSize()));
+
+    return OffsetPage.<MessageDTO.Message>builder()
+        .content(paging.getContent().stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList())
+        .number(paging.getNumber())
+        .size(paging.getSize())
+        .hasNext(paging.hasNext())
+        .totalElement(paging.getTotalElements())
+        .build();
 
   }
 
   @Transactional(readOnly = true)
   @Override
-  public List<MessageDTO.Message> findMessagesByChannelId(UUID channelId) {
+  public OffsetPage<MessageDTO.Message> findMessagesByChannelId(UUID channelId, PagingDTO.OffsetRequest pageable) {
 
     if (!channelRepository.existById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
-    return messageRepository.findByChannelId(channelId).stream()
-        .map(messageEntityMapper::entityToMessage)
-        .toList();
+    Page<MessageEntity> paging = messageRepository.findByChannelId(channelId, PageRequest.of(pageable.getPage(), pageable.getSize()));
+
+    return OffsetPage.<MessageDTO.Message>builder()
+        .content(paging.getContent().stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList())
+        .number(paging.getNumber())
+        .size(paging.getSize())
+        .hasNext(paging.hasNext())
+        .totalElement(paging.getTotalElements())
+        .build();
 
   }
 
   @Override
-  public List<MessageDTO.Message> findAllMessages() {
-    return messageRepository.findAll().stream()
-        .map(messageEntityMapper::entityToMessage)
-        .toList();
+  public OffsetPage<Message> findAllMessages(PagingDTO.OffsetRequest pageable) {
+
+    Page<MessageEntity> paging = messageRepository.findAll(PageRequest.of(pageable.getPage(), pageable.getSize()));
+
+    return OffsetPage.<MessageDTO.Message>builder()
+        .content(paging.getContent().stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList())
+        .number(paging.getNumber())
+        .size(paging.getSize())
+        .hasNext(paging.hasNext())
+        .totalElement(paging.getTotalElements())
+        .build();
+
   }
 
   @Transactional
