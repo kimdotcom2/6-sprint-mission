@@ -2,10 +2,9 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.ChannelEntity;
-import com.sprint.mission.discodeit.entity.MessageEntity;
 import com.sprint.mission.discodeit.entity.ReadStatusEntity;
 import com.sprint.mission.discodeit.enums.ChannelType;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.ChannelEntityMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
@@ -76,7 +75,7 @@ public class BasicChannelService implements ChannelService {
     public Optional<ChannelDTO.Channel> findChannelById(UUID id) {
 
         ChannelEntity channelEntity = channelRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such channel."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
 
         return Optional.ofNullable(channelEntityMapper.entityToChannel(channelEntity));
 
@@ -115,7 +114,7 @@ public class BasicChannelService implements ChannelService {
     public void updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
         if (!channelRepository.existById(request.id())) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         if (request.name().isBlank() || request.type() == null) {
@@ -123,7 +122,7 @@ public class BasicChannelService implements ChannelService {
         }
 
         ChannelEntity updatedChannelEntity = channelRepository.findById(request.id())
-                .orElseThrow(() -> new NoSuchDataException("No such channel."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
 
         if (updatedChannelEntity.isPrivate()) {
             throw new IllegalArgumentException("Private channel cannot be updated.");
@@ -139,7 +138,7 @@ public class BasicChannelService implements ChannelService {
     public void deleteChannelById(UUID id) {
 
         if (!channelRepository.existById(id)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         messageRepository.deleteByChannelId(id);

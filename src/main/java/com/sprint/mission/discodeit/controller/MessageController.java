@@ -6,7 +6,7 @@ import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
 import com.sprint.mission.discodeit.enums.ContentType;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -103,7 +103,7 @@ public class MessageController {
                 .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
                 .limit(1)
                 .findFirst()
-                .orElseThrow(() -> new NoSuchDataException("No such message."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
 
         return ResponseEntity.status(201).body(MessageApiDTO.FindMessageResponse.builder()
                 .id(message.id())
@@ -168,7 +168,7 @@ public class MessageController {
         messageService.updateMessage(updateMessageCommand);
 
         MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
-            .orElseThrow(() -> new NoSuchDataException("No such message."));
+            .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
 
         return ResponseEntity.ok().body(MessageApiDTO.FindMessageResponse.builder()
                 .id(message.id())
@@ -256,8 +256,9 @@ public class MessageController {
 
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 

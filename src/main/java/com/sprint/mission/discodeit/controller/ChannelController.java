@@ -6,7 +6,7 @@ import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.ChannelUpdateRequest;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.PrivateChannelCreateRequest;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -96,7 +96,7 @@ public class ChannelController {
             .filter(
                 channel -> !channel.isPrivate() && publicChannelCreateRequest.channelName().equals(channel.name()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchDataException("No such channels"));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channels"));
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
@@ -155,7 +155,7 @@ public class ChannelController {
         ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
             .filter(channel1 -> channel1.userIdList().equals(privateChannelCreateRequest.userIdList()))
             .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchDataException("No such channels"));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channels"));
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
@@ -221,7 +221,7 @@ public class ChannelController {
         channelService.updateChannel(updateChannelCommand);
 
         ChannelDTO.FindChannelResult findChannelResult = channelService.findChannelById(channelId)
-                .orElseThrow(() -> new NoSuchDataException("No such channel."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
 
         return ResponseEntity.ok(ChannelApiDTO.FindChannelResponse.builder()
                 .id(findChannelResult.id())
@@ -306,8 +306,9 @@ public class ChannelController {
             .toList();
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 

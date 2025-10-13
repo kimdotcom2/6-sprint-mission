@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
 import com.sprint.mission.discodeit.entity.UserEntity;
 import com.sprint.mission.discodeit.entity.UserStatusEntity;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.UserStatusEntityMapper;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.repository.UserStatusRepository;
@@ -27,7 +28,7 @@ public class BasicUserStatusService implements UserStatusService {
     public UserStatusDTO.UserStatus createUserStatus(UserStatusDTO.CreateUserStatusCommand request) {
 
         if (!userRepository.existById(request.userId())) {
-            throw new IllegalArgumentException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         if (existUserStatusByUserId(request.userId())) {
@@ -58,7 +59,7 @@ public class BasicUserStatusService implements UserStatusService {
     public Optional<UserStatusDTO.UserStatus> findUserStatusById(UUID id) {
 
         UserStatusEntity userStatusEntity = userStatusRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         return Optional.ofNullable(userStatusEntityMapper.entityToUserStatus(userStatusEntity));
 
@@ -69,11 +70,11 @@ public class BasicUserStatusService implements UserStatusService {
     public Optional<UserStatusDTO.UserStatus> findUserStatusByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
-            throw new IllegalArgumentException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         return Optional.ofNullable(userStatusEntityMapper.entityToUserStatus(userStatusEntity));
 
@@ -92,7 +93,7 @@ public class BasicUserStatusService implements UserStatusService {
     public void updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request) {
 
         UserStatusEntity userStatusEntity = userStatusRepository.findById(request.id())
-                .orElseThrow(() -> new IllegalArgumentException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         userStatusEntity.updateLastActiveAt(request.lastActiveAt());
 
@@ -104,7 +105,7 @@ public class BasicUserStatusService implements UserStatusService {
     public void deleteUserStatusById(UUID id) {
 
         if (!userStatusRepository.existById(id)) {
-            throw new IllegalArgumentException("No such user status.");
+            throw new NoSuchDataBaseRecordException("No such user status.");
         }
 
         userStatusRepository.deleteById(id);
@@ -116,7 +117,7 @@ public class BasicUserStatusService implements UserStatusService {
     public void deleteUserStatusByUserId(UUID userId) {
 
         if (!userStatusRepository.existById(userId)) {
-            throw new IllegalArgumentException("No such user status.");
+            throw new NoSuchDataBaseRecordException("No such user status.");
         }
 
         userStatusRepository.deleteByUserId(userId);
@@ -129,7 +130,7 @@ public class BasicUserStatusService implements UserStatusService {
 
         uuidList.forEach(uuid -> {
             if (!userStatusRepository.existById(uuid)) {
-                throw new IllegalArgumentException("No such user status.");
+                throw new NoSuchDataBaseRecordException("No such user status.");
             }
         });
 

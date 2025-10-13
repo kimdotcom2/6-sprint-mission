@@ -4,7 +4,7 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.api.AuthApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -81,7 +81,7 @@ public class AuthController {
                 .build());
 
         UserDTO.FindUserResult findUserResult = userService.findUserByUsername(loginRequest.nickname())
-            .orElseThrow(() -> new NoSuchDataException("No such user"));
+            .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user"));
 
         UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
             .id(findUserResult.id())
@@ -96,8 +96,9 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 

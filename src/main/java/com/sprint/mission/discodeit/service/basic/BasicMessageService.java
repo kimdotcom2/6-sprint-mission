@@ -1,10 +1,9 @@
 package com.sprint.mission.discodeit.service.basic;
 
-import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContent;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
 import com.sprint.mission.discodeit.entity.MessageEntity;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.MessageEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
@@ -36,18 +35,18 @@ public class BasicMessageService implements MessageService {
     public MessageDTO.Message createMessage(MessageDTO.CreateMessageCommand request) {
 
         if (!userRepository.existById(request.userId())) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         if (!channelRepository.existById(request.channelId())) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         MessageEntity messageEntity = MessageEntity.builder()
                 .author(userRepository.findById(request.userId())
-                    .orElseThrow(() -> new NoSuchDataException("No such user.")))
+                    .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user.")))
                 .channel(channelRepository.findById(request.channelId())
-                    .orElseThrow(() -> new NoSuchDataException("No such channel.")))
+                    .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel.")))
                 .content(request.content())
                 .build();
 
@@ -79,7 +78,7 @@ public class BasicMessageService implements MessageService {
     @Override
     public Optional<MessageDTO.Message> findMessageById(UUID id) {
 
-        MessageEntity messageEntity = messageRepository.findById(id).orElseThrow(() -> new NoSuchDataException("No such message."));
+        MessageEntity messageEntity = messageRepository.findById(id).orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
 
         return Optional.ofNullable(messageEntityMapper.entityToMessage(messageEntity));
     }
@@ -89,7 +88,7 @@ public class BasicMessageService implements MessageService {
     public List<MessageDTO.Message> findMessagesByAuthorId(UUID authorId) {
 
         if (!userRepository.existById(authorId)) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         return messageRepository.findByAuthorId(authorId).stream()
@@ -103,7 +102,7 @@ public class BasicMessageService implements MessageService {
     public List<MessageDTO.Message> findMessagesByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         return messageRepository.findByChannelId(channelId).stream()
@@ -124,11 +123,11 @@ public class BasicMessageService implements MessageService {
     public void updateMessage(MessageDTO.UpdateMessageCommand request) {
 
         if (!messageRepository.existById(request.id())) {
-            throw new NoSuchDataException("No such message.");
+            throw new NoSuchDataBaseRecordException("No such message.");
         }
 
         MessageEntity updatedMessageEntity = messageRepository.findById(request.id())
-                .orElseThrow(() -> new NoSuchDataException("No such message."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
         updatedMessageEntity.updateMessage(request.content());
         messageRepository.save(updatedMessageEntity);
 
@@ -139,7 +138,7 @@ public class BasicMessageService implements MessageService {
     public void deleteMessageById(UUID id) {
 
         binaryContentRepository.deleteAllByIdIn(messageRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such message.")).getAttachments()
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message.")).getAttachments()
             .stream()
             .map(BinaryContentEntity::getId)
             .toList());

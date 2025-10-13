@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -67,7 +67,7 @@ public class BinaryContentController {
             @PathVariable("binaryContentId") UUID id) {
 
         BinaryContentDTO.ReadBinaryContentResult readBinaryContentResult = binaryContentService.findBinaryContentById(id)
-            .orElseThrow(() -> new NoSuchDataException("BinaryContent not found"));
+            .orElseThrow(() -> new NoSuchDataBaseRecordException("BinaryContent not found"));
 
         return ResponseEntity.ok(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
                 .id(readBinaryContentResult.id())
@@ -122,8 +122,9 @@ public class BinaryContentController {
 
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 

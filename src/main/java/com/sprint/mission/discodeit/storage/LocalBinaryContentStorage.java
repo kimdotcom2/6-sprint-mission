@@ -2,7 +2,7 @@ package com.sprint.mission.discodeit.storage;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContent;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import jakarta.annotation.PostConstruct;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
     try(InputStream is = Files.newInputStream(resolvePath(id))) {
       return is;
     } catch (IOException e) {
-      throw new NoSuchDataException("No such file.");
+      throw new NoSuchDataBaseRecordException("No such file.");
     }
 
   }

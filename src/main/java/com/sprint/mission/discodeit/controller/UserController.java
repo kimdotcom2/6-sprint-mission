@@ -7,8 +7,8 @@ import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
 import com.sprint.mission.discodeit.enums.ContentType;
-import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -99,7 +99,7 @@ public class UserController {
         userService.createUser(createUserCommand);
 
         UserDTO.FindUserResult user = userService.findUserByEmail(userCreateRequest.email())
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
                 .id(user.id())
@@ -173,7 +173,7 @@ public class UserController {
         userService.updateUser(updateUserCommand);
 
         UserDTO.FindUserResult user = userService.findUserById(userId)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         return ResponseEntity.status(204).body(UserApiDTO.FindUserResponse.builder()
                 .id(user.id())
@@ -335,7 +335,7 @@ public class UserController {
             @RequestBody @Valid UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
 
         UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)
-            .orElseThrow(() -> new NoSuchDataException("No such user status."));
+            .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
                 .id(userStatus.id())
@@ -353,8 +353,9 @@ public class UserController {
 
     }
 
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 
@@ -364,8 +365,9 @@ public class UserController {
             .build());
     }
 
-    @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
+    @ExceptionHandler(AllReadyExistDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(
+        AllReadyExistDataBaseRecordException e) {
 
       log.error("AllReadyExistDataException occurred", e);
 

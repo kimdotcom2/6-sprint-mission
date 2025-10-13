@@ -2,8 +2,8 @@ package com.sprint.mission.discodeit.service.basic;
 
 import com.sprint.mission.discodeit.dto.ReadStatusDTO;
 import com.sprint.mission.discodeit.entity.ReadStatusEntity;
-import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.ReadStatusEntityMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -31,15 +31,15 @@ public class BasicReadStatusService implements ReadStatusService {
     public ReadStatusDTO.ReadStatus createReadStatus(ReadStatusDTO.CreateReadStatusCommand request) {
 
         if (!userRepository.existById(request.userId())) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         if (!channelRepository.existById(request.channelId())) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         if (existReadStatusByUserIdAndChannelId(request.userId(), request.channelId())) {
-            throw new AllReadyExistDataException("Read status already exists.");
+            throw new AllReadyExistDataBaseRecordException("Read status already exists.");
         }
 
         ReadStatusEntity readStatusEntity = ReadStatusEntity.builder()
@@ -66,7 +66,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public Optional<ReadStatusDTO.ReadStatus> findReadStatusById(UUID id) {
 
         ReadStatusEntity readStatusEntity = readStatusRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such read status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
 
         return Optional.ofNullable(readStatusEntityMapper.entityToReadStatus(readStatusEntity));
     }
@@ -76,11 +76,11 @@ public class BasicReadStatusService implements ReadStatusService {
     public Optional<ReadStatusDTO.ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
 
         if (!userRepository.existById(userId)) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         if (!channelRepository.existById(channelId)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         ReadStatusEntity readStatusEntity = readStatusRepository.findByUserIdAndChannelId(userId, channelId)
@@ -94,7 +94,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public List<ReadStatusDTO.ReadStatus> findAllReadStatusByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         return readStatusRepository.findByUserId(userId)
@@ -108,7 +108,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public List<ReadStatusDTO.ReadStatus> findAllReadStatusByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         return readStatusRepository.findByChannelId(channelId)
@@ -129,7 +129,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request) {
 
         ReadStatusEntity readStatusEntity = readStatusRepository.findById(request.id())
-                .orElseThrow(() -> new NoSuchDataException("No such read status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
 
         readStatusEntity.updateLastReadAt(request.lastReadAt());
 
@@ -142,7 +142,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public void deleteReadStatusById(UUID id) {
 
         if (!readStatusRepository.existById(id)) {
-            throw new NoSuchDataException("No such read status.");
+            throw new NoSuchDataBaseRecordException("No such read status.");
         }
 
         readStatusRepository.deleteById(id);
@@ -154,11 +154,11 @@ public class BasicReadStatusService implements ReadStatusService {
     public void deleteReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
 
         if (!userRepository.existById(userId)) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         if (!channelRepository.existById(channelId)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         readStatusRepository.deleteByUserIdAndChannelId(userId, channelId);
@@ -170,7 +170,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public void deleteAllReadStatusByUserId(UUID userId) {
 
         if (!userRepository.existById(userId)) {
-            throw new NoSuchDataException("No such user.");
+            throw new NoSuchDataBaseRecordException("No such user.");
         }
 
         readStatusRepository.deleteByUserId(userId);
@@ -182,7 +182,7 @@ public class BasicReadStatusService implements ReadStatusService {
     public void deleteAllReadStatusByChannelId(UUID channelId) {
 
         if (!channelRepository.existById(channelId)) {
-            throw new NoSuchDataException("No such channel.");
+            throw new NoSuchDataBaseRecordException("No such channel.");
         }
 
         readStatusRepository.deleteByChannelId(channelId);
@@ -195,7 +195,7 @@ public class BasicReadStatusService implements ReadStatusService {
 
         uuidList.forEach(uuid -> {
             if (!readStatusRepository.existById(uuid)) {
-                throw new NoSuchDataException("No such read status.");
+                throw new NoSuchDataBaseRecordException("No such read status.");
             }
         });
 

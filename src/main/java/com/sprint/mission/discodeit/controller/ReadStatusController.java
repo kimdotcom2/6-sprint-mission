@@ -4,8 +4,8 @@ import com.sprint.mission.discodeit.dto.ReadStatusDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO;
 import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO.ReadStatusUpdateRequest;
-import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -78,7 +78,7 @@ public class ReadStatusController {
                 .build());
 
         ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusByUserIdAndChannelId(readStatusCreateRequest.userId(), readStatusCreateRequest.channelId())
-                .orElseThrow(() -> new NoSuchDataException("No such read status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
 
         return ResponseEntity.status(201).body(ReadStatusApiDTO.FindReadStatusResponse.builder()
                 .id(readStatus.id())
@@ -131,7 +131,7 @@ public class ReadStatusController {
                 .build());
 
         ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusById(readStatusId)
-                .orElseThrow(() -> new NoSuchDataException("No such read status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
 
         return ResponseEntity.ok(ReadStatusApiDTO.FindReadStatusResponse.builder()
                 .id(readStatus.id())
@@ -188,8 +188,9 @@ public class ReadStatusController {
      * @return 에러 응답
      */
     @io.swagger.v3.oas.annotations.Hidden
-    @ExceptionHandler(NoSuchDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(NoSuchDataException e) {
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
       log.error("NoSuchDataException occurred", e);
 
@@ -206,8 +207,9 @@ public class ReadStatusController {
      * @return 에러 응답
      */
     @io.swagger.v3.oas.annotations.Hidden
-    @ExceptionHandler(AllReadyExistDataException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleAllReadyExistDataException(AllReadyExistDataException e) {
+    @ExceptionHandler(AllReadyExistDataBaseRecordException.class)
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleAllReadyExistDataException(
+        AllReadyExistDataBaseRecordException e) {
 
       log.error("AllReadyExistDataException occurred", e);
 

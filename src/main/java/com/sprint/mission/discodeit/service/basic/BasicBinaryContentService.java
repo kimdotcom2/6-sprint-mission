@@ -3,7 +3,7 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.BinaryContentEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
@@ -59,7 +59,7 @@ public class BasicBinaryContentService implements BinaryContentService {
     public Optional<BinaryContentDTO.BinaryContent> findBinaryContentById(UUID id) {
 
         BinaryContentEntity binaryContentEntity = binaryContentRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such binary content"));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such binary content"));
 
         byte[] bytes = null;
 
@@ -93,7 +93,7 @@ public class BasicBinaryContentService implements BinaryContentService {
                             .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
                             .build();
                   } catch (IOException e) {
-                    throw new NoSuchDataException("No such binary content");
+                    throw new NoSuchDataBaseRecordException("No such binary content");
                   }
                 })
                 .toList();
@@ -113,7 +113,7 @@ public class BasicBinaryContentService implements BinaryContentService {
                             .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
                             .build();
                   } catch (IOException e) {
-                    throw new NoSuchDataException("No such binary content");
+                    throw new NoSuchDataBaseRecordException("No such binary content");
                   }
                 })
                 .toList();
@@ -124,10 +124,11 @@ public class BasicBinaryContentService implements BinaryContentService {
     public void deleteBinaryContentById(UUID id) {
 
         if (!binaryContentRepository.existById(id)) {
-            throw new NoSuchDataException("No such binary content");
+            throw new NoSuchDataBaseRecordException("No such binary content");
         }
 
         binaryContentRepository.deleteById(id);
+        binaryContentStorage.deleteById(id);
 
     }
 }

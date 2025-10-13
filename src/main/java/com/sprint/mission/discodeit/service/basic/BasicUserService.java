@@ -4,8 +4,8 @@ import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
 import com.sprint.mission.discodeit.entity.UserEntity;
 import com.sprint.mission.discodeit.entity.UserStatusEntity;
-import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.UserEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
@@ -37,7 +37,7 @@ public class BasicUserService implements UserService {
     public UserDTO.User createUser(UserDTO.CreateUserCommand request) {
 
         if (userRepository.existByEmailOrUsername(request.email(), request.username())) {
-            throw new AllReadyExistDataException("User already exists.");
+            throw new AllReadyExistDataBaseRecordException("User already exists.");
         }
 
         UserEntity userEntity = UserEntity.builder()
@@ -83,10 +83,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.User> findUserById(UUID id) {
 
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(id)
-                .orElseThrow(() -> new NoSuchDataException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         UserDTO.User user = userEntityMapper.entityToUser(userEntity);
         user.updateStatus(userStatusEntity.isOnline());
@@ -99,10 +99,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.User> findUserByEmail(String email) {
 
         UserEntity userEntity = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
-                .orElseThrow(() -> new NoSuchDataException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         UserDTO.User user = userEntityMapper.entityToUser(userEntity);
         user.updateStatus(userStatusEntity.isOnline());
@@ -115,10 +115,10 @@ public class BasicUserService implements UserService {
     public Optional<UserDTO.User> findUserByUsername(String username) {
 
         UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(userEntity.getId())
-                .orElseThrow(() -> new NoSuchDataException("No such user status."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
         UserDTO.User user = userEntityMapper.entityToUser(userEntity);
         user.updateStatus(userStatusEntity.isOnline());
@@ -134,7 +134,7 @@ public class BasicUserService implements UserService {
                 .map(userEntityMapper::entityToUser)
                 .peek(user -> {
                   UserStatusEntity userStatusEntity = userStatusRepository.findByUserId(user.getId())
-                      .orElseThrow(() -> new NoSuchDataException("No such user status."));
+                      .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
                   user.updateStatus(userStatusEntity.isOnline());
                 })
                 .toList();
@@ -144,11 +144,11 @@ public class BasicUserService implements UserService {
     public void updateUser(UserDTO.UpdateUserCommand request) {
 
         UserEntity updatedUserEntity = userRepository.findById(request.id())
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         if (userRepository.existByEmailOrUsername(request.email(), request.username()) &&
                 !updatedUserEntity.getId().equals(request.id())) {
-            throw new AllReadyExistDataException("User already exists.");
+            throw new AllReadyExistDataBaseRecordException("User already exists.");
         }
 
         if (!securityUtil.hashPassword(request.currentPassword()).equals(updatedUserEntity.getPassword())) {
@@ -181,7 +181,7 @@ public class BasicUserService implements UserService {
     public void deleteUserById(UUID id) {
 
         UserEntity userEntity = userRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataException("No such user."));
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
         binaryContentRepository.deleteById(userEntity.getProfileId().getId());
         userStatusRepository.deleteByUserId(userEntity.getId());

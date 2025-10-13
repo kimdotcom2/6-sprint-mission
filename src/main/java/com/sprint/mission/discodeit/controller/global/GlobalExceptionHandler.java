@@ -1,8 +1,8 @@
 package com.sprint.mission.discodeit.controller.global;
 
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
-import com.sprint.mission.discodeit.exception.AllReadyExistDataException;
-import com.sprint.mission.discodeit.exception.NoSuchDataException;
+import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
+import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NoSuchDataException.class)
+    @ExceptionHandler(NoSuchDataBaseRecordException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(NoSuchDataException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(
+        NoSuchDataBaseRecordException e) {
 
         log.error("NoSuchDataException occurred", e);
 
@@ -26,9 +27,10 @@ public class GlobalExceptionHandler {
                 .build());
     }
 
-    @ExceptionHandler(AllReadyExistDataException.class)
+    @ExceptionHandler(AllReadyExistDataBaseRecordException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(AllReadyExistDataException e) {
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(
+        AllReadyExistDataBaseRecordException e) {
 
         log.error("AllReadyExistDataException occurred", e);
 
