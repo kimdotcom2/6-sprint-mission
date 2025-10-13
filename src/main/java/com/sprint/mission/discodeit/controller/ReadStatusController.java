@@ -187,6 +187,7 @@ public class ReadStatusController {
         .code(HttpStatus.NOT_FOUND.value())
         .message(e.getMessage())
         .build());
+
   }
 
   /**
@@ -206,6 +207,7 @@ public class ReadStatusController {
         .code(HttpStatus.BAD_REQUEST.value())
         .message(e.getMessage())
         .build());
+
   }
 
 }

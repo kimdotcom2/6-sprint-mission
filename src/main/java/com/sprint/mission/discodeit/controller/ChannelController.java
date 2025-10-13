@@ -144,21 +144,20 @@ public class ChannelController {
         .type(channel.getType())
         .name(channel.getName())
         .description(channel.getDescription())
-        .participants(channel.getParticipants().stream().map(user -> {
-          return UserApiDTO.FindUserResponse.builder()
-              .id(user.getId())
-              .username(user.getUsername())
-              .email(user.getEmail())
-              .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                  .id(user.getProfileId().getId())
-                  .fileName(user.getProfileId().getFileName())
-                  .size(user.getProfileId().getSize())
-                  .contentType(user.getProfileId().getContentType())
-                  .build() : null)
-              .isOnline(user.getIsOnline())
-              .build();
-        }).toList())
+        .participants(channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .size(user.getProfileId().getSize())
+                .contentType(user.getProfileId().getContentType())
+                .build() : null)
+            .isOnline(user.getIsOnline())
+            .build()).toList())
         .build());
+
   }
 
   /**
@@ -213,20 +212,18 @@ public class ChannelController {
         .type(channel.getType())
         .name(channel.getName())
         .description(channel.getDescription())
-        .participants(channel.getParticipants().stream().map(user -> {
-          return UserApiDTO.FindUserResponse.builder()
-              .id(user.getId())
-              .username(user.getUsername())
-              .email(user.getEmail())
-              .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                  .id(user.getProfileId().getId())
-                  .fileName(user.getProfileId().getFileName())
-                  .size(user.getProfileId().getSize())
-                  .contentType(user.getProfileId().getContentType())
-                  .build() : null)
-              .isOnline(user.getIsOnline())
-              .build();
-        }).toList())
+        .participants(channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
+            .id(user.getId())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .size(user.getProfileId().getSize())
+                .contentType(user.getProfileId().getContentType())
+                .build() : null)
+            .isOnline(user.getIsOnline())
+            .build()).toList())
         .lastMessageAt(channel.getLastMessageAt() != null ? channel.getLastMessageAt() : null)
         .build());
 
@@ -306,6 +303,7 @@ public class ChannelController {
                 .build()).toList())
             .build())
         .toList();
+
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
@@ -318,6 +316,7 @@ public class ChannelController {
         .code(HttpStatus.NOT_FOUND.value())
         .message(e.getMessage())
         .build());
+
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
@@ -330,6 +329,7 @@ public class ChannelController {
         .code(HttpStatus.BAD_REQUEST.value())
         .message(e.getMessage())
         .build());
+
   }
 
 }

@@ -166,11 +166,11 @@ public class UserController {
         .currentPassword(userUpdateRequest.currentPassword())
         .newPassword(userUpdateRequest.newPassword())
         .isProfileImageUpdated(!profile.isEmpty())
-        .profileImage(profile == null ? null : BinaryContentCreateCommand.builder()
-            .fileName(profile.getName())
-            .data(profile.getBytes())
-            .contentType(ContentType.IMAGE)
-            .build())
+        .profileImage(BinaryContentCreateCommand.builder()
+                    .fileName(profile.getName())
+                    .data(profile.getBytes())
+                    .contentType(ContentType.IMAGE)
+                    .build())
         .build();
 
     UserDTO.User user = userService.updateUser(updateUserCommand);
@@ -367,6 +367,7 @@ public class UserController {
         .code(HttpStatus.NOT_FOUND.value())
         .message(e.getMessage())
         .build());
+
   }
 
   @ExceptionHandler(AllReadyExistDataBaseRecordException.class)
@@ -379,6 +380,7 @@ public class UserController {
         .code(HttpStatus.BAD_REQUEST.value())
         .message(e.getMessage())
         .build());
+
   }
 
 }

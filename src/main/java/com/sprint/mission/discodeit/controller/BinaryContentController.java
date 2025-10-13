@@ -153,6 +153,7 @@ public class BinaryContentController {
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such BinaryContent"));
 
     return binaryContentStorage.download(readBinaryContentResult);
+
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
@@ -165,6 +166,7 @@ public class BinaryContentController {
         .code(HttpStatus.NOT_FOUND.value())
         .message(e.getMessage())
         .build());
+
   }
 
   /**
@@ -184,6 +186,7 @@ public class BinaryContentController {
         .code(HttpStatus.BAD_REQUEST.value())
         .message(e.getMessage())
         .build());
+
   }
 
 }

@@ -312,6 +312,7 @@ public class MessageController {
         .code(HttpStatus.NOT_FOUND.value())
         .message(e.getMessage())
         .build());
+
   }
 
   @ExceptionHandler(IllegalArgumentException.class)
@@ -324,6 +325,7 @@ public class MessageController {
         .code(HttpStatus.BAD_REQUEST.value())
         .message(e.getMessage())
         .build());
+
   }
 
 }
