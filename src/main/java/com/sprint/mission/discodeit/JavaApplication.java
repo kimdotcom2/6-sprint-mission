@@ -451,14 +451,14 @@ public class JavaApplication {
         //Message messageOne = new Message(userOne.getId(), channelOne.getId(),"messageOne", false, null);
         //Message messageTwo = new Message(userOne.getId(), channelOne.getId(), "messageTwo", true, messageOne.getId());
         Message messageOne = new Message.Builder()
-                .userId(userOne.getId())
+                .authorId(userOne.getId())
                 .channelId(channelOne.getId())
                 .content("messageOne")
                 .isReply(false)
                 .parentMessageId(null)
                 .build();
         Message messageTwo = new Message.Builder()
-                .userId(userTwo.getId())
+                .authorId(userTwo.getId())
                 .channelId(channelTwo.getId())
                 .content("messageTwo")
                 .isReply(true)
@@ -525,14 +525,14 @@ public class JavaApplication {
         Channel channelTwo = new Channel("channelTwo", ChannelType.DM, true);
         fileChannelCrudService.createChannel(channelTwo);
         Message messageOne = new Message.Builder()
-                .userId(userOne.getId())
+                .authorId(userOne.getId())
                 .channelId(channelOne.getId())
                 .content("messageOne")
                 .isReply(false)
                 .parentMessageId(null)
                 .build();
         Message messageTwo = new Message.Builder()
-                .userId(userTwo.getId())
+                .authorId(userTwo.getId())
                 .channelId(channelTwo.getId())
                 .content("messageTwo")
                 .isReply(true)
@@ -606,14 +606,14 @@ public class JavaApplication {
         Channel channelTwo = new Channel("channelTwo", ChannelType.VOICE, true);
         basicChannelCrudService.createChannel(channelTwo);
         Message messageOne = new Message.Builder()
-                .userId(userOne.getId())
+                .authorId(userOne.getId())
                 .channelId(channelOne.getId())
                 .content("messageOne")
                 .isReply(false)
                 .parentMessageId(null)
                 .build();
         Message messageTwo = new Message.Builder()
-                .userId(userTwo.getId())
+                .authorId(userTwo.getId())
                 .channelId(channelTwo.getId())
                 .content("messageTwo")
                 .isReply(true)

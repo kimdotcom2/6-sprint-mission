@@ -13,13 +13,10 @@ public class BinaryContentApiDTO {
     @Builder
     public record ReadBinaryContentResponse(
             UUID id,
-            Instant createdAt,
             String fileName,
             Long size,
             @JsonProperty("contentType")
-            ContentType contentType,
-            @JsonProperty("bytes")
-            byte[] data
+            ContentType contentType
     ) {
 
     }

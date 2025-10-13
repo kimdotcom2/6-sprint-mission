@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.dto.api.ChannelApiDTO;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.ChannelUpdateRequest;
 import com.sprint.mission.discodeit.dto.api.ChannelApiDTO.PrivateChannelCreateRequest;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
+import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.ChannelService;
@@ -90,12 +91,10 @@ public class ChannelController {
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(channel.getId())
-                .createdAt(channel.getCreatedAt())
-                .updatedAt(channel.getUpdatedAt())
                 .type(channel.getType())
                 .name(channel.getName())
                 .description(channel.getDescription())
-                .participantIdList(new ArrayList<>())
+                .participants(new ArrayList<>())
                 .build());
 
     }
@@ -141,12 +140,18 @@ public class ChannelController {
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
                 .id(channel.getId())
-                .createdAt(channel.getCreatedAt())
-                .updatedAt(channel.getUpdatedAt())
                 .type(channel.getType())
                 .name(channel.getName())
                 .description(channel.getDescription())
-                .participantIdList(channel.getParticipants().stream().map(participant -> participant.getId()).toList())
+                .participants(channel.getParticipants().stream().map(user -> {
+                    return UserApiDTO.FindUserResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .username(user.getUsername())
+                        .createdAt(user.getCreatedAt())
+                        .updatedAt(LocalDateTime.ofInstant(user.getUpdatedAt(), ZoneId.systemDefault()))
+                        .build();
+                }))
                 .build());
     }
 

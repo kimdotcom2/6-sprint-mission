@@ -92,13 +92,13 @@ public class MessageController {
                 .isReply(messageCreateRequest.isReply())
                 .parentMessageId(messageCreateRequest.parentMessageId())
                 .channelId(messageCreateRequest.channelId())
-                .userId(messageCreateRequest.userId())
+                .userId(messageCreateRequest.authorId())
                 .binaryContentList(binaryContentList)
                 .build();
 
         messageService.createMessage(createMessageCommand);
 
-        MessageDTO.FindMessageResult message = messageService.findMessagesByAuthorId(messageCreateRequest.userId()).stream()
+        MessageDTO.FindMessageResult message = messageService.findMessagesByAuthorId(messageCreateRequest.authorId()).stream()
                 .filter(message1 -> message1.channelId().equals(messageCreateRequest.channelId()))
                 .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
                 .limit(1)

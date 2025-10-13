@@ -10,12 +10,12 @@ import org.mapstruct.Mappings;
 public interface UserStatusEntityMapper {
 
   @Mappings({
-      @Mapping(target = "userId", source = "user.id")
+      @Mapping(target = "authorId", source = "user.id")
   })
   UserStatusDTO.UserStatus entityToUserStatus(UserStatusEntity entity);
 
   @Mappings({
-      @Mapping(target = "user.id", source = "userId")
+      @Mapping(target = "user.id", source = "authorId")
   })
   UserStatusEntity userStatusToEntity(UserStatusDTO.UserStatus userStatus);
 

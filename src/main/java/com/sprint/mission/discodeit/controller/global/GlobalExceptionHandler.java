@@ -16,10 +16,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchDataBaseRecordException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataBaseRecordException(
         NoSuchDataBaseRecordException e) {
 
-        log.error("NoSuchDataException occurred", e);
+        log.error("NoSuchDataBaseRecordException occurred", e);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())
@@ -29,10 +29,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AllReadyExistDataBaseRecordException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataException(
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> AllReadyExistDataBaseRecordException(
         AllReadyExistDataBaseRecordException e) {
 
-        log.error("AllReadyExistDataException occurred", e);
+        log.error("AllReadyExistDataBaseRecordException occurred", e);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.BAD_REQUEST.value())

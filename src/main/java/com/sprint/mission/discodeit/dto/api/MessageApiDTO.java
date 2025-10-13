@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -12,36 +13,29 @@ public class MessageApiDTO {
     @Builder
     public record MessageCreateRequest(
             String content,
-            boolean isReply,
-            UUID parentMessageId,
-            UUID channelId,
-            @JsonProperty("authorId")
-            UUID userId) {
+            UUID authorId,
+            UUID channelId) {
 
     }
 
     @Builder
     public record MessageUpdateRequest(
+        UUID id,
         @JsonProperty("newContent")
-        String content,
-        boolean isReply,
-        UUID parentMessageId) {
+        String content) {
 
     }
 
     @Builder
     public record FindMessageResponse(
             UUID id,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt,
-            String content,
+            Instant createdAt,
+            Instant updatedAt,
             UUID channelId,
-            @JsonProperty("authorId")
-            UUID userId,
-            boolean isReply,
-            UUID parentMessageId,
+            UUID authorId,
+            String content,
             @JsonProperty("attachmentIds")
-            List<UUID> binaryContentList
+            List<UUID> attachmentIds
     ) {
 
     }

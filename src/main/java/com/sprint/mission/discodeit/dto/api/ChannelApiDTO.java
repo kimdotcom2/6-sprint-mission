@@ -13,7 +13,6 @@ public class ChannelApiDTO {
     @Builder
     public record PublicChannelCreateRequest(
         String name,
-        String category,
         String description) {
 
     }
@@ -30,7 +29,6 @@ public class ChannelApiDTO {
     public record ChannelUpdateRequest(
         @JsonProperty("newName")
         String name,
-        String category,
         @JsonProperty("newDescription")
         String description) {
 
@@ -39,15 +37,11 @@ public class ChannelApiDTO {
     @Builder
     public record FindChannelResponse(
             UUID id,
-            Instant createdAt,
-            Instant updatedAt,
             ChannelType type,
-            @JsonProperty("name")
             String name,
             String description,
-            @JsonProperty("participantIds")
-            List<UUID> participantIdList,
-            Long recentMessageTime
+            List<UserApiDTO.FindUserResponse> participants,
+            Instant lastMessageAt
     ) {
 
     }

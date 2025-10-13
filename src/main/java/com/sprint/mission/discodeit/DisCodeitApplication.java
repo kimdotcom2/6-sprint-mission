@@ -213,7 +213,7 @@ public class DisCodeitApplication {
                 .build();
         channelService.createChannel(channelTwo);
         *//*Message messageOne = new Message.Builder()
-                .userId(userService.findUserByEmail(userOne.email())
+                .authorId(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
                         .filter(channel -> channel.name().equals(channelOne.name()))
@@ -223,7 +223,7 @@ public class DisCodeitApplication {
                 .parentMessageId(null)
                 .build();
         Message messageTwo = new Message.Builder()
-                .userId(userService.findUserByEmail(userTwo.email())
+                .authorId(userService.findUserByEmail(userTwo.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
                         .filter(channel -> channel.name().equals(channelTwo.name()))
@@ -233,7 +233,7 @@ public class DisCodeitApplication {
                 .parentMessageId(messageOne.getId())
                 .build();*//*
         MessageDTO.CreateMessageCommand messageOne = MessageDTO.CreateMessageCommand.builder()
-                .userId(userService.findUserByEmail(userOne.email())
+                .authorId(userService.findUserByEmail(userOne.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
                         .filter(channel -> channel.name().equals(channelOne.name()))
@@ -244,7 +244,7 @@ public class DisCodeitApplication {
                 .build();
         messageService.createMessage(messageOne);
         MessageDTO.CreateMessageCommand messageTwo = MessageDTO.CreateMessageCommand.builder()
-                .userId(userService.findUserByEmail(userTwo.email())
+                .authorId(userService.findUserByEmail(userTwo.email())
                         .orElseThrow((IllegalArgumentException::new)).id())
                 .channelId(channelService.findAllChannels().stream()
                         .filter(channel -> channel.name().equals(channelTwo.name()))

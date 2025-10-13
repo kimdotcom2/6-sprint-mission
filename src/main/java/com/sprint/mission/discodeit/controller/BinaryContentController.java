@@ -73,8 +73,6 @@ public class BinaryContentController {
                 .id(readBinaryContentResult.getId())
                 .fileName(readBinaryContentResult.getFileName())
                 .size(readBinaryContentResult.getSize())
-                .data(readBinaryContentResult.getBytes())
-                .createdAt(readBinaryContentResult.getCreatedAt())
                 .contentType(readBinaryContentResult.getContentType())
                 .build());
 
@@ -112,14 +110,25 @@ public class BinaryContentController {
         return ResponseEntity.ok(binaryContentService.findAllBinaryContentByIdIn(idList).stream()
                 .map(binaryContent -> BinaryContentApiDTO.ReadBinaryContentResponse.builder()
                         .id(binaryContent.getId())
-                        .createdAt(binaryContent.getCreatedAt())
                         .fileName(binaryContent.getFileName())
                         .size(binaryContent.getSize())
-                        .data(binaryContent.getBytes())
                         .contentType(binaryContent.getContentType())
                         .build())
                 .toList());
 
+    }
+
+    @GetMapping("{binaryContentId}/download")
+    public ResponseEntity<byte[]> downloadBinaryContent(
+        @Parameter(description = "바이너리 콘텐츠 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+        @PathVariable("binaryContentId") UUID id) {
+
+      BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(id)
+          .orElseThrow(() -> new NoSuchDataBaseRecordException("No such BinaryContent"));
+
+      return ResponseEntity.ok()
+          .header("Content-Disposition", "attachment; filename=\"" + readBinaryContentResult.getFileName() + "\"")
+          .body(readBinaryContentResult.getBytes());
     }
 
     @ExceptionHandler(NoSuchDataBaseRecordException.class)
