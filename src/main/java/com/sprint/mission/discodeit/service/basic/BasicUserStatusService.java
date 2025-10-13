@@ -90,14 +90,15 @@ public class BasicUserStatusService implements UserStatusService {
 
   @Transactional
   @Override
-  public void updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request) {
+  public UserStatusDTO.UserStatus updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request) {
 
     UserStatusEntity userStatusEntity = userStatusRepository.findById(request.id())
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
     userStatusEntity.updateLastActiveAt(request.lastActiveAt());
 
-    userStatusRepository.save(userStatusEntity);
+    return userStatusEntityMapper.entityToUserStatus(userStatusRepository.save(userStatusEntity));
+
   }
 
   @Transactional

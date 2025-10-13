@@ -206,9 +206,7 @@ public class ChannelController {
         .description(channelUpdateRequest.description())
         .build();
 
-    ChannelDTO.Channel channel = channelService.updateChannel(updateChannelCommand)
-        .orElseThrow(
-            () -> new NoSuchDataBaseRecordException("No such channel with id: " + channelId));
+    ChannelDTO.Channel channel = channelService.updateChannel(updateChannelCommand);
 
     return ResponseEntity.status(200).body(ChannelApiDTO.FindChannelResponse.builder()
         .id(channel.getId())

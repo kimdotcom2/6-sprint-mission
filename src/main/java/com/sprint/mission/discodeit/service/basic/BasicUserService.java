@@ -140,8 +140,9 @@ public class BasicUserService implements UserService {
         .toList();
   }
 
+  @Transactional
   @Override
-  public void updateUser(UserDTO.UpdateUserCommand request) {
+  public UserDTO.User updateUser(UserDTO.UpdateUserCommand request) {
 
     UserEntity updatedUserEntity = userRepository.findById(request.id())
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
@@ -158,7 +159,6 @@ public class BasicUserService implements UserService {
 
     updatedUserEntity.update(request.username(), request.email(),
         securityUtil.hashPassword(request.currentPassword()));
-    userRepository.save(updatedUserEntity);
 
     if (request.isProfileImageUpdated()) {
 
@@ -177,6 +177,8 @@ public class BasicUserService implements UserService {
           request.profileImage().data());
 
     }
+
+    return userEntityMapper.entityToUser(userRepository.save(updatedUserEntity));
 
   }
 

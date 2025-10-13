@@ -111,7 +111,7 @@ public class BasicChannelService implements ChannelService {
 
   @Transactional
   @Override
-  public Optional<ChannelDTO.Channel> updateChannel(ChannelDTO.UpdateChannelCommand request) {
+  public ChannelDTO.Channel updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
     if (!channelRepository.existById(request.id())) {
       throw new NoSuchDataBaseRecordException("No such channel.");
@@ -130,8 +130,7 @@ public class BasicChannelService implements ChannelService {
 
     updatedChannelEntity.update(request.name(), request.description());
 
-    return Optional.ofNullable(
-        channelEntityMapper.entityToChannel(channelRepository.save(updatedChannelEntity)));
+    return channelEntityMapper.entityToChannel(channelRepository.save(updatedChannelEntity));
 
   }
 

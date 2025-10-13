@@ -123,7 +123,7 @@ public class BasicMessageService implements MessageService {
 
   @Transactional
   @Override
-  public void updateMessage(MessageDTO.UpdateMessageCommand request) {
+  public MessageDTO.Message updateMessage(MessageDTO.UpdateMessageCommand request) {
 
     if (!messageRepository.existById(request.id())) {
       throw new NoSuchDataBaseRecordException("No such message.");
@@ -132,7 +132,8 @@ public class BasicMessageService implements MessageService {
     MessageEntity updatedMessageEntity = messageRepository.findById(request.id())
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
     updatedMessageEntity.updateMessage(request.content());
-    messageRepository.save(updatedMessageEntity);
+
+    return messageEntityMapper.entityToMessage(messageRepository.save(updatedMessageEntity));
 
   }
 

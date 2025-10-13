@@ -20,7 +20,7 @@ public interface UserStatusService {
 
   List<UserStatusDTO.UserStatus> findAllUserStatus();
 
-  void updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request);
+  UserStatusDTO.UserStatus updateUserStatus(UserStatusDTO.UpdateUserStatusCommand request);
 
   void deleteUserStatusById(UUID id);
 

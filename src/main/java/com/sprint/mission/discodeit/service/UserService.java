@@ -24,7 +24,7 @@ public interface UserService {
 
   List<UserDTO.User> findAllUsers();
 
-  void updateUser(UserDTO.UpdateUserCommand request);
+  UserDTO.User updateUser(UserDTO.UpdateUserCommand request);
 
   void deleteUserById(UUID id);
 

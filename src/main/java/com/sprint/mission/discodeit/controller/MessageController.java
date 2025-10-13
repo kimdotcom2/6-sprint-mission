@@ -174,10 +174,7 @@ public class MessageController {
         .content(messageUpdateRequest.content())
         .build();
 
-    messageService.updateMessage(updateMessageCommand);
-
-    MessageDTO.Message message = messageService.findMessageById(messageId)
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
+    MessageDTO.Message message = messageService.updateMessage(updateMessageCommand);
 
     return ResponseEntity.ok(MessageApiDTO.FindMessageResponse.builder()
         .id(message.getId())

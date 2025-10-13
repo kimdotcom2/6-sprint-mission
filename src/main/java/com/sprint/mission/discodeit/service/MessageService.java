@@ -20,7 +20,7 @@ public interface MessageService {
 
   List<MessageDTO.Message> findAllMessages();
 
-  void updateMessage(MessageDTO.UpdateMessageCommand request);
+  MessageDTO.Message updateMessage(MessageDTO.UpdateMessageCommand request);
 
   void deleteMessageById(UUID id);
 
