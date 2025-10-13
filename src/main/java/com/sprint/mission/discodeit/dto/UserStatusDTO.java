@@ -20,8 +20,6 @@ public class UserStatusDTO {
   public static class UserStatus {
 
     private UUID id;
-    private Instant createdAt;
-    private Instant updatedAt;
     private UUID userId;
     private Instant lastActiveAt;
 

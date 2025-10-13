@@ -295,10 +295,10 @@ public class MessageController {
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
-  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
       NoSuchDataBaseRecordException e) {
 
-    log.error("NoSuchDataException occurred", e);
+    log.error("NoSuchDataBaseRecordException occurred", e);
 
     return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
         .code(HttpStatus.NOT_FOUND.value())

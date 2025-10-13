@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
+import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
@@ -96,19 +97,19 @@ public class UserController {
             .build())
         .build();
 
-    userService.createUser(createUserCommand);
-
-    UserDTO.FindUserResult user = userService.findUserByEmail(userCreateRequest.email())
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
+    UserDTO.User user = userService.createUser(createUserCommand);
 
     UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-        .id(user.id())
-        .username(user.nickname())
-        .email(user.email())
-        .profileImageId(user.profileImageId())
-        .isOnline(user.isOnline())
-        .createdAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
+        .id(user.getId())
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+            .id(user.getProfileId().getId())
+            .fileName(user.getProfileId().getFileName())
+            .size(user.getProfileId().getSize())
+            .contentType(user.getProfileId().getContentType())
+            .build())
+        .isOnline(user.getIsOnline())
         .build();
 
     return ResponseEntity.status(201).body(response);
@@ -160,7 +161,7 @@ public class UserController {
 
     UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
         .id(userId)
-        .nickname(userUpdateRequest.username())
+        .username(userUpdateRequest.username())
         .email(userUpdateRequest.email())
         .currentPassword(userUpdateRequest.currentPassword())
         .newPassword(userUpdateRequest.newPassword())
@@ -168,26 +169,26 @@ public class UserController {
         .profileImage(profile == null ? null : BinaryContentCreateCommand.builder()
             .fileName(profile.getName())
             .data(profile.getBytes())
-            .fileType(ContentType.IMAGE)
+            .contentType(ContentType.IMAGE)
             .build())
         .build();
 
-    userService.updateUser(updateUserCommand);
+    UserDTO.User user = userService.updateUser(updateUserCommand);
 
-    UserDTO.FindUserResult user = userService.findUserById(userId)
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
+    UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
+        .id(user.getId())
+        .username(user.getUsername())
+        .email(user.getEmail())
+        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+            .id(user.getProfileId().getId())
+            .fileName(user.getProfileId().getFileName())
+            .size(user.getProfileId().getSize())
+            .contentType(user.getProfileId().getContentType())
+            .build())
+        .isOnline(user.getIsOnline())
+        .build();
 
-    return ResponseEntity.status(204).body(UserApiDTO.FindUserResponse.builder()
-        .id(user.id())
-        .nickname(user.nickname())
-        .email(user.email())
-        .profileImageId(user.profileImageId())
-        .isOnline(user.isOnline())
-        .createdAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
-        .updatedAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
-        .build());
+    return ResponseEntity.status(204).body(response);
 
   }
 
@@ -244,17 +245,17 @@ public class UserController {
 
     List<UserApiDTO.FindUserResponse> userList = userService.findAllUsers().stream()
         .map(user -> UserApiDTO.FindUserResponse.builder()
-            .id(user.id())
-            .nickname(user.nickname())
-            .email(user.email())
-            .profileImageId(user.profileImageId())
-            .isOnline(user.isOnline())
-            .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()),
-                ZoneId.systemDefault()))
-            .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()),
-                ZoneId.systemDefault()))
+            .id(user.getId())
+            .username(user.getUsername())
+            .email(user.getEmail())
+            .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .size(user.getProfileId().getSize())
+                .contentType(user.getProfileId().getContentType())
+                .build())
+            .isOnline(user.getIsOnline())
             .build())
-
         .toList();
 
     return ResponseEntity.status(201).body(userList);
@@ -288,17 +289,13 @@ public class UserController {
       @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @PathVariable UUID userId) {
 
-    UserDTO.FindUserResult user = userService.findUserById(userId).get();
+    UserStatusDTO.UserStatus userStatus = userStatusService.findUserStatusByUserId(userId)
+        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
     return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
-        .id(user.id())
-        .createdAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.createdAt()), ZoneId.systemDefault()))
-        .updatedAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
-        .userId(user.id())
-        .lastOnlineAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(user.updatedAt()), ZoneId.systemDefault()))
+        .id(userStatus.getId())
+        .userId(userId)
+        .lastOnlineAt(userStatus.getLastActiveAt())
         .isOnline(true)
         .build());
 
@@ -343,35 +340,28 @@ public class UserController {
       )
       @RequestBody @Valid UserApiDTO.UserStatusUpdateRequest userStatusUpdateRequest) {
 
-    UserStatusDTO.FindUserStatusResult userStatus = userStatusService.findUserStatusByUserId(userId)
+    UserStatusDTO.UserStatus userStatus = userStatusService.findUserStatusByUserId(userId)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
     userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
-        .id(userStatus.id())
-        .lastActiveTimestamp(
-            userStatusUpdateRequest.newLastActiveAt().toEpochSecond(ZoneOffset.UTC))
+        .id(userStatus.getUserId())
+        .lastActiveAt(userStatus.getLastActiveAt())
         .build());
 
     return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
-        .id(userStatus.id())
-        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.createdAt()),
-            ZoneId.systemDefault()))
-        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.updatedAt()),
-            ZoneId.systemDefault()))
-        .userId(userStatus.userId())
-        .lastOnlineAt(
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(userStatus.lastActiveTimestamp()),
-                ZoneId.systemDefault()))
+        .id(userStatus.getId())
+        .userId(userStatus.getUserId())
+        .lastOnlineAt(userStatus.getLastActiveAt())
         .isOnline(true)
         .build());
 
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
-  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataException(
+  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> NoSuchDataBaseRecordException(
       NoSuchDataBaseRecordException e) {
 
-    log.error("NoSuchDataException occurred", e);
+    log.error("NoSuchDataBaseRecordException occurred", e);
 
     return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
         .code(HttpStatus.NOT_FOUND.value())

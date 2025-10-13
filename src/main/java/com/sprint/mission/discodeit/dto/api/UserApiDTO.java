@@ -51,8 +51,6 @@ public class UserApiDTO {
   @Builder
   public record CheckUserOnline(
       UUID id,
-      Instant createdAt,
-      Instant updatedAt,
       UUID userId,
       @JsonProperty("lastActiveAt")
       Instant lastOnlineAt,
