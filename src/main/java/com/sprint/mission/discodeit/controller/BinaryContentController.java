@@ -5,6 +5,7 @@ import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.BinaryContentService;
+import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 public class BinaryContentController {
 
   private final BinaryContentService binaryContentService;
+  private final BinaryContentStorage binaryContentStorage;
 
   /**
    * 바이너리 콘텐츠 조회
@@ -120,18 +123,14 @@ public class BinaryContentController {
   }
 
   @GetMapping("{binaryContentId}/download")
-  public ResponseEntity<byte[]> downloadBinaryContent(
+  public ResponseEntity<?> downloadBinaryContent(
       @Parameter(description = "바이너리 콘텐츠 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @PathVariable("binaryContentId") UUID id) {
 
-    BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(
-            id)
+    BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(id)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such BinaryContent"));
 
-    return ResponseEntity.ok()
-        .header("Content-Disposition",
-            "attachment; filename=\"" + readBinaryContentResult.getFileName() + "\"")
-        .body(readBinaryContentResult.getBytes());
+    return binaryContentStorage.download(readBinaryContentResult);
   }
 
   @ExceptionHandler(NoSuchDataBaseRecordException.class)
