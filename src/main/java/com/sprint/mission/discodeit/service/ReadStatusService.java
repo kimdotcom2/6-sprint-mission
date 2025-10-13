@@ -16,8 +16,7 @@ public interface ReadStatusService {
 
   Optional<ReadStatusDTO.ReadStatus> findReadStatusById(UUID id);
 
-  Optional<ReadStatusDTO.ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId,
-      UUID channelId);
+  Optional<ReadStatusDTO.ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId, UUID channelId);
 
   List<ReadStatusDTO.ReadStatus> findAllReadStatusByUserId(UUID userId);
 
@@ -25,7 +24,7 @@ public interface ReadStatusService {
 
   List<ReadStatusDTO.ReadStatus> findAllReadStatus();
 
-  void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request);
+  ReadStatusDTO.ReadStatus updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request);
 
   void deleteReadStatusById(UUID id);
 

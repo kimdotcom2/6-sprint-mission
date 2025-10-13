@@ -128,14 +128,14 @@ public class BasicReadStatusService implements ReadStatusService {
 
   @Transactional
   @Override
-  public void updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request) {
+  public ReadStatusDTO.ReadStatus updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand request) {
 
     ReadStatusEntity readStatusEntity = readStatusRepository.findById(request.id())
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
 
     readStatusEntity.updateLastReadAt(request.lastReadAt());
 
-    readStatusRepository.save(readStatusEntity);
+    return readStatusEntityMapper.entityToReadStatus(readStatusRepository.save(readStatusEntity));
 
   }
 

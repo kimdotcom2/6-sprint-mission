@@ -71,27 +71,16 @@ public class ReadStatusController {
       )
       @RequestBody @Valid ReadStatusApiDTO.ReadStatusCreateRequest readStatusCreateRequest) {
 
-    readStatusService.createReadStatus(ReadStatusDTO.CreateReadStatusCommand.builder()
+    ReadStatusDTO.ReadStatus readStatus = readStatusService.createReadStatus(ReadStatusDTO.CreateReadStatusCommand.builder()
         .channelId(readStatusCreateRequest.channelId())
         .userId(readStatusCreateRequest.userId())
-        .lastReadTimestamp(
-            readStatusCreateRequest.lastReadAt().toInstant(ZoneOffset.UTC).toEpochMilli())
+        .lastReadTimeAt(readStatusCreateRequest.lastReadAt())
         .build());
 
-    ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusByUserIdAndChannelId(
-            readStatusCreateRequest.userId(), readStatusCreateRequest.channelId())
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
-
     return ResponseEntity.status(201).body(ReadStatusApiDTO.FindReadStatusResponse.builder()
-        .id(readStatus.id())
-        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.createdAt()),
-            ZoneId.systemDefault()))
-        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.updatedAt()),
-            ZoneId.systemDefault()))
-        .channelId(readStatus.channelId())
-        .userId(readStatus.userId())
-        .lastReadAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.lastReadTimestamp()),
-            ZoneId.systemDefault()))
+        .channelId(readStatus.getChannelId())
+        .userId(readStatus.getUserId())
+        .lastReadAt(readStatus.getLastReadAt())
         .build());
 
   }
@@ -130,25 +119,17 @@ public class ReadStatusController {
       )
       @RequestBody @Valid ReadStatusUpdateRequest readStatusUpdateRequest) {
 
-    readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()
+
+    ReadStatusDTO.ReadStatus readStatus = readStatusService.updateReadStatus(ReadStatusDTO.UpdateReadStatusCommand.builder()
         .id(readStatusId)
-        .lastReadTimestamp(readStatusUpdateRequest.newLastReadAt().toEpochSecond(ZoneOffset.UTC))
+        .lastReadAt(readStatusUpdateRequest.newLastReadAt())
         .build());
 
-    ReadStatusDTO.FindReadStatusResult readStatus = readStatusService.findReadStatusById(
-            readStatusId)
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such read status."));
-
     return ResponseEntity.ok(ReadStatusApiDTO.FindReadStatusResponse.builder()
-        .id(readStatus.id())
-        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.createdAt()),
-            ZoneId.systemDefault()))
-        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.updatedAt()),
-            ZoneId.systemDefault()))
-        .channelId(readStatus.channelId())
-        .userId(readStatus.userId())
-        .lastReadAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.lastReadTimestamp()),
-            ZoneId.systemDefault()))
+        .id(readStatus.getId())
+        .channelId(readStatus.getChannelId())
+        .userId(readStatus.getUserId())
+        .lastReadAt(readStatus.getLastReadAt())
         .build());
 
   }
@@ -178,16 +159,10 @@ public class ReadStatusController {
     List<ReadStatusApiDTO.FindReadStatusResponse> readStatusList = readStatusService.findAllReadStatusByUserId(
             userId).stream()
         .map(readStatus -> ReadStatusApiDTO.FindReadStatusResponse.builder()
-            .id(readStatus.id())
-            .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.createdAt()),
-                ZoneId.systemDefault()))
-            .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.updatedAt()),
-                ZoneId.systemDefault()))
-            .channelId(readStatus.channelId())
-            .userId(readStatus.userId())
-            .lastReadAt(
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(readStatus.lastReadTimestamp()),
-                    ZoneId.systemDefault()))
+            .id(readStatus.getId())
+            .channelId(readStatus.getChannelId())
+            .userId(readStatus.getUserId())
+            .lastReadAt(readStatus.getLastReadAt())
             .build())
         .toList();
 

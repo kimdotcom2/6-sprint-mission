@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto.api;
 
+import java.time.Instant;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -8,23 +9,21 @@ import java.util.UUID;
 public class ReadStatusApiDTO {
 
   @Builder
-  public record ReadStatusCreateRequest(UUID userId, UUID channelId, LocalDateTime lastReadAt) {
+  public record ReadStatusCreateRequest(UUID userId, UUID channelId, Instant lastReadAt) {
 
   }
 
   @Builder
-  public record ReadStatusUpdateRequest(LocalDateTime newLastReadAt) {
+  public record ReadStatusUpdateRequest(Instant newLastReadAt) {
 
   }
 
   @Builder
   public record FindReadStatusResponse(
       UUID id,
-      LocalDateTime createdAt,
-      LocalDateTime updatedAt,
       UUID userId,
       UUID channelId,
-      LocalDateTime lastReadAt
+      Instant lastReadAt
   ) {
 
   }
