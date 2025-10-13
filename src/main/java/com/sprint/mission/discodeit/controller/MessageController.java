@@ -2,9 +2,11 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.MessageDTO;
+import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
+import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.service.MessageService;
@@ -79,7 +81,7 @@ public class MessageController {
           try {
             return BinaryContentCreateCommand.builder()
                 .fileName(file.getOriginalFilename())
-                .fileType(ContentType.ETC)
+                .contentType(ContentType.ETC)
                 .data(file.getBytes())
                 .build();
           } catch (IOException e) {
@@ -89,36 +91,41 @@ public class MessageController {
 
     MessageDTO.CreateMessageCommand createMessageCommand = MessageDTO.CreateMessageCommand.builder()
         .content(messageCreateRequest.content())
-        .isReply(messageCreateRequest.isReply())
-        .parentMessageId(messageCreateRequest.parentMessageId())
         .channelId(messageCreateRequest.channelId())
         .userId(messageCreateRequest.authorId())
         .binaryContentList(binaryContentList)
         .build();
 
-    messageService.createMessage(createMessageCommand);
+    MessageDTO.Message message = messageService.createMessage(createMessageCommand);
 
-    MessageDTO.FindMessageResult message = messageService.findMessagesByAuthorId(
-            messageCreateRequest.authorId()).stream()
-        .filter(message1 -> message1.channelId().equals(messageCreateRequest.channelId()))
-        .sorted((message1, message2) -> message2.createdAt().compareTo(message1.createdAt()))
-        .limit(1)
-        .findFirst()
-        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
-
-    return ResponseEntity.status(201).body(MessageApiDTO.FindMessageResponse.builder()
-        .id(message.id())
-        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()),
-            ZoneId.systemDefault()))
-        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()),
-            ZoneId.systemDefault()))
-        .content(message.content())
-        .isReply(message.isReply())
-        .parentMessageId(message.parentMessageId())
-        .channelId(message.channelId())
-        .userId(message.userId())
-        .binaryContentList(message.binaryContentList())
-        .build());
+    return ResponseEntity.status(HttpStatus.CREATED).body(
+        MessageApiDTO.FindMessageResponse.builder()
+            .id(message.getId())
+            .createdAt(message.getCreatedAt())
+            .updatedAt(message.getUpdatedAt())
+            .content(message.getContent())
+            .channelId(message.getChannelId())
+            .author(UserApiDTO.FindUserResponse.builder()
+                .id(message.getAuthor().getId())
+                .username(message.getAuthor().getUsername())
+                .email(message.getAuthor().getEmail())
+                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(message.getAuthor().getProfileId().getId())
+                    .fileName(message.getAuthor().getProfileId().getFileName())
+                    .size(message.getAuthor().getProfileId().getSize())
+                    .contentType(message.getAuthor().getProfileId().getContentType())
+                    .build())
+                .isOnline(message.getAuthor().getIsOnline())
+                .build())
+            .attachments(message.getAttachments().stream().map(attachment ->
+                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(attachment.getId())
+                    .fileName(attachment.getFileName())
+                    .size(attachment.getSize())
+                    .contentType(attachment.getContentType())
+                    .build()
+            ).toList())
+            .build());
 
   }
 
@@ -164,27 +171,39 @@ public class MessageController {
     MessageDTO.UpdateMessageCommand updateMessageCommand = MessageDTO.UpdateMessageCommand.builder()
         .id(messageId)
         .content(messageUpdateRequest.content())
-        .isReply(messageUpdateRequest.isReply())
-        .parentMessageId(messageUpdateRequest.parentMessageId())
         .build();
 
     messageService.updateMessage(updateMessageCommand);
 
-    MessageDTO.FindMessageResult message = messageService.findMessageById(messageId)
+    MessageDTO.Message message = messageService.findMessageById(messageId)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such message."));
 
-    return ResponseEntity.ok().body(MessageApiDTO.FindMessageResponse.builder()
-        .id(message.id())
-        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()),
-            ZoneId.systemDefault()))
-        .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()),
-            ZoneId.systemDefault()))
-        .content(message.content())
-        .isReply(message.isReply())
-        .parentMessageId(message.parentMessageId())
-        .channelId(message.channelId())
-        .userId(message.userId())
-        .binaryContentList(message.binaryContentList())
+    return ResponseEntity.ok(MessageApiDTO.FindMessageResponse.builder()
+        .id(message.getId())
+        .createdAt(message.getCreatedAt())
+        .updatedAt(message.getUpdatedAt())
+        .content(message.getContent())
+        .channelId(message.getChannelId())
+        .author(UserApiDTO.FindUserResponse.builder()
+            .id(message.getAuthor().getId())
+            .username(message.getAuthor().getUsername())
+            .email(message.getAuthor().getEmail())
+            .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(message.getAuthor().getProfileId().getId())
+                .fileName(message.getAuthor().getProfileId().getFileName())
+                .size(message.getAuthor().getProfileId().getSize())
+                .contentType(message.getAuthor().getProfileId().getContentType())
+                .build())
+            .isOnline(message.getAuthor().getIsOnline())
+            .build())
+        .attachments(message.getAttachments().stream().map(attachment ->
+            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(attachment.getId())
+                .fileName(attachment.getFileName())
+                .size(attachment.getSize())
+                .contentType(attachment.getContentType())
+                .build()
+        ).toList())
         .build());
 
   }
@@ -243,21 +262,35 @@ public class MessageController {
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId) {
 
-    List<MessageDTO.FindMessageResult> messages = messageService.findMessagesByChannelId(channelId);
+    List<MessageDTO.Message> messageList = messageService.findMessagesByChannelId(channelId);
 
-    return ResponseEntity.ok(messages.stream()
+    return ResponseEntity.ok(messageList.stream()
         .map(message -> MessageApiDTO.FindMessageResponse.builder()
-            .id(message.id())
-            .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.createdAt()),
-                ZoneId.systemDefault()))
-            .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(message.updatedAt()),
-                ZoneId.systemDefault()))
-            .content(message.content())
-            .isReply(message.isReply())
-            .parentMessageId(message.parentMessageId())
-            .channelId(message.channelId())
-            .userId(message.userId())
-            .binaryContentList(message.binaryContentList())
+            .id(message.getId())
+            .createdAt(message.getCreatedAt())
+            .updatedAt(message.getUpdatedAt())
+            .content(message.getContent())
+            .channelId(message.getChannelId())
+            .author(UserApiDTO.FindUserResponse.builder()
+                .id(message.getAuthor().getId())
+                .username(message.getAuthor().getUsername())
+                .email(message.getAuthor().getEmail())
+                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(message.getAuthor().getProfileId().getId())
+                    .fileName(message.getAuthor().getProfileId().getFileName())
+                    .size(message.getAuthor().getProfileId().getSize())
+                    .contentType(message.getAuthor().getProfileId().getContentType())
+                    .build())
+                .isOnline(message.getAuthor().getIsOnline())
+                .build())
+            .attachments(message.getAttachments().stream().map(attachment ->
+                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(attachment.getId())
+                    .fileName(attachment.getFileName())
+                    .size(attachment.getSize())
+                    .contentType(attachment.getContentType())
+                    .build()
+            ).toList())
             .build())
         .toList());
 

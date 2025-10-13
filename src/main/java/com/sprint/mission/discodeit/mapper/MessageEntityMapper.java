@@ -12,14 +12,14 @@ public interface MessageEntityMapper {
   @Mappings({
       @Mapping(target = "channelId", source = "channel.id"),
       @Mapping(target = "author", source = "author"),
-      @Mapping(target = "attachments", source = "attachmentIds")
+      @Mapping(target = "attachments", source = "attachments")
   })
   MessageDTO.Message entityToMessage(MessageEntity messageEntity);
 
   @Mappings({
       @Mapping(target = "channel.id", source = "channelId"),
       @Mapping(target = "author", source = "author"),
-      @Mapping(target = "attachmentIds", source = "attachments")
+      @Mapping(target = "attachments", source = "attachments")
   })
   MessageEntity messageToEntity(MessageDTO.Message messageDTO);
 
