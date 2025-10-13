@@ -4,6 +4,8 @@ import com.sprint.mission.discodeit.entity.MessageEntity;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,6 +21,8 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
 
   @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.channel.id = :channelId")
   List<MessageEntity> findByChannelId(UUID channelId);
+
+  Page<MessageEntity> findAll(Pageable pageable);
 
   void deleteById(UUID id);
 
