@@ -20,7 +20,7 @@ public interface ChannelService {
 
     List<ChannelDTO.Channel> findAllChannels();
 
-    void updateChannel(ChannelDTO.UpdateChannelCommand request);
+    Optional<ChannelDTO.Channel> updateChannel(ChannelDTO.UpdateChannelCommand request);
 
     void deleteChannelById(UUID id);
 

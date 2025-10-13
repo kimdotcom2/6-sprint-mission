@@ -2,9 +2,9 @@ package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sprint.mission.discodeit.enums.ChannelType;
+import java.time.Instant;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,21 +12,16 @@ public class ChannelApiDTO {
 
     @Builder
     public record PublicChannelCreateRequest(
-        @JsonProperty("name")
-        String channelName,
+        String name,
         String category,
-        boolean isVoiceChannel,
         String description) {
 
     }
 
     @Builder
     public record PrivateChannelCreateRequest(
-        //ChannelType type,
-        //boolean isVoiceChannel,
         @JsonProperty("participantIds")
-        List<UUID> userIdList
-        //String description
+        List<UUID> participantIdList
     ) {
 
     }
@@ -34,9 +29,8 @@ public class ChannelApiDTO {
     @Builder
     public record ChannelUpdateRequest(
         @JsonProperty("newName")
-        String channelName,
+        String name,
         String category,
-        boolean isVoiceChannel,
         @JsonProperty("newDescription")
         String description) {
 
@@ -45,16 +39,14 @@ public class ChannelApiDTO {
     @Builder
     public record FindChannelResponse(
             UUID id,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt,
-            ChannelType category,
-            boolean isVoiceChannel,
-            String type,
+            Instant createdAt,
+            Instant updatedAt,
+            ChannelType type,
             @JsonProperty("name")
-            String channelName,
+            String name,
             String description,
             @JsonProperty("participantIds")
-            List<UUID> userIdList,
+            List<UUID> participantIdList,
             Long recentMessageTime
     ) {
 

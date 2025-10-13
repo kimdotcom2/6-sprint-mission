@@ -82,32 +82,20 @@ public class ChannelController {
             @RequestBody @Valid ChannelApiDTO.PublicChannelCreateRequest publicChannelCreateRequest) {
 
         ChannelDTO.CreatePublicChannelCommand createPublicChannelCommand = ChannelDTO.CreatePublicChannelCommand.builder()
-                .channelName(publicChannelCreateRequest.channelName())
-                //.type(ChannelType.valueOf(publicChannelCreateRequest.type()))
-                .category(ChannelType.PUBLIC)
-                //.isVoiceChannel(publicChannelCreateRequest.isVoiceChannel())
-                .isVoiceChannel(false)
+                .name(publicChannelCreateRequest.name())
                 .description(publicChannelCreateRequest.description())
                 .build();
 
-        channelService.createChannel(createPublicChannelCommand);
-
-        ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
-            .filter(
-                channel -> !channel.isPrivate() && publicChannelCreateRequest.channelName().equals(channel.name()))
-            .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channels"));
+        ChannelDTO.Channel channel = channelService.createChannel(createPublicChannelCommand);
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
-                .id(findChannelResult.id())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.type())
-                .isVoiceChannel(findChannelResult.isVoiceChannel())
-                .type("PUBLIC")
-                .channelName(findChannelResult.name())
-                .description(findChannelResult.description())
-                .userIdList(new ArrayList<>())
+                .id(channel.getId())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
+                .type(channel.getType())
+                .name(channel.getName())
+                .description(channel.getDescription())
+                .participantIdList(new ArrayList<>())
                 .build());
 
     }
@@ -144,31 +132,22 @@ public class ChannelController {
             @RequestBody @Valid PrivateChannelCreateRequest privateChannelCreateRequest) {
 
         ChannelDTO.CreatePrivateChannelCommand createPrivateChannelCommand = ChannelDTO.CreatePrivateChannelCommand.builder()
-                .category(ChannelType.PRIVATE)
-                .isVoiceChannel(false)
-                .userIdList(privateChannelCreateRequest.userIdList())
+                .type(ChannelType.PRIVATE)
+                .participants(privateChannelCreateRequest.participantIdList())
                 .description("DM")
                 .build();
 
-        channelService.createPrivateChannel(createPrivateChannelCommand);
-
-        ChannelDTO.FindChannelResult findChannelResult = channelService.findAllChannels().stream()
-            .filter(channel1 -> channel1.userIdList().equals(privateChannelCreateRequest.userIdList()))
-            .min((channel1, channel2) -> channel2.createdAt().compareTo(channel1.createdAt()))
-                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channels"));
+        ChannelDTO.Channel channel = channelService.createPrivateChannel(createPrivateChannelCommand);
 
         return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
-                .id(findChannelResult.id())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.type())
-                .isVoiceChannel(findChannelResult.isVoiceChannel())
-                .type("PRIVATE")
-                .channelName(findChannelResult.name())
-                .description(findChannelResult.description())
-                .userIdList(findChannelResult.userIdList())
+                .id(channel.getId())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
+                .type(channel.getType())
+                .name(channel.getName())
+                .description(channel.getDescription())
+                .participantIdList(channel.getParticipants().stream().map(participant -> participant.getId()).toList())
                 .build());
-
     }
 
     /**
@@ -212,27 +191,23 @@ public class ChannelController {
 
         ChannelDTO.UpdateChannelCommand updateChannelCommand = ChannelDTO.UpdateChannelCommand.builder()
                 .id(channelId)
-                .channelName(channelUpdateRequest.channelName())
-                .category(ChannelType.valueOf(channelUpdateRequest.category()))
-                .isVoiceChannel(channelUpdateRequest.isVoiceChannel())
+                .name(channelUpdateRequest.name())
+                .type(ChannelType.valueOf(channelUpdateRequest.category()))
                 .description(channelUpdateRequest.description())
                 .build();
 
-        channelService.updateChannel(updateChannelCommand);
+        ChannelDTO.Channel channel = channelService.updateChannel(updateChannelCommand)
+            .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel with id: " + channelId));
 
-        ChannelDTO.FindChannelResult findChannelResult = channelService.findChannelById(channelId)
-                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
-
-        return ResponseEntity.ok(ChannelApiDTO.FindChannelResponse.builder()
-                .id(findChannelResult.id())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(findChannelResult.updatedAt()), ZoneId.systemDefault()))
-                .category(findChannelResult.type())
-                .isVoiceChannel(findChannelResult.isVoiceChannel())
-                .type("PUBLIC")
-                .channelName(findChannelResult.name())
-                .description(findChannelResult.description())
-                .userIdList(findChannelResult.userIdList())
+        return ResponseEntity.status(200).body(ChannelApiDTO.FindChannelResponse.builder()
+                .id(channel.getId())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
+                .type(channel.getType())
+                .name(channel.getName())
+                .description(channel.getDescription())
+                .participantIdList(channel.getParticipants().stream().map(participant -> participant.getId()).toList())
+                .recentMessageTime(channel.getLastMessageAt() != null ? channel.getLastMessageAt().toEpochMilli() : null)
                 .build());
 
     }
@@ -293,24 +268,22 @@ public class ChannelController {
 
         return channelService.findChannelsByUserId(userId).stream()
             .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
-                .id(channel.id())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.createdAt()), ZoneId.systemDefault()))
-                .updatedAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(channel.updatedAt()), ZoneId.systemDefault()))
-                .category(channel.type())
-                .isVoiceChannel(channel.isVoiceChannel())
-                .type(channel.isPrivate() ? "PRIVATE" : "PUBLIC")
-                .channelName(channel.name())
-                .description(channel.description())
-                .userIdList(channel.userIdList())
+                .id(channel.getId())
+                .createdAt(channel.getCreatedAt())
+                .updatedAt(channel.getUpdatedAt())
+                .type(channel.getType())
+                .name(channel.getName())
+                .description(channel.getDescription())
+                .participantIdList(channel.getParticipants().stream().map(participant -> participant.getId()).toList())
                 .build())
             .toList();
     }
 
     @ExceptionHandler(NoSuchDataBaseRecordException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
         NoSuchDataBaseRecordException e) {
 
-      log.error("NoSuchDataException occurred", e);
+      log.error("NoSuchDataBaseRecordException occurred", e);
 
       return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())

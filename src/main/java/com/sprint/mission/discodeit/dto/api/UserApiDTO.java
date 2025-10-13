@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
@@ -9,8 +10,8 @@ public class UserApiDTO {
 
     @Builder
     public record UserCreateRequest(
-            @JsonProperty("username")
-            String nickname,
+
+            String username,
             String email,
             String password,
             String description) {
@@ -20,7 +21,7 @@ public class UserApiDTO {
     @Builder
     public record UserUpdateRequest(
             @JsonProperty("newUsername")
-            String nickname,
+            String username,
             @JsonProperty("newEmail")
             String email,
             String currentPassword,
@@ -30,17 +31,16 @@ public class UserApiDTO {
     }
 
     @Builder
-    public record UserStatusUpdateRequest(LocalDateTime newLastActiveAt) {
+    public record UserStatusUpdateRequest(Instant newLastActiveAt) {
 
     }
 
     @Builder
     public record FindUserResponse(
             UUID id,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt,
-            @JsonProperty("username")
-            String nickname,
+            Instant createdAt,
+            Instant updatedAt,
+            String username,
             String email,
             @JsonProperty("profileId")
             UUID profileImageId,
@@ -53,11 +53,11 @@ public class UserApiDTO {
     @Builder
     public record CheckUserOnline(
         UUID id,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt,
+        Instant createdAt,
+        Instant updatedAt,
         UUID userId,
         @JsonProperty("lastActiveAt")
-        LocalDateTime lastOnlineAt,
+        Instant lastOnlineAt,
         boolean isOnline
     ) {
 

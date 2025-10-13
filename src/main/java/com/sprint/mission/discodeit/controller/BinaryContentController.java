@@ -66,16 +66,16 @@ public class BinaryContentController {
             @Parameter(description = "바이너리 콘텐츠 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
             @PathVariable("binaryContentId") UUID id) {
 
-        BinaryContentDTO.ReadBinaryContentResult readBinaryContentResult = binaryContentService.findBinaryContentById(id)
+        BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(id)
             .orElseThrow(() -> new NoSuchDataBaseRecordException("BinaryContent not found"));
 
         return ResponseEntity.ok(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(readBinaryContentResult.id())
-                .fileName(readBinaryContentResult.fileName())
-                .size(readBinaryContentResult.size())
-                .data(readBinaryContentResult.data())
-                .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(readBinaryContentResult.createdAt()), ZoneId.systemDefault()))
-                .fileType(readBinaryContentResult.contentType())
+                .id(readBinaryContentResult.getId())
+                .fileName(readBinaryContentResult.getFileName())
+                .size(readBinaryContentResult.getSize())
+                .data(readBinaryContentResult.getBytes())
+                .createdAt(readBinaryContentResult.getCreatedAt())
+                .contentType(readBinaryContentResult.getContentType())
                 .build());
 
     }
@@ -111,22 +111,22 @@ public class BinaryContentController {
 
         return ResponseEntity.ok(binaryContentService.findAllBinaryContentByIdIn(idList).stream()
                 .map(binaryContent -> BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                        .id(binaryContent.id())
-                        .createdAt(LocalDateTime.ofInstant(Instant.ofEpochMilli(binaryContent.createdAt()), ZoneId.systemDefault()))
-                        .fileName(binaryContent.fileName())
-                        .size(binaryContent.size())
-                        .data(binaryContent.data())
-                        .fileType(binaryContent.contentType())
+                        .id(binaryContent.getId())
+                        .createdAt(binaryContent.getCreatedAt())
+                        .fileName(binaryContent.getFileName())
+                        .size(binaryContent.getSize())
+                        .data(binaryContent.getBytes())
+                        .contentType(binaryContent.getContentType())
                         .build())
                 .toList());
 
     }
 
     @ExceptionHandler(NoSuchDataBaseRecordException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
         NoSuchDataBaseRecordException e) {
 
-      log.error("NoSuchDataException occurred", e);
+      log.error("NoSuchDataBaseRecordException occurred", e);
 
       return ResponseEntity.status(404).body(ErrorApiDTO.ErrorApiResponse.builder()
                 .code(HttpStatus.NOT_FOUND.value())

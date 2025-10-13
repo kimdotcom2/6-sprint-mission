@@ -53,7 +53,7 @@ public class BasicChannelService implements ChannelService {
                 .description(request.description())
                 .build();
 
-        List<ReadStatusEntity> readStatusEntityList = request.userIdList().stream()
+        List<ReadStatusEntity> readStatusEntityList = request.participants().stream()
                 .map(userId -> ReadStatusEntity.builder()
                   .lastReadAt(Instant.now())
                   .build())
@@ -111,7 +111,7 @@ public class BasicChannelService implements ChannelService {
 
     @Transactional
     @Override
-    public void updateChannel(ChannelDTO.UpdateChannelCommand request) {
+    public Optional<ChannelDTO.Channel> updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
         if (!channelRepository.existById(request.id())) {
             throw new NoSuchDataBaseRecordException("No such channel.");
@@ -129,7 +129,8 @@ public class BasicChannelService implements ChannelService {
         }
 
         updatedChannelEntity.update(request.name(), request.description());
-        channelRepository.save(updatedChannelEntity);
+
+        return Optional.ofNullable(channelEntityMapper.entityToChannel(channelRepository.save(updatedChannelEntity)));
 
     }
 

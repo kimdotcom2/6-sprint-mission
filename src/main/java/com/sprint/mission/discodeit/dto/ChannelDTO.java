@@ -27,18 +27,18 @@ public class ChannelDTO {
   }
 
   @Builder
-  public record CreatePublicChannelCommand(String name, ChannelType type, boolean isVoiceChannel, String description) {
+  public record CreatePublicChannelCommand(String name, ChannelType type, String description) {
 
   }
 
   @Builder
-  public record CreatePrivateChannelCommand(ChannelType type, boolean isVoiceChannel, List<UUID> userIdList, String description) {
+  public record CreatePrivateChannelCommand(ChannelType type, List<UUID> participants, String description) {
 
   }
 
   //channel update를 위한 Request DTO
   @Builder
-  public record UpdateChannelCommand(UUID id, String name, ChannelType type, boolean isVoiceChannel, List<UUID> userIdList, String description) {
+  public record UpdateChannelCommand(UUID id, String name, ChannelType type, List<UUID> participants, String description) {
 
   }
 

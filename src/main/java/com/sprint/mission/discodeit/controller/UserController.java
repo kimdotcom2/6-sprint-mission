@@ -85,7 +85,7 @@ public class UserController {
         throws IOException {
 
         UserDTO.CreateUserCommand createUserCommand = UserDTO.CreateUserCommand.builder()
-                .nickname(userCreateRequest.nickname())
+                .nickname(userCreateRequest.username())
                 .email(userCreateRequest.email())
                 .password(userCreateRequest.password())
                 .description(userCreateRequest.description())
@@ -158,7 +158,7 @@ public class UserController {
 
         UserDTO.UpdateUserCommand updateUserCommand = UserDTO.UpdateUserCommand.builder()
                 .id(userId)
-                .nickname(userUpdateRequest.nickname())
+                .nickname(userUpdateRequest.username())
                 .email(userUpdateRequest.email())
                 .currentPassword(userUpdateRequest.currentPassword())
                 .newPassword(userUpdateRequest.newPassword())

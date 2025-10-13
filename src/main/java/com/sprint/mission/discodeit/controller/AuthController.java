@@ -13,9 +13,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,31 +73,30 @@ public class AuthController {
             @RequestBody @Valid AuthApiDTO.LoginRequest loginRequest) {
 
         authService.login(UserDTO.LoginCommand.builder()
-                .nickname(loginRequest.nickname())
+                .username(loginRequest.username())
                 .password(loginRequest.password())
                 .build());
 
-        UserDTO.FindUserResult findUserResult = userService.findUserByUsername(loginRequest.nickname())
+        UserDTO.User findUserResult = userService.findUserByUsername(loginRequest.username())
             .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user"));
 
         UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-            .id(findUserResult.id())
-            .nickname(findUserResult.nickname())
-            .email(findUserResult.email())
-            .profileImageId(findUserResult.profileImageId())
-            .isOnline(findUserResult.isOnline())
-            .createdAt(
-                LocalDateTime.ofInstant(Instant.ofEpochMilli(findUserResult.createdAt()), ZoneId.systemDefault()))
+            .id(findUserResult.getId())
+            .username(findUserResult.getUsername())
+            .email(findUserResult.getEmail())
+            .profileImageId(findUserResult.getProfileId().getId())
+            .isOnline(findUserResult.getIsOnline())
+            .createdAt(findUserResult.getCreatedAt())
             .build();
 
         return ResponseEntity.ok(response);
     }
 
     @ExceptionHandler(NoSuchDataBaseRecordException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataException(
+    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
         NoSuchDataBaseRecordException e) {
 
-      log.error("NoSuchDataException occurred", e);
+      log.error("NoSuchDataBaseRecordException occurred", e);
 
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
             .code(HttpStatus.NOT_FOUND.value())
