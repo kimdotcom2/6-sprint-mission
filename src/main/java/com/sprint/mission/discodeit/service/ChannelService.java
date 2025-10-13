@@ -8,20 +8,20 @@ import java.util.UUID;
 
 public interface ChannelService {
 
-    ChannelDTO.Channel createChannel(ChannelDTO.CreatePublicChannelCommand request);
+  ChannelDTO.Channel createChannel(ChannelDTO.CreatePublicChannelCommand request);
 
-    ChannelDTO.Channel createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request);
+  ChannelDTO.Channel createPrivateChannel(ChannelDTO.CreatePrivateChannelCommand request);
 
-    boolean existChannelById(UUID id);
+  boolean existChannelById(UUID id);
 
-    Optional<ChannelDTO.Channel> findChannelById(UUID id);
+  Optional<ChannelDTO.Channel> findChannelById(UUID id);
 
-    List<ChannelDTO.Channel> findChannelsByUserId(UUID userId);
+  List<ChannelDTO.Channel> findChannelsByUserId(UUID userId);
 
-    List<ChannelDTO.Channel> findAllChannels();
+  List<ChannelDTO.Channel> findAllChannels();
 
-    Optional<ChannelDTO.Channel> updateChannel(ChannelDTO.UpdateChannelCommand request);
+  Optional<ChannelDTO.Channel> updateChannel(ChannelDTO.UpdateChannelCommand request);
 
-    void deleteChannelById(UUID id);
+  void deleteChannelById(UUID id);
 
 }

@@ -17,15 +17,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public abstract class BaseEntity{
+public abstract class BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(updatable = false, nullable = false)
-    private UUID id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  @Column(updatable = false, nullable = false)
+  private UUID id;
 
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private Instant createdAt;
+  @CreatedDate
+  @Column(updatable = false, nullable = false)
+  private Instant createdAt;
 
 }

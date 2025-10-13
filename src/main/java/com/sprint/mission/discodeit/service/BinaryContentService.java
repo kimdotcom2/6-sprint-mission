@@ -9,16 +9,16 @@ import java.util.UUID;
 
 public interface BinaryContentService {
 
-    BinaryContentDTO.BinaryContent createBinaryContent(BinaryContentCreateCommand request);
+  BinaryContentDTO.BinaryContent createBinaryContent(BinaryContentCreateCommand request);
 
-    boolean existBinaryContentById(UUID id);
+  boolean existBinaryContentById(UUID id);
 
-    Optional<BinaryContentDTO.BinaryContent> findBinaryContentById(UUID id);
+  Optional<BinaryContentDTO.BinaryContent> findBinaryContentById(UUID id);
 
-    List<BinaryContentDTO.BinaryContent> findAllBinaryContentByIdIn(List<UUID> uuidList);
+  List<BinaryContentDTO.BinaryContent> findAllBinaryContentByIdIn(List<UUID> uuidList);
 
-    List<BinaryContentDTO.BinaryContent> findAllBinaryContent();
+  List<BinaryContentDTO.BinaryContent> findAllBinaryContent();
 
-    void deleteBinaryContentById(UUID id);
+  void deleteBinaryContentById(UUID id);
 
 }

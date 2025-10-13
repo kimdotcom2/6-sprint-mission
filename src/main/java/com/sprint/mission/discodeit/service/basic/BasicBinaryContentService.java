@@ -21,114 +21,114 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BasicBinaryContentService implements BinaryContentService {
 
-    private final BinaryContentRepository binaryContentRepository;
-    private final BinaryContentStorage binaryContentStorage;
-    private final BinaryContentEntityMapper binaryContentEntityMapper;
+  private final BinaryContentRepository binaryContentRepository;
+  private final BinaryContentStorage binaryContentStorage;
+  private final BinaryContentEntityMapper binaryContentEntityMapper;
 
-    @Transactional
-    @Override
-    public BinaryContentDTO.BinaryContent createBinaryContent(BinaryContentCreateCommand request) {
+  @Transactional
+  @Override
+  public BinaryContentDTO.BinaryContent createBinaryContent(BinaryContentCreateCommand request) {
 
-        if (request.data() == null) {
-            throw new IllegalArgumentException("Data must not be null");
-        }
-
-        if (request.contentType() == null) {
-            throw new IllegalArgumentException("FileType must not be null");
-        }
-
-        BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
-            .fileName(request.fileName())
-            .size((long) request.data().length)
-            .contentType(request.contentType())
-            .build();
-
-        binaryContentEntity = binaryContentRepository.save(binaryContentEntity);
-        binaryContentStorage.put(binaryContentEntity.getId(), request.data());
-
-        return binaryContentEntityMapper.entityToBinaryContent(binaryContentEntity);
-
+    if (request.data() == null) {
+      throw new IllegalArgumentException("Data must not be null");
     }
 
-    @Override
-    public boolean existBinaryContentById(UUID id) {
-        return binaryContentRepository.existById(id);
+    if (request.contentType() == null) {
+      throw new IllegalArgumentException("FileType must not be null");
     }
 
-    @Override
-    public Optional<BinaryContentDTO.BinaryContent> findBinaryContentById(UUID id) {
+    BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
+        .fileName(request.fileName())
+        .size((long) request.data().length)
+        .contentType(request.contentType())
+        .build();
 
-        BinaryContentEntity binaryContentEntity = binaryContentRepository.findById(id)
-                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such binary content"));
+    binaryContentEntity = binaryContentRepository.save(binaryContentEntity);
+    binaryContentStorage.put(binaryContentEntity.getId(), request.data());
 
-        byte[] bytes = null;
+    return binaryContentEntityMapper.entityToBinaryContent(binaryContentEntity);
 
-        try {
-          bytes = binaryContentStorage.get(binaryContentEntity.getId()).readAllBytes();
-        } catch (IOException e) {
-          throw new RuntimeException(e);
-        }
+  }
 
-      return Optional.ofNullable(BinaryContentDTO.BinaryContent.builder()
-                .id(binaryContentEntity.getId())
-                .fileName(binaryContentEntity.getFileName())
-                .size(binaryContentEntity.getSize())
-                .createdAt(binaryContentEntity.getCreatedAt())
-                .contentType(binaryContentEntity.getContentType())
-                .bytes(bytes)
-                .build());
+  @Override
+  public boolean existBinaryContentById(UUID id) {
+    return binaryContentRepository.existById(id);
+  }
+
+  @Override
+  public Optional<BinaryContentDTO.BinaryContent> findBinaryContentById(UUID id) {
+
+    BinaryContentEntity binaryContentEntity = binaryContentRepository.findById(id)
+        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such binary content"));
+
+    byte[] bytes = null;
+
+    try {
+      bytes = binaryContentStorage.get(binaryContentEntity.getId()).readAllBytes();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
 
-    @Override
-    public List<BinaryContentDTO.BinaryContent> findAllBinaryContentByIdIn(List<UUID> uuidList) {
-        return binaryContentRepository.findAllByIdIn(uuidList).stream()
-                .map(binaryContent -> {
-                  try {
-                    return BinaryContentDTO.BinaryContent.builder()
-                            .id(binaryContent.getId())
-                            .fileName(binaryContent.getFileName())
-                            .size(binaryContent.getSize())
-                            .createdAt(binaryContent.getCreatedAt())
-                            .contentType(binaryContent.getContentType())
-                            .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
-                            .build();
-                  } catch (IOException e) {
-                    throw new NoSuchDataBaseRecordException("No such binary content");
-                  }
-                })
-                .toList();
-    }
+    return Optional.ofNullable(BinaryContentDTO.BinaryContent.builder()
+        .id(binaryContentEntity.getId())
+        .fileName(binaryContentEntity.getFileName())
+        .size(binaryContentEntity.getSize())
+        .createdAt(binaryContentEntity.getCreatedAt())
+        .contentType(binaryContentEntity.getContentType())
+        .bytes(bytes)
+        .build());
+  }
 
-    @Override
-    public List<BinaryContentDTO.BinaryContent> findAllBinaryContent() {
-        return binaryContentRepository.findAll().stream()
-                .map(binaryContent -> {
-                  try {
-                    return BinaryContentDTO.BinaryContent.builder()
-                            .id(binaryContent.getId())
-                            .fileName(binaryContent.getFileName())
-                            .size(binaryContent.getSize())
-                            .createdAt(binaryContent.getCreatedAt())
-                            .contentType(binaryContent.getContentType())
-                            .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
-                            .build();
-                  } catch (IOException e) {
-                    throw new NoSuchDataBaseRecordException("No such binary content");
-                  }
-                })
-                .toList();
-    }
-
-    @Transactional
-    @Override
-    public void deleteBinaryContentById(UUID id) {
-
-        if (!binaryContentRepository.existById(id)) {
+  @Override
+  public List<BinaryContentDTO.BinaryContent> findAllBinaryContentByIdIn(List<UUID> uuidList) {
+    return binaryContentRepository.findAllByIdIn(uuidList).stream()
+        .map(binaryContent -> {
+          try {
+            return BinaryContentDTO.BinaryContent.builder()
+                .id(binaryContent.getId())
+                .fileName(binaryContent.getFileName())
+                .size(binaryContent.getSize())
+                .createdAt(binaryContent.getCreatedAt())
+                .contentType(binaryContent.getContentType())
+                .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
+                .build();
+          } catch (IOException e) {
             throw new NoSuchDataBaseRecordException("No such binary content");
-        }
+          }
+        })
+        .toList();
+  }
 
-        binaryContentRepository.deleteById(id);
-        binaryContentStorage.deleteById(id);
+  @Override
+  public List<BinaryContentDTO.BinaryContent> findAllBinaryContent() {
+    return binaryContentRepository.findAll().stream()
+        .map(binaryContent -> {
+          try {
+            return BinaryContentDTO.BinaryContent.builder()
+                .id(binaryContent.getId())
+                .fileName(binaryContent.getFileName())
+                .size(binaryContent.getSize())
+                .createdAt(binaryContent.getCreatedAt())
+                .contentType(binaryContent.getContentType())
+                .bytes(binaryContentStorage.get(binaryContent.getId()).readAllBytes())
+                .build();
+          } catch (IOException e) {
+            throw new NoSuchDataBaseRecordException("No such binary content");
+          }
+        })
+        .toList();
+  }
 
+  @Transactional
+  @Override
+  public void deleteBinaryContentById(UUID id) {
+
+    if (!binaryContentRepository.existById(id)) {
+      throw new NoSuchDataBaseRecordException("No such binary content");
     }
+
+    binaryContentRepository.deleteById(id);
+    binaryContentStorage.deleteById(id);
+
+  }
 }

@@ -13,20 +13,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BasicAuthService implements AuthService {
 
-    private final UserRepository userRepository;
-    private final SecurityUtil securityUtil = new SecurityUtil();
+  private final UserRepository userRepository;
+  private final SecurityUtil securityUtil = new SecurityUtil();
 
-    @Override
-    public UserEntity login(UserDTO.LoginCommand loginCommand) {
+  @Override
+  public UserEntity login(UserDTO.LoginCommand loginCommand) {
 
-        UserEntity userEntity = userRepository.findByUsername(loginCommand.username())
-                .orElseThrow(() -> new NoSuchDataBaseRecordException("사용자를 찾을 수 없음"));
+    UserEntity userEntity = userRepository.findByUsername(loginCommand.username())
+        .orElseThrow(() -> new NoSuchDataBaseRecordException("사용자를 찾을 수 없음"));
 
-        if (userEntity.getPassword().equals(securityUtil.hashPassword(loginCommand.password()))) {
-            return userEntity;
-        } else {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않음");
-        }
-
+    if (userEntity.getPassword().equals(securityUtil.hashPassword(loginCommand.password()))) {
+      return userEntity;
+    } else {
+      throw new IllegalArgumentException("비밀번호가 일치하지 않음");
     }
+
+  }
 }

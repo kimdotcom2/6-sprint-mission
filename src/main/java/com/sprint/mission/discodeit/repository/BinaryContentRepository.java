@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BinaryContentRepository extends JpaRepository<BinaryContentEntity, UUID> {
 
-    boolean existById(UUID id);
+  boolean existById(UUID id);
 
-    Optional<BinaryContentEntity> findById(UUID id);
+  Optional<BinaryContentEntity> findById(UUID id);
 
-    List<BinaryContentEntity> findAllByIdIn(List<UUID> uuidList);
+  List<BinaryContentEntity> findAllByIdIn(List<UUID> uuidList);
 
-    void deleteById(UUID id);
+  void deleteById(UUID id);
 
-    void deleteAllByIdIn(Collection<UUID> idList);
+  void deleteAllByIdIn(Collection<UUID> idList);
 
 }

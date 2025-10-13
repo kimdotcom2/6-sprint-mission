@@ -12,7 +12,8 @@ import lombok.RequiredArgsConstructor;
 public class MessageDTO {
 
   @Builder
-  public record CreateMessageCommand(String content, UUID channelId, UUID userId, List<BinaryContentCreateCommand> binaryContentList) {
+  public record CreateMessageCommand(String content, UUID channelId, UUID userId,
+                                     List<BinaryContentCreateCommand> binaryContentList) {
 
   }
 

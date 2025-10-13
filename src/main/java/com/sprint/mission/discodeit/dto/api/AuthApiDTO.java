@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AuthApiDTO {
 
-    public record LoginRequest(
+  public record LoginRequest(
 
-        String username,
-        String password) {
+      String username,
+      String password) {
 
-    }
+  }
 
 }

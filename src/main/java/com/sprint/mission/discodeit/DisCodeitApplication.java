@@ -17,22 +17,22 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @EnableJpaAuditing
 public class DisCodeitApplication {
 
-    static final String strongPassword = "fe5A3sad@lks^";
+  static final String strongPassword = "fe5A3sad@lks^";
 
-	public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        SpringApplication.run(DisCodeitApplication.class, args);
-        //ConfigurableApplicationContext context = SpringApplication.run(DisCodeitApplication.class, args);
+    SpringApplication.run(DisCodeitApplication.class, args);
+    //ConfigurableApplicationContext context = SpringApplication.run(DisCodeitApplication.class, args);
 
-        //UserService userService = context.getBean(UserService.class);
-        //ChannelService channelService = context.getBean(ChannelService.class);
-        //MessageService messageService = context.getBean(MessageService.class);
+    //UserService userService = context.getBean(UserService.class);
+    //ChannelService channelService = context.getBean(ChannelService.class);
+    //MessageService messageService = context.getBean(MessageService.class);
 
-        //testUserService(userService);
-        //testChannelService(channelService);
-        //testMessageService(userService, channelService, messageService);
+    //testUserService(userService);
+    //testChannelService(channelService);
+    //testMessageService(userService, channelService, messageService);
 
-	}
+  }
 
     /*public static void testUserService(UserService userService) {
 

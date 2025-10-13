@@ -15,6 +15,7 @@ public class ChannelDTO {
   @Builder
   @RequiredArgsConstructor
   public static class Channel {
+
     private UUID id;
     private Instant createdAt;
     private Instant updatedAt;
@@ -27,7 +28,7 @@ public class ChannelDTO {
   }
 
   @Builder
-  public record CreatePublicChannelCommand(String name, ChannelType type, String description) {
+  public record CreatePublicChannelCommand(String name, String description) {
 
   }
 
@@ -38,7 +39,8 @@ public class ChannelDTO {
 
   //channel update를 위한 Request DTO
   @Builder
-  public record UpdateChannelCommand(UUID id, String name, ChannelType type, List<UUID> participants, String description) {
+  public record UpdateChannelCommand(UUID id, String name, ChannelType type,
+                                     List<UUID> participants, String description) {
 
   }
 

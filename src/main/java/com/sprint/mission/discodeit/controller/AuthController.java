@@ -33,86 +33,87 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
-    private final UserService userService;
+  private final AuthService authService;
+  private final UserService userService;
 
-    /**
-     * 사용자 로그인
-     *
-     * @param loginRequest 로그인 요청 정보
-     * @return 로그인된 사용자 정보
-     */
-    @Operation(
-        summary = "사용자 로그인",
-        description = "사용자 인증을 수행하고 JWT 토큰을 발급합니다.",
-        responses = {
-            @ApiResponse(
-                responseCode = "200",
-                description = "로그인 성공",
-                content = @Content(schema = @Schema(implementation = UserApiDTO.FindUserResponse.class))
-            ),
-            @ApiResponse(
-                responseCode = "400",
-                description = "잘못된 요청",
-                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
-            ),
-            @ApiResponse(
-                responseCode = "404",
-                description = "사용자를 찾을 수 없음",
-                content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
-            )
-        }
-    )
-    @PostMapping(value = "/login")
-    public ResponseEntity<UserApiDTO.FindUserResponse> login(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "로그인 요청 정보",
-                required = true,
-                content = @Content(schema = @Schema(implementation = AuthApiDTO.LoginRequest.class))
-            )
-            @RequestBody @Valid AuthApiDTO.LoginRequest loginRequest) {
+  /**
+   * 사용자 로그인
+   *
+   * @param loginRequest 로그인 요청 정보
+   * @return 로그인된 사용자 정보
+   */
+  @Operation(
+      summary = "사용자 로그인",
+      description = "사용자 인증을 수행하고 JWT 토큰을 발급합니다.",
+      responses = {
+          @ApiResponse(
+              responseCode = "200",
+              description = "로그인 성공",
+              content = @Content(schema = @Schema(implementation = UserApiDTO.FindUserResponse.class))
+          ),
+          @ApiResponse(
+              responseCode = "400",
+              description = "잘못된 요청",
+              content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+          ),
+          @ApiResponse(
+              responseCode = "404",
+              description = "사용자를 찾을 수 없음",
+              content = @Content(schema = @Schema(implementation = ErrorApiDTO.ErrorApiResponse.class))
+          )
+      }
+  )
+  @PostMapping(value = "/login")
+  public ResponseEntity<UserApiDTO.FindUserResponse> login(
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+          description = "로그인 요청 정보",
+          required = true,
+          content = @Content(schema = @Schema(implementation = AuthApiDTO.LoginRequest.class))
+      )
+      @RequestBody @Valid AuthApiDTO.LoginRequest loginRequest) {
 
-        authService.login(UserDTO.LoginCommand.builder()
-                .username(loginRequest.username())
-                .password(loginRequest.password())
-                .build());
+    authService.login(UserDTO.LoginCommand.builder()
+        .username(loginRequest.username())
+        .password(loginRequest.password())
+        .build());
 
-        UserDTO.User findUserResult = userService.findUserByUsername(loginRequest.username())
-            .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user"));
+    UserDTO.User findUserResult = userService.findUserByUsername(loginRequest.username())
+        .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user"));
 
-        UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-            .id(findUserResult.getId())
-            .username(findUserResult.getUsername())
-            .email(findUserResult.getEmail())
-            .profileImageId(findUserResult.getProfileId().getId())
-            .isOnline(findUserResult.getIsOnline())
-            .createdAt(findUserResult.getCreatedAt())
-            .build();
+    UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
+        .id(findUserResult.getId())
+        .username(findUserResult.getUsername())
+        .email(findUserResult.getEmail())
+        .profileImageId(findUserResult.getProfileId().getId())
+        .isOnline(findUserResult.getIsOnline())
+        .createdAt(findUserResult.getCreatedAt())
+        .build();
 
-        return ResponseEntity.ok(response);
-    }
+    return ResponseEntity.ok(response);
+  }
 
-    @ExceptionHandler(NoSuchDataBaseRecordException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
-        NoSuchDataBaseRecordException e) {
+  @ExceptionHandler(NoSuchDataBaseRecordException.class)
+  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleNoSuchDataBaseRecordException(
+      NoSuchDataBaseRecordException e) {
 
-      log.error("NoSuchDataBaseRecordException occurred", e);
+    log.error("NoSuchDataBaseRecordException occurred", e);
 
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
-            .code(HttpStatus.NOT_FOUND.value())
-            .message(e.getMessage())
-            .build());
-    }
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorApiDTO.ErrorApiResponse.builder()
+        .code(HttpStatus.NOT_FOUND.value())
+        .message(e.getMessage())
+        .build());
+  }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ErrorApiDTO.ErrorApiResponse> handleIllegalArgumentException(
+      IllegalArgumentException e) {
 
-      log.error("IllegalArgumentException occurred", e);
+    log.error("IllegalArgumentException occurred", e);
 
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
-            .code(HttpStatus.BAD_REQUEST.value())
-            .message(e.getMessage())
-            .build());
-    }
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorApiDTO.ErrorApiResponse.builder()
+        .code(HttpStatus.BAD_REQUEST.value())
+        .message(e.getMessage())
+        .build());
+  }
 
 }

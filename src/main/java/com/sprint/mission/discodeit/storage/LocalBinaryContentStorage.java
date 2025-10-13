@@ -44,7 +44,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   @Override
   public UUID put(UUID id, byte[] bytes) {
 
-    try(FileOutputStream fos = new FileOutputStream(String.valueOf(resolvePath(id).toFile()));
+    try (FileOutputStream fos = new FileOutputStream(String.valueOf(resolvePath(id).toFile()));
         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
       oos.writeObject(bytes);
     } catch (IOException e) {
@@ -69,7 +69,7 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   @Override
   public InputStream get(UUID id) {
 
-    try(InputStream is = Files.newInputStream(resolvePath(id))) {
+    try (InputStream is = Files.newInputStream(resolvePath(id))) {
       return is;
     } catch (IOException e) {
       throw new NoSuchDataBaseRecordException("No such file.");
@@ -80,7 +80,8 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   @Override
   public ResponseEntity<BinaryContentDTO.BinaryContent> download(BinaryContent binaryContentDTO) {
     return ResponseEntity.ok()
-        .header("Content-Disposition", "attachment; filename=\"" + binaryContentDTO.getFileName() + "\"")
+        .header("Content-Disposition",
+            "attachment; filename=\"" + binaryContentDTO.getFileName() + "\"")
         .body(binaryContentDTO);
   }
 }

@@ -8,60 +8,58 @@ import lombok.Builder;
 
 public class UserApiDTO {
 
-    @Builder
-    public record UserCreateRequest(
+  @Builder
+  public record UserCreateRequest(
 
-            String username,
-            String email,
-            String password,
-            String description) {
+      String username,
+      String email,
+      String password,
+      String description) {
 
-    }
+  }
 
-    @Builder
-    public record UserUpdateRequest(
-            @JsonProperty("newUsername")
-            String username,
-            @JsonProperty("newEmail")
-            String email,
-            String currentPassword,
-            String newPassword
-    ) {
+  @Builder
+  public record UserUpdateRequest(
+      @JsonProperty("newUsername")
+      String username,
+      @JsonProperty("newEmail")
+      String email,
+      String currentPassword,
+      String newPassword
+  ) {
 
-    }
+  }
 
-    @Builder
-    public record UserStatusUpdateRequest(Instant newLastActiveAt) {
+  @Builder
+  public record UserStatusUpdateRequest(Instant newLastActiveAt) {
 
-    }
+  }
 
-    @Builder
-    public record FindUserResponse(
-            UUID id,
-            Instant createdAt,
-            Instant updatedAt,
-            String username,
-            String email,
-            @JsonProperty("profileId")
-            UUID profileImageId,
-            @JsonProperty("online")
-            boolean isOnline
-    ) {
+  @Builder
+  public record FindUserResponse(
+      UUID id,
+      String username,
+      String email,
+      @JsonProperty("profile")
+      BinaryContentApiDTO.ReadBinaryContentResponse profile,
+      @JsonProperty("online")
+      boolean isOnline
+  ) {
 
-    }
+  }
 
-    @Builder
-    public record CheckUserOnline(
-        UUID id,
-        Instant createdAt,
-        Instant updatedAt,
-        UUID userId,
-        @JsonProperty("lastActiveAt")
-        Instant lastOnlineAt,
-        boolean isOnline
-    ) {
+  @Builder
+  public record CheckUserOnline(
+      UUID id,
+      Instant createdAt,
+      Instant updatedAt,
+      UUID userId,
+      @JsonProperty("lastActiveAt")
+      Instant lastOnlineAt,
+      boolean isOnline
+  ) {
 
-    }
+  }
 
 
 }

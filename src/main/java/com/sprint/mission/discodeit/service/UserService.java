@@ -8,24 +8,24 @@ import java.util.UUID;
 
 public interface UserService {
 
-    UserDTO.User createUser(UserDTO.CreateUserCommand request);
+  UserDTO.User createUser(UserDTO.CreateUserCommand request);
 
-    boolean existUserById(UUID id);
+  boolean existUserById(UUID id);
 
-    boolean existUserByEmail(String email);
+  boolean existUserByEmail(String email);
 
-    boolean existUserByNickname(String nickname);
+  boolean existUserByNickname(String nickname);
 
-    Optional<UserDTO.User> findUserById(UUID id);
+  Optional<UserDTO.User> findUserById(UUID id);
 
-    Optional<UserDTO.User> findUserByEmail(String email);
+  Optional<UserDTO.User> findUserByEmail(String email);
 
-    Optional<UserDTO.User> findUserByUsername(String username);
+  Optional<UserDTO.User> findUserByUsername(String username);
 
-    List<UserDTO.User> findAllUsers();
+  List<UserDTO.User> findAllUsers();
 
-    void updateUser(UserDTO.UpdateUserCommand request);
+  void updateUser(UserDTO.UpdateUserCommand request);
 
-    void deleteUserById(UUID id);
+  void deleteUserById(UUID id);
 
 }

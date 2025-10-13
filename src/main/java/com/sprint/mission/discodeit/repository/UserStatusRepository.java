@@ -9,20 +9,20 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserStatusRepository extends JpaRepository<UserStatusEntity, UUID> {
 
-    boolean existById(UUID id);
+  boolean existById(UUID id);
 
-    boolean existByUserId(UUID userId);
+  boolean existByUserId(UUID userId);
 
-    @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id = :id")
-    Optional<UserStatusEntity> findById(UUID id);
+  @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id = :id")
+  Optional<UserStatusEntity> findById(UUID id);
 
-    @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id IN :idList")
-    Optional<UserStatusEntity> findByUserId(UUID userId);
+  @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id IN :idList")
+  Optional<UserStatusEntity> findByUserId(UUID userId);
 
-    void deleteById(UUID id);
+  void deleteById(UUID id);
 
-    void deleteByUserId(UUID userId);
+  void deleteByUserId(UUID userId);
 
-    void deleteAllByIdIn(Collection<UUID> idList);
+  void deleteAllByIdIn(Collection<UUID> idList);
 
 }

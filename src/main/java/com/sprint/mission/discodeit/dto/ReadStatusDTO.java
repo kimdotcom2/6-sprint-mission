@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class ReadStatusDTO {
 
   @Builder
-  public record CreateReadStatusCommand(UUID channelId, UUID userId, Instant lastReadTimeAt){
+  public record CreateReadStatusCommand(UUID channelId, UUID userId, Instant lastReadTimeAt) {
 
   }
 
@@ -18,6 +18,7 @@ public class ReadStatusDTO {
   @Builder
   @RequiredArgsConstructor
   public static class ReadStatus {
+
     UUID id;
     Instant createdAt;
     Instant updatedAt;
@@ -27,7 +28,7 @@ public class ReadStatusDTO {
   }
 
   @Builder
-  public record UpdateReadStatusCommand(UUID id, Instant lastReadAt){
+  public record UpdateReadStatusCommand(UUID id, Instant lastReadAt) {
 
   }
 

@@ -10,15 +10,15 @@ import java.util.UUID;
 
 public class BinaryContentApiDTO {
 
-    @Builder
-    public record ReadBinaryContentResponse(
-            UUID id,
-            String fileName,
-            Long size,
-            @JsonProperty("contentType")
-            ContentType contentType
-    ) {
+  @Builder
+  public record ReadBinaryContentResponse(
+      UUID id,
+      String fileName,
+      Long size,
+      @JsonProperty("contentType")
+      ContentType contentType
+  ) {
 
-    }
+  }
 
 }

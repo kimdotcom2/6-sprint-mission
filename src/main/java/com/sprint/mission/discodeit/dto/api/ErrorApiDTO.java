@@ -4,12 +4,12 @@ import lombok.Builder;
 
 public class ErrorApiDTO {
 
-    @Builder
-    public record ErrorApiResponse(
-            Integer code,
-            String message
-    ){
+  @Builder
+  public record ErrorApiResponse(
+      Integer code,
+      String message
+  ) {
 
-    }
+  }
 
 }

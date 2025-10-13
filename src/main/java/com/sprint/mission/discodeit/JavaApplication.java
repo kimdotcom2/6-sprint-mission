@@ -3,10 +3,10 @@ package com.sprint.mission.discodeit;
 @Deprecated
 public class JavaApplication {
 
-    //static String fileDirectory = FILE_PATH;
-    //static final String strongPassword = "fe5A3sad@lks^";
+  //static String fileDirectory = FILE_PATH;
+  //static final String strongPassword = "fe5A3sad@lks^";
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
         /*testJcfUserService();
         testJcfChannelService();
@@ -18,7 +18,7 @@ public class JavaApplication {
         testBasicChannelService();
         testBasicMessageService();*/
 
-    }
+  }
 
     /*public static void testJcfUserService() {
 

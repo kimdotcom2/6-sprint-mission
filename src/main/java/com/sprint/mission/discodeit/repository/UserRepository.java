@@ -8,23 +8,23 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
-    boolean existById(UUID id);
+  boolean existById(UUID id);
 
-    boolean existByEmail(String email);
+  boolean existByEmail(String email);
 
-    boolean existByNickname(String nickname);
+  boolean existByNickname(String nickname);
 
-    boolean existByEmailOrUsername(String email, String username);
+  boolean existByEmailOrUsername(String email, String username);
 
-    @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.id = :id")
-    Optional<UserEntity> findById(UUID id);
+  @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.id = :id")
+  Optional<UserEntity> findById(UUID id);
 
-    @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")
-    Optional<UserEntity> findByEmail(String email);
+  @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")
+  Optional<UserEntity> findByEmail(String email);
 
-    @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")
-    Optional<UserEntity> findByUsername(String username);
+  @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")
+  Optional<UserEntity> findByUsername(String username);
 
-    void deleteById(UUID id);
+  void deleteById(UUID id);
 
 }
