@@ -52,7 +52,7 @@ public class BasicBinaryContentService implements BinaryContentService {
 
   @Override
   public boolean existBinaryContentById(UUID id) {
-    return binaryContentRepository.existById(id);
+    return binaryContentRepository.existsById(id);
   }
 
   @Override
@@ -123,7 +123,7 @@ public class BasicBinaryContentService implements BinaryContentService {
   @Override
   public void deleteBinaryContentById(UUID id) {
 
-    if (!binaryContentRepository.existById(id)) {
+    if (!binaryContentRepository.existsById(id)) {
       throw new NoSuchDataBaseRecordException("No such binary content");
     }
 

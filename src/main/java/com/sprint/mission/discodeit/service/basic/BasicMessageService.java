@@ -39,11 +39,11 @@ public class BasicMessageService implements MessageService {
   @Override
   public MessageDTO.Message createMessage(MessageDTO.CreateMessageCommand request) {
 
-    if (!userRepository.existById(request.userId())) {
+    if (!userRepository.existsById(request.userId())) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
-    if (!channelRepository.existById(request.channelId())) {
+    if (!channelRepository.existsById(request.channelId())) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -79,7 +79,7 @@ public class BasicMessageService implements MessageService {
 
   @Override
   public boolean existMessageById(UUID id) {
-    return messageRepository.existById(id);
+    return messageRepository.existsById(id);
   }
 
   @Override
@@ -95,7 +95,7 @@ public class BasicMessageService implements MessageService {
   @Override
   public OffsetPage<MessageDTO.Message> findMessagesByAuthorId(UUID authorId, PagingDTO.OffsetRequest pageable) {
 
-    if (!userRepository.existById(authorId)) {
+    if (!userRepository.existsById(authorId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
@@ -117,7 +117,7 @@ public class BasicMessageService implements MessageService {
   @Override
   public OffsetPage<MessageDTO.Message> findMessagesByChannelId(UUID channelId, PagingDTO.OffsetRequest pageable) {
 
-    if (!channelRepository.existById(channelId)) {
+    if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -156,7 +156,7 @@ public class BasicMessageService implements MessageService {
   @Override
   public MessageDTO.Message updateMessage(MessageDTO.UpdateMessageCommand request) {
 
-    if (!messageRepository.existById(request.id())) {
+    if (!messageRepository.existsById(request.id())) {
       throw new NoSuchDataBaseRecordException("No such message.");
     }
 

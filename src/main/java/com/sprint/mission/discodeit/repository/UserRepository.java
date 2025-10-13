@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<UserEntity, UUID> {
 
-  boolean existById(UUID id);
+  boolean existsById(UUID id);
 
-  boolean existByEmail(String email);
+  boolean existsByEmail(String email);
 
-  boolean existByNickname(String nickname);
+  boolean existsByUsername(String username);
 
-  boolean existByEmailOrUsername(String email, String username);
+  boolean existsByEmailOrUsername(String email, String username);
 
   @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.id = :id")
   Optional<UserEntity> findById(UUID id);

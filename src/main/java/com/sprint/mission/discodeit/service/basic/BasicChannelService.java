@@ -68,7 +68,7 @@ public class BasicChannelService implements ChannelService {
 
   @Override
   public boolean existChannelById(UUID id) {
-    return channelRepository.existById(id);
+    return channelRepository.existsById(id);
   }
 
   @Override
@@ -113,7 +113,7 @@ public class BasicChannelService implements ChannelService {
   @Override
   public ChannelDTO.Channel updateChannel(ChannelDTO.UpdateChannelCommand request) {
 
-    if (!channelRepository.existById(request.id())) {
+    if (!channelRepository.existsById(request.id())) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -138,7 +138,7 @@ public class BasicChannelService implements ChannelService {
   @Override
   public void deleteChannelById(UUID id) {
 
-    if (!channelRepository.existById(id)) {
+    if (!channelRepository.existsById(id)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 

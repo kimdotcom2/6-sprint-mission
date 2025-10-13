@@ -27,7 +27,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public UserStatusDTO.UserStatus createUserStatus(UserStatusDTO.CreateUserStatusCommand request) {
 
-    if (!userRepository.existById(request.userId())) {
+    if (!userRepository.existsById(request.userId())) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
@@ -47,12 +47,12 @@ public class BasicUserStatusService implements UserStatusService {
 
   @Override
   public boolean existUserStatusById(UUID id) {
-    return userStatusRepository.existById(id);
+    return userStatusRepository.existsById(id);
   }
 
   @Override
   public boolean existUserStatusByUserId(UUID userId) {
-    return userStatusRepository.existByUserId(userId);
+    return userStatusRepository.existsByUserId(userId);
   }
 
   @Override
@@ -69,7 +69,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public Optional<UserStatusDTO.UserStatus> findUserStatusByUserId(UUID userId) {
 
-    if (!userRepository.existById(userId)) {
+    if (!userRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
@@ -105,7 +105,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public void deleteUserStatusById(UUID id) {
 
-    if (!userStatusRepository.existById(id)) {
+    if (!userStatusRepository.existsById(id)) {
       throw new NoSuchDataBaseRecordException("No such user status.");
     }
 
@@ -117,7 +117,7 @@ public class BasicUserStatusService implements UserStatusService {
   @Override
   public void deleteUserStatusByUserId(UUID userId) {
 
-    if (!userStatusRepository.existById(userId)) {
+    if (!userStatusRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user status.");
     }
 
@@ -130,7 +130,7 @@ public class BasicUserStatusService implements UserStatusService {
   public void deleteAllUserStatusByIdIn(List<UUID> uuidList) {
 
     uuidList.forEach(uuid -> {
-      if (!userStatusRepository.existById(uuid)) {
+      if (!userStatusRepository.existsById(uuid)) {
         throw new NoSuchDataBaseRecordException("No such user status.");
       }
     });

@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ReadStatusRepository extends JpaRepository<ReadStatusEntity, UUID> {
 
-  boolean existById(UUID id);
+  boolean existsById(UUID id);
 
-  boolean existByUserIdAndChannelId(UUID userId, UUID channelId);
+  boolean existsByUserIdAndChannelId(UUID userId, UUID channelId);
 
   @Query("SELECT rs FROM ReadStatusEntity rs LEFT JOIN FETCH rs.user u LEFT JOIN FETCH rs.channel c WHERE rs.id = :id")
   Optional<ReadStatusEntity> findById(UUID id);

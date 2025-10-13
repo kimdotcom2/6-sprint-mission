@@ -2,18 +2,21 @@ package com.sprint.mission.discodeit.dto;
 
 import com.sprint.mission.discodeit.enums.ChannelType;
 import java.time.Instant;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 public class ChannelDTO {
 
   @Getter
   @Builder
-  @RequiredArgsConstructor
+  @NoArgsConstructor
+  @AllArgsConstructor
   public static class Channel {
 
     private UUID id;

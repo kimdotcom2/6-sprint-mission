@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserStatusRepository extends JpaRepository<UserStatusEntity, UUID> {
 
-  boolean existById(UUID id);
+  boolean existsById(UUID id);
 
-  boolean existByUserId(UUID userId);
+  boolean existsByUserId(UUID userId);
 
   @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id = :id")
   Optional<UserStatusEntity> findById(UUID id);

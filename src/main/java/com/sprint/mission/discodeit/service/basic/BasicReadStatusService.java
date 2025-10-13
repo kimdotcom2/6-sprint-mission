@@ -30,11 +30,11 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public ReadStatusDTO.ReadStatus createReadStatus(ReadStatusDTO.CreateReadStatusCommand request) {
 
-    if (!userRepository.existById(request.userId())) {
+    if (!userRepository.existsById(request.userId())) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
-    if (!channelRepository.existById(request.channelId())) {
+    if (!channelRepository.existsById(request.channelId())) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -54,12 +54,12 @@ public class BasicReadStatusService implements ReadStatusService {
 
   @Override
   public boolean existReadStatusById(UUID id) {
-    return readStatusRepository.existById(id);
+    return readStatusRepository.existsById(id);
   }
 
   @Override
   public boolean existReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
-    return readStatusRepository.existByUserIdAndChannelId(userId, channelId);
+    return readStatusRepository.existsByUserIdAndChannelId(userId, channelId);
   }
 
   @Override
@@ -76,11 +76,11 @@ public class BasicReadStatusService implements ReadStatusService {
   public Optional<ReadStatusDTO.ReadStatus> findReadStatusByUserIdAndChannelId(UUID userId,
       UUID channelId) {
 
-    if (!userRepository.existById(userId)) {
+    if (!userRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
-    if (!channelRepository.existById(channelId)) {
+    if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -95,7 +95,7 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public List<ReadStatusDTO.ReadStatus> findAllReadStatusByUserId(UUID userId) {
 
-    if (!userRepository.existById(userId)) {
+    if (!userRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
@@ -109,7 +109,7 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public List<ReadStatusDTO.ReadStatus> findAllReadStatusByChannelId(UUID channelId) {
 
-    if (!channelRepository.existById(channelId)) {
+    if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -143,7 +143,7 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public void deleteReadStatusById(UUID id) {
 
-    if (!readStatusRepository.existById(id)) {
+    if (!readStatusRepository.existsById(id)) {
       throw new NoSuchDataBaseRecordException("No such read status.");
     }
 
@@ -155,11 +155,11 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public void deleteReadStatusByUserIdAndChannelId(UUID userId, UUID channelId) {
 
-    if (!userRepository.existById(userId)) {
+    if (!userRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
-    if (!channelRepository.existById(channelId)) {
+    if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -171,7 +171,7 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public void deleteAllReadStatusByUserId(UUID userId) {
 
-    if (!userRepository.existById(userId)) {
+    if (!userRepository.existsById(userId)) {
       throw new NoSuchDataBaseRecordException("No such user.");
     }
 
@@ -183,7 +183,7 @@ public class BasicReadStatusService implements ReadStatusService {
   @Override
   public void deleteAllReadStatusByChannelId(UUID channelId) {
 
-    if (!channelRepository.existById(channelId)) {
+    if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
     }
 
@@ -196,7 +196,7 @@ public class BasicReadStatusService implements ReadStatusService {
   public void deleteAllReadStatusByIdIn(List<UUID> uuidList) {
 
     uuidList.forEach(uuid -> {
-      if (!readStatusRepository.existById(uuid)) {
+      if (!readStatusRepository.existsById(uuid)) {
         throw new NoSuchDataBaseRecordException("No such read status.");
       }
     });

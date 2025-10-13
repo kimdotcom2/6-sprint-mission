@@ -36,7 +36,7 @@ public class BasicUserService implements UserService {
   @Override
   public UserDTO.User createUser(UserDTO.CreateUserCommand request) {
 
-    if (userRepository.existByEmailOrUsername(request.email(), request.username())) {
+    if (userRepository.existsByEmailOrUsername(request.email(), request.username())) {
       throw new AllReadyExistDataBaseRecordException("User already exists.");
     }
 
@@ -65,17 +65,17 @@ public class BasicUserService implements UserService {
 
   @Override
   public boolean existUserById(UUID id) {
-    return userRepository.existById(id);
+    return userRepository.existsById(id);
   }
 
   @Override
   public boolean existUserByEmail(String email) {
-    return userRepository.existByEmail(email);
+    return userRepository.existsByEmail(email);
   }
 
   @Override
-  public boolean existUserByNickname(String nickname) {
-    return userRepository.existByNickname(nickname);
+  public boolean existUserByUsername(String username) {
+    return userRepository.existsByUsername(username);
   }
 
   @Transactional(readOnly = true)
@@ -147,7 +147,7 @@ public class BasicUserService implements UserService {
     UserEntity updatedUserEntity = userRepository.findById(request.id())
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user."));
 
-    if (userRepository.existByEmailOrUsername(request.email(), request.username()) &&
+    if (userRepository.existsByEmailOrUsername(request.email(), request.username()) &&
         !updatedUserEntity.getId().equals(request.id())) {
       throw new AllReadyExistDataBaseRecordException("User already exists.");
     }

@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -26,12 +27,11 @@ public class UserEntity extends BaseUpdatableEntity {
   @Column(nullable = false)
   private String password;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-  @Column(name = "profile_id", unique = true)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "profile_id", unique = true)
   private BinaryContentEntity profileId;
 
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, mappedBy = "user", orphanRemoval = true)
-  @Column(nullable = false)
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "user", optional = false)
   private UserStatusEntity userStatus;
 
   @Builder
