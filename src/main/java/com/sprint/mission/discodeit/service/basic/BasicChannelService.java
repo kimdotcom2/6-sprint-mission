@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -28,7 +29,7 @@ public class BasicChannelService implements ChannelService {
   private final ChannelRepository channelRepository;
   private final MessageRepository messageRepository;
   private final ReadStatusRepository readStatusRepository;
-  private ChannelEntityMapper channelEntityMapper;
+  private final ChannelEntityMapper channelEntityMapper;
 
   @Transactional
   @Override
@@ -91,7 +92,6 @@ public class BasicChannelService implements ChannelService {
 
     List<ChannelDTO.Channel> privateChannelList = readStatusRepository.findByUserId(userId).stream()
         .map(ReadStatusEntity::getChannel)
-        .filter(channelEntity -> channelEntity.getType() == ChannelType.PRIVATE)
         .map(channelEntityMapper::entityToChannel)
         .toList();
 
