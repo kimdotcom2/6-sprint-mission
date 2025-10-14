@@ -3,6 +3,7 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.dto.ChannelDTO;
 import com.sprint.mission.discodeit.entity.ChannelEntity;
 import com.sprint.mission.discodeit.entity.ReadStatusEntity;
+import com.sprint.mission.discodeit.entity.UserEntity;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.ChannelEntityMapper;
@@ -10,6 +11,7 @@ import com.sprint.mission.discodeit.mapper.UserEntityMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
+import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.ChannelService;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ public class BasicChannelService implements ChannelService {
   private final ChannelRepository channelRepository;
   private final MessageRepository messageRepository;
   private final ReadStatusRepository readStatusRepository;
+  private final UserRepository userRepository;
   private final ChannelEntityMapper channelEntityMapper;
   private final UserEntityMapper userEntityMapper;
 
@@ -60,16 +63,21 @@ public class BasicChannelService implements ChannelService {
         .description(request.description())
         .build();
 
+    channelRepository.save(channelEntity);
+    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
+
     List<ReadStatusEntity> readStatusEntityList = request.participants().stream()
-        .map(userId -> ReadStatusEntity.builder()
-            .lastReadAt(Instant.now())
-            .build())
+        .map(userId -> {
+          return ReadStatusEntity.builder()
+              .user(userRepository.findById(userId)
+                  .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user.")))
+              .channel(channelEntity)
+              .lastReadAt(Instant.now())
+              .build();
+        })
         .toList();
 
     readStatusRepository.saveAll(readStatusEntityList);
-    channelRepository.save(channelEntity);
-
-    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
 
     channel.addParticipants(readStatusEntityList.stream()
         .map(ReadStatusEntity::getUser)

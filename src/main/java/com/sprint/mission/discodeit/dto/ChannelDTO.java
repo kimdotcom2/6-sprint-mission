@@ -28,7 +28,15 @@ public class ChannelDTO {
     private Instant lastMessageAt;
 
     public void addParticipants(List<UserDTO.User> participants) {
+
+      if (participants == null || participants.isEmpty()) {
+        return;
+      } else if (this.participants == null) {
+        this.participants = new ArrayList<>();
+      }
+
       this.participants.addAll(participants);
+
     }
 
   }
