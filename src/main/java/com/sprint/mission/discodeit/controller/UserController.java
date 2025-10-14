@@ -356,7 +356,7 @@ public class UserController {
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
     userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
-        .id(userStatus.getUserId())
+        .id(userStatus.getId())
         .lastActiveAt(userStatus.getLastActiveAt())
         .build());
 

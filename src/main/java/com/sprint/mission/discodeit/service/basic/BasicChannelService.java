@@ -91,6 +91,7 @@ public class BasicChannelService implements ChannelService {
 
     List<ChannelDTO.Channel> privateChannelList = readStatusRepository.findByUserId(userId).stream()
         .map(ReadStatusEntity::getChannel)
+        .filter(channelEntity -> channelEntity.getType() == ChannelType.PRIVATE)
         .map(channelEntityMapper::entityToChannel)
         .toList();
 
