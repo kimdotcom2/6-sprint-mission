@@ -141,7 +141,7 @@ public class ChannelController {
         .type(channel.getType())
         .name(channel.getName())
         .description(channel.getDescription())
-        .participants(channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
+        .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
             .id(user.getId())
             .username(user.getUsername())
             .email(user.getEmail())
@@ -152,7 +152,7 @@ public class ChannelController {
                 .contentType(user.getProfileId().getContentType())
                 .build() : null)
             .isOnline(user.getIsOnline())
-            .build()).toList())
+            .build()).toList() : new ArrayList<>())
         .build());
 
   }
@@ -209,7 +209,7 @@ public class ChannelController {
         .type(channel.getType())
         .name(channel.getName())
         .description(channel.getDescription())
-        .participants(channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
+        .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
             .id(user.getId())
             .username(user.getUsername())
             .email(user.getEmail())
@@ -220,7 +220,7 @@ public class ChannelController {
                 .contentType(user.getProfileId().getContentType())
                 .build() : null)
             .isOnline(user.getIsOnline())
-            .build()).toList())
+            .build()).toList() : new ArrayList<>())
         .lastMessageAt(channel.getLastMessageAt() != null ? channel.getLastMessageAt() : null)
         .build());
 
@@ -286,7 +286,7 @@ public class ChannelController {
             .type(channel.getType())
             .name(channel.getName())
             .description(channel.getDescription())
-            .participants(channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
+            .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -297,7 +297,7 @@ public class ChannelController {
                     .contentType(user.getProfileId().getContentType())
                     .build() : null)
                 .isOnline(user.getIsOnline())
-                .build()).toList())
+                .build()).toList() : new ArrayList<>())
             .build())
         .toList();
 

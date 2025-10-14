@@ -12,13 +12,13 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
 
   boolean existsById(UUID id);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.id = :id")
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.id = :id")
   Optional<MessageEntity> findById(UUID id);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.author.id = :authorId ORDER BY m.createdAt ASC")
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.author.id = :authorId ORDER BY m.createdAt ASC")
   Page<MessageEntity> findByAuthorId(UUID authorId, Pageable pageable);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel WHERE m.channel.id = :channelId ORDER BY m.createdAt ASC")
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.channel.id = :channelId ORDER BY m.createdAt ASC")
   Page<MessageEntity> findByChannelId(UUID channelId, Pageable pageable);
 
   @Query(value = "SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel",

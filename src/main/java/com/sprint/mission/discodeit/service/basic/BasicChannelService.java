@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.entity.ReadStatusEntity;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import com.sprint.mission.discodeit.mapper.ChannelEntityMapper;
+import com.sprint.mission.discodeit.mapper.UserEntityMapper;
 import com.sprint.mission.discodeit.repository.ChannelRepository;
 import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.ReadStatusRepository;
@@ -30,6 +31,7 @@ public class BasicChannelService implements ChannelService {
   private final MessageRepository messageRepository;
   private final ReadStatusRepository readStatusRepository;
   private final ChannelEntityMapper channelEntityMapper;
+  private final UserEntityMapper userEntityMapper;
 
   @Transactional
   @Override
@@ -67,7 +69,15 @@ public class BasicChannelService implements ChannelService {
     readStatusRepository.saveAll(readStatusEntityList);
     channelRepository.save(channelEntity);
 
-    return channelEntityMapper.entityToChannel(channelEntity);
+    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
+
+    channel.addParticipants(readStatusEntityList.stream()
+        .map(ReadStatusEntity::getUser)
+        .filter(Objects::nonNull)
+        .map(userEntityMapper::entityToUser)
+        .toList());
+
+    return channel;
 
   }
 
@@ -82,7 +92,16 @@ public class BasicChannelService implements ChannelService {
     ChannelEntity channelEntity = channelRepository.findById(id)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
 
-    return Optional.ofNullable(channelEntityMapper.entityToChannel(channelEntity));
+    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
+    List<ReadStatusEntity> readStatusEntityList = readStatusRepository.findByChannelId(id);
+
+    channel.addParticipants(readStatusEntityList.stream()
+        .map(ReadStatusEntity::getUser)
+        .filter(Objects::nonNull)
+        .map(userEntityMapper::entityToUser)
+        .toList());
+
+    return Optional.ofNullable(channel);
 
   }
 

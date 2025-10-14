@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.dto;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class MessageDTO {
     private UUID channelId;
     private UserDTO.User author;
     private String content;
-    private List<BinaryContentDTO.BinaryContent> attachments;
+    private List<BinaryContentDTO.BinaryContent> attachments = new ArrayList<>();
 
   }
 

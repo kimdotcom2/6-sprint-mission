@@ -2,6 +2,7 @@ package com.sprint.mission.discodeit.dto;
 
 import com.sprint.mission.discodeit.enums.ChannelType;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -23,8 +24,12 @@ public class ChannelDTO {
     private ChannelType type;
     private String name;
     private String description;
-    private List<UserDTO.User> participants;
+    private List<UserDTO.User> participants = new ArrayList<>();
     private Instant lastMessageAt;
+
+    public void addParticipants(List<UserDTO.User> participants) {
+      this.participants.addAll(participants);
+    }
 
   }
 

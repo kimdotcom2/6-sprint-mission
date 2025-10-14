@@ -31,6 +31,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -272,7 +273,7 @@ public class MessageController {
           required = true,
           content = @Content(schema = @Schema(implementation = PagingApiDTO.OffsetRequest.class))
       )
-      @RequestBody PagingApiDTO.OffsetRequest pageable) {
+      @ModelAttribute PagingApiDTO.OffsetRequest pageable) {
 
     PagingDTO.OffsetPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelId(
         channelId, PagingDTO.OffsetRequest.of(pageable.page(), pageable.size()));
