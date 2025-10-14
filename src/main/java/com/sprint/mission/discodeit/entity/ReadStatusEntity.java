@@ -6,9 +6,10 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.*;
-
 import java.time.Instant;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -17,7 +18,7 @@ import java.time.Instant;
 public class ReadStatusEntity extends BaseUpdatableEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "message_id", nullable = false)
+  @JoinColumn(name = "user_id", nullable = false)
   private UserEntity user;
 
   @ManyToOne(fetch = FetchType.LAZY)

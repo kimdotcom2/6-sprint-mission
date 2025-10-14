@@ -1,11 +1,9 @@
 package com.sprint.mission.discodeit.service;
 
 import com.sprint.mission.discodeit.dto.MessageDTO;
-
 import com.sprint.mission.discodeit.dto.MessageDTO.Message;
 import com.sprint.mission.discodeit.dto.PagingDTO;
 import com.sprint.mission.discodeit.dto.PagingDTO.OffsetPage;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 

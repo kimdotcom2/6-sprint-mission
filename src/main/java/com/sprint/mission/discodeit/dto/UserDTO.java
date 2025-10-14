@@ -2,13 +2,11 @@ package com.sprint.mission.discodeit.dto;
 
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-
-import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 public class UserDTO {
 

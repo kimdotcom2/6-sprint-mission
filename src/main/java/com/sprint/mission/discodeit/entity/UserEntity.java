@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor
@@ -57,6 +56,10 @@ public class UserEntity extends BaseUpdatableEntity {
 
   public void updateUserStatus(UserStatusEntity userStatus) {
     this.userStatus = userStatus;
+  }
+
+  public boolean isOnline() {
+    return this.userStatus.isOnline();
   }
 
 }

@@ -2,9 +2,9 @@ package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Instant;
-import lombok.Builder;
 import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
 
 public class MessageApiDTO {
 

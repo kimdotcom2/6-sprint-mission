@@ -8,13 +8,14 @@ import com.sprint.mission.discodeit.mapper.BinaryContentEntityMapper;
 import com.sprint.mission.discodeit.repository.BinaryContentRepository;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import java.io.FileInputStream;
 import java.io.IOException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -63,8 +64,8 @@ public class BasicBinaryContentService implements BinaryContentService {
 
     byte[] bytes = null;
 
-    try {
-      bytes = binaryContentStorage.get(binaryContentEntity.getId()).readAllBytes();
+    try (InputStream is = binaryContentStorage.get(binaryContentEntity.getId())) {
+      bytes = is.readAllBytes();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

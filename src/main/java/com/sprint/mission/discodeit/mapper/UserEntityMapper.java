@@ -10,7 +10,8 @@ import org.mapstruct.Mappings;
 public interface UserEntityMapper {
 
   @Mappings({
-      @Mapping(target = "profileId", source = "profileId")
+      @Mapping(target = "profileId", source = "profileId"),
+      @Mapping(target = "isOnline", expression = "java(userEntity.isOnline())")
   })
   UserDTO.User entityToUser(UserEntity userEntity);
 

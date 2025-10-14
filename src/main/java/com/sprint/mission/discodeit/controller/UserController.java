@@ -22,19 +22,23 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.io.IOException;
-import java.time.ZoneOffset;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -103,12 +107,14 @@ public class UserController {
         .id(user.getId())
         .username(user.getUsername())
         .email(user.getEmail())
-        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-            .id(user.getProfileId().getId())
-            .fileName(user.getProfileId().getFileName())
-            .size(user.getProfileId().getSize())
-            .contentType(user.getProfileId().getContentType())
-            .build())
+        .profile(user.getProfileId() != null ?
+            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .size(user.getProfileId().getSize())
+                .contentType(user.getProfileId().getContentType())
+                .build() :
+            null)
         .isOnline(user.getIsOnline())
         .build();
 
@@ -166,11 +172,13 @@ public class UserController {
         .currentPassword(userUpdateRequest.currentPassword())
         .newPassword(userUpdateRequest.newPassword())
         .isProfileImageUpdated(!profile.isEmpty())
-        .profileImage(BinaryContentCreateCommand.builder()
-                    .fileName(profile.getName())
-                    .data(profile.getBytes())
-                    .contentType(ContentType.IMAGE)
-                    .build())
+        .profileImage(profile != null ?
+            BinaryContentCreateCommand.builder()
+                .fileName(profile.getName())
+                .data(profile.getBytes())
+                .contentType(ContentType.IMAGE)
+                .build() :
+            null)
         .build();
 
     UserDTO.User user = userService.updateUser(updateUserCommand);
@@ -179,12 +187,14 @@ public class UserController {
         .id(user.getId())
         .username(user.getUsername())
         .email(user.getEmail())
-        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-            .id(user.getProfileId().getId())
-            .fileName(user.getProfileId().getFileName())
-            .size(user.getProfileId().getSize())
-            .contentType(user.getProfileId().getContentType())
-            .build())
+        .profile(user.getProfileId() != null ?
+            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .size(user.getProfileId().getSize())
+                .contentType(user.getProfileId().getContentType())
+                .build() :
+            null)
         .isOnline(user.getIsOnline())
         .build();
 
@@ -248,12 +258,14 @@ public class UserController {
             .id(user.getId())
             .username(user.getUsername())
             .email(user.getEmail())
-            .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .size(user.getProfileId().getSize())
-                .contentType(user.getProfileId().getContentType())
-                .build())
+            .profile(user.getProfileId() != null ?
+                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(user.getProfileId().getId())
+                    .fileName(user.getProfileId().getFileName())
+                    .size(user.getProfileId().getSize())
+                    .contentType(user.getProfileId().getContentType())
+                    .build() :
+                null)
             .isOnline(user.getIsOnline())
             .build())
         .toList();

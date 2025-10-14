@@ -1,12 +1,5 @@
 package com.sprint.mission.discodeit;
 
-import com.sprint.mission.discodeit.dto.ChannelDTO;
-import com.sprint.mission.discodeit.dto.MessageDTO;
-import com.sprint.mission.discodeit.dto.UserDTO;
-import com.sprint.mission.discodeit.enums.ChannelType;
-import com.sprint.mission.discodeit.service.ChannelService;
-import com.sprint.mission.discodeit.service.MessageService;
-import com.sprint.mission.discodeit.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

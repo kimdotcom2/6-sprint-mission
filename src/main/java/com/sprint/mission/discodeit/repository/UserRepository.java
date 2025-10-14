@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
   @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.id = :id")
   Optional<UserEntity> findById(UUID id);
 
-  @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")
+  @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.email = :email")
   Optional<UserEntity> findByEmail(String email);
 
   @Query("SELECT u FROM UserEntity u LEFT JOIN FETCH u.profileId LEFT JOIN FETCH u.userStatus WHERE u.username = :username")

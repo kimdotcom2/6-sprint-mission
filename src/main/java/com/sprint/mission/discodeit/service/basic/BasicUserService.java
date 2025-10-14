@@ -13,12 +13,12 @@ import com.sprint.mission.discodeit.repository.UserStatusRepository;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import com.sprint.mission.discodeit.utils.SecurityUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -46,6 +46,11 @@ public class BasicUserService implements UserService {
         .username(request.username())
         .build();
 
+    userEntity.updateUserStatus(UserStatusEntity.builder()
+        .user(userEntity)
+        .lastActiveAt(Instant.now())
+        .build());
+
     if (request.profileImage() != null) {
 
       BinaryContentEntity binaryContentEntity = BinaryContentEntity.builder()
@@ -54,12 +59,17 @@ public class BasicUserService implements UserService {
           .contentType(request.profileImage().contentType())
           .build();
 
-      binaryContentEntity = binaryContentRepository.save(binaryContentEntity);
-      binaryContentStorage.put(binaryContentEntity.getId(), request.profileImage().data());
+      userEntity.updateProfile(binaryContentEntity);
 
     }
 
-    return userEntityMapper.entityToUser(userRepository.save(userEntity));
+    UserDTO.User user = userEntityMapper.entityToUser(userRepository.save(userEntity));
+
+    if (request.profileImage() != null) {
+      binaryContentStorage.put(user.getProfileId().getId(), request.profileImage().data());
+    }
+
+    return  user;
 
   }
 
@@ -127,6 +137,7 @@ public class BasicUserService implements UserService {
 
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<UserDTO.User> findAllUsers() {
 

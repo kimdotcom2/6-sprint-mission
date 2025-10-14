@@ -1,6 +1,5 @@
 package com.sprint.mission.discodeit.dto.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Builder;
 

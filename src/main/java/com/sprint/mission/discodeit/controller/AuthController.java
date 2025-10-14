@@ -82,11 +82,13 @@ public class AuthController {
         .id(user.getId())
         .username(user.getUsername())
         .email(user.getEmail())
-        .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-            .id(user.getProfileId().getId())
-            .fileName(user.getProfileId().getFileName())
-            .contentType(user.getProfileId().getContentType())
-            .build())
+        .profile(user.getProfileId() != null ?
+            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                .id(user.getProfileId().getId())
+                .fileName(user.getProfileId().getFileName())
+                .contentType(user.getProfileId().getContentType())
+                .build() :
+            null)
         .isOnline(user.getIsOnline())
         .build();
 

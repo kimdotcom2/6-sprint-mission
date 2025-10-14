@@ -16,7 +16,7 @@ public interface UserStatusRepository extends JpaRepository<UserStatusEntity, UU
   @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id = :id")
   Optional<UserStatusEntity> findById(UUID id);
 
-  @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id IN :idList")
+  @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.user.id = :userId")
   Optional<UserStatusEntity> findByUserId(UUID userId);
 
   void deleteById(UUID id);

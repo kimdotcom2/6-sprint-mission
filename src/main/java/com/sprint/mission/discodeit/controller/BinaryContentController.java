@@ -13,18 +13,19 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 바이너리 콘텐츠 관련 API 컨트롤러
@@ -69,8 +70,7 @@ public class BinaryContentController {
       @Parameter(description = "바이너리 콘텐츠 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @PathVariable("binaryContentId") UUID id) {
 
-    BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(
-            id)
+    BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(id)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("BinaryContent not found"));
 
     return ResponseEntity.ok(BinaryContentApiDTO.ReadBinaryContentResponse.builder()

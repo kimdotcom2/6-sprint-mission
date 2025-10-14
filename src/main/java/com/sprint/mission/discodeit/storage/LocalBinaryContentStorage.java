@@ -69,8 +69,8 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   @Override
   public InputStream get(UUID id) {
 
-    try (InputStream is = Files.newInputStream(resolvePath(id))) {
-      return is;
+    try {
+      return Files.newInputStream(resolvePath(id));
     } catch (IOException e) {
       throw new NoSuchDataBaseRecordException("No such file.");
     }

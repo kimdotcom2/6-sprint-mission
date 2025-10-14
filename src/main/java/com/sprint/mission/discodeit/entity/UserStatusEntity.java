@@ -6,10 +6,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.temporal.ChronoUnit;
-import lombok.*;
-
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
