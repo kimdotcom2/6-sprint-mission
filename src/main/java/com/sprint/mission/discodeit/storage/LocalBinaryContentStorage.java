@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContent;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
 import jakarta.annotation.PostConstruct;
+import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,9 @@ import java.nio.file.Path;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -45,8 +49,8 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   public UUID put(UUID id, byte[] bytes) {
 
     try (FileOutputStream fos = new FileOutputStream(String.valueOf(resolvePath(id).toFile()));
-        ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-      oos.writeObject(bytes);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);) {
+      bos.write(bytes);
     } catch (IOException e) {
       throw new IllegalArgumentException("파일을 저장할 수 없습니다.");
     }
@@ -78,10 +82,20 @@ public class LocalBinaryContentStorage implements BinaryContentStorage {
   }
 
   @Override
-  public ResponseEntity<BinaryContentDTO.BinaryContent> download(BinaryContent binaryContentDTO) {
+  public ResponseEntity<Resource> download(BinaryContent binaryContent) {
+
+    if (binaryContent.getId() == null) {
+      throw new IllegalArgumentException("Invalid file id.");
+    }
+
+    InputStream inputStream = get(binaryContent.getId());
+
     return ResponseEntity.ok()
         .header("Content-Disposition",
-            "attachment; filename=\"" + binaryContentDTO.getFileName() + "\"")
-        .body(binaryContentDTO);
+            "attachment; filename=\"" + binaryContent.getFileName() + ".png")
+        .header("Content-Length", String.valueOf(binaryContent.getSize()))
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .body(new InputStreamResource(inputStream));
+
   }
 }
