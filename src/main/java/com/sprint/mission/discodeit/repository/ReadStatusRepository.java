@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ReadStatusRepository extends JpaRepository<ReadStatusEntity, UUID> {
 
@@ -15,16 +16,16 @@ public interface ReadStatusRepository extends JpaRepository<ReadStatusEntity, UU
   boolean existsByUserIdAndChannelId(UUID userId, UUID channelId);
 
   @Query("SELECT rs FROM ReadStatusEntity rs LEFT JOIN FETCH rs.user u LEFT JOIN FETCH rs.channel c WHERE rs.id = :id")
-  Optional<ReadStatusEntity> findById(UUID id);
+  Optional<ReadStatusEntity> findById(@Param("id") UUID id);
 
   @Query("SELECT rs FROM ReadStatusEntity rs LEFT JOIN FETCH rs.user u LEFT JOIN FETCH rs.channel c WHERE u.id = :userId AND c.id = :channelId")
-  Optional<ReadStatusEntity> findByUserIdAndChannelId(UUID userId, UUID channelId);
+  Optional<ReadStatusEntity> findByUserIdAndChannelId(@Param("userId") UUID userId, @Param("channelId") UUID channelId);
 
   @Query("SELECT rs FROM ReadStatusEntity rs LEFT JOIN FETCH rs.user u LEFT JOIN FETCH rs.channel c WHERE u.id = :userId")
-  List<ReadStatusEntity> findByUserId(UUID userId);
+  List<ReadStatusEntity> findByUserId(@Param("userId") UUID userId);
 
   @Query("SELECT rs FROM ReadStatusEntity rs LEFT JOIN FETCH rs.user u LEFT JOIN FETCH rs.channel c WHERE c.id = :channelId")
-  List<ReadStatusEntity> findByChannelId(UUID channelId);
+  List<ReadStatusEntity> findByChannelId(@Param("channelId") UUID channelId);
 
   void deleteById(UUID id);
 

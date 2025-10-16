@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserStatusRepository extends JpaRepository<UserStatusEntity, UUID> {
 
@@ -14,10 +15,10 @@ public interface UserStatusRepository extends JpaRepository<UserStatusEntity, UU
   boolean existsByUserId(UUID userId);
 
   @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.id = :id")
-  Optional<UserStatusEntity> findById(UUID id);
+  Optional<UserStatusEntity> findById(@Param("id") UUID id);
 
   @Query("SELECT us FROM UserStatusEntity us LEFT JOIN FETCH us.user WHERE us.user.id = :userId")
-  Optional<UserStatusEntity> findByUserId(UUID userId);
+  Optional<UserStatusEntity> findByUserId(@Param("userId") UUID userId);
 
   void deleteById(UUID id);
 
