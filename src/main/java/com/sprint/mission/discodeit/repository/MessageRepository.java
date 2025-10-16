@@ -15,15 +15,17 @@ public interface MessageRepository extends JpaRepository<MessageEntity, UUID> {
   @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.id = :id")
   Optional<MessageEntity> findById(UUID id);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.author.id = :authorId ORDER BY m.createdAt ASC")
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.author.id = :authorId ORDER BY m.createdAt")
   Page<MessageEntity> findByAuthorId(UUID authorId, Pageable pageable);
 
-  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.channel.id = :channelId ORDER BY m.createdAt ASC")
+  @Query("SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel LEFT JOIN FETCH m.author.userStatus WHERE m.channel.id = :channelId ORDER BY m.createdAt")
   Page<MessageEntity> findByChannelId(UUID channelId, Pageable pageable);
 
-  @Query(value = "SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel",
+  @Query(value = "SELECT m FROM MessageEntity m LEFT JOIN FETCH m.author LEFT JOIN FETCH m.channel ORDER BY m.createdAt",
       countQuery = "SELECT count(m) FROM MessageEntity m")
   Page<MessageEntity> findAll(Pageable pageable);
+
+  Page<MessageEntity> findPageByOrderByCreatedAt(Pageable pageable);
 
   void deleteById(UUID id);
 

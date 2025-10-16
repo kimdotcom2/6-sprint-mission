@@ -14,7 +14,7 @@ public class PagingApiDTO {
   ) {}
 
   @Builder
-  public record OffsetResponse<T>(
+  public record PageResponse<T>(
       List<T> content,
       int number,
       int size,

@@ -6,8 +6,10 @@ import com.sprint.mission.discodeit.dto.PagingDTO;
 import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
+import com.sprint.mission.discodeit.dto.api.MessageApiDTO.FindMessageResponse;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
 import com.sprint.mission.discodeit.dto.api.PagingApiDTO;
+import com.sprint.mission.discodeit.dto.api.PagingApiDTO.PageResponse;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -265,7 +267,7 @@ public class MessageController {
       }
   )
   @GetMapping()
-  public ResponseEntity<PagingApiDTO.OffsetResponse<MessageApiDTO.FindMessageResponse>> findAllByChannelId(
+  public ResponseEntity<PageResponse<FindMessageResponse>> findAllByChannelId(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -278,7 +280,7 @@ public class MessageController {
     PagingDTO.OffsetPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelId(
         channelId, PagingDTO.OffsetRequest.of(pageable.page(), pageable.size()));
 
-    PagingApiDTO.OffsetResponse<MessageApiDTO.FindMessageResponse> response = PagingApiDTO.OffsetResponse.<MessageApiDTO.FindMessageResponse>builder()
+    PageResponse<FindMessageResponse> response = PageResponse.<MessageApiDTO.FindMessageResponse>builder()
         .number(messagePage.getNumber())
         .size(messagePage.getSize())
         .hasNext(messagePage.isHasNext())
