@@ -22,6 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class BasicChannelService implements ChannelService {
   private final UserRepository userRepository;
   private final ChannelEntityMapper channelEntityMapper;
   private final UserEntityMapper userEntityMapper;
+  private final BasicChannelService.ChannelWithParticipants channelWithParticipants;
 
   @Transactional
   @Override
@@ -63,18 +65,15 @@ public class BasicChannelService implements ChannelService {
         .description(request.description())
         .build();
 
-    channelRepository.save(channelEntity);
-    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
+    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelRepository.save(channelEntity));
 
     List<ReadStatusEntity> readStatusEntityList = request.participants().stream()
-        .map(userId -> {
-          return ReadStatusEntity.builder()
-              .user(userRepository.findById(userId)
-                  .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user.")))
-              .channel(channelEntity)
-              .lastReadAt(Instant.now())
-              .build();
-        })
+        .map(userId -> ReadStatusEntity.builder()
+            .user(userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user.")))
+            .channel(channelEntity)
+            .lastReadAt(Instant.now())
+            .build())
         .toList();
 
     readStatusRepository.saveAll(readStatusEntityList);
@@ -100,14 +99,7 @@ public class BasicChannelService implements ChannelService {
     ChannelEntity channelEntity = channelRepository.findById(id)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such channel."));
 
-    ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
-    List<ReadStatusEntity> readStatusEntityList = readStatusRepository.findByChannelId(id);
-
-    channel.addParticipants(readStatusEntityList.stream()
-        .map(ReadStatusEntity::getUser)
-        .filter(Objects::nonNull)
-        .map(userEntityMapper::entityToUser)
-        .toList());
+    ChannelDTO.Channel channel = channelWithParticipants.addParticipantsToChannel(channelEntity);
 
     return Optional.ofNullable(channel);
 
@@ -119,7 +111,7 @@ public class BasicChannelService implements ChannelService {
 
     List<ChannelDTO.Channel> privateChannelList = readStatusRepository.findByUserId(userId).stream()
         .map(ReadStatusEntity::getChannel)
-        .map(channelEntityMapper::entityToChannel)
+        .map(channelWithParticipants::addParticipantsToChannel)
         .toList();
 
     List<ChannelDTO.Channel> publicChannelList = channelRepository.findAll().stream()
@@ -179,5 +171,37 @@ public class BasicChannelService implements ChannelService {
     channelRepository.deleteById(id);
 
   }
+
+  @RequiredArgsConstructor
+  @Component
+  static class ChannelWithParticipants {
+
+    private final ChannelEntityMapper channelEntityMapper;
+    private final UserEntityMapper userEntityMapper;
+    private final ReadStatusRepository readStatusRepository;
+
+    private ChannelDTO.Channel addParticipantsToChannel(ChannelEntity channelEntity) {
+
+      ChannelDTO.Channel channel = channelEntityMapper.entityToChannel(channelEntity);
+
+      if (channelEntity.getType() == ChannelType.PUBLIC) {
+        return channel;
+      }
+
+      List<ReadStatusEntity> readStatusEntityList = readStatusRepository.findByChannelId(channelEntity.getId());
+
+      channel.addParticipants(readStatusEntityList.stream()
+          .map(ReadStatusEntity::getUser)
+          .filter(Objects::nonNull)
+          .map(userEntityMapper::entityToUser)
+          .toList());
+
+      return channel;
+
+    }
+
+  }
+
+
 
 }
