@@ -265,7 +265,7 @@ public class MessageController {
       }
   )
   @GetMapping()
-  public ResponseEntity<List<MessageApiDTO.FindMessageResponse>> findAllByChannelId(
+  public ResponseEntity<PagingApiDTO.OffsetResponse<MessageApiDTO.FindMessageResponse>> findAllByChannelId(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -278,35 +278,43 @@ public class MessageController {
     PagingDTO.OffsetPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelId(
         channelId, PagingDTO.OffsetRequest.of(pageable.page(), pageable.size()));
 
-    return ResponseEntity.ok(messagePage.getContent().stream()
-        .map(message -> MessageApiDTO.FindMessageResponse.builder()
-            .id(message.getId())
-            .createdAt(message.getCreatedAt())
-            .updatedAt(message.getUpdatedAt())
-            .content(message.getContent())
-            .channelId(message.getChannelId())
-            .author(UserApiDTO.FindUserResponse.builder()
-                .id(message.getAuthor().getId())
-                .username(message.getAuthor().getUsername())
-                .email(message.getAuthor().getEmail())
-                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(message.getAuthor().getProfileId().getId())
-                    .fileName(message.getAuthor().getProfileId().getFileName())
-                    .size(message.getAuthor().getProfileId().getSize())
-                    .contentType(message.getAuthor().getProfileId().getContentType())
+    PagingApiDTO.OffsetResponse<MessageApiDTO.FindMessageResponse> response = PagingApiDTO.OffsetResponse.<MessageApiDTO.FindMessageResponse>builder()
+        .number(messagePage.getNumber())
+        .size(messagePage.getSize())
+        .hasNext(messagePage.isHasNext())
+        .totalElements(messagePage.getTotalElement())
+        .content(messagePage.getContent().stream()
+            .map(message -> MessageApiDTO.FindMessageResponse.builder()
+                .id(message.getId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .content(message.getContent())
+                .channelId(message.getChannelId())
+                .author(UserApiDTO.FindUserResponse.builder()
+                    .id(message.getAuthor().getId())
+                    .username(message.getAuthor().getUsername())
+                    .email(message.getAuthor().getEmail())
+                    .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                        .id(message.getAuthor().getProfileId().getId())
+                        .fileName(message.getAuthor().getProfileId().getFileName())
+                        .size(message.getAuthor().getProfileId().getSize())
+                        .contentType(message.getAuthor().getProfileId().getContentType())
+                        .build())
+                    .isOnline(message.getAuthor().getIsOnline())
                     .build())
-                .isOnline(message.getAuthor().getIsOnline())
+                .attachments(message.getAttachments().stream().map(attachment ->
+                    BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                        .id(attachment.getId())
+                        .fileName(attachment.getFileName())
+                        .size(attachment.getSize())
+                        .contentType(attachment.getContentType())
+                        .build()
+                ).toList())
                 .build())
-            .attachments(message.getAttachments().stream().map(attachment ->
-                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(attachment.getId())
-                    .fileName(attachment.getFileName())
-                    .size(attachment.getSize())
-                    .contentType(attachment.getContentType())
-                    .build()
-            ).toList())
-            .build())
-        .toList());
+            .toList())
+        .build();
+
+    return ResponseEntity.ok(response);
 
   }
 

@@ -109,27 +109,24 @@ public class BasicChannelService implements ChannelService {
   @Override
   public List<ChannelDTO.Channel> findChannelsByUserId(UUID userId) {
 
-    List<ChannelDTO.Channel> privateChannelList = readStatusRepository.findByUserId(userId).stream()
+
+    List<ChannelDTO.Channel> channelList = new ArrayList<>(readStatusRepository.findByUserId(userId).stream()
         .map(ReadStatusEntity::getChannel)
         .map(channelWithParticipants::addParticipantsToChannel)
-        .toList();
+        .toList());
 
-    List<ChannelDTO.Channel> publicChannelList = channelRepository.findAll().stream()
-        .filter(channelEntity -> channelEntity.getType() == ChannelType.PUBLIC)
+    channelList.addAll(channelRepository.findByType(ChannelType.PUBLIC).stream()
         .map(channelEntityMapper::entityToChannel)
-        .toList();
+        .toList());
 
-    Set<ChannelDTO.Channel> combined = new HashSet<>();
-    combined.addAll(privateChannelList);
-    combined.addAll(publicChannelList);
+    return channelList;
 
-    return new ArrayList<>(combined);
   }
 
   @Override
   public List<ChannelDTO.Channel> findAllChannels() {
     return channelRepository.findAll().stream()
-        .map(channelEntityMapper::entityToChannel)
+        .map(channelWithParticipants::addParticipantsToChannel)
         .toList();
   }
 
