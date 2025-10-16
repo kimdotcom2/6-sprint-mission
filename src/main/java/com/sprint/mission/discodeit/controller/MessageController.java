@@ -266,7 +266,7 @@ public class MessageController {
           )
       }
   )
-  @GetMapping()
+  @GetMapping("/offset")
   public ResponseEntity<PagingApiDTO.OffsetPageResponse<FindMessageResponse>> findAllByChannelId(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId,
@@ -320,7 +320,7 @@ public class MessageController {
 
   }
 
-  @GetMapping("/cursor")
+  @GetMapping("")
   public ResponseEntity<PagingApiDTO.CursorPageResponse<FindMessageResponse>> findAllByChannelIdAndCreatedAt(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId,
