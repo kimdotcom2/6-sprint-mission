@@ -9,7 +9,7 @@ import com.sprint.mission.discodeit.dto.api.MessageApiDTO;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.FindMessageResponse;
 import com.sprint.mission.discodeit.dto.api.MessageApiDTO.MessageUpdateRequest;
 import com.sprint.mission.discodeit.dto.api.PagingApiDTO;
-import com.sprint.mission.discodeit.dto.api.PagingApiDTO.PageResponse;
+import com.sprint.mission.discodeit.dto.api.PagingApiDTO.OffsetPageResponse;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -267,7 +267,7 @@ public class MessageController {
       }
   )
   @GetMapping()
-  public ResponseEntity<PageResponse<FindMessageResponse>> findAllByChannelId(
+  public ResponseEntity<PagingApiDTO.OffsetPageResponse<FindMessageResponse>> findAllByChannelId(
       @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @RequestParam UUID channelId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -280,11 +280,91 @@ public class MessageController {
     PagingDTO.OffsetPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelId(
         channelId, PagingDTO.OffsetRequest.of(pageable.page(), pageable.size()));
 
-    PageResponse<FindMessageResponse> response = PageResponse.<MessageApiDTO.FindMessageResponse>builder()
+    PagingApiDTO.OffsetPageResponse<FindMessageResponse> response = OffsetPageResponse.<MessageApiDTO.FindMessageResponse>builder()
         .number(messagePage.getNumber())
         .size(messagePage.getSize())
         .hasNext(messagePage.isHasNext())
         .totalElements(messagePage.getTotalElement())
+        .content(messagePage.getContent().stream()
+            .map(message -> MessageApiDTO.FindMessageResponse.builder()
+                .id(message.getId())
+                .createdAt(message.getCreatedAt())
+                .updatedAt(message.getUpdatedAt())
+                .content(message.getContent())
+                .channelId(message.getChannelId())
+                .author(UserApiDTO.FindUserResponse.builder()
+                    .id(message.getAuthor().getId())
+                    .username(message.getAuthor().getUsername())
+                    .email(message.getAuthor().getEmail())
+                    .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                        .id(message.getAuthor().getProfileId().getId())
+                        .fileName(message.getAuthor().getProfileId().getFileName())
+                        .size(message.getAuthor().getProfileId().getSize())
+                        .contentType(message.getAuthor().getProfileId().getContentType())
+                        .build())
+                    .isOnline(message.getAuthor().getIsOnline())
+                    .build())
+                .attachments(message.getAttachments().stream().map(attachment ->
+                    BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                        .id(attachment.getId())
+                        .fileName(attachment.getFileName())
+                        .size(attachment.getSize())
+                        .contentType(attachment.getContentType())
+                        .build()
+                ).toList())
+                .build())
+            .toList())
+        .build();
+
+    return ResponseEntity.ok(response);
+
+  }
+
+  @GetMapping("/cursor")
+  public ResponseEntity<PagingApiDTO.CursorPageResponse<FindMessageResponse>> findAllByChannelIdAndCreatedAt(
+      @Parameter(description = "채널 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+      @RequestParam UUID channelId,
+      @Parameter(description = "기준 생성 시간(ISO 8601 형식)", example = "2023-10-01T12:00:00Z")
+      @RequestParam(required = false) String cursor,
+      @io.swagger.v3.oas.annotations.parameters.RequestBody(
+          description = "페이징 요청 정보",
+          required = true,
+          content = @Content(schema = @Schema(implementation = PagingApiDTO.CursorRequest.class))
+      )
+      @ModelAttribute PagingApiDTO.CursorRequest pageable) {
+
+    PagingDTO.CursorPage<MessageDTO.Message> messagePage = messageService.findMessagesByChannelIdAndCreatedAt(channelId, cursor, PagingDTO.CursorRequest.of(pageable.size()));
+
+    PagingApiDTO.CursorPageResponse<MessageApiDTO.FindMessageResponse> response = PagingApiDTO.CursorPageResponse.<MessageApiDTO.FindMessageResponse>builder()
+        .nextCursor(messagePage.getNextCursor() != null ? MessageApiDTO.FindMessageResponse.builder()
+            .id(messagePage.getNextCursor().getId())
+            .createdAt(messagePage.getNextCursor().getCreatedAt())
+            .updatedAt(messagePage.getNextCursor().getUpdatedAt())
+            .content(messagePage.getNextCursor().getContent())
+            .channelId(messagePage.getNextCursor().getChannelId())
+            .author(UserApiDTO.FindUserResponse.builder()
+                .id(messagePage.getNextCursor().getAuthor().getId())
+                .username(messagePage.getNextCursor().getAuthor().getUsername())
+                .email(messagePage.getNextCursor().getAuthor().getEmail())
+                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(messagePage.getNextCursor().getAuthor().getProfileId().getId())
+                    .fileName(messagePage.getNextCursor().getAuthor().getProfileId().getFileName())
+                    .size(messagePage.getNextCursor().getAuthor().getProfileId().getSize())
+                    .contentType(messagePage.getNextCursor().getAuthor().getProfileId().getContentType())
+                    .build())
+                .isOnline(messagePage.getNextCursor().getAuthor().getIsOnline())
+                .build())
+            .attachments(messagePage.getNextCursor().getAttachments().stream().map(attachment ->
+                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
+                    .id(attachment.getId())
+                    .fileName(attachment.getFileName())
+                    .size(attachment.getSize())
+                    .contentType(attachment.getContentType())
+                    .build()
+            ).toList())
+            .build() : null)
+        .size(messagePage.getSize())
+        .hasNext(messagePage.isHasNext())
         .content(messagePage.getContent().stream()
             .map(message -> MessageApiDTO.FindMessageResponse.builder()
                 .id(message.getId())

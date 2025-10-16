@@ -3,7 +3,9 @@ package com.sprint.mission.discodeit.service.basic;
 import com.sprint.mission.discodeit.dto.MessageDTO;
 import com.sprint.mission.discodeit.dto.MessageDTO.Message;
 import com.sprint.mission.discodeit.dto.PagingDTO;
+import com.sprint.mission.discodeit.dto.PagingDTO.CursorPage;
 import com.sprint.mission.discodeit.dto.PagingDTO.OffsetPage;
+import com.sprint.mission.discodeit.dto.PagingDTO.OffsetRequest;
 import com.sprint.mission.discodeit.entity.BinaryContentEntity;
 import com.sprint.mission.discodeit.entity.MessageEntity;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
@@ -14,12 +16,14 @@ import com.sprint.mission.discodeit.repository.MessageRepository;
 import com.sprint.mission.discodeit.repository.UserRepository;
 import com.sprint.mission.discodeit.service.MessageService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
@@ -116,7 +120,7 @@ public class BasicMessageService implements MessageService {
 
   @Transactional(readOnly = true)
   @Override
-  public OffsetPage<MessageDTO.Message> findMessagesByChannelId(UUID channelId, PagingDTO.OffsetRequest pageable) {
+  public PagingDTO.OffsetPage<MessageDTO.Message> findMessagesByChannelId(UUID channelId, PagingDTO.OffsetRequest pageable) {
 
     if (!channelRepository.existsById(channelId)) {
       throw new NoSuchDataBaseRecordException("No such channel.");
@@ -126,7 +130,7 @@ public class BasicMessageService implements MessageService {
 
     Page<MessageEntity> paging = messageRepository.findByChannelId(channelId, PageRequest.of(pageable.getPage(), pageable.getSize(), direction));
 
-    return OffsetPage.<MessageDTO.Message>builder()
+    return PagingDTO.OffsetPage.<MessageDTO.Message>builder()
         .content(paging.getContent().stream()
             .map(messageEntityMapper::entityToMessage)
             .toList())
@@ -134,6 +138,29 @@ public class BasicMessageService implements MessageService {
         .size(paging.getSize())
         .hasNext(paging.hasNext())
         .totalElement(paging.getTotalElements())
+        .build();
+
+  }
+
+  @Transactional(readOnly = true)
+  @Override
+  public PagingDTO.CursorPage<Message> findMessagesByChannelIdAndCreatedAt(UUID channelId, String createdAt, PagingDTO.CursorRequest pageable) {
+
+    if (!channelRepository.existsById(channelId)) {
+      throw new NoSuchDataBaseRecordException("No such channel.");
+    }
+
+    //Sort.Direction direction = pageable.getSort().split(",")[1].equalsIgnoreCase("DESC") ? Direction.DESC : Direction.ASC;
+
+    Slice<MessageEntity> slice = messageRepository.findByChannelIdAndCreatedAt(channelId, Instant.parse(createdAt), pageable.getSize());
+
+    return PagingDTO.CursorPage.<Message>builder()
+        .content(slice.getContent().stream()
+            .map(messageEntityMapper::entityToMessage)
+            .toList())
+        .nextCursor(slice.hasNext() ? messageEntityMapper.entityToMessage(slice.getContent().get(slice.getContent().size() - 1)) : null)
+        .size(slice.getSize())
+        .hasNext(slice.hasNext())
         .build();
 
   }

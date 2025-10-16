@@ -39,4 +39,36 @@ public class PagingDTO {
         private Long totalElement;
 
     }
+
+  @Getter
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class CursorRequest {
+    private int size;
+    private String sort;
+
+    public static CursorRequest of(int size) {
+      return new CursorRequest(size, null);
+    }
+
+    public static CursorRequest of(int size, String sort) {
+      return new CursorRequest(size, "createdAt,desc");
+    }
+  }
+
+  @Getter
+  @Builder
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class CursorPage<T> {
+
+    private List<T> content;
+    private T nextCursor;
+    private int size;
+    private boolean hasNext;
+    private Long totalElement;
+
+  }
+
 }
