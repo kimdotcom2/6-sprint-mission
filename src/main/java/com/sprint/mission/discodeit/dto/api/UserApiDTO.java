@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Builder;
@@ -9,10 +10,9 @@ public class UserApiDTO {
 
   @Builder
   public record UserCreateRequest(
-
-      String username,
-      String email,
-      String password,
+      @NotBlank(message = "계정명을 입력하세요.") String username,
+      @NotBlank(message = "이메일을 입력하세요.") String email,
+      @NotBlank(message = "비밀번호를 입력하세요.") String password,
       String description) {
 
   }
@@ -20,11 +20,13 @@ public class UserApiDTO {
   @Builder
   public record UserUpdateRequest(
       @JsonProperty("newUsername")
+      @NotBlank(message = "계정명을 입력하세요.")
       String username,
       @JsonProperty("newEmail")
+      @NotBlank(message = "이메일을 입력하세요.")
       String email,
-      String currentPassword,
-      String newPassword
+      @NotBlank(message = "기존 비밀번호를 입력하세요.")String currentPassword,
+      @NotBlank(message = "새 비밀번호를 입력하세요.")String newPassword
   ) {
 
   }

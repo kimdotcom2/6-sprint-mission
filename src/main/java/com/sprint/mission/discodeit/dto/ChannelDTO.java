@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto;
 
 import com.sprint.mission.discodeit.enums.ChannelType;
+import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,8 +54,12 @@ public class ChannelDTO {
 
   //channel update를 위한 Request DTO
   @Builder
-  public record UpdateChannelCommand(UUID id, String name, ChannelType type,
-                                     List<UUID> participants, String description) {
+  public record UpdateChannelCommand(
+      UUID id,
+      String name,
+      ChannelType type,
+      List<UUID> participants,
+      String description) {
 
   }
 

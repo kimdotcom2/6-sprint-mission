@@ -1,5 +1,6 @@
 package com.sprint.mission.discodeit.dto.api;
 
+import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.Builder;
 
@@ -7,8 +8,8 @@ public class PagingApiDTO {
 
   @Builder
   public record OffsetRequest(
-      int size,
-      int page,
+      @NotBlank(message = "올바르지 않은 페이지 형식입니다.") int size,
+      @NotBlank(message = "올바르지 않은 페이지 형식입니다.") int page,
       String sort
   ) {}
 

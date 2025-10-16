@@ -1,6 +1,7 @@
 package com.sprint.mission.discodeit.dto.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -10,9 +11,9 @@ public class MessageApiDTO {
 
   @Builder
   public record MessageCreateRequest(
-      String content,
-      UUID authorId,
-      UUID channelId) {
+      @NotBlank(message = "메시지는 공백을 허용하지 않습니다.") String content,
+      @NotBlank(message = "올바르지 않은 이용자입니다.") UUID authorId,
+      @NotBlank(message = "올바르지 않은 채널입니다.") UUID channelId) {
 
   }
 

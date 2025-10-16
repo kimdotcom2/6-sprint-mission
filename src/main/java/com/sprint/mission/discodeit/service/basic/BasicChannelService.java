@@ -42,10 +42,6 @@ public class BasicChannelService implements ChannelService {
   @Override
   public ChannelDTO.Channel createChannel(ChannelDTO.CreatePublicChannelCommand request) {
 
-    if (request.name().isBlank()) {
-      throw new IllegalArgumentException("Invalid channel data.");
-    }
-
     ChannelEntity channelEntity = ChannelEntity.builder()
         .type(ChannelType.PUBLIC)
         .name(request.name())
