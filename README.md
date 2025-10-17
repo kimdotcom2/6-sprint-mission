@@ -11,27 +11,38 @@
   - [x] Spring Data JPA와 PostgreSQL을 위한 의존성을 추가하세요.
   - [x] 앞서 구성한 데이터베이스에 연결하기 위한 설정값을 application.yaml 파일에 작성하세요.
   - [x] 디버깅을 위해 SQL 로그와 관련된 설정값을 application.yaml 파일에 작성하세요.
-- [x] 엔티티 정의하기
-  - [x] 클래스 다이어그램을 참고해 도메인 모델의 공통 속성을 추상 클래스로 정의하고 상속 관계를 구현하세요.
-  - [x] JPA의 어노테이션을 활용해 createdAt, updatedAt 속성이 자동으로 설정되도록 구현하세요.
-  - [x] 클래스 다이어그램을 참고해 클래스 참조 관계를 수정하세요. 필요한 경우 생성자, update 메소드를 수정할 수 있습니다. 단, 아직 JPA Entity와 관련된 어노테이션은 작성하지 마세요.
-  - [x] ERD와 클래스 다이어그램을 토대로 연관관계 매핑 정보를 표로 정리해보세요.(이 내용은 PR에 첨부해주세요.)
-  - |엔티티 관계|다중성|방향성|부모-자식 관계|연관관계의 주인|
-  - |---|---|---|---|---|
-  - |User - UserStatus|1:1|단방향|부모: User, 자식: UserStatus|UserStatus|
-  - |User - ReadStatus|1:N|단방향|부모: User, 자식: ReadStatus|ReadStatus|
-  - |User - Message|1:N|단방향|부모: User, 자식: Message|Message|
-  - |Channel - Message|1:N|단방향|부모: Channel, 자식: Message|Message|
-  - |Channel - ReadStatus|1:N|단방향|부모: Channel, 자식: ReadStatus|ReadStatus|
-  - |User - BinaryContent|1:1|단방향|부모: User, 자식: BinaryContent|User|
-  - |Message - BinaryContent|1:N|단방향|부모: Message, 자식: BinaryContent|Message|
-  - [x] JPA 주요 어노테이션을 활용해 ERD, 연관관계 매핑 정보를 도메인 모델에 반영해보세요. 
-  - [x] ERD의 외래키 제약 조건과 연관관계 매핑 정보의 부모-자식 관계를 고려해 영속성 전이와 고아 객체를 정의하세요. 
+  - [x] 엔티티 정의하기
+    - [x] 클래스 다이어그램을 참고해 도메인 모델의 공통 속성을 추상 클래스로 정의하고 상속 관계를 구현하세요.
+    - [x] JPA의 어노테이션을 활용해 createdAt, updatedAt 속성이 자동으로 설정되도록 구현하세요.
+    - [x] 클래스 다이어그램을 참고해 클래스 참조 관계를 수정하세요. 필요한 경우 생성자, update 메소드를 수정할 수 있습니다. 단, 아직 JPA Entity와 관련된 어노테이션은 작성하지 마세요.
+    - [x] ERD와 클래스 다이어그램을 토대로 연관관계 매핑 정보를 표로 정리해보세요.(이 내용은 PR에 첨부해주세요.)
+  
+    |엔티티 관계|다중성|방향성|부모-자식 관계|연관관계의 주인|
+    |---|---|---|---|---|
+    |User - UserStatus|1:1|단방향|부모: User, 자식: UserStatus|UserStatus|
+    |User - ReadStatus|1:N|단방향|부모: User, 자식: ReadStatus|ReadStatus|
+    |User - Message|1:N|단방향|부모: User, 자식: Message|Message|
+    |Channel - Message|1:N|단방향|부모: Channel, 자식: Message|Message|
+    |Channel - ReadStatus|1:N|단방향|부모: Channel, 자식: ReadStatus|ReadStatus|
+    |User - BinaryContent|1:1|단방향|부모: User, 자식: BinaryContent|User|
+    |Message - BinaryContent|1:N|단방향|부모: Message, 자식: BinaryContent|Message|
+    - [x] JPA 주요 어노테이션을 활용해 ERD, 연관관계 매핑 정보를 도메인 모델에 반영해보세요. 
+    - [x] ERD의 외래키 제약 조건과 연관관계 매핑 정보의 부모-자식 관계를 고려해 영속성 전이와 고아 객체를 정의하세요. 
 - [x] 레포지토리와 서비스에 JPA 도입하기
   - [x] 기존의 Repository 인터페이스를 JPARepository로 정의하고 쿼리메소드로 대체하세요. 
   - [x] 영속성 컨텍스트의 특징에 맞추어 서비스 레이어를 수정해보세요. 
 - [x] DTO 적극 도입하기
   - [x] Entity를 Controller 까지 그대로 노출했을 때 발생할 수 있는 문제점에 대해 정리해보세요. DTO를 적극 도입했을 때 보일러플레이트 코드가 많아지지만, 그럼에도 불구하고 어떤 이점이 있는지 알 수 있을거에요.(이 내용은 PR에 첨부해주세요.)
+  - Entity를 Controller까지 그대로 노출했을 때 발생할 수 있는 문제점:
+    - 민감한 정보까지 포함하여 response로 반환하므로 보안 문제가 발생한다.
+    - Entity 구조가 변경되면 API 응답 형식도 변경되어 클라이언트에 영향을 미친다.
+    - 불필요한 데이터까지 포함되어 response가 무거워지고 네트워크 트래픽이 증가한다.
+    - Entity와 API 응답 형식이 결합되어 있어 코드의 유지보수가 어려워진다.
+  - DTO를 적극 도입했을 때의 이점:
+    - 필요한 데이터만 포함된 DTO를 사용함으로써 민감한 정보를 감출 수 있다.
+    - DTO를 통해 API 응답 형식을 독립적으로 관리할 수 있어, Entity 구조 변경 시에도 API에 영향을 최소화할 수 있다.
+    - 필요한 데이터만 포함된 DTO를 반환함으로써 네트워크 트래픽을 줄일 수 있다.
+    - 유지보수 용이: Entity와 API 응답 형식이 분리되어 있어, 코드의 유지보수가 용이하다.
   - [x] 다음의 클래스 다이어그램을 참고하여 DTO를 정의하세요.
   - [x] Entity를 DTO로 매핑하는 로직을 책임지는 Mapper 컴포넌트를 정의해 반복되는 코드를 줄여보세요.
 - [x] BinaryContent 저장 로직 고도화
