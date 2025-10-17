@@ -17,15 +17,15 @@
     - [x] 클래스 다이어그램을 참고해 클래스 참조 관계를 수정하세요. 필요한 경우 생성자, update 메소드를 수정할 수 있습니다. 단, 아직 JPA Entity와 관련된 어노테이션은 작성하지 마세요.
     - [x] ERD와 클래스 다이어그램을 토대로 연관관계 매핑 정보를 표로 정리해보세요.(이 내용은 PR에 첨부해주세요.)
   
-    |엔티티 관계|다중성|방향성|부모-자식 관계|연관관계의 주인|
-    |---|---|---|---|---|
-    |User - UserStatus|1:1|단방향|부모: User, 자식: UserStatus|UserStatus|
-    |User - ReadStatus|1:N|단방향|부모: User, 자식: ReadStatus|ReadStatus|
-    |User - Message|1:N|단방향|부모: User, 자식: Message|Message|
-    |Channel - Message|1:N|단방향|부모: Channel, 자식: Message|Message|
-    |Channel - ReadStatus|1:N|단방향|부모: Channel, 자식: ReadStatus|ReadStatus|
-    |User - BinaryContent|1:1|단방향|부모: User, 자식: BinaryContent|User|
-    |Message - BinaryContent|1:N|단방향|부모: Message, 자식: BinaryContent|Message|
+    |엔티티 관계|다중성| 방향성 |부모-자식 관계|연관관계의 주인|
+    |---|---|-----|---|---|
+    |User - UserStatus|1:1| 양방향 |부모: User, 자식: UserStatus|UserStatus|
+    |User - ReadStatus|1:N| 단방향 |부모: User, 자식: ReadStatus|ReadStatus|
+    |User - Message|1:N| 단방향 |부모: User, 자식: Message|Message|
+    |Channel - Message|1:N| 단방향 |부모: Channel, 자식: Message|Message|
+    |Channel - ReadStatus|1:N| 단방향 |부모: Channel, 자식: ReadStatus|ReadStatus|
+    |User - BinaryContent|1:1| 양방향 |부모: User, 자식: BinaryContent|User|
+    |Message - BinaryContent|1:N| 단방향 |부모: Message, 자식: BinaryContent|Message|
     - [x] JPA 주요 어노테이션을 활용해 ERD, 연관관계 매핑 정보를 도메인 모델에 반영해보세요. 
     - [x] ERD의 외래키 제약 조건과 연관관계 매핑 정보의 부모-자식 관계를 고려해 영속성 전이와 고아 객체를 정의하세요. 
 - [x] 레포지토리와 서비스에 JPA 도입하기
