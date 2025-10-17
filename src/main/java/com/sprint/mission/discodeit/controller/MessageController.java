@@ -13,6 +13,9 @@ import com.sprint.mission.discodeit.dto.api.PagingApiDTO.OffsetPageResponse;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.BinaryContentApiMapper;
+import com.sprint.mission.discodeit.mapper.api.MessageApiMapper;
+import com.sprint.mission.discodeit.mapper.api.UserApiMapper;
 import com.sprint.mission.discodeit.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,6 +58,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class MessageController {
 
   private final MessageService messageService;
+  private final MessageApiMapper messageApiMapper;
+  private final BinaryContentApiMapper binaryContentApiMapper;
+  private final UserApiMapper userApiMapper;
 
   /**
    * 메시지 전송
@@ -110,34 +116,7 @@ public class MessageController {
 
     MessageDTO.Message message = messageService.createMessage(createMessageCommand);
 
-    return ResponseEntity.status(HttpStatus.CREATED).body(
-        MessageApiDTO.FindMessageResponse.builder()
-            .id(message.getId())
-            .createdAt(message.getCreatedAt())
-            .updatedAt(message.getUpdatedAt())
-            .content(message.getContent())
-            .channelId(message.getChannelId())
-            .author(UserApiDTO.FindUserResponse.builder()
-                .id(message.getAuthor().getId())
-                .username(message.getAuthor().getUsername())
-                .email(message.getAuthor().getEmail())
-                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(message.getAuthor().getProfileId().getId())
-                    .fileName(message.getAuthor().getProfileId().getFileName())
-                    .size(message.getAuthor().getProfileId().getSize())
-                    .contentType(message.getAuthor().getProfileId().getContentType())
-                    .build())
-                .isOnline(message.getAuthor().getIsOnline())
-                .build())
-            .attachments(message.getAttachments().stream().map(attachment ->
-                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(attachment.getId())
-                    .fileName(attachment.getFileName())
-                    .size(attachment.getSize())
-                    .contentType(attachment.getContentType())
-                    .build()
-            ).toList())
-            .build());
+    return ResponseEntity.status(HttpStatus.CREATED).body(messageApiMapper.messageToFindMessageResponse(message));
 
   }
 
@@ -187,33 +166,7 @@ public class MessageController {
 
     MessageDTO.Message message = messageService.updateMessage(updateMessageCommand);
 
-    return ResponseEntity.ok(MessageApiDTO.FindMessageResponse.builder()
-        .id(message.getId())
-        .createdAt(message.getCreatedAt())
-        .updatedAt(message.getUpdatedAt())
-        .content(message.getContent())
-        .channelId(message.getChannelId())
-        .author(UserApiDTO.FindUserResponse.builder()
-            .id(message.getAuthor().getId())
-            .username(message.getAuthor().getUsername())
-            .email(message.getAuthor().getEmail())
-            .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(message.getAuthor().getProfileId().getId())
-                .fileName(message.getAuthor().getProfileId().getFileName())
-                .size(message.getAuthor().getProfileId().getSize())
-                .contentType(message.getAuthor().getProfileId().getContentType())
-                .build())
-            .isOnline(message.getAuthor().getIsOnline())
-            .build())
-        .attachments(message.getAttachments().stream().map(attachment ->
-            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(attachment.getId())
-                .fileName(attachment.getFileName())
-                .size(attachment.getSize())
-                .contentType(attachment.getContentType())
-                .build()
-        ).toList())
-        .build());
+    return ResponseEntity.ok(messageApiMapper.messageToFindMessageResponse(message));
 
   }
 
@@ -286,33 +239,7 @@ public class MessageController {
         .hasNext(messagePage.isHasNext())
         .totalElements(messagePage.getTotalElement())
         .content(messagePage.getContent().stream()
-            .map(message -> MessageApiDTO.FindMessageResponse.builder()
-                .id(message.getId())
-                .createdAt(message.getCreatedAt())
-                .updatedAt(message.getUpdatedAt())
-                .content(message.getContent())
-                .channelId(message.getChannelId())
-                .author(UserApiDTO.FindUserResponse.builder()
-                    .id(message.getAuthor().getId())
-                    .username(message.getAuthor().getUsername())
-                    .email(message.getAuthor().getEmail())
-                    .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                        .id(message.getAuthor().getProfileId().getId())
-                        .fileName(message.getAuthor().getProfileId().getFileName())
-                        .size(message.getAuthor().getProfileId().getSize())
-                        .contentType(message.getAuthor().getProfileId().getContentType())
-                        .build())
-                    .isOnline(message.getAuthor().getIsOnline())
-                    .build())
-                .attachments(message.getAttachments().stream().map(attachment ->
-                    BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                        .id(attachment.getId())
-                        .fileName(attachment.getFileName())
-                        .size(attachment.getSize())
-                        .contentType(attachment.getContentType())
-                        .build()
-                ).toList())
-                .build())
+            .map(messageApiMapper::messageToFindMessageResponse)
             .toList())
         .build();
 
@@ -342,57 +269,14 @@ public class MessageController {
             .updatedAt(messagePage.getNextCursor().getUpdatedAt())
             .content(messagePage.getNextCursor().getContent())
             .channelId(messagePage.getNextCursor().getChannelId())
-            .author(UserApiDTO.FindUserResponse.builder()
-                .id(messagePage.getNextCursor().getAuthor().getId())
-                .username(messagePage.getNextCursor().getAuthor().getUsername())
-                .email(messagePage.getNextCursor().getAuthor().getEmail())
-                .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(messagePage.getNextCursor().getAuthor().getProfileId().getId())
-                    .fileName(messagePage.getNextCursor().getAuthor().getProfileId().getFileName())
-                    .size(messagePage.getNextCursor().getAuthor().getProfileId().getSize())
-                    .contentType(messagePage.getNextCursor().getAuthor().getProfileId().getContentType())
-                    .build())
-                .isOnline(messagePage.getNextCursor().getAuthor().getIsOnline())
-                .build())
-            .attachments(messagePage.getNextCursor().getAttachments().stream().map(attachment ->
-                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(attachment.getId())
-                    .fileName(attachment.getFileName())
-                    .size(attachment.getSize())
-                    .contentType(attachment.getContentType())
-                    .build()
-            ).toList())
+            .author(userApiMapper.userToFindUserResponse(messagePage.getNextCursor().getAuthor()))
+            .attachments(messagePage.getNextCursor().getAttachments().stream()
+                .map(binaryContentApiMapper::binaryContentToReadBinaryContentResponse).toList())
             .build() : null)
         .size(messagePage.getSize())
         .hasNext(messagePage.isHasNext())
         .content(messagePage.getContent().stream()
-            .map(message -> MessageApiDTO.FindMessageResponse.builder()
-                .id(message.getId())
-                .createdAt(message.getCreatedAt())
-                .updatedAt(message.getUpdatedAt())
-                .content(message.getContent())
-                .channelId(message.getChannelId())
-                .author(UserApiDTO.FindUserResponse.builder()
-                    .id(message.getAuthor().getId())
-                    .username(message.getAuthor().getUsername())
-                    .email(message.getAuthor().getEmail())
-                    .profile(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                        .id(message.getAuthor().getProfileId().getId())
-                        .fileName(message.getAuthor().getProfileId().getFileName())
-                        .size(message.getAuthor().getProfileId().getSize())
-                        .contentType(message.getAuthor().getProfileId().getContentType())
-                        .build())
-                    .isOnline(message.getAuthor().getIsOnline())
-                    .build())
-                .attachments(message.getAttachments().stream().map(attachment ->
-                    BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                        .id(attachment.getId())
-                        .fileName(attachment.getFileName())
-                        .size(attachment.getSize())
-                        .contentType(attachment.getContentType())
-                        .build()
-                ).toList())
-                .build())
+            .map(messageApiMapper::messageToFindMessageResponse)
             .toList())
         .build();
 

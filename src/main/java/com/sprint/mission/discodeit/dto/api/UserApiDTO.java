@@ -50,7 +50,7 @@ public class UserApiDTO {
   }
 
   @Builder
-  public record CheckUserOnline(
+  public record CheckUserOnlineResponse(
       UUID id,
       UUID userId,
       @JsonProperty("lastActiveAt")

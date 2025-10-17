@@ -2,10 +2,10 @@ package com.sprint.mission.discodeit.controller;
 
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.api.AuthApiDTO;
-import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.AuthApiMapper;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,6 +36,7 @@ public class AuthController {
 
   private final AuthService authService;
   private final UserService userService;
+  private final AuthApiMapper authApiMapper;
 
   /**
    * 사용자 로그인
@@ -78,21 +79,7 @@ public class AuthController {
         .password(loginRequest.password())
         .build());
 
-    UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-        .id(user.getId())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .profile(user.getProfileId() != null ?
-            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .contentType(user.getProfileId().getContentType())
-                .build() :
-            null)
-        .isOnline(user.getIsOnline())
-        .build();
-
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok(authApiMapper.userToFindUserResponse(user));
 
   }
 

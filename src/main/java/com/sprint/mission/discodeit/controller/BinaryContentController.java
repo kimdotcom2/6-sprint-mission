@@ -4,6 +4,7 @@ import com.sprint.mission.discodeit.dto.BinaryContentDTO;
 import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.BinaryContentApiMapper;
 import com.sprint.mission.discodeit.service.BinaryContentService;
 import com.sprint.mission.discodeit.storage.BinaryContentStorage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +40,7 @@ public class BinaryContentController {
 
   private final BinaryContentService binaryContentService;
   private final BinaryContentStorage binaryContentStorage;
+  private final BinaryContentApiMapper binaryContentApiMapper;
 
   /**
    * 바이너리 콘텐츠 조회
@@ -73,12 +75,7 @@ public class BinaryContentController {
     BinaryContentDTO.BinaryContent readBinaryContentResult = binaryContentService.findBinaryContentById(id)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("BinaryContent not found"));
 
-    return ResponseEntity.ok(BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-        .id(readBinaryContentResult.getId())
-        .fileName(readBinaryContentResult.getFileName())
-        .size(readBinaryContentResult.getSize())
-        .contentType(readBinaryContentResult.getContentType())
-        .build());
+    return ResponseEntity.ok(binaryContentApiMapper.binaryContentToReadBinaryContentResponse(readBinaryContentResult));
 
   }
 
@@ -112,12 +109,7 @@ public class BinaryContentController {
       @RequestParam("binaryContentIds") List<UUID> idList) {
 
     return ResponseEntity.ok(binaryContentService.findAllBinaryContentByIdIn(idList).stream()
-        .map(binaryContent -> BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-            .id(binaryContent.getId())
-            .fileName(binaryContent.getFileName())
-            .size(binaryContent.getSize())
-            .contentType(binaryContent.getContentType())
-            .build())
+        .map(binaryContentApiMapper::binaryContentToReadBinaryContentResponse)
         .toList());
 
   }

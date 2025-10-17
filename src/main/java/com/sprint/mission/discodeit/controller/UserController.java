@@ -3,13 +3,14 @@ package com.sprint.mission.discodeit.controller;
 import com.sprint.mission.discodeit.dto.BinaryContentDTO.BinaryContentCreateCommand;
 import com.sprint.mission.discodeit.dto.UserDTO;
 import com.sprint.mission.discodeit.dto.UserStatusDTO;
-import com.sprint.mission.discodeit.dto.api.BinaryContentApiDTO;
 import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
+import com.sprint.mission.discodeit.dto.api.UserApiDTO.CheckUserOnlineResponse;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO.UserUpdateRequest;
 import com.sprint.mission.discodeit.enums.ContentType;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.UserApiMapper;
 import com.sprint.mission.discodeit.service.AuthService;
 import com.sprint.mission.discodeit.service.UserService;
 import com.sprint.mission.discodeit.service.UserStatusService;
@@ -54,6 +55,7 @@ public class UserController {
   private final AuthService authService;
   private final UserService userService;
   private final UserStatusService userStatusService;
+  private final UserApiMapper userApiMapper;
 
   /**
    * 사용자 등록
@@ -103,22 +105,7 @@ public class UserController {
 
     UserDTO.User user = userService.createUser(createUserCommand);
 
-    UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-        .id(user.getId())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .profile(user.getProfileId() != null ?
-            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .size(user.getProfileId().getSize())
-                .contentType(user.getProfileId().getContentType())
-                .build() :
-            null)
-        .isOnline(user.getIsOnline())
-        .build();
-
-    return ResponseEntity.status(201).body(response);
+    return ResponseEntity.status(201).body(userApiMapper.userToFindUserResponse(user));
 
   }
 
@@ -183,22 +170,7 @@ public class UserController {
 
     UserDTO.User user = userService.updateUser(updateUserCommand);
 
-    UserApiDTO.FindUserResponse response = UserApiDTO.FindUserResponse.builder()
-        .id(user.getId())
-        .username(user.getUsername())
-        .email(user.getEmail())
-        .profile(user.getProfileId() != null ?
-            BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .size(user.getProfileId().getSize())
-                .contentType(user.getProfileId().getContentType())
-                .build() :
-            null)
-        .isOnline(user.getIsOnline())
-        .build();
-
-    return ResponseEntity.status(204).body(response);
+    return ResponseEntity.status(204).body(userApiMapper.userToFindUserResponse(user));
 
   }
 
@@ -254,20 +226,7 @@ public class UserController {
   public ResponseEntity<List<UserApiDTO.FindUserResponse>> findAll() {
 
     List<UserApiDTO.FindUserResponse> userList = userService.findAllUsers().stream()
-        .map(user -> UserApiDTO.FindUserResponse.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .profile(user.getProfileId() != null ?
-                BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(user.getProfileId().getId())
-                    .fileName(user.getProfileId().getFileName())
-                    .size(user.getProfileId().getSize())
-                    .contentType(user.getProfileId().getContentType())
-                    .build() :
-                null)
-            .isOnline(user.getIsOnline())
-            .build())
+        .map(userApiMapper::userToFindUserResponse)
         .toList();
 
     return ResponseEntity.status(201).body(userList);
@@ -287,7 +246,7 @@ public class UserController {
           @ApiResponse(
               responseCode = "200",
               description = "상태 조회 성공",
-              content = @Content(schema = @Schema(implementation = UserApiDTO.CheckUserOnline.class))
+              content = @Content(schema = @Schema(implementation = CheckUserOnlineResponse.class))
           ),
           @ApiResponse(
               responseCode = "404",
@@ -297,19 +256,14 @@ public class UserController {
       }
   )
   @GetMapping("/{userId}/userStatus")
-  public ResponseEntity<UserApiDTO.CheckUserOnline> checkUserOnlineStatus(
+  public ResponseEntity<UserApiDTO.CheckUserOnlineResponse> checkUserOnlineStatus(
       @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @PathVariable UUID userId) {
 
     UserStatusDTO.UserStatus userStatus = userStatusService.findUserStatusByUserId(userId)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
-    return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
-        .id(userStatus.getId())
-        .userId(userId)
-        .lastOnlineAt(userStatus.getLastActiveAt())
-        .isOnline(true)
-        .build());
+    return ResponseEntity.ok(userApiMapper.userStatusToCheckUserOnlineResponse(userStatus));
 
   }
 
@@ -327,7 +281,7 @@ public class UserController {
           @ApiResponse(
               responseCode = "200",
               description = "상태 업데이트 성공",
-              content = @Content(schema = @Schema(implementation = UserApiDTO.CheckUserOnline.class))
+              content = @Content(schema = @Schema(implementation = CheckUserOnlineResponse.class))
           ),
           @ApiResponse(
               responseCode = "400",
@@ -342,7 +296,7 @@ public class UserController {
       }
   )
   @PatchMapping(value = "/{userId}/userStatus", consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<UserApiDTO.CheckUserOnline> updateUserOnlineStatus(
+  public ResponseEntity<UserApiDTO.CheckUserOnlineResponse> updateUserOnlineStatus(
       @Parameter(description = "사용자 ID", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
       @PathVariable UUID userId,
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -355,17 +309,12 @@ public class UserController {
     UserStatusDTO.UserStatus userStatus = userStatusService.findUserStatusByUserId(userId)
         .orElseThrow(() -> new NoSuchDataBaseRecordException("No such user status."));
 
-    userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
+    userStatus = userStatusService.updateUserStatus(UserStatusDTO.UpdateUserStatusCommand.builder()
         .id(userStatus.getId())
         .lastActiveAt(userStatus.getLastActiveAt())
         .build());
 
-    return ResponseEntity.ok(UserApiDTO.CheckUserOnline.builder()
-        .id(userStatus.getId())
-        .userId(userStatus.getUserId())
-        .lastOnlineAt(userStatus.getLastActiveAt())
-        .isOnline(true)
-        .build());
+    return ResponseEntity.ok(userApiMapper.userStatusToCheckUserOnlineResponse(userStatus));
 
   }
 

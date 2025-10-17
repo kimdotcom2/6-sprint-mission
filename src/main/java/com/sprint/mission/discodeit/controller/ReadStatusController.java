@@ -6,6 +6,7 @@ import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO;
 import com.sprint.mission.discodeit.dto.api.ReadStatusApiDTO.ReadStatusUpdateRequest;
 import com.sprint.mission.discodeit.exception.AllReadyExistDataBaseRecordException;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.ReadStatusApiMapper;
 import com.sprint.mission.discodeit.service.ReadStatusService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -43,6 +44,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReadStatusController {
 
   private final ReadStatusService readStatusService;
+  private final ReadStatusApiMapper readStatusApiMapper;
 
   /**
    * 읽음 상태 생성
@@ -81,11 +83,7 @@ public class ReadStatusController {
         .lastReadTimeAt(readStatusCreateRequest.lastReadAt())
         .build());
 
-    return ResponseEntity.status(201).body(ReadStatusApiDTO.FindReadStatusResponse.builder()
-        .channelId(readStatus.getChannelId())
-        .userId(readStatus.getUserId())
-        .lastReadAt(readStatus.getLastReadAt())
-        .build());
+    return ResponseEntity.status(201).body(readStatusApiMapper.readStatusApiToReadStatusResponse(readStatus));
 
   }
 
@@ -129,12 +127,7 @@ public class ReadStatusController {
         .lastReadAt(readStatusUpdateRequest.newLastReadAt())
         .build());
 
-    return ResponseEntity.ok(ReadStatusApiDTO.FindReadStatusResponse.builder()
-        .id(readStatus.getId())
-        .channelId(readStatus.getChannelId())
-        .userId(readStatus.getUserId())
-        .lastReadAt(readStatus.getLastReadAt())
-        .build());
+    return ResponseEntity.ok(readStatusApiMapper.readStatusApiToReadStatusResponse(readStatus));
 
   }
 
@@ -162,12 +155,7 @@ public class ReadStatusController {
 
     List<ReadStatusApiDTO.FindReadStatusResponse> readStatusList = readStatusService.findAllReadStatusByUserId(
             userId).stream()
-        .map(readStatus -> ReadStatusApiDTO.FindReadStatusResponse.builder()
-            .id(readStatus.getId())
-            .channelId(readStatus.getChannelId())
-            .userId(readStatus.getUserId())
-            .lastReadAt(readStatus.getLastReadAt())
-            .build())
+        .map(readStatusApiMapper::readStatusApiToReadStatusResponse)
         .toList();
 
     return ResponseEntity.ok(readStatusList);

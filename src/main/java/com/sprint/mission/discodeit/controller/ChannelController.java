@@ -9,6 +9,7 @@ import com.sprint.mission.discodeit.dto.api.ErrorApiDTO;
 import com.sprint.mission.discodeit.dto.api.UserApiDTO;
 import com.sprint.mission.discodeit.enums.ChannelType;
 import com.sprint.mission.discodeit.exception.NoSuchDataBaseRecordException;
+import com.sprint.mission.discodeit.mapper.api.ChannelApiMapper;
 import com.sprint.mission.discodeit.service.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,6 +49,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ChannelController {
 
   private final ChannelService channelService;
+  private final ChannelApiMapper channelApiMapper;
 
   /**
    * 공개 채널 생성
@@ -136,24 +138,7 @@ public class ChannelController {
 
     ChannelDTO.Channel channel = channelService.createPrivateChannel(createPrivateChannelCommand);
 
-    return ResponseEntity.status(201).body(ChannelApiDTO.FindChannelResponse.builder()
-        .id(channel.getId())
-        .type(channel.getType())
-        .name(channel.getName())
-        .description(channel.getDescription())
-        .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .size(user.getProfileId().getSize())
-                .contentType(user.getProfileId().getContentType())
-                .build() : null)
-            .isOnline(user.getIsOnline())
-            .build()).toList() : new ArrayList<>())
-        .build());
+    return ResponseEntity.status(201).body(channelApiMapper.channelToFindChannelResponse(channel));
 
   }
 
@@ -204,25 +189,7 @@ public class ChannelController {
 
     ChannelDTO.Channel channel = channelService.updateChannel(updateChannelCommand);
 
-    return ResponseEntity.status(200).body(ChannelApiDTO.FindChannelResponse.builder()
-        .id(channel.getId())
-        .type(channel.getType())
-        .name(channel.getName())
-        .description(channel.getDescription())
-        .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
-            .id(user.getId())
-            .username(user.getUsername())
-            .email(user.getEmail())
-            .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                .id(user.getProfileId().getId())
-                .fileName(user.getProfileId().getFileName())
-                .size(user.getProfileId().getSize())
-                .contentType(user.getProfileId().getContentType())
-                .build() : null)
-            .isOnline(user.getIsOnline())
-            .build()).toList() : new ArrayList<>())
-        .lastMessageAt(channel.getLastMessageAt() != null ? channel.getLastMessageAt() : null)
-        .build());
+    return ResponseEntity.status(200).body(channelApiMapper.channelToFindChannelResponse(channel));
 
   }
 
@@ -281,24 +248,7 @@ public class ChannelController {
       @RequestParam UUID userId) {
 
     return channelService.findChannelsByUserId(userId).stream()
-        .map(channel -> ChannelApiDTO.FindChannelResponse.builder()
-            .id(channel.getId())
-            .type(channel.getType())
-            .name(channel.getName())
-            .description(channel.getDescription())
-            .participants(channel.getParticipants() != null ? channel.getParticipants().stream().map(user -> UserApiDTO.FindUserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .profile(user.getProfileId() != null ? BinaryContentApiDTO.ReadBinaryContentResponse.builder()
-                    .id(user.getProfileId().getId())
-                    .fileName(user.getProfileId().getFileName())
-                    .size(user.getProfileId().getSize())
-                    .contentType(user.getProfileId().getContentType())
-                    .build() : null)
-                .isOnline(user.getIsOnline())
-                .build()).toList() : new ArrayList<>())
-            .build())
+        .map(channelApiMapper::channelToFindChannelResponse)
         .toList();
 
   }
